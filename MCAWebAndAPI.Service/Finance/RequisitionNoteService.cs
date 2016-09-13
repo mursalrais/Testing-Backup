@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -69,11 +68,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         string _siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public RequisitionNoteService(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            this._siteUrl = siteUrl;
         }
-
+        
         public async Task<RequisitionNoteVM> GetAsync(int? ID)
         {
             return Get(ID);
@@ -364,7 +363,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             SPConnector.DeleteListItem(ListName_RequisitionNoteItem, id, _siteUrl);
         }
 
-        public Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId)
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_REQUISITION_EVENTBUDGETNO + "' /><Value Type='Lookup'>" + eventBudgetId.ToString() + "</Value></Eq></Where></Query> <RowLimit>1</RowLimit> </View>";
             string number = string.Empty;

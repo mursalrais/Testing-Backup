@@ -43,8 +43,8 @@
                     </tr>
                 </table>
 
-                <div class="table-content">
-                    <table class="padzero1 width100 border-bg4">
+                <div class="table-content" style="min-height: 100px;  border: 1px solid #1e88e5;  margin-left: 5px; ">
+                    <table class="padzero1 width100 border-bg4" style="margin-left:0px; margin-top:-1px;">
                         @if (Model.BudgetVsActualDisbursement.Count() > 0)
                         {
                             foreach (var item in Model.BudgetVsActualDisbursement)
@@ -54,10 +54,10 @@
                                         @item.ProjectOrActivity
                                     </td>
                                     <td class="isi-bg4a wd-30">
-                                        @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", item.BudgetUSD)
+                                        @String.Format(CultureInfo.InvariantCulture, "{0:N0}", item.BudgetUSD)
                                     </td>
                                     <td class="isi-bg4a wd-30">
-                                        @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", item.ActualUSD)
+                                        @String.Format(CultureInfo.InvariantCulture, "{0:N0}", item.ActualUSD)
                                     </td>
                                     <td class="isi-bg4a wd-10">
                                        @String.Format(CultureInfo.InvariantCulture, "{0:N2}", item.ActualPercentage)
@@ -65,6 +65,7 @@
                                 </tr>
                             }
                         }
+                      
                     </table>
                 </div>
 
@@ -99,10 +100,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="isi-bg1a" id="OA_PIC_Number">
-                                                            @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OA_PIC_Number)    <!--Profesional & IC : Number of Advance-->
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:#}", Model.OA_PIC_Number)    <!--Profesional & IC : Number of Advance-->
                                                         </td>
                                                         <td class="isi-bg1a" id="OA_PIC_Amount">
-                                                            @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OA_PIC_Amount)    <!--Profesional & IC : Ammount (IDR)-->
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OA_PIC_Amount)    <!--Profesional & IC : Ammount (IDR)-->
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -127,10 +128,10 @@
                                                     </tr>
                                                     <tr>
                                                         <td class="isi-bg1a" id="OA_G_Number">
-                                                            @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OA_G_Number)      <!--Grantess : Number of Advance-->
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:#}", Model.OA_G_Number)      <!--Grantess : Number of Advance-->
                                                         </td>
                                                         <td class="isi-bg1a" id="OA_G_Amount">
-                                                            @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OA_G_Amount)      <!--Grantess : Ammount (IDR)-->
+                                                            @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OA_G_Amount)      <!--Grantess : Ammount (IDR)-->
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -149,7 +150,7 @@
                             </tr>
                             <tr>
                                 <td class="border-bg2" style="height:160px;" id="SPHL">
-                                    @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.SPHL)         <!--SPHL (IDR)-->
+                                    @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.SPHL)         <!--SPHL (IDR)-->
                                 </td>
                             </tr>
                         </table>
@@ -213,26 +214,26 @@
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="VAT_Exemp_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture,"{0:0,0}", Model.VAT_Exemp_YTD_Min2)    <!-- 2014 : VAT : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD_Min2)    <!-- 2014 : VAT : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="VAT_Reimb_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.VAT_Reimb_YTD_Min2)   <!-- 2014 : VAT : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD_Min2)   <!-- 2014 : VAT : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="IncomeTax_Exemp_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Exemp_YTD_Min2)    <!-- 2014 : Income Tax : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD_Min2)    <!-- 2014 : Income Tax : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="IncomeTax_Reimb_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Reimb_YTD_Min2)    <!-- 2014 : Income Tax : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD_Min2)    <!-- 2014 : Income Tax : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="OtherTax_Exemp_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Exemp_YTD_Min2)    <!-- 2014 : Other : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD_Min2)    <!-- 2014 : Other : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="OtherTax_Reimb_YTD_min2">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Reimb_YTD_Min2)    <!-- 2014 : Other : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD_Min2)    <!-- 2014 : Other : Reimbursement -->
                                             </td>
                                         </tr>
                                     </table>
@@ -252,26 +253,26 @@
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="VAT_Exemp_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.VAT_Exemp_YTD_Min1)    <!-- 2015 : VAT : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD_Min1)    <!-- 2015 : VAT : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="VAT_Reimb_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.VAT_Reimb_YTD_Min1)    <!-- 2015 : VAT : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD_Min1)    <!-- 2015 : VAT : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="IncomeTax_Exemp_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Exemp_YTD_Min1)    <!-- 2015 : Income Tax : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD_Min1)    <!-- 2015 : Income Tax : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="IncomeTax_Reimb_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Reimb_YTD_Min1)    <!-- 2015 : Income Tax : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD_Min1)    <!-- 2015 : Income Tax : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="OtherTax_Exemp_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Exemp_YTD_Min1)      <!-- 2015 : Other : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD_Min1)      <!-- 2015 : Other : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="OtherTax_Reimb_YTD_min1">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Reimb_YTD_Min1)      <!-- 2015 : Other : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD_Min1)      <!-- 2015 : Other : Reimbursement -->
                                             </td>
                                         </tr>
                                     </table>
@@ -291,26 +292,26 @@
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="VAT_Exemp_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.VAT_Exemp_YTD)        <!-- 2016 : VAT : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Exemp_YTD)        <!-- 2016 : VAT : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="VAT_Reimb_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.VAT_Reimb_YTD)        <!-- 2016 : VAT : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.VAT_Reimb_YTD)        <!-- 2016 : VAT : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="IncomeTax_Exemp_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Exemp_YTD)  <!-- 2016 : Income Tax : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Exemp_YTD)  <!-- 2016 : Income Tax : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="IncomeTax_Reimb_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.IncomeTax_Reimb_YTD)  <!-- 2016 : Income Tax : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.IncomeTax_Reimb_YTD)  <!-- 2016 : Income Tax : Reimbursement -->
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="isi-bg3a" id="OtherTax_Exemp_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Exemp_YTD)   <!-- 2016 : Other : Exemption -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Exemp_YTD)   <!-- 2016 : Other : Exemption -->
                                             </td>
                                             <td class="isi-bg3a" id="OtherTax_Reimb_YTD">
-                                                @String.Format(CultureInfo.InvariantCulture, "{0:0,0}", Model.OtherTax_Reimb_YTD)   <!-- 2016 : Other : Reimbursement -->
+                                                @String.Format(CultureInfo.InvariantCulture, "{0:N0}", Model.OtherTax_Reimb_YTD)   <!-- 2016 : Other : Reimbursement -->
                                             </td>
                                         </tr>
                                     </table>

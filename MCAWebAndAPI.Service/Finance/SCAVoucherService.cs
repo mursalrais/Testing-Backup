@@ -79,14 +79,14 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
-        private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public void SetSiteUrl(string siteUrl)
+        public SCAVoucherService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
 
+        private string siteUrl = string.Empty;
+        static Logger logger = LogManager.GetCurrentClassLogger();
+        
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
             int activityID = 0;
@@ -289,7 +289,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb=>eb.SCA > 0);
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb => eb.SCA > 0);
 
             var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
 
@@ -301,7 +301,7 @@ namespace MCAWebAndAPI.Service.Finance
                     WBS = Convert.ToString(ebItem.WBS.Text),
                     GLID = Convert.ToInt32(ebItem.GL.Value),
                     GL = Convert.ToString(ebItem.GL.Text),
-                    Amount = Convert.ToDecimal(ebItem.AmountPerItem)
+                    Amount = Convert.ToDecimal(ebItem.SCA)
                 });
             }
 
@@ -372,7 +372,13 @@ namespace MCAWebAndAPI.Service.Finance
 
             return result;
         }
-        
+
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
+        {
+            var sca = GetAll().FirstOrDefault(s => s.EventBudgetID == eventBudgetId);
+
+            return sca == null ? new Tuple<int, string>(0, string.Empty) : new Tuple<int, string>((int)sca.ID, sca.SCAVoucherNo);
+        }
 
         private string GetDocumentUrl(int? ID)
         {

@@ -28,7 +28,7 @@
             columns.Bound(p => p.Date);
             columns.Bound(p => p.TransactionType);
             columns.Bound(p => p.TransactionNo);
-            columns.Bound(p => p.Currency);
+            columns.Bound(p => p.Currency.Text).Title("Currency");
             columns.Bound(p => p.Amount);
             columns.Bound(p => p.Balance);
         })

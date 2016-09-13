@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
@@ -20,6 +21,8 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class PettyCashPaymentVoucherService : IPettyCashPaymentVoucherService
     {
+        #region Private Const 
+
         private const string LISTNAME = "Petty Cash Payment Voucher";
         private const string LISTNAME_DOCUMENTS = "Petty Cash Payment Voucher Documents";
 
@@ -38,17 +41,20 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_AMOUNTPAID_WORD = "Amount_x0020_Paid_x0020_in_x0020";
         private const string FIELD_REASON = "Reason_x0020_of_x0020_Payment";
         private const string FIELD_FUND = "Fund";
-        private const string FIELD_WBS_ID = "WBS_x0020_ID";
-        private const string FIELD_WBS_GLNO = "WBS_x0020_ID_x003a_WBS_x0020_ID";
-        private const string FIELD_WBS_DESC = "WBS_x0020_ID_x003a_WBS_x0020_Des";
+        
+        private const string FieldName_WBSID = "WBSID";
+        private const string FieldName_WBSDescription = "WBSDescription";
+
         private const string FIELD_GL_ID = "GL_x0020_ID";
         private const string FIELD_GL_NO = "GL_x0020_ID_x003a_GL_x0020_No";
         private const string FIELD_GL_DESC = "GL_x0020_ID_x003a_GL_x0020_Descr";
+
         private const string FIELD_REMARKS = "Remarks";
-        //private const string FIELD_VOUCHERNO = "Voucher_x0020_NO";
         private const string FIELD_VOUCHERNO = "Title";
         private const string FIELD_ID = "ID";
         private const string FIELD_PCID_DOCUMENTS = "Petty_x0020_Cash_x0020_Payment_x0020_Voucher";
+
+        #endregion
 
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
@@ -84,7 +90,6 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 var professionalId = Convert.ToInt32(viewModel.Professional.Value);
-                //var professional = new ProfessionalService(xxxx).GetProfessionalData(professionalId);
                 var professional = ProfessionalService.Get(siteUrl, professionalId);
 
                 newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
@@ -101,8 +106,12 @@ namespace MCAWebAndAPI.Service.Finance
             newItem.Add(FIELD_AMOUNTPAID_WORD, viewModel.AmountPaidInWord);
             newItem.Add(FIELD_REASON, viewModel.ReasonOfPayment);
             newItem.Add(FIELD_FUND, viewModel.Fund);
-            newItem.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+            newItem.Add(FieldName_WBSID, Convert.ToInt32(viewModel.WBS.Value));
+            newItem.Add(FieldName_WBSDescription, Convert.ToString(viewModel.WBS.Text));
+
             newItem.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
+
             newItem.Add(FIELD_REMARKS, viewModel.Remarks);
 
             string docNO = DocumentNumbering.Create(siteUrl, documentNoFormat, DIGIT_DOCUMENTNO);
@@ -158,7 +167,10 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(FIELD_AMOUNTPAID_WORD, viewModel.AmountPaidInWord);
             updatedValue.Add(FIELD_REASON, viewModel.ReasonOfPayment);
             updatedValue.Add(FIELD_FUND, viewModel.Fund);
-            updatedValue.Add(FIELD_WBS_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+            updatedValue.Add(FieldName_WBSID, Convert.ToInt32(viewModel.WBS.Value));
+            updatedValue.Add(FieldName_WBSDescription, viewModel.WBSDescription);
+
             updatedValue.Add(FIELD_GL_ID, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
             updatedValue.Add(FIELD_REMARKS, viewModel.Remarks);
 
@@ -270,13 +282,14 @@ namespace MCAWebAndAPI.Service.Finance
 
             viewModel.Currency.Value = Convert.ToString(listItem[FIELD_CURRENCY]);
 
-
             viewModel.AmountPaidInWord = Convert.ToString(listItem[FIELD_AMOUNTPAID_WORD]);
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FIELD_REASON]);
             viewModel.Fund = Convert.ToString(listItem[FIELD_FUND]);
 
-            viewModel.WBS.Value = (listItem[FIELD_WBS_ID] as FieldLookupValue).LookupId;
-            viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FIELD_WBS_GLNO] as FieldLookupValue).LookupValue, (listItem[FIELD_WBS_DESC] as FieldLookupValue).LookupValue);
+            WBSMapping wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(listItem[FieldName_WBSID]));
+
+            viewModel.WBS.Value = wbs.ID;
+            viewModel.WBS.Text = string.Format("{0}-{1}", wbs.WBSID, wbs.WBSDescription);
 
             viewModel.GL.Value = (listItem[FIELD_GL_ID] as FieldLookupValue).LookupId;
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_GL_NO] as FieldLookupValue).LookupValue, (listItem[FIELD_GL_DESC] as FieldLookupValue).LookupValue);

@@ -87,6 +87,7 @@
                     @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.WBS)
+                        @Html.HiddenFor(m => m.WBSDescription)
                         @Html.ValidationMessageFor(m => m.WBS)
                     </div>
                 </div>
@@ -225,6 +226,15 @@
 
             $("#Amount").change(function () {
                 $("#AmountReimbursed").data("kendoNumericTextBox").value($("#Amount").val());
+            });
+
+            $('#submit-button').click(function (e) {
+                $("#WBSDescription").val($("#WBS_Value").data("kendoDropDownList").text());
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
             });
 
             $('#print-button').click(function (e) {

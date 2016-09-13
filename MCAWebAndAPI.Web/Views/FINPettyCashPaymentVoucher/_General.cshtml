@@ -75,6 +75,7 @@
             @Html.Bootstrap().LabelFor(m => m.WBS).Class("col-sm-3 control-label")
             <div class="col-sm-8">
                 @Html.EditorFor(m => m.WBS)
+                @Html.HiddenFor(m=>m.WBSDescription)
             </div>
         </div>
         <div class="form-group">
