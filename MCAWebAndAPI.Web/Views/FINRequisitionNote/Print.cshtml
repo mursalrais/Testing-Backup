@@ -122,10 +122,7 @@
                     <th>GL</th>
                     <th>Specification</th>
                     <th>Quantity</th>
-                    @if (!string.IsNullOrWhiteSpace(Model.EventBudgetNo.Text))
-                    {
-                        <th>Frequency</th>
-                    }
+                    <th>Frequency</th>
                     <th>Price</th>
                     <th>Total (per item)</th>
                 </tr>
@@ -157,19 +154,16 @@
                                 @listData[i].Quantity.ToString()
                             </td>
 
-                            @if (!string.IsNullOrWhiteSpace(Model.EventBudgetNo.Text))
-                            {
-                                <td class="centerAlign">
-                                    @listData[i].Frequency.ToString()
-                                </td>
-                            }
-
+                            <td class="centerAlign">
+                                @listData[i].Frequency.ToString()
+                            </td>
+                      
                             <td class="centerAlign">
                                 @listData[i].Price.ToString()
                             </td>
 
-                            
-                             <td class="centerAlign">
+
+                            <td class="centerAlign">
                                 @listData[i].Total.ToString()
                             </td>
                         </tr>
