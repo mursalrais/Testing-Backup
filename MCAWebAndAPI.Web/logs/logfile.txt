@@ -743,3 +743,6 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-09-13 16:35:54.7277 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-14 11:47:22.2515 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-09-14 12:12:19.5471 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-09-14 15:29:40.3344 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
