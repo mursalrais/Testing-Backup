@@ -743,3 +743,36 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-09-13 16:35:54.7277 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-14 10:16:33.2793 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:19:03.6622 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:22:08.1469 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:24:25.5265 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:31:52.3162 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 10:37:04.7017 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:42:53.1486 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-14 10:44:41.6911 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The underlying connection was closed: An unexpected error occurred on a receive.
+2016-09-14 10:47:21.4487 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 10:50:42.3412 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 10:53:46.8244 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 10:54:16.3579 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 10:56:36.4059 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Syntax error: Missing operand after 's' operator.
+2016-09-14 14:19:20.2908 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:21:08.4565 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:23:02.0618 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:23:50.2364 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:25:55.8367 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:26:29.1902 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:28:31.1247 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:29:03.1286 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:29:39.8807 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:30:11.2303 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:32:13.9413 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:32:41.7850 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:33:08.7127 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:33:44.4710 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:34:56.4986 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:36:27.5637 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:40:34.7305 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 14:48:49.5680 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 15:00:15.6123 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
+2016-09-14 20:56:39.0220 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService The operation has timed out.
