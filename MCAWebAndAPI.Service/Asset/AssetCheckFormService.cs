@@ -43,6 +43,29 @@ namespace MCAWebAndAPI.Service.Asset
             throw new NotImplementedException();
         }
 
+        public int? EditSave(AssetCheckFormHeaderVM data)
+        {
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add("assetcheckcreatedate", data.CreateDate);
+
+            SPConnector.UpdateListItem("Asset Check", data.ID, columnValues, _siteUrl);
+
+            var detailData = data.Details;
+
+            foreach (var item in detailData)
+            {
+                columnValues = new Dictionary<string, object>();
+                columnValues.Add("existence", item.existense);
+                columnValues.Add("condition", item.condition);
+                columnValues.Add("specification", item.specification);
+                columnValues.Add("physicalquantity", item.physicalQty);
+
+                SPConnector.UpdateListItem("Asset Check Detail", item.ID, columnValues, _siteUrl);
+            }
+
+            return data.ID;
+        }
+
         public int? save(AssetCheckFormHeaderVM data)
         {
             var columnValues = new Dictionary<string, object>();
@@ -171,7 +194,6 @@ namespace MCAWebAndAPI.Service.Asset
 
                         int qtyAquisisi = 1;
                         i++;
-                        var itemsss = item;
                         var modelDetailItem = new AssetCheckFormItemVM();
                         modelDetailItem.AssetID = (item["assetsubasset"] as FieldLookupValue).LookupId;
                         modelDetailItem.item = i;
@@ -210,6 +232,50 @@ namespace MCAWebAndAPI.Service.Asset
             }      
                   
             model.Details = modelDetail;
+            return model;
+        }
+
+        public AssetCheckFormHeaderVM EditView(int? ID)
+        {
+            var model = new AssetCheckFormHeaderVM();
+
+            var dataAssetCheckForm = SPConnector.GetListItem("Asset Check", ID, _siteUrl);
+
+            model.CreateDate = Convert.ToDateTime(dataAssetCheckForm["assetcheckcreatedate"].ToString());
+            model.ID = Convert.ToInt32(dataAssetCheckForm["ID"].ToString());
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetcheckformid' /><Value Type='Number'>"+ dataAssetCheckForm["assetcheckformid"].ToString() + "</Value></Eq></Where></Query></View>";
+            var dataDetailAssetCheckForm = SPConnector.GetList("Asset Check Detail", _siteUrl, caml);
+
+            var modelDetail = new List<AssetCheckFormItemVM>();
+
+            int i = 0;
+            foreach (var item in dataDetailAssetCheckForm)
+            {
+                var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
+
+                i++;
+                var modelDetailItem = new AssetCheckFormItemVM();
+                modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
+                modelDetailItem.ID = Convert.ToInt32(item["ID"].ToString());
+                modelDetailItem.item = i;
+                modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                modelDetailItem.province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
+                modelDetailItem.location = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
+                modelDetailItem.status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                modelDetailItem.systemQty = Convert.ToInt32(item["systemquantity"].ToString());
+
+                modelDetailItem.existense = (item["existence"] == null ? "" : item["existence"].ToString());
+                modelDetailItem.condition = (item["condition"] == null ? "" : item["condition"].ToString());
+                modelDetailItem.specification = (item["specification"] == null ? "" : item["specification"].ToString());
+                modelDetailItem.physicalQty = Convert.ToInt32(item["physicalquantity"].ToString());
+
+                modelDetail.Add(modelDetailItem);
+            }
+
+            model.Details = modelDetail;
+            
             return model;
         }
 
