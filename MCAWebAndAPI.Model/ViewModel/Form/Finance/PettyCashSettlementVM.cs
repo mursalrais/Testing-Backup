@@ -51,7 +51,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [UIHint("Decimal")]
         [DisplayName("Amount paid")]
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public decimal AmountPaid { get; set; } = 0;
 
         [DisplayName("Amount paid in words")]
@@ -69,12 +69,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [Required]
         [DisplayName("Amount Liquidated")]
         [UIHint("Decimal")]
-        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public decimal AmountLiquidated { get; set; } = 0;
 
         
         [UIHint("TextArea")]
-        [Required]
         public string Remarks { get; set; }
 
         [DisplayName("Attachment")]
@@ -93,6 +92,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [UIHint("Decimal")]
         [DisplayName("Amount Reimbursed/Returned")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public decimal Amount { get; set; } = 0;
 
         [ReadOnly(true)]

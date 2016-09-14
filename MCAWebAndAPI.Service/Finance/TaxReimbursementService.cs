@@ -37,6 +37,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_DocumentNo = "Document_x0020_No_x002e_";
         private const string FieldName_PaymentReceivedDate = "Payment_x0020_Received_x0020_Dat";
 
+        private const string TaxReimbursementDocument_URL = "{0}/Tax%20Reimbursement%20Documents/Forms/AllItems.aspx?FilterField1=Tax_x0020_Reimbursement&FilterValue1={1}";
+
         private enum TaxTypes { Income, VAT, Others };
         private enum Period { YTD, YTD_Min1, YTD_Min2 }
 
@@ -61,6 +63,7 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToRequisitionNoteVM(listItem);
+                viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             }
 
             viewModel.Operation = op;
@@ -301,5 +304,9 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
+        private string GetDocumentUrl(int? ID)
+        {
+            return string.Format(TaxReimbursementDocument_URL, siteUrl, ID);
+        }
     }
 }

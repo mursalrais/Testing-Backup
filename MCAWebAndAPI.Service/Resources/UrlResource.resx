@@ -323,4 +323,7 @@
   <data name="ProfessionalMaster" xml:space="preserve">
     <value>/Lists/Professional%20Master/Need%20Validation.aspx</value>
   </data>
+  <data name="VendorMaster" xml:space="preserve">
+    <value>/Lists/Vendor/AllItems.aspx</value>
+  </data>
 </root>

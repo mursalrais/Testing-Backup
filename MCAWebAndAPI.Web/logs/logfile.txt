@@ -739,15 +739,7 @@ Please try again.
    at System.Net.Mail.SmtpClient.Send(MailMessage message)
    at MCAWebAndAPI.Service.Utils.EmailUtil.SendMultiple(List`1 lstEmail, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 68
    at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(List`1 emailTo, String position, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 363
-2016-09-13 12:55:06.6619 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot set Column 'Location' to be null. Please use DBNull instead.
-2016-09-13 12:58:14.6491 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot set Column 'Location' to be null. Please use DBNull instead.
-2016-09-13 13:00:04.8702 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Cannot set Column 'Location' to be null. Please use DBNull instead.
-2016-09-13 13:51:17.1706 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
-2016-09-13 13:51:23.2183 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
-2016-09-13 14:22:35.9410 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
-2016-09-13 14:23:32.1324 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
-2016-09-13 14:24:21.5075 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The property or field has not been initialized. It has not been requested or the request has not been executed. It may need to be explicitly requested.
-2016-09-13 15:23:14.9065 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
-2016-09-13 15:23:23.4968 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote name could not be resolved: 'eceos2.sharepoint.com'
-2016-09-13 15:47:23.1479 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
-2016-09-13 15:49:27.7761 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object cannot be cast from DBNull to other types.
+2016-09-13 16:33:55.1186 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-13 16:35:54.7277 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64

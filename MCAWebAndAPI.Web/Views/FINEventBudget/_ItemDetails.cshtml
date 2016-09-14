@@ -59,10 +59,10 @@
         columns.Bound(p => p.UoMFreq).ClientTemplate("#= UoMFreq #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].UoMFreq' value='#= UoMFreq #' />").Width(170);
 
-        columns.Bound(p => p.UnitPrice).ClientTemplate("#= UnitPrice #" +
+        columns.Bound(p => p.UnitPrice).ClientTemplate("#=kendo.toString(UnitPrice,'N2') #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].UnitPrice' value='#= calculateField(data).UnitPrice #' />").Width(170);
 
-        columns.Bound(p => p.AmountPerItem).ClientTemplate("#= AmountPerItem #" +
+        columns.Bound(p => p.AmountPerItem).ClientTemplate("#=kendo.toString(AmountPerItem,'N2') #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].AmountPerItem' value='#= AmountPerItem #' />").Width(170);
 
 
@@ -70,8 +70,8 @@
             .Title("Funding Mechanism")
             .Columns(x =>
             {
-                x.Bound(p => p.DirectPayment).ClientTemplate("#= DirectPayment #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= calculateSCADirect(data).DirectPayment #' />").Width(170);
-                x.Bound(p => p.SCA).ClientTemplate("#= SCA #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= calculateSCADirect(data).SCA #' />").Width(170);
+                x.Bound(p => p.DirectPayment).ClientTemplate("#=kendo.toString(DirectPayment,'N2') #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].DirectPayment' value='#= calculateSCADirect(data).DirectPayment #' />").Width(170);
+                x.Bound(p => p.SCA).ClientTemplate("#=kendo.toString(SCA,'N2') #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].SCA' value='#= calculateSCADirect(data).SCA #' />").Width(170);
             })
            );
 
@@ -138,13 +138,19 @@
                 }
             }
 
-            $("#TotalDirectPayment").val(totalAllDP);
-            $("#TotalSCA").val(totalAllSCA);
-            $("#TotalIDR").val(totalAll);
+            var totalDPControl = $('#TotalDirectPayment').data("kendoNumericTextBox");
+            totalDPControl.value(totalAllDP);
+
+            var totalSCAControl = $('#TotalSCA').data("kendoNumericTextBox");
+            totalSCAControl.value(totalAllSCA);
+
+            var totalIDRControl = $('#TotalIDR').data("kendoNumericTextBox");
+            totalIDRControl.value(totalAll);
 
             var rate = $("#Rate").val();
             if (rate > 0) {
-                $("#TotalUSD").val(totalAll / rate);
+                var totalUSDControl = $('#TotalUSD').data("kendoNumericTextBox");
+                totalUSDControl.value(totalAll / rate);
             }
         }
 
@@ -161,7 +167,10 @@
 
         function onedit(e) {
             onEditKendoDetail(e);
-            $(e.container).find('input[name="AmountPerItem"]').attr("readonly", true);
+            var allItem = $(e.container).find('input[name="AmountPerItem"]');
+            if (allItem !== 'undefined') {
+                
+            }
         }
 
         function filterWBS() {
