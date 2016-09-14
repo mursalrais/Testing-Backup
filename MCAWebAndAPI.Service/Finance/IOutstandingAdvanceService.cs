@@ -27,8 +27,8 @@ namespace MCAWebAndAPI.Service.Finance
 
         Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel);
 
-        Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel);
+        Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, string siteUrlHR);
 
-        Task<List<CSVErrorLogVM>> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors);
+        List<CSVErrorLogVM> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors, ref List<OutstandingAdvanceVM> listOutstandingAdvance);
     }
 }

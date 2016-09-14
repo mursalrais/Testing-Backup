@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
@@ -29,7 +30,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string LIST_NAME_SCAVOUCHER_DOC = "SCA_x0020_Voucher";
         #endregion
 
-        #region Lilst Field Definition
+        #region List Field Definition
         private const string FIELD_NAME_ID = "ID";
         private const string FIELD_NAME_SCAVOUCHER = "SCAVoucher";
         private const string FIELD_NAME_SCA_NO = "Title";
@@ -53,16 +54,16 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_REFFERENCE_NO = "cicv";
         private const string FIELD_NAME_REMARKS = "p7up";
         private const string FIELD_NAME_USER_EMAIL = "UserEmail";
-        private const string FIELD_NAME_WBS = "WBS_x0020_Master_x0020_ID";
+        private const string FieldName_VisibleTo = "VisibleTo";
         private const string FIELD_NAME_GL = "GL_x0020_Master_x0020_ID";
         private const string FIELD_NAME_TITLE = "Title";
         private const string FIELD_NAME_AMOUNT = "Amount";
         private const string FIELD_NAME_TRANSTATUS = "Transaction_x0020_Status";
-
         private const string FIELD_NAME_SCA_GL_ID = "GL_x0020_Master_x0020_ID_x003a_G";
         private const string FIELD_NAME_SCA_GL_VALUE = "GL_x0020_Master_x0020_ID_x003a_G0";
-        private const string FIELD_NAME_SCA_WBS_ID = "WBS_x0020_Master_x0020_ID_x003a_";
-        private const string FIELD_NAME_SCA_WBS_VALUE = "WBS_x0020_Master_x0020_ID_x003a_0";
+
+        private const string FieldNameItem_WBSID = "WBSID";
+        private const string FieldNameItem_WBSDescription = "WBSDescription";
 
         private const string EVENT_BUDGET_FIELD_NAME_DATE_FROM = "Date_x0020_From";
         private const string EVENT_BUDGET_FIELD_NAME_DATE_TO = "Date_x0020_To";
@@ -79,13 +80,13 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
         #endregion
 
-        private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
-
-        public void SetSiteUrl(string siteUrl)
+        public SCAVoucherService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
+
+        private string siteUrl = string.Empty;
+        static Logger logger = LogManager.GetCurrentClassLogger();
 
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
@@ -109,22 +110,25 @@ namespace MCAWebAndAPI.Service.Finance
 
             var columnValues = new Dictionary<string, object>
             {
-                {FIELD_NAME_SCA_NO,scaNo },
-                {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
-                {FIELD_NAME_SDOID,scaVoucher.SDO.Value},
-                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
-                {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
-                {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
-                {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
-                {FIELD_NAME_PURPOSE,scaVoucher.Purpose},
-                {FIELD_NAME_PROJECT,scaVoucher.Project},
-                {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
-                {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
-                {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
-                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
+                { FIELD_NAME_SCA_NO,scaNo },
+                { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
+                { FIELD_NAME_SDOID,scaVoucher.SDO.Value},
+                { FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
+                { FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
+                { FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
+                { FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
+                { FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
+                { FIELD_NAME_PURPOSE,scaVoucher.Purpose},
+                { FIELD_NAME_PROJECT,scaVoucher.Project},
+                { FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
+                { FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
+                { FIELD_NAME_FUND,scaVoucher.Fund},
+                { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
+                { FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
+           
+            //TODO: figure out how to make this work
+            //     { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
             };
 
             try
@@ -150,21 +154,24 @@ namespace MCAWebAndAPI.Service.Finance
             bool result = false;
             var columnValues = new Dictionary<string, object>
             {
-                {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
-                {FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
-                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
-                {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
-                {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
-                {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
-                {FIELD_NAME_PURPOSE,scaVoucher.Purpose},
-                {FIELD_NAME_PROJECT,scaVoucher.Project},
-                {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
-                {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
-                {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
-                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
+                { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
+                { FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
+                { FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
+                { FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
+                { FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
+                { FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
+                { FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
+                { FIELD_NAME_PURPOSE,scaVoucher.Purpose},
+                { FIELD_NAME_PROJECT,scaVoucher.Project},
+                { FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
+                { FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
+                { FIELD_NAME_FUND,scaVoucher.Fund},
+                { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
+                { FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
+              
+            //TODO: figure out how to make this work
+            //  { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
             };
 
             if (scaVoucher.Action == SCAVoucherVM.ActionType.approve.ToString())
@@ -271,17 +278,19 @@ namespace MCAWebAndAPI.Service.Finance
 
             foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, siteUrl, caml))
             {
-                scaVoucherItemsVM.Add(
-                    new SCAVoucherItemsVM
-                    {
-                        ID = Convert.ToInt32(item[FIELD_NAME_ID]),
-                        WBSID = Convert.ToInt32((item[FIELD_NAME_WBS] as FieldLookupValue).LookupId.ToString()),
-                        GLID = Convert.ToInt32((item[FIELD_NAME_GL] as FieldLookupValue).LookupId.ToString()),
-                        WBS = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_WBS_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_WBS_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        GL = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_GL_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        Amount = Convert.ToInt32(item[FIELD_NAME_AMOUNT])
-                    }
-                );
+                SCAVoucherItemsVM scvItem = new SCAVoucherItemsVM();
+
+                scvItem.ID = Convert.ToInt32(item[FIELD_NAME_ID]);
+                scvItem.GLID = Convert.ToInt32((item[FIELD_NAME_GL] as FieldLookupValue).LookupId.ToString());
+
+                scvItem.WBSID = Convert.ToInt32(item[FieldNameItem_WBSID]);
+                WBSMapping wbs = Common.WBSMasterService.Get(siteUrl, scvItem.WBSID);
+                scvItem.WBS = wbs.WBSIDDescription;
+
+                scvItem.GL = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_GL_VALUE] as FieldLookupValue).LookupValue.ToString());
+                scvItem.Amount = Convert.ToInt32(item[FIELD_NAME_AMOUNT]);
+
+                scaVoucherItemsVM.Add(scvItem);
             }
 
             return scaVoucherItemsVM;
@@ -289,7 +298,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         public IEnumerable<SCAVoucherItemsVM> GetEventBudgetItems(int eventBudgetID)
         {
-            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb=>eb.SCA > 0);
+            IEnumerable<EventBudgetItemVM> eventBudgetItems = EventBudgetService.GetItems(siteUrl, eventBudgetID).Where(eb => eb.SCA > 0);
 
             var scaVoucherItemVMs = new List<SCAVoucherItemsVM>();
 
@@ -301,7 +310,7 @@ namespace MCAWebAndAPI.Service.Finance
                     WBS = Convert.ToString(ebItem.WBS.Text),
                     GLID = Convert.ToInt32(ebItem.GL.Value),
                     GL = Convert.ToString(ebItem.GL.Text),
-                    Amount = Convert.ToDecimal(ebItem.AmountPerItem)
+                    Amount = Convert.ToDecimal(ebItem.SCA)
                 });
             }
 
@@ -334,13 +343,14 @@ namespace MCAWebAndAPI.Service.Finance
                 foreach (var viewModel in viewModels)
                 {
                     var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_TITLE,scaVoucherID},
-                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
+                    {
+                        { FIELD_NAME_TITLE,scaVoucherID},
+                        { FIELD_NAME_SCAVOUCHER,scaVoucherID},
+                        { FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBSID) },
+                        { FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
+                        { FIELD_NAME_AMOUNT,viewModel.Amount}
+                    };
+
                     try
                     {
                         SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
@@ -372,7 +382,13 @@ namespace MCAWebAndAPI.Service.Finance
 
             return result;
         }
-        
+
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
+        {
+            var sca = GetAll().FirstOrDefault(s => s.EventBudgetID == eventBudgetId);
+
+            return sca == null ? new Tuple<int, string>(0, string.Empty) : new Tuple<int, string>((int)sca.ID, sca.SCAVoucherNo);
+        }
 
         private string GetDocumentUrl(int? ID)
         {

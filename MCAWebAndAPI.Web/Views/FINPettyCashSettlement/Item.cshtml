@@ -240,6 +240,8 @@
         }
 
         $(document).ready(function () {
+            var numerictextbox = $("#Amount").data("kendoNumericTextBox");
+            numerictextbox.readonly();
 
             $('#print-button').click(function (e) {
                 if (!$('form').valid()) {
@@ -272,7 +274,8 @@
 
             var amout = amoutLiquidated - amoutPaid;
 
-            $('#Amount').val(amout);
+            var amtcontrol = $('#Amount').data("kendoNumericTextBox");
+            amtcontrol.value(amout);
         });
 
         $('#submit-cancel').click(function (e) {

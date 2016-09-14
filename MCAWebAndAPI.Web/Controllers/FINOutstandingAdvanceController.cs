@@ -62,6 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public async Task<ActionResult> Save(FormCollection form, OutstandingAdvanceVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrlHR = ConfigResource.DefaultHRSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             try
@@ -69,7 +70,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 int? id = service.Save(viewModel);
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
                 Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel);
-                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel);
+                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel, siteUrlHR);
                 Task allTasks = Task.WhenAll(createApplicationDocumentTask, sendEmailToProfessional, sendEmailToGrantees);
 
                 await allTasks;
@@ -94,7 +95,10 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
+            var siteUrlHR = ConfigResource.DefaultHRSiteUrl;
+
             List<CSVErrorLogVM> csvErrors;
+            List<OutstandingAdvanceVM> listOutstandingAdvance = new List<OutstandingAdvanceVM>();
 
             RedirectToRouteResult result = RedirectToAction("Index", "Success",
                 new
@@ -103,29 +107,42 @@ namespace MCAWebAndAPI.Web.Controllers
                     previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
 
-
             try
             {
                 csvErrors = new List<CSVErrorLogVM>();
 
-                csvErrors = await service.ProcessCSVFilesAsync(viewModel.Documents, COMMVendorController.GetAll());
+                csvErrors = service.ProcessCSVFilesAsync(viewModel.Documents, COMMVendorController.GetAll(), ref listOutstandingAdvance);
+
+                if (csvErrors.Count > 0)
+                {
+                    string key = Guid.NewGuid().ToString();
+
+                    ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
+                    errorService.Save(key, csvErrors);
+
+                    result = RedirectToAction("UploadError", "FINOutstandingAdvance", new { key = key });
+                }
+                else
+                {
+                    foreach (var item in listOutstandingAdvance)
+                    {
+                        int? id = service.Save(item);
+                        if (id > 0)
+                        {
+                            Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, item);
+                            Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, item, siteUrlHR);
+                            Task allTasks = Task.WhenAll(sendEmailToProfessional, sendEmailToGrantees);
+
+                            await allTasks;
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
-
-            if (csvErrors.Count > 0)
-            {
-                string key = Guid.NewGuid().ToString();
-
-                ICSVErrorLogService errorService = new CSVErrorLogService(siteUrl);
-                errorService.Save(key, csvErrors);
-
-                result = RedirectToAction("UploadError", "FINOutstandingAdvance", new { key = key });
-            }
-
 
             return result;
         }

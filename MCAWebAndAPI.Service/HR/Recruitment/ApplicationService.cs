@@ -575,10 +575,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         /// <param name="viewModel"></param>
         /// <returns></returns>
         public int? CreateProfessionalData(ApplicationDataVM viewModel)
-        {
+        {   
             var updatedValue = new Dictionary<string, object>();
 
-            updatedValue.Add("Title", viewModel.FirstMiddleName);
+            updatedValue.Add("Title", viewModel.FirstMiddleName + viewModel.LastName);
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);

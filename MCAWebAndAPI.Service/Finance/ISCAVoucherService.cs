@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -35,9 +36,9 @@ namespace MCAWebAndAPI.Service.Finance
         bool UpdateSCAVoucher(SCAVoucherVM scaVoucher);
 
         bool UpdateStatusSCAVoucher(SCAVoucherVM scaVoucher);
-
-        void SetSiteUrl(string siteUrl);
-
+        
         void DeleteDetail(int id);
+
+        Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId);
     }
 }

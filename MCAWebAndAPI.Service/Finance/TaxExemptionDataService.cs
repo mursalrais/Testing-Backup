@@ -212,44 +212,37 @@ namespace MCAWebAndAPI.Service.Finance
 
         public static decimal GetIncomeTax_Exemp_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD_Min1);
         }
 
         public static decimal GetVAT_Exemp_YTD(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD);
         }
 
         public static decimal GetVAT_Exemp_YTD_Min2(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD_Min2);
         }
 
         public static decimal GetVAT_Exemp_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD_Min1);
         }
 
         public static decimal GetOtherTax_Exemp_YTD(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD);
         }
 
         public static decimal GetOtherTax_Exemp_YTD_Min2(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD_Min2);
         }
 
         public static decimal GetOtherTax_Exemp_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD_Min1);
         }
 
         private static decimal GetTaxAmount(string siteUrl, TaxTypes taxType, Period period)
@@ -292,8 +285,14 @@ namespace MCAWebAndAPI.Service.Finance
             var dateFrom = String.Format("{0}-{1}-{2}", year, "01", "01");
             var dateTo = String.Format("{0}-{1}-{2}", year, 12, 31);
 
-            //TODO: keliatannya caml masih salah
-            var caml = @"<View><Query><Where><And><Geq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value Type='DateTime'>" + dateFrom + "</Value></Geq><Leq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value Type='DateTime'>" + dateTo + "</Value></Leq></And></Where></Query></View>";
+             var caml = @"<View><Query><Where><And>" +
+                                "<Geq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value IncludeTimeValue = 'False' Type='DateTime'>" + dateFrom + "</Value></Geq>" + 
+                                "<Leq><FieldRef Name='" + SP_PERIOD_COLUMN_NAME + "' /><Value IncludeTimeValue = 'False' Type='DateTime'>" + dateTo + "</Value></Leq>" + 
+                                "</And></Where></Query>" +
+                                "<ViewFields> <FieldRef Name='" + amountFieldName + "' />  </ViewFields>" +
+                               "</View>";
+                                
+
 
             foreach (var listItem in SPConnector.GetList(listName, siteUrl, caml))
             {

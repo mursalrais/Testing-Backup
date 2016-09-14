@@ -775,7 +775,15 @@ namespace MCAWebAndAPI.Service.Utils
             ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
             ListItem oListItem = oList.GetItemById(listItemID);
 
+            //check if already an attachment
             clientContext.ExecuteQuery();
+            clientContext.Load(oListItem, li => li.AttachmentFiles);
+            clientContext.ExecuteQuery();
+            if(oListItem.AttachmentFiles.ToList().Count != 0)
+            {
+                oListItem.AttachmentFiles.ToList().ForEach(a => a.DeleteObject());
+                clientContext.ExecuteQuery();
+            }
 
             byte[] contents = new byte[Convert.ToInt32(file.ContentLength)];
             Stream fStream = file.InputStream;

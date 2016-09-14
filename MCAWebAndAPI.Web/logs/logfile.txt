@@ -739,3 +739,10 @@ Please try again.
    at System.Net.Mail.SmtpClient.Send(MailMessage message)
    at MCAWebAndAPI.Service.Utils.EmailUtil.SendMultiple(List`1 lstEmail, String subject, String emailMessage) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 68
    at MCAWebAndAPI.Service.HR.Recruitment.HRShortlistService.SendEmailValidation(List`1 emailTo, String position, String emailMessages) in C:\Users\sobari\Documents\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRShortlistService.cs:line 363
+2016-09-13 16:33:55.1186 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-13 16:35:54.7277 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-14 16:45:28.6140 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-09-14 17:00:30.7692 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-09-14 17:16:44.5856 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.

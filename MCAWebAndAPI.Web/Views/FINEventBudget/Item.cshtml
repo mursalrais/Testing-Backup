@@ -13,8 +13,6 @@
         enctype = "multipart/form-data"
     }))
 {
-    Model.SCAVoucherNo = "ddd.ddd.ddd";
-
     string buttonMsg = string.Empty;
     var rnNoAvail = !string.IsNullOrEmpty(Model.RequisitionNoteNo);
     var scaVAvail = !string.IsNullOrEmpty(Model.SCAVoucherNo);
@@ -187,7 +185,7 @@
                                 <label class="col-sm-5 control-label"> SCA Voucher number :</label>
                                 <div class="col-sm-7">
                                     @Html.DisplayFor(m => m.SCAVoucherNo)
-
+                                    @Html.HiddenFor(m => m.SCAVoucherId)
                                 </div>
                             </div>
                             <br />
@@ -252,6 +250,17 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
+            var TotalDirectPaymentTxt = $("#TotalDirectPayment").data("kendoNumericTextBox");
+            TotalDirectPaymentTxt.readonly();
+
+            var TotalSCATxt = $("#TotalSCA").data("kendoNumericTextBox");
+            TotalSCATxt.readonly();
+
+            var TotalIDRTxt = $("#TotalIDR").data("kendoNumericTextBox");
+            TotalIDRTxt.readonly();
+
+            var TotalUSDTxt = $("#TotalUSD").data("kendoNumericTextBox");
+            TotalUSDTxt.readonly();
 
             $('#print-button').click(function (e) {
                 if (!$('form').valid()) {
@@ -293,13 +302,13 @@
         });
 
         $("#Rate").change(function () {
-
+            var TotalUSDTxt = $("#TotalUSD").data("kendoNumericTextBox");
             var totalIDR = $("#TotalIDR").val();
             var rate = $("#Rate").val();
             if (rate > 0)
-                $("#TotalUSD").val(totalIDR / rate);
+                TotalUSDTxt.value(totalIDR / rate);
             else
-                $("#TotalUSD").val(0);
+                TotalUSDTxt.value(0);
         });
 
         function filterProject() {

@@ -1,0 +1,153 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Procurement
+
+@model VendorVM
+
+@using (Ajax.BeginForm("Update", "PROVendor",
+                                                                                                                            FormMethod.Post,
+                                                                                                                            new AjaxOptions
+                                                                                                                            {
+                                                                                                                                OnBegin = "onBeginForm",
+                                                                                                                                OnComplete = "onCompleteForm",
+                                                                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                OnFailure = "onFailureForm"
+                                                                                                                            }, new { @class = "form-horizontal" }))
+{
+    <form class="form-horizontal" method="post" action="/PROVendor/Update" id="create-asset-acquisition-form">
+        <fieldset>
+            <legend>Form Vendor Master</legend>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.VendorID).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="VendorID" value="@Model.VendorID" id="VendorID" style="width:100%" onfocusout="isVendorID()" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.VendorName).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="VendorName" value="@Model.VendorName" id="VendorName" style="width:100%" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProfessionalID).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.ProfessionalID)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" disabled value="@Model.ProfessionalName" name="ProfessionalName" id="ProfessionalName" style="width:100%" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Street).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="Street" value="@Model.Street" id="Street" style="width:100%" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.PostalCode).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="PostalCode" value="@Model.PostalCode" id="PostalCode" style="width:100%" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.City).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="City" id="City" value="@Model.City" style="width:100%" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Currency).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Currency)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.HomeNumber).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="HomeNumber" id="HomeNumber" value="@Model.HomeNumber" style="width:100%" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Group).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Group)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Email).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        <input tye="text" name="Email" id="Email" value="@Model.Email" style="width:100%" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.ProfessionalName)
+        @Html.HiddenFor(m => m.Email)
+        </form>
+        }
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-sm-12">
+                    <center>
+                        <button class="k-button k-button-icontext k-grid-add" id="submit-button" type="submit">
+                            Submit
+                        </button>
+                        <a href="@Model.CancelUrl" target='_parent'>
+                            <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                        </a>
+                    </center>
+
+                </div>
+            </div>
+        </div>
+
+        @section scripts{
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    isVendorID();
+                    $("#submit-button").click(function () {
+                        $("form").submit();
+                    });
+                });
+
+                function onProfIDChange(e) {
+                    var res = this.dataItem(e.item)
+                    alert(res);
+                    var url = "/PROVendor/GetProfMasterInfo?ID=" + res;
+                    $.getJSON(url, function (data) {
+                        //do next
+                        //alert(data);
+                        var breakk = data.split("-");
+                        document.getElementById('ProfessionalName').value = breakk[0];
+                        document.getElementById('Email').value = breakk[1];
+                    })
+                }
+
+                function isVendorID() {
+                    var vendoriid = document.getElementById("VendorID");
+                    //alert(vendoriid.value);
+                    if (vendoriid.value.substring(0, 1) == "5") {
+                        $("#ProfessionalID_Value").data("kendoDropDownList").enable(true);
+                        document.getElementById('ProfessionalName').disabled = true;
+                        document.getElementById('Email').disabled = true;
+                    }
+                    else {
+                        $("#ProfessionalID_Value").data("kendoDropDownList").enable(false);
+                        document.getElementById('ProfessionalName').disabled = false;
+                        document.getElementById('Email').disabled = false;
+                    }
+                }
+            </script>
+        }

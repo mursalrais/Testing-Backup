@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -36,6 +37,12 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_DocumentNo = "Document_x0020_No_x002e_";
         private const string FieldName_PaymentReceivedDate = "Payment_x0020_Received_x0020_Dat";
 
+        private const string TaxReimbursementDocument_URL = "{0}/Tax%20Reimbursement%20Documents/Forms/AllItems.aspx?FilterField1=Tax_x0020_Reimbursement&FilterValue1={1}";
+
+        private enum TaxTypes { Income, VAT, Others };
+        private enum Period { YTD, YTD_Min1, YTD_Min2 }
+
+
         string siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -56,6 +63,7 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToRequisitionNoteVM(listItem);
+                viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             }
 
             viewModel.Operation = op;
@@ -153,61 +161,100 @@ namespace MCAWebAndAPI.Service.Finance
 
         #region Supply data to Landing Page
 
-        public static decimal GetIncomeTax_Reimb_YTD()
+        public static decimal GetIncomeTax_Reimb_YTD(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD);
         }
 
-        public static decimal GetIncomeTax_Reimb_YTD_Min2()
+        public static decimal GetIncomeTax_Reimb_YTD_Min2(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD_Min2);
         }
 
-        public static decimal GetIncomeTax_Reimb_YTD_Min1()
+        public static decimal GetIncomeTax_Reimb_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Income, Period.YTD_Min1);
         }
 
-        public static decimal GetVAT_Reimb_YTD()
+        public static decimal GetVAT_Reimb_YTD(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+           return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD);
         }
 
-        public static decimal GetVAT_Reimb_YTD_Min2()
+        public static decimal GetVAT_Reimb_YTD_Min2(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD_Min2);
         }
 
-        public static decimal GetVAT_Reimb_YTD_Min1()
+        public static decimal GetVAT_Reimb_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.VAT, Period.YTD_Min1);
         }
 
-        public static decimal GetOtherTax_Reimb_YTD()
+        public static decimal GetOtherTax_Reimb_YTD(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD);
         }
 
-        public static decimal GetOtherTax_Reimb_YTD_Min2()
+        public static decimal GetOtherTax_Reimb_YTD_Min2(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD_Min2);
         }
 
-        public static decimal GetOtherTax_Reimb_YTD_Min1()
+        public static decimal GetOtherTax_Reimb_YTD_Min1(string siteUrl)
         {
-            //TODO: implement for Landing Page
-            return Convert.ToDecimal(new Random().Next(1000000, 100000000));
+            return GetTaxAmount(siteUrl, TaxTypes.Others, Period.YTD_Min1);
         }
 
+        private static decimal GetTaxAmount(string siteUrl, TaxTypes taxType, Period period)
+        {
+            decimal result = 0;
+            int year = DateTime.Now.Year;
+            string selectedTaxType = string.Empty;
 
+            if (period == Period.YTD_Min1)
+            {
+                year--;
+            }
+            else if (period == Period.YTD_Min2)
+            {
+                year -= 2;
+            }
+
+            switch (taxType)
+            {
+                case TaxTypes.Income:
+                    selectedTaxType = TaxTypeComboBoxVM.INCOME;
+                    break;
+
+                case TaxTypes.VAT:
+                    selectedTaxType = TaxTypeComboBoxVM.VAT;
+                    break;
+
+                case TaxTypes.Others:
+                    selectedTaxType = TaxTypeComboBoxVM.OTHERS;
+                    break;
+            }
+
+            var dateFrom = String.Format("{0}-{1}-{2}", year, "01", "01");
+            var dateTo = String.Format("{0}-{1}-{2}", year, 12, 31);
+
+            var caml = @"<View><Query><Where>" +
+                               "<And><Eq><FieldRef Name='" + FieldName_TypeOfTax + "' /><Value Type='Choice'>" + selectedTaxType + "</Value></Eq>" +
+                               "<And><Geq><FieldRef Name='" + FieldName_LetterDate + "' /><Value IncludeTimeValue = 'False' Type='DateTime'>" + dateFrom + "</Value></Geq>" +
+                               "<Leq><FieldRef Name='" + FieldName_LetterDate + "' /><Value IncludeTimeValue = 'False' Type='DateTime'>" + dateTo + "</Value></Leq></And></And>" +
+                               "</Where></Query>" + 
+                               "<ViewFields> <FieldRef Name='"+ FieldName_AmountIDR + "' />  </ViewFields>" +
+                               "</View>";
+
+            foreach (var listItem in SPConnector.GetList(ListName, siteUrl, caml))
+            {
+                result += Convert.ToDecimal(listItem[FieldName_AmountIDR]);
+            }
+
+            return result;
+
+        }
         #endregion
 
 
@@ -257,5 +304,9 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
+        private string GetDocumentUrl(int? ID)
+        {
+            return string.Format(TaxReimbursementDocument_URL, siteUrl, ID);
+        }
     }
 }

@@ -15,26 +15,24 @@ namespace MCAWebAndAPI.Service.Common
         public const string SP_ACTIVITY_LIST_NAME = "Activity";
         public const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
 
-        private string siteUrlCompactProgram = null;
-        private string _siteUrl;    //TODO: adjust this variable
-
-        public void SetCompactProgramSiteUrl(string siteUrl)
+        /// <summary>
+        /// Gets a WBSMapping by its id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static WBSMapping Get(string siteUrl, int id)
         {
-            this.siteUrlCompactProgram = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
+            var item = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, id, GetCompactProgramSiteUrl(siteUrl));
+            
+            return ConvertToWBSModelInProgram(item);
         }
 
-        public void Sync()
-        {
-            var siteUrl_BO = siteUrlCompactProgram + "/bo";
 
-
-        }
-
-        public static IEnumerable<WBSMapping> GetWBSMappingsInProgram(string _siteUrl)
+        public static IEnumerable<WBSMapping> GetWBSMappingsInProgram(string siteUrl)
         {
             var wbs = new List<WBSMapping>();
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
             {
                 wbs.Add(ConvertToWBSModelInProgram(item));
             }
@@ -42,11 +40,11 @@ namespace MCAWebAndAPI.Service.Common
             return wbs;
         }
 
-        public static WBSMapping GetWBSMappingsInProgram(string _siteUrl, int? ID)
+        public static WBSMapping GetWBSMappingsInProgram(string siteUrl, int? ID)
         {
             var wbs = new WBSMapping();
 
-            var listItem = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, ID, _siteUrl);
+            var listItem = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, ID, GetCompactProgramSiteUrl(siteUrl));
             wbs = ConvertToWBSModelInProgram(listItem);
             
             return wbs;
@@ -86,20 +84,22 @@ namespace MCAWebAndAPI.Service.Common
             return anyUpdatedValue || appendIfNew;
         }
 
-        public static IEnumerable<WBSMapping> GetAllWBSMappings(string _siteUrl)
+        public static IEnumerable<WBSMapping> GetAllWBSMappings(string siteUrl)
         {
-            var activities = GetActivitiesAcrossProjects(_siteUrl);
-            var subActivities = GetSubActivitiesAcrossProjects(_siteUrl);
-            var items = GetWBSAcrossProjects(_siteUrl, subActivities, activities);
+            var siteUrlCP = GetCompactProgramSiteUrl(siteUrl);
+
+            var activities = GetActivitiesAcrossProjects(siteUrlCP);
+            var subActivities = GetSubActivitiesAcrossProjects(siteUrlCP);
+            var items = GetWBSAcrossProjects(siteUrlCP, subActivities, activities);
 
             return items;
         }
 
-        public static IEnumerable<Activity> GetAllActivities(string _siteUrl)
+        public static IEnumerable<Activity> GetAllActivities(string siteUrl)
         {
             var items = new List<Activity>();
 
-            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToActivityModel(item));
             }
@@ -107,11 +107,11 @@ namespace MCAWebAndAPI.Service.Common
             return items;
         }
 
-        public static IEnumerable<SubActivity> GetAllSubActivities(string _siteUrl)
+        public static IEnumerable<SubActivity> GetAllSubActivities(string siteUrl)
         {
             var items = new List<SubActivity>();
 
-            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToSubActivityModel(item));
             }
@@ -120,42 +120,42 @@ namespace MCAWebAndAPI.Service.Common
         }
 
 
-        private static IEnumerable<WBSMapping> GetWBSAcrossProjects(string _siteUrl, IEnumerable<SubActivity> subActivities,
+        private static IEnumerable<WBSMapping> GetWBSAcrossProjects(string siteUrl, IEnumerable<SubActivity> subActivities,
             IEnumerable<Activity> activities)
         {
             var items = new List<WBSMapping>();
-            items.AddRange(GetProjectWBS(_siteUrl, "/gp", subActivities, activities));
-            items.AddRange(GetProjectWBS(_siteUrl, "/hn", subActivities, activities));
-            items.AddRange(GetProjectWBS(_siteUrl, "/pm", subActivities, activities));
+            items.AddRange(GetProjectWBS(siteUrl, "/gp", subActivities, activities));
+            items.AddRange(GetProjectWBS(siteUrl, "/hn", subActivities, activities));
+            items.AddRange(GetProjectWBS(siteUrl, "/pm", subActivities, activities));
             return items;
         }
 
-        private static IEnumerable<WBSMapping> GetProjectWBS(string _siteUrl, string projectRelativeUrl,
+        private static IEnumerable<WBSMapping> GetProjectWBS(string siteUrl, string projectRelativeUrl,
             IEnumerable<SubActivity> subActivities,
             IEnumerable<Activity> activities)
         {
-            var programSiteUrl = _siteUrl;
-            _siteUrl = programSiteUrl + projectRelativeUrl;
-            var wbses = GetAllWBSes(_siteUrl, subActivities, activities);
-            _siteUrl = programSiteUrl;
+            var programSiteUrl = siteUrl;
+            siteUrl = programSiteUrl + projectRelativeUrl;
+            var wbses = GetAllWBSes(siteUrl, subActivities, activities);
+            siteUrl = programSiteUrl;
 
             return wbses;
         }
 
-        private static IEnumerable<WBSMapping> GetAllWBSes(string _siteUrl, IEnumerable<SubActivity> subActivities,
+        private static IEnumerable<WBSMapping> GetAllWBSes(string siteUrl, IEnumerable<SubActivity> subActivities,
             IEnumerable<Activity> activities)
         {
             var items = new List<WBSMapping>();
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROJECT_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROJECT_LIST_NAME, siteUrl))
             {
-                items.Add(ConvertToWBSModel(_siteUrl, item, subActivities, activities));
+                items.Add(ConvertToWBSModel(siteUrl, item, subActivities, activities));
             }
 
             return items;
         }
 
-        private static bool AppendIfNewWBSExist(string _siteUrl, Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
+        private static bool AppendIfNewWBSExist(string siteUrl, Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
         {
             var itemKeysToAppend = new List<string>();
             foreach (var item in wbsProjectDict)
@@ -183,7 +183,7 @@ namespace MCAWebAndAPI.Service.Common
 
                 try
                 {
-                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, _siteUrl);
+                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -194,7 +194,7 @@ namespace MCAWebAndAPI.Service.Common
             return true;
         }
 
-        private static bool UpdateIfChanged(string _siteUrl, ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
+        private static bool UpdateIfChanged(string siteUrl, ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
         {
             var key = Convert.ToString(item["WBS_x0020_ID"]);
             if (!wbsDictionary.ContainsKey(key))
@@ -223,7 +223,7 @@ namespace MCAWebAndAPI.Service.Common
                 try
                 {
                     SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["ID"]),
-                        updatedValues, _siteUrl);
+                        updatedValues, siteUrl);
                     return true;
                 }
                 catch (Exception e)
@@ -238,7 +238,7 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
-        private static WBSMapping ConvertToWBSModel(string _siteUrl, ListItem item, IEnumerable<SubActivity> subActivities,
+        private static WBSMapping ConvertToWBSModel(string siteUrl, ListItem item, IEnumerable<SubActivity> subActivities,
             IEnumerable<Activity> activities)
         {
             var model = new WBSMapping();
@@ -252,7 +252,7 @@ namespace MCAWebAndAPI.Service.Common
                 return model;
 
             model.Activity = relatedActivity.ActivityName;
-            model.Project = ProjectHierarchyService.GetProjectNameFromSiteUrl(_siteUrl) ?? relatedActivity.ProjectName;
+            model.Project = ProjectHierarchyService.GetProjectNameFromSiteUrl(siteUrl) ?? relatedActivity.ProjectName;
             return model;
         }
 
@@ -282,12 +282,12 @@ namespace MCAWebAndAPI.Service.Common
         }
 
 
-        private static IEnumerable<Activity> GetProjectActivities(string _siteUrl, string projectRelativeUrl)
+        private static IEnumerable<Activity> GetProjectActivities(string siteUrl, string projectRelativeUrl)
         {
-            var programSiteUrl = _siteUrl;
-            _siteUrl = programSiteUrl + projectRelativeUrl;
-            var activities = GetAllActivities(_siteUrl);
-            _siteUrl = programSiteUrl;
+            var programSiteUrl = siteUrl;
+            siteUrl = programSiteUrl + projectRelativeUrl;
+            var activities = GetAllActivities(siteUrl);
+            siteUrl = programSiteUrl;
 
             foreach (var item in activities)
             {
@@ -299,31 +299,31 @@ namespace MCAWebAndAPI.Service.Common
             return activities;
         }
 
-        private static IEnumerable<SubActivity> GetProjectSubActivities(string _siteUrl, string projectRelativeUrl)
+        private static IEnumerable<SubActivity> GetProjectSubActivities(string siteUrl, string projectRelativeUrl)
         {
-            var programSiteUrl = _siteUrl;
-            _siteUrl = programSiteUrl + projectRelativeUrl;
-            var subActivities = GetAllSubActivities(_siteUrl);
-            _siteUrl = programSiteUrl;
+            var programSiteUrl = siteUrl;
+            siteUrl = programSiteUrl + projectRelativeUrl;
+            var subActivities = GetAllSubActivities(siteUrl);
+            siteUrl = programSiteUrl;
 
             return subActivities;
         }
 
-        public static IEnumerable<Activity> GetActivitiesAcrossProjects(string _siteUrl)
+        public static IEnumerable<Activity> GetActivitiesAcrossProjects(string siteUrl)
         {
             var items = new List<Activity>();
-            items.AddRange(GetProjectActivities(_siteUrl, "/gp"));
-            items.AddRange(GetProjectActivities(_siteUrl, "/hn"));
-            items.AddRange(GetProjectActivities(_siteUrl, "/pm"));
+            items.AddRange(GetProjectActivities(siteUrl, "/gp"));
+            items.AddRange(GetProjectActivities(siteUrl, "/hn"));
+            items.AddRange(GetProjectActivities(siteUrl, "/pm"));
             return items;
         }
 
-        private static IEnumerable<SubActivity> GetSubActivitiesAcrossProjects(string _siteUrl)
+        private static IEnumerable<SubActivity> GetSubActivitiesAcrossProjects(string siteUrl)
         {
             var items = new List<SubActivity>();
-            items.AddRange(GetProjectSubActivities(_siteUrl, "/gp"));
-            items.AddRange(GetProjectSubActivities(_siteUrl, "/hn"));
-            items.AddRange(GetProjectSubActivities(_siteUrl, "/pm"));
+            items.AddRange(GetProjectSubActivities(siteUrl, "/gp"));
+            items.AddRange(GetProjectSubActivities(siteUrl, "/hn"));
+            items.AddRange(GetProjectSubActivities(siteUrl, "/pm"));
             return items;
         }
 
@@ -367,6 +367,9 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
-
+        private static string GetCompactProgramSiteUrl(string siteUrl)
+        {
+            return CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.CP);
+        }
     }
 }

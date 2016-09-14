@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -29,7 +30,9 @@ namespace MCAWebAndAPI.Web.Controllers
             assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl) + Service.Resources.UrlResource.AssetCheckForm);
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
 
         //public ActionResult Create()
@@ -57,7 +60,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if(!string.IsNullOrEmpty(cancel))
             {
-                return RedirectToAction("Create", "ASSAssetCheckForm", new { });
+                return RedirectToAction("Index");
             }
 
             string office = data.Office.Value;
@@ -67,6 +70,32 @@ namespace MCAWebAndAPI.Web.Controllers
             
 
             var viewModel = assetCheckFormService.GetPopulatedModel(null, office, floor, room);
+
+            return View(viewModel);
+        }
+
+        public ActionResult Edit(
+            int? ID,
+            string siteUrl,
+            AssetCheckFormHeaderVM data,
+            string save,
+            string cancel)
+        {
+            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            
+            if (!string.IsNullOrEmpty(save))
+            {
+                int? formid = assetCheckFormService.EditSave(data);
+                return RedirectToAction("Index");
+            }
+
+            if (!string.IsNullOrEmpty(cancel))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = assetCheckFormService.EditView(ID);
 
             return View(viewModel);
         }
@@ -87,14 +116,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 const string RelativePath = "~/Views/ASSAssetCheckForm/Print.cshtml";
                 var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
 
-                var fileName = "_AssetCheckForm.pdf";
+                var fileName = data.hFormId.ToString() + "_AssetCheckForm.pdf";
                 byte[] pdfBuf = null;
                 string content;
-                
+                data.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
                 ControllerContext.Controller.ViewData.Model = data;
                 ViewData = ControllerContext.Controller.ViewData;
                 TempData = ControllerContext.Controller.TempData;
-
+                
                 using (var writer = new StringWriter())
                 {
                     var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);

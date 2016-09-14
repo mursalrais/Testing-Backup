@@ -1,4 +1,5 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Form.Procurement;
+﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using MCAWebAndAPI.Model.ViewModel.Form.Procurement;
 using System.Collections.Generic;
 using System.Data;
 
@@ -8,13 +9,15 @@ namespace MCAWebAndAPI.Service.Procurement
     {
         void SetSiteUrl(string siteUrl);
 
-        int? CreateAssetMaster(VendorVM assetMaster, string mode = null);
+        VendorVM getPopulated(string SiteUrl);
 
-        bool UpdateAssetMaster(VendorVM assetMaster);
+        int? CreateVendorMaster(VendorVM assetMaster, string mode = null);
 
-        VendorVM GetAssetMaster();
+        bool UpdateVendorMaster(VendorVM assetMaster);
 
-        VendorVM GetAssetMaster(int ID);
+        string getProfMasterInfo(string listname, int ID, string siteUrl);
+
+        VendorVM GetVendorMaster(int ID);
 
         int? MassUpload(string ListName, DataTable CSVDataTable, string SiteUrl = null);
     }

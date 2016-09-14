@@ -176,7 +176,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         viewModel.TypeForm = "Approver2";
                     }
-                    if (viewModel.TypeForm == "Professional")
+                    if (viewModel.TypeForm == "Professional" && viewModel.StatusForm != "Draft")
                     {
                         viewModel.TypeForm = "AcessDenied";
                     }

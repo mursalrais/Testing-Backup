@@ -15,8 +15,6 @@ namespace MCAWebAndAPI.Service.Finance
     
     public interface IEventBudgetService
     {
-        void SetSiteUrl(string siteUrl);
-
         EventBudgetVM Get(int? ID);
 
         Task<EventBudgetVM> GetASync(int? ID);
@@ -34,5 +32,7 @@ namespace MCAWebAndAPI.Service.Finance
         Task CreateAttachmentsAsync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
 
         Task UpdateRequisitionNoteAsync(string siteUrl = null, int id = 0);
+        Task UpdateSCAVoucherAsync(string siteUrl = null, int id = 0);
+        
     }
 }

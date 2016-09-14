@@ -46,6 +46,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="text" readonly name="attach" id="attach" value="@Model.filename" style="width : 100%" />
+                    </div>
+                </div>
+                <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                     <div class="col-md-8">
                         @Html.DisplayFor(m => m.CompletionStatus)

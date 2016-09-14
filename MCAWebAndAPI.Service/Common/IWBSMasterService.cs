@@ -2,8 +2,5 @@
 {
     public interface IWBSMasterService
     {
-        void SetCompactProgramSiteUrl(string siteUrl);
-
-        void Sync();
     }
 }
