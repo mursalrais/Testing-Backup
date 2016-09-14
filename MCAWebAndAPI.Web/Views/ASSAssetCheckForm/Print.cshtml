@@ -10,9 +10,9 @@
     <fieldset>
         <div class="row">
             <div class="col-sm-12">
-                <img src="~/Content/icon-mca.png" /><br /><br />
+                <img src="@Model.UrlImage" /><br /><br />
                 <p style="font-size:larger; text-align: center;">Asset Check Form</p>
-                <table style="border: 0px; width:25%;">
+                <table style="border: 0px; width:30%;">
                     <tr>
                         <td style="border:0px; padding: 5px;">Form ID</td>
                         <td style="border:0px; padding: 5px;">:</td>
@@ -21,12 +21,12 @@
                     <tr>
                         <td style="border:0px; padding: 5px;">Created Date</td>
                         <td style="border:0px; padding: 5px;">:</td>
-                        <td style="border:0px; padding: 5px;">@Model.hTanggalCreate</td>
+                        <td style="border:0px; padding: 5px;">@Model.CreateDate.Value.ToString("dd-MM-yyyy")</td>
                     </tr>
                     <tr>
                         <td style="border:0px; padding: 5px;">Count Date</td>
                         <td style="border:0px; padding: 5px;">:</td>
-                        <td style="border:0px; padding: 5px;">@Model.hTanggalCounted</td>
+                        <td style="border:0px; padding: 5px;"></td>
                     </tr>
                     <tr>
                         <td style="border:0px; padding: 5px;">Counted by  (1)</td>
@@ -79,8 +79,18 @@
                         </tr>
                     }
                 </table>
+                <div style="page-break-before:always">&nbsp;</div> 
                 <br /><br />
                 <p>Counted By :</p>
+                <br /><br />
+                <br /><br />
+                <table style="border: 0px; width:70%;">
+                    <tr>
+                        <td style="border:0px; padding: 10px;"><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                        <td style="border:0px; padding: 10px;"><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></td>
+                        
+                    </tr>
+                </table>
             </div>
         </div>
     </fieldset>

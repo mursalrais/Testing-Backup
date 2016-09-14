@@ -12,6 +12,10 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        int? EditSave(AssetCheckFormHeaderVM data);
+
+        AssetCheckFormHeaderVM EditView(int? ID);
+
         AssetCheckFormHeaderVM GetPopulatedModel(int? ID = null, string office = null, string floor = null, string room = null);
 
         AssetCheckFormHeaderVM GetPopulatedModelPrint(int? ID = null);
