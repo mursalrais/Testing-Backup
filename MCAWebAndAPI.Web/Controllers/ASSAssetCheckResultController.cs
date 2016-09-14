@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
 
-            return Content("<script>window.location = '"+url+"';</script>");     
+            return Content("<script>window.top.location.href = '" + url+"';</script>");     
         }
 
         public int PositionID(int? ID, string siteUrl)
