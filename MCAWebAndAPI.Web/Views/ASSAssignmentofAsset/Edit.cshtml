@@ -65,6 +65,7 @@
         </fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.filename)
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" />
@@ -123,6 +124,11 @@
             alert("Detail cannot Empty");
             return false;
         }
+
+        var url = "/ASSAssignmentOfAsset/Update";
+        $.getJSON(url, function (data) {
+
+        })
     }
 
     function onAssetChange(e) {
