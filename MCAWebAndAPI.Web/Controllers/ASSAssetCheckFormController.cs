@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Service.Converter;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -29,7 +30,9 @@ namespace MCAWebAndAPI.Web.Controllers
             assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl) + Service.Resources.UrlResource.AssetCheckForm);
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+
+            return Content("<script>window.location = '" + url + "';</script>");
         }
 
         //public ActionResult Create()
