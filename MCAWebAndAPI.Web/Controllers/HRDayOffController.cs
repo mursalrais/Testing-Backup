@@ -130,12 +130,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return array;
         }
 
-        public ActionResult DisplayRequestDetail(List<string> dayOffRequestDayOffType, List<string> dayOffRequestStarDate, List<string> dayOffRequestEndDate, List<string> dayOffRequestFullOrHalf, List<string> dayOffRequestRemarks, List<string> dayOffRewquestTotalDays, string siteUrl = null)
+        public ActionResult DisplayRequestDetail(List<string> dayOffRequestDayOffType, List<string> dayOffRequestStarDate, List<string> dayOffRequestEndDate, List<string> dayOffRequestFullOrHalf, List<string> dayOffRequestRemarks, List<string> dayOffRewquestTotalDays, List<string> returnToWork, string siteUrl = null)
         {
             _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewModel = _hRDayOffService.GetRequestData(dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays);
+            var viewModel = _hRDayOffService.GetRequestData(dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork);
 
             return View("_DisplayRequestDetail", viewModel.DayOffRequestDetailsDisplay);
         }

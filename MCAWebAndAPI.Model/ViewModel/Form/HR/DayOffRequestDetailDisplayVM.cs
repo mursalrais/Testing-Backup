@@ -46,6 +46,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? ReturnWork { get; set; }
 
         /// <summary>
+        /// returntowork in string
+        /// </summary>
+        [DisplayName("Return To Work")]
+        public string StrReturnToWork { get; set; }
+
+        /// <summary>
         /// remarks
         /// </summary>
         [DisplayName("Remarks")]

@@ -226,7 +226,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 viewModel.Position = FormatUtil.ConvertLookupToValue(item, "Position");
                 viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
-                viewModel.FullName = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]);
+                viewModel.FullName = Convert.ToString(item["Title"]);
                 viewModel.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 positionID = FormatUtil.ConvertLookupToID(item, "Position");
                 viewModel.ProfessionalID = Convert.ToInt32(item["ID"]);
@@ -1268,6 +1268,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return professionalID;
         }
 
+        public int GetProfessionalIDNumber (string psaNumber)
+        {
+            int professionalID = 0;
+
+            var camlProfessionalData = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='PSAnumber' /><Value Type='Text'>" + psaNumber + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var professionalData in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, camlProfessionalData))
+            {
+                professionalID = Convert.ToInt32(professionalData["ID"]);
+                break;
+            }
+
+            return professionalID;
+        }
+
         public void SendMailDocument(string requestorMail, string documentExitProcedure)
         {
             EmailUtil.Send(requestorMail, " ", documentExitProcedure);
@@ -1385,6 +1404,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             try
             {
                 SPConnector.UpdateListItem(SP_PSA_LIST_NAME, psaID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool UpdateLastWorkingDateOnProfessional(int professionalID, DateTime lastWorkingDate)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add("lastworkingdate", lastWorkingDate);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, professionalID, columnValues, _siteUrl);
             }
             catch (Exception e)
             {
