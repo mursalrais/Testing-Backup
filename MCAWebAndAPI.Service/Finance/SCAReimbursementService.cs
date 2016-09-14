@@ -35,12 +35,13 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailReceiptNo = "ReceiptNo";
         private const string FieldNameDetailPayee = "Payee";
         private const string FieldNameDetailDescription = "DescriptionOfExpenses";
-        private const string FieldNameDetailWBS = "WBSMasterId";
+
+        private const string FieldNameDetail_WBSID = "WBSID";
+        private const string FieldNameDetail_WBSDescription = "WBSDescription";
+
         private const string FieldNameDetailGL = "GLMasterId";
         private const string FieldNameDetailAmount = "AmontPerItem";
         private const string FieldNameDetailSCAReimbursementHeaderID = "SCAReimbursementId";
-        private const string FieldNameDetailWBSNo = "WBSMasterId_x003a_WBS_x0020_ID";
-        private const string FieldNameDetailWBSDesc = "WBSMasterId_x003a_WBS_x0020_Desc";
         private const string FieldNameDetailGLNo = "GLMasterId_x003a_GL_x0020_No";
         private const string FieldNameDetailGLDesc = "GLMasterId_x003a_GL_x0020_Descri";
 
@@ -136,7 +137,14 @@ namespace MCAWebAndAPI.Service.Finance
                 var updatedValue = new Dictionary<string, object>();
 
                 updatedValue.Add(FieldNameDetailSCAReimbursementHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add(FieldNameDetailWBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+
+                var wbsId = Convert.ToInt32(viewModel.WBS.Value);
+                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+
+                updatedValue.Add(FieldNameDetail_WBSID, wbsId);
+                updatedValue.Add(FieldNameDetail_WBSDescription, wbs.WBSIDDescription);
+
                 updatedValue.Add(FieldNameDetailGL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FieldNameDetailReceiptDate, viewModel.ReceiptDate);
                 updatedValue.Add(FieldNameDetailReceiptNo, viewModel.ReceiptNo);
@@ -192,8 +200,8 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Payee = Convert.ToString(listItem[FieldNameDetailPayee]);
             viewModel.DescriptionOfExpense = Convert.ToString(listItem[FieldNameDetailDescription]);
 
-            viewModel.WBS.Value = (listItem[FieldNameDetailWBS] as FieldLookupValue).LookupId;
-            viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FieldNameDetailWBSNo] as FieldLookupValue).LookupValue, (listItem[FieldNameDetailWBSDesc] as FieldLookupValue).LookupValue);
+            viewModel.WBS.Value = Convert.ToInt32(listItem[FieldNameDetail_WBSID]);
+            viewModel.WBS.Text = Convert.ToString(listItem[FieldNameDetail_WBSDescription]);
 
             viewModel.GL.Value = (listItem[FieldNameDetailGL] as FieldLookupValue).LookupId;
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FieldNameDetailGLNo] as FieldLookupValue).LookupValue, (listItem[FieldNameDetailGLDesc] as FieldLookupValue).LookupValue);
@@ -226,5 +234,5 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-  }
+    }
 }
