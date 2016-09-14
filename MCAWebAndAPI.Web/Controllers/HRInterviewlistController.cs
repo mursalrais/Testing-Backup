@@ -196,7 +196,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = _service.GetResultlistInterview(ID, posMan);
             viewmodel.SiteUrl = siteurl;
             viewmodel.ManPos = posMan;
-            //viewmodel.ID = id;
 
             return View(viewmodel);
         }
