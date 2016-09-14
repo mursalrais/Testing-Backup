@@ -3,15 +3,25 @@
 @model AssetCheckResultHeaderVM
 
 <form>
-    <fieldset>            
-        <div class="col-md-8">
-            @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
-            @Html.EditorFor(m => m.Position)
-        </div>
-        <div class="col-md-4">
-            @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
-            @Html.EditorFor(m => m.Name)
-        </div>
+    <fieldset>  
+        <table>
+            <tr>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+                        @Html.EditorFor(m => m.Position)
+                    </div>
+                </td>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
+                        @Html.EditorFor(m => m.Name)
+                    </div>
+                </td>
+            </tr>
+        </table>          
+        
+        
     </fieldset>
 </form>
 
