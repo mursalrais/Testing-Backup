@@ -746,3 +746,5 @@ Please try again.
 2016-09-14 16:45:28.6140 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
 2016-09-14 17:00:30.7692 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
 2016-09-14 17:16:44.5856 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
+2016-09-14 21:38:59.2486 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
+2016-09-14 22:46:54.1487 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
