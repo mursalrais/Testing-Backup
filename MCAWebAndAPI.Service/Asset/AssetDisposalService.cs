@@ -269,7 +269,6 @@ namespace MCAWebAndAPI.Service.Asset
                 var updatedValues = new Dictionary<string, object>();
                 updatedValues.Add("assetdisposal", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
-
                 var caml = @"<View><Query>
                            <Where>
                               <Eq>
@@ -284,39 +283,123 @@ namespace MCAWebAndAPI.Service.Asset
                         <QueryOptions /></View>";
 
                 var getAssetID = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
-          
-               
-
-                foreach (var info in getAssetID)
+                //getInformation From  Asset Assignment Detail
+                
+                if ( getAssetID.Count != 0)
                 {
-                    if ((info["assetsubasset"] as FieldLookupValue) != null)
+                    foreach (var info in getAssetID)
                     {
-                        updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
-                    }
-                    if (getAssetID.Count > 1)
-                    {
-                        break;
+                        if ((info["assetsubasset"] as FieldLookupValue) != null)
+                        {
+                            updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+                        }
+                        if (getAssetID.Count > 1)
+                        {
+                            break;
+                        }
                     }
                 }
-                // updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
-                //updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
-               
+                else
+                {
+                    var assetID = SPConnector.GetListItem("Asset Acquisition Details", item.AssetSubAsset.Value.Value, _siteUrl);
+                   
+                    if ((assetID["assetsubasset"] as FieldLookupValue) != null)
+                    {
+                        updatedValues.Add("assetsubasset", (assetID["assetsubasset"] as FieldLookupValue).LookupId);
+                    }
+
+                    
+                }
+
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("status", "RETIRED");
+
                 try
                 {
                     if (Item.CheckIfUpdated(item))
-                        SPConnector.UpdateListItem(SP_ASSACQDetails_LIST_NAME, item.ID, updatedValues, _siteUrl);
+                        SPConnector.UpdateListItem("Asset Disposal Detail", item.ID, updatedValues, _siteUrl);
                     else
-                        SPConnector.AddListItem(SP_ASSACQDetails_LIST_NAME, updatedValues, _siteUrl);
+                        SPConnector.AddListItem("Asset Disposal Detail", updatedValues, _siteUrl);
                 }
                 catch (Exception e)
                 {
                     logger.Error(e);
-                    throw new Exception(ErrorResource.SPUpdateError);
+                    throw new Exception(ErrorResource.SPInsertError);
                 }
             }
         }
+
+        //public void UpdateDetails(int? headerID, IEnumerable<AssetDisposalDetailVM> items)
+        //{
+        //    foreach (var item in items)
+        //    {
+        //         if (Item.CheckIfSkipped(item)) continue;
+
+        //        if (Item.CheckIfDeleted(item))
+        //        {
+        //            try
+        //            {
+        //                SPConnector.DeleteListItem("Asset Dispoal Detail", item.ID, _siteUrl);
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                logger.Error(e);
+        //                throw e;
+        //            }
+        //            continue;
+        //        }
+
+        //        var updatedValues = new Dictionary<string, object>();
+        //        updatedValues.Add("assetdisposal", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
+
+        //        var caml = @"<View><Query>
+        //                   <Where>
+        //                      <Eq>
+        //                         <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+        //                         <Value Type='Lookup'>" + item.AssetSubAsset.Value.Value + @"</Value>
+        //                      </Eq>
+        //                   </Where>
+        //                </Query>
+        //                <ViewFields>
+        //                   <FieldRef Name='assetsubasset' />
+        //                </ViewFields>
+        //                <QueryOptions /></View>";
+
+        //        var getAssetID = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+
+
+
+        //        foreach (var info in getAssetID)
+        //        {
+        //            if ((info["assetsubasset"] as FieldLookupValue) != null)
+        //            {
+        //                updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+        //            }
+        //            if (getAssetID.Count > 1)
+        //            {
+        //                break;
+        //            }
+        //        }
+        //        // updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+        //        //updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
+
+        //        updatedValues.Add("remarks", item.Remarks);
+        //        updatedValues.Add("status", "RETIRED");
+        //        try
+        //        {
+        //            if (Item.CheckIfUpdated(item))
+        //                SPConnector.UpdateListItem("Asset Disposal Detail", item.ID, updatedValues, _siteUrl);
+        //            else
+        //                SPConnector.AddListItem("Asset Disposal Detail", updatedValues, _siteUrl);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.Error(e);
+        //            throw new Exception(ErrorResource.SPInsertError);
+        //        }
+        //    }
+        //}
 
         public IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset()
         {

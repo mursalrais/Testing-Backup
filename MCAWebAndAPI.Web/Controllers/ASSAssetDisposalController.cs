@@ -117,17 +117,18 @@ namespace MCAWebAndAPI.Web.Controllers
             //}            
         }
 
+        [HttpPost]
         public ActionResult Update(AssetDisposalVM _data, string SiteUrl)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if (_data.attach.FileName == "" || _data.attach.FileName == null)
+            if ((_data.attach == null && _data.filename == null) || (_data.attach == null && _data.filename == ""))
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
+                return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
             }
 
             try

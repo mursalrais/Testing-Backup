@@ -13,7 +13,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     {
         public int? Header_ID { get; set; }
 
-        public int? ID { get; set; }
+    
 
         public string Status { get; set; }
 
