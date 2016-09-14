@@ -157,14 +157,14 @@
                         <td>
                             @listData[i].UoMFreq
                         </td>
-                        <td>
-                            @listData[i].UnitPrice.ToString("0.00")
+                        <td class="rightAlign">
+                            @listData[i].UnitPrice.ToString("N2")
                         </td>
-                        <td>
-                            @listData[i].AmountPerItem.ToString("0.00")
+                        <td class="rightAlign">
+                            @listData[i].AmountPerItem.ToString("N2")
                         </td>
-                        <td>@listData[i].DirectPayment.ToString("0.00")</td>
-                        <td>@listData[i].SCA.ToString("0.00")</td>
+                        <td class="rightAlign">@listData[i].DirectPayment.ToString("N2")</td>
+                        <td class="rightAlign">@listData[i].SCA.ToString("N2")</td>
                         <td>
                             @listData[i].Remarks
                         </td>
@@ -182,9 +182,9 @@
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor" colspan="2">Grand in Total (IDR)</td>
-                <td class="rightAlign footerBGColor">@Model.TotalIDR.ToString("0.00")</td>
-                <td class="footerBGColor">@Model.TotalDirectPayment.ToString("0.00")</td>
-                <td class="footerBGColor">@Model.TotalSCA.ToString("0.00")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalIDR.ToString("N2")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalDirectPayment.ToString("N2")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalSCA.ToString("N2")</td>
                 <td class="footerBGColor"></td>
 
             </tr>
@@ -197,9 +197,9 @@
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor"></td>
                 <td class="footerBGColor" colspan="2">Grand in Total (USD)</td>
-                <td class="rightAlign footerBGColor">@Model.TotalUSD.ToString("0.00")</td>
-                <td class="footerBGColor">@Model.TotalDirectPaymentUSD.ToString("0.00")</td>
-                <td class="footerBGColor">@Model.TotalSCAUSD.ToString("0.00")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalUSD.ToString("N2")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalDirectPaymentUSD.ToString("N2")</td>
+                <td class="rightAlign footerBGColor">@Model.TotalSCAUSD.ToString("N2")</td>
                 <td class="footerBGColor"></td>
 
             </tr>

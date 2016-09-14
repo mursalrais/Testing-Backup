@@ -71,7 +71,7 @@
 
            .Width("10%");
 
-        columns.Bound(p => p.Total).ClientTemplate("#= Total #" +
+        columns.Bound(p => p.Total).ClientTemplate("#=kendo.toString(Total,'N2') #" +
             "<input type='hidden' name='ItemDetails[#= getRequisitionDataDetail(data)#].Total' value='#= Total #' />")
           .HtmlAttributes(new { @class = "totalItemRN" })
           .Width("10%");
@@ -135,8 +135,8 @@
             }
         }
 
-        $("#Total").val(totalAll);
-
+        var totalCtrl = $('#Total').data("kendoNumericTextBox");
+        totalCtrl.value(totalAll);
 
         var category = $("#Category_Value").data("kendoDropDownList").value();
 

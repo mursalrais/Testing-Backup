@@ -91,6 +91,8 @@
         var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
         toggleEventBudgetComboBox(categoryDropDownList.value());
 
+        var totaTxt = $("#Total").data("kendoNumericTextBox");
+        totaTxt.readonly();
 
     });
 
