@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         Task<TimesheetVM> GetTimesheetAsync(string userlogin, DateTime period);
 
-        Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin);
+        Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin, bool? bprint=null);
 
         IEnumerable<TimesheetDetailVM> GetTimesheetDetails(string userlogin, DateTime period, string strName);
 
