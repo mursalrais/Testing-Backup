@@ -46,7 +46,7 @@
                     <tr>
                         <td width="160px">Amount paid</td>
                         <td>:</td>
-                        <td colspan="3">@Model.AmountPaid</td>
+                        <td colspan="3">@Model.AmountPaid.ToString("N2")</td>
                     </tr>
 
                     <tr>
@@ -105,13 +105,13 @@
                     <tr>
                         <td width="200px">Amount Liquidated</td>
                         <td width="5px">:</td>
-                        <td>@Model.AmountLiquidated </td>
+                        <td>@Model.AmountLiquidated.ToString("N2") </td>
                     </tr>
 
                     <tr>
                         <td width="200px">Amount Reimbursed/Returned</td>
                         <td width="5px">:</td>
-                        <td>@Model.Amount </td>
+                        <td>@Model.Amount.Value.ToString("N2") </td>
                     </tr>
 
                     <tr>

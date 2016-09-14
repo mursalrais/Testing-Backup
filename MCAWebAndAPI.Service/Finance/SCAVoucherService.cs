@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string LIST_NAME_SCAVOUCHER_DOC = "SCA_x0020_Voucher";
         #endregion
 
-        #region Lilst Field Definition
+        #region List Field Definition
         private const string FIELD_NAME_ID = "ID";
         private const string FIELD_NAME_SCAVOUCHER = "SCAVoucher";
         private const string FIELD_NAME_SCA_NO = "Title";
@@ -53,6 +53,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_REFFERENCE_NO = "cicv";
         private const string FIELD_NAME_REMARKS = "p7up";
         private const string FIELD_NAME_USER_EMAIL = "UserEmail";
+        private const string FieldName_VisibleTo = "VisibleTo";
         private const string FIELD_NAME_WBS = "WBS_x0020_Master_x0020_ID";
         private const string FIELD_NAME_GL = "GL_x0020_Master_x0020_ID";
         private const string FIELD_NAME_TITLE = "Title";
@@ -109,22 +110,25 @@ namespace MCAWebAndAPI.Service.Finance
 
             var columnValues = new Dictionary<string, object>
             {
-                {FIELD_NAME_SCA_NO,scaNo },
-                {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
-                {FIELD_NAME_SDOID,scaVoucher.SDO.Value},
-                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
-                {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
-                {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
-                {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
-                {FIELD_NAME_PURPOSE,scaVoucher.Purpose},
-                {FIELD_NAME_PROJECT,scaVoucher.Project},
-                {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
-                {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
-                {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
-                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
+                { FIELD_NAME_SCA_NO,scaNo },
+                { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
+                { FIELD_NAME_SDOID,scaVoucher.SDO.Value},
+                { FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
+                { FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
+                { FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
+                { FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
+                { FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
+                { FIELD_NAME_PURPOSE,scaVoucher.Purpose},
+                { FIELD_NAME_PROJECT,scaVoucher.Project},
+                { FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
+                { FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
+                { FIELD_NAME_FUND,scaVoucher.Fund},
+                { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
+                { FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
+           
+            //TODO: figure out how to make this work
+            //     { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
             };
 
             try
@@ -150,21 +154,24 @@ namespace MCAWebAndAPI.Service.Finance
             bool result = false;
             var columnValues = new Dictionary<string, object>
             {
-                {FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
-                {FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
-                {FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
-                {FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                {FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
-                {FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
-                {FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
-                {FIELD_NAME_PURPOSE,scaVoucher.Purpose},
-                {FIELD_NAME_PROJECT,scaVoucher.Project},
-                {FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
-                {FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
-                {FIELD_NAME_FUND,scaVoucher.Fund},
-                {FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                {FIELD_NAME_REMARKS,scaVoucher.Remarks},
-                {FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail}
+                { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
+                { FIELD_NAME_SDOID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SDO.Value) }},
+                { FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
+                { FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
+                { FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
+                { FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
+                { FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
+                { FIELD_NAME_PURPOSE,scaVoucher.Purpose},
+                { FIELD_NAME_PROJECT,scaVoucher.Project},
+                { FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
+                { FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
+                { FIELD_NAME_FUND,scaVoucher.Fund},
+                { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
+                { FIELD_NAME_REMARKS,scaVoucher.Remarks},
+                { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
+              
+            //TODO: figure out how to make this work
+            //  { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
             };
 
             if (scaVoucher.Action == SCAVoucherVM.ActionType.approve.ToString())

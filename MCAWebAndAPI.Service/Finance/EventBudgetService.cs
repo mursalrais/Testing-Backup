@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
@@ -50,6 +51,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EventBudgetFieldName_TotalUSD = "Total_x0020__x0028_USD_x0029_";
         private const string EventBudgetFieldName_TransactionStatus = "TransactionStatus";
         private const string EventBudgetFieldName_UserEmail = "UserEmail";
+        private const string EventBudgetFieldName_VisibleTo = "VisibleTo";
 
         private const string ActivityFieldName_Name = "Title";
 
@@ -194,6 +196,9 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
             updatedValue.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
 
+            //TODO: figure out how to make this work
+            //updatedValue.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl, "??"));
+
             try
             {
                 SPConnector.UpdateListItem(ListName_EventBudget, eventBudget.ID, updatedValue, siteUrl);
@@ -206,7 +211,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             return true;
         }
-
+        
         public static IEnumerable<EventBudgetItemVM> GetItems(string siteUrl,int eventBudgetID)
         {
             IEventBudgetService service = new EventBudgetService(siteUrl);
@@ -222,7 +227,10 @@ namespace MCAWebAndAPI.Service.Finance
 
             foreach (var item in SPConnector.GetList(ListName_EventBudgetItem, siteUrl, caml))
             {
-                eventBudgets.Add(ConvertToItemVM(item));
+                if (item != null)
+                {
+                    eventBudgets.Add(ConvertToItemVM(item));
+                }
             }
 
 
@@ -246,12 +254,13 @@ namespace MCAWebAndAPI.Service.Finance
             detail.Remarks = Convert.ToString(item[EventBudgetItemFieldName_Remarks]);
 
             detail.WBSId = Convert.ToInt32(item[EventBudgetItemFieldName_WBSId]);
-            WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, detail.WBSId);
-
-            detail.WBS.Value = detail.WBSId;
-            detail.WBS.Text = wbsMapping.WBSIDDescription;
-            
-            detail.WBSDesription = string.Format("{0}-{1}", wbsMapping.WBSID, wbsMapping.WBSIDDescription);
+            if (detail.WBSId > 0)
+            {
+                WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, detail.WBSId);
+                detail.WBS.Value = detail.WBSId;
+                detail.WBS.Text = wbsMapping.WBSIDDescription;
+                detail.WBSDesription = string.Format("{0}-{1}", wbsMapping.WBSID, wbsMapping.WBSIDDescription);
+            }
 
             detail.GL.Value = (item[EventBudgetItemFieldName_GLID] as FieldLookupValue).LookupId;
             detail.GL.Text = string.Format("{0}-{1}", (item[EventBudgetItemFieldName_GLNo] as FieldLookupValue).LookupValue, (item[EventBudgetItemFieldName_GLDescription] as FieldLookupValue).LookupValue);
@@ -293,6 +302,9 @@ namespace MCAWebAndAPI.Service.Finance
             newObject.Add(EventBudgetFieldName_TotalUSD, eventBudget.TotalUSD);
             newObject.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
             newObject.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
+
+            //TODO: figure out how to make this work
+            // newObject.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl, "??"));
 
             eventBudget.No = DocumentNumbering.Create(siteUrl, DocumentNo, 5);
             newObject.Add(EventBudgetFieldName_No, eventBudget.No);
