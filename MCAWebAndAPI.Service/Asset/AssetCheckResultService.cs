@@ -118,16 +118,7 @@ namespace MCAWebAndAPI.Service.Asset
                 foreach (var item in SPConnector.GetList("Asset Check Result Detail", _siteUrl, caml))
                 {
                     var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
-
-                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
-                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                    string status = "";
-                    foreach (var itemLoan in dataLoan)
-                    {
-                        status = itemLoan["status"].ToString();
-                    }
-
+                    
                     i++;
                     var modelDetailItem = new AssetCheckResultItemVM();
                     if (item["assetmaster"] != null)
@@ -146,26 +137,19 @@ namespace MCAWebAndAPI.Service.Asset
 
                     modelDetailItem.DifferentQty = modelDetailItem.PhysicalQty - modelDetailItem.SystemQty;
 
-                    if (status != "")
+                    modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                    if (modelDetailItem.Status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
                     {
-                        modelDetailItem.Status = status;
-                        if (status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
-                        {
-                            modelDetailItem.Dispose = "Yes";
-                        }
-                        if (status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
-                        {
-                            modelDetailItem.Dispose = "No";
-                        }
-
+                        modelDetailItem.Dispose = "Yes";
                     }
-                    else
+                    if (modelDetailItem.Status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
                     {
-                        if (modelDetailItem.DifferentQty >= 0)
-                        {
-                            modelDetailItem.Dispose = "No";
-                        }
-                        modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                        modelDetailItem.Dispose = "No";
+                    }
+
+                    if (modelDetailItem.DifferentQty >= 0)
+                    {
+                        modelDetailItem.Dispose = "No";
                     }
 
                     modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
@@ -281,16 +265,7 @@ namespace MCAWebAndAPI.Service.Asset
             foreach (var item in SPConnector.GetList("Asset Check Detail", _siteUrl, caml))
             {
                 var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetmaster"] as FieldLookupValue).LookupId, _siteUrl);
-
-                caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + (item["assetmaster"] as FieldLookupValue).LookupId + "</Value></Eq></Where></Query></View>";
-                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                string status = "";
-                foreach (var itemLoan in dataLoan)
-                {
-                    status = itemLoan["status"].ToString();
-                }
-
+                
                 i++;
                 var modelDetailItem = new AssetCheckResultItemVM();
                 if (item["assetmaster"] != null)
@@ -308,28 +283,20 @@ namespace MCAWebAndAPI.Service.Asset
 
                 modelDetailItem.DifferentQty = modelDetailItem.PhysicalQty - modelDetailItem.SystemQty;
 
-                if (status != "")
+                modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                if (modelDetailItem.Status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
                 {
-                    modelDetailItem.Status = status;
-                    if (status.ToUpper() == "RUNNING" && modelDetailItem.DifferentQty < 0)
-                    {
-                        modelDetailItem.Dispose = "Yes";
-                    }
-                    if (status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
-                    {
-                        modelDetailItem.Dispose = "No";
-                    }
-
+                    modelDetailItem.Dispose = "Yes";
                 }
-                else
+                if (modelDetailItem.Status.ToUpper() == "LOAN" && modelDetailItem.DifferentQty < 0)
                 {
-                    if (modelDetailItem.DifferentQty >= 0)
-                    {
-                        modelDetailItem.Dispose = "No";
-                    }
-                    modelDetailItem.Status = (item["assetstatus"] == null ? "" : item["assetstatus"].ToString());
+                    modelDetailItem.Dispose = "No";
                 }
 
+                if (modelDetailItem.DifferentQty >= 0)
+                {
+                    modelDetailItem.Dispose = "No";
+                }
 
                 modelDetailItem.Existense = (item["existence"] == null ? "" : item["existence"].ToString());
                 modelDetailItem.Condition = (item["condition"] == null ? "" : item["condition"].ToString());
@@ -364,45 +331,28 @@ namespace MCAWebAndAPI.Service.Asset
             int i = 0;
             foreach (var item in model.Details)
             {
-                var caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
-                var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                string status = "";
-                foreach (var itemLoan in dataLoan)
-                {
-                    status = itemLoan["status"].ToString();
-                }
+                
 
                 i++;
 
                 item.Item = i;
 
                 item.DifferentQty = item.PhysicalQty - item.SystemQty;
-
-                if (status != "")
+                
+                if (item.Status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
                 {
-                    item.Status = status;
-                    if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
-                    {
-                        item.Dispose = "Yes";
-                    }
-                    if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
-                    {
-                        item.Dispose = "No";
-                    }
-
+                    item.Dispose = "Yes";
                 }
-                else
+                if (item.Status.ToUpper() == "LOAN" && item.DifferentQty < 0)
                 {
-                    if (item.DifferentQty < 0)
-                    {
-                        item.Dispose = "Yes";
-                    }
-                    if (item.DifferentQty >= 0)
-                    {
-                        item.Dispose = "No";
-                    }
+                    item.Dispose = "No";
                 }
+
+                if (item.DifferentQty >= 0)
+                {
+                    item.Dispose = "No";
+                }
+                
             }
             return model;
         }
@@ -419,44 +369,25 @@ namespace MCAWebAndAPI.Service.Asset
                 foreach (var item in model.Details)
                 {
 
-                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
-                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                    string status = "";
-                    foreach (var itemLoan in dataLoan)
-                    {
-                        status = itemLoan["status"].ToString();
-                    }
-
+                    
                     i++;
 
                     item.Item = i;
 
                     item.DifferentQty = item.PhysicalQty - item.SystemQty;
 
-                    if (status != "")
+                    if (item.Status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
                     {
-                        item.Status = status;
-                        if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "No";
-                        }
-
+                        item.Dispose = "Yes";
                     }
-                    else
+                    if (item.Status.ToUpper() == "LOAN" && item.DifferentQty < 0)
                     {
-                        if (item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (item.DifferentQty >= 0)
-                        {
-                            item.Dispose = "No";
-                        }
+                        item.Dispose = "No";
+                    }
+
+                    if (item.DifferentQty >= 0)
+                    {
+                        item.Dispose = "No";
                     }
                 }
 
@@ -512,44 +443,24 @@ namespace MCAWebAndAPI.Service.Asset
                 foreach (var item in model.Details)
                 {
 
-                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset_x003a_ID' /><Value Type='Lookup'>" + item.AssetID + "</Value></Eq></Where></Query></View>";
-                    var dataLoan = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
-
-                    string status = "";
-                    foreach (var itemLoan in dataLoan)
-                    {
-                        status = itemLoan["status"].ToString();
-                    }
-
                     i++;
 
                     item.Item = i;
 
                     item.DifferentQty = item.PhysicalQty - item.SystemQty;
 
-                    if (status != "")
+                    if (item.Status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
                     {
-                        item.Status = status;
-                        if (status.ToUpper() == "RUNNING" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (status.ToUpper() == "LOAN" && item.DifferentQty < 0)
-                        {
-                            item.Dispose = "No";
-                        }
-
+                        item.Dispose = "Yes";
                     }
-                    else
+                    if (item.Status.ToUpper() == "LOAN" && item.DifferentQty < 0)
                     {
-                        if (item.DifferentQty < 0)
-                        {
-                            item.Dispose = "Yes";
-                        }
-                        if (item.DifferentQty >= 0)
-                        {
-                            item.Dispose = "No";
-                        }
+                        item.Dispose = "No";
+                    }
+
+                    if (item.DifferentQty >= 0)
+                    {
+                        item.Dispose = "No";
                     }
                 }
 
