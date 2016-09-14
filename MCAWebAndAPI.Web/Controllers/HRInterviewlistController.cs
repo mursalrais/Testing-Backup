@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _serviceApplication = new ApplicationService();
         }
 
+        //Shortlisted & Recommended Candidates
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
@@ -49,45 +50,47 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult NextInterviewlist(string siteurl = null, int? position = null, string username = null, string useraccess = null)
-        {
-            //mandatory: set site url
-            if (siteurl == "")
-            {
-                siteurl = SessionManager.Get<string>("SiteUrl");
-                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            }
-            else
-            {
-                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            }
+        //tidak dipakai
+        //public ActionResult NextInterviewlist(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        //{
+        //    //mandatory: set site url
+        //    if (siteurl == "")
+        //    {
+        //        siteurl = SessionManager.Get<string>("SiteUrl");
+        //        _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    }
+        //    else
+        //    {
+        //        _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //        SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    }
 
-            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+        //    var viewmodel = _service.GetInterviewlist(position, username, useraccess);
 
-            //viewmodel.ID = id;
-            return View(viewmodel);
-        }
+        //    //viewmodel.ID = id;
+        //    return View(viewmodel);
+        //}
 
-        public ActionResult InterviewPanellistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
-        {
-            //mandatory: set site url
-            if (siteurl == "")
-            {
-                siteurl = SessionManager.Get<string>("SiteUrl");
-                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            }
-            else
-            {
-                _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-                SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            }
+        //tidak dipakai
+        //public ActionResult InterviewPanellistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        //{
+        //    //mandatory: set site url
+        //    if (siteurl == "")
+        //    {
+        //        siteurl = SessionManager.Get<string>("SiteUrl");
+        //        _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    }
+        //    else
+        //    {
+        //        _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //        SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    }
 
-            var viewmodel = _service.GetInterviewlist(position, username, useraccess);
+        //    var viewmodel = _service.GetInterviewlist(position, username, useraccess);
 
-            //viewmodel.ID = id;
-            return View(viewmodel);
-        }
+        //    //viewmodel.ID = id;
+        //    return View(viewmodel);
+        //}
 
         [HttpPost]
         public ActionResult CreateInterviewlistData(FormCollection form, ApplicationShortlistVM viewModel)
@@ -183,6 +186,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Input Interview Result (I)
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null, int? posMan = null )
         {
             //mandatory: get site url
@@ -192,7 +196,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewmodel = _service.GetResultlistInterview(ID, posMan);
             viewmodel.SiteUrl = siteurl;
             viewmodel.ManPos = posMan;
-            //viewmodel.ID = id;
 
             return View(viewmodel);
         }
@@ -225,6 +228,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Input Interview Result(II)
         public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null, int? manPos = null)
         {
 

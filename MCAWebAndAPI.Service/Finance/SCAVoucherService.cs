@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Resources;
@@ -54,16 +55,15 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_REMARKS = "p7up";
         private const string FIELD_NAME_USER_EMAIL = "UserEmail";
         private const string FieldName_VisibleTo = "VisibleTo";
-        private const string FIELD_NAME_WBS = "WBS_x0020_Master_x0020_ID";
         private const string FIELD_NAME_GL = "GL_x0020_Master_x0020_ID";
         private const string FIELD_NAME_TITLE = "Title";
         private const string FIELD_NAME_AMOUNT = "Amount";
         private const string FIELD_NAME_TRANSTATUS = "Transaction_x0020_Status";
-
         private const string FIELD_NAME_SCA_GL_ID = "GL_x0020_Master_x0020_ID_x003a_G";
         private const string FIELD_NAME_SCA_GL_VALUE = "GL_x0020_Master_x0020_ID_x003a_G0";
-        private const string FIELD_NAME_SCA_WBS_ID = "WBS_x0020_Master_x0020_ID_x003a_";
-        private const string FIELD_NAME_SCA_WBS_VALUE = "WBS_x0020_Master_x0020_ID_x003a_0";
+
+        private const string FieldNameItem_WBSID = "WBSID";
+        private const string FieldNameItem_WBSDescription = "WBSDescription";
 
         private const string EVENT_BUDGET_FIELD_NAME_DATE_FROM = "Date_x0020_From";
         private const string EVENT_BUDGET_FIELD_NAME_DATE_TO = "Date_x0020_To";
@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
-        
+
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
             int activityID = 0;
@@ -278,17 +278,19 @@ namespace MCAWebAndAPI.Service.Finance
 
             foreach (var item in SPConnector.GetList(LIST_NAME_SCAVOUCHER_ITEM, siteUrl, caml))
             {
-                scaVoucherItemsVM.Add(
-                    new SCAVoucherItemsVM
-                    {
-                        ID = Convert.ToInt32(item[FIELD_NAME_ID]),
-                        WBSID = Convert.ToInt32((item[FIELD_NAME_WBS] as FieldLookupValue).LookupId.ToString()),
-                        GLID = Convert.ToInt32((item[FIELD_NAME_GL] as FieldLookupValue).LookupId.ToString()),
-                        WBS = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_WBS_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_WBS_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        GL = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_GL_VALUE] as FieldLookupValue).LookupValue.ToString()),
-                        Amount = Convert.ToInt32(item[FIELD_NAME_AMOUNT])
-                    }
-                );
+                SCAVoucherItemsVM scvItem = new SCAVoucherItemsVM();
+
+                scvItem.ID = Convert.ToInt32(item[FIELD_NAME_ID]);
+                scvItem.GLID = Convert.ToInt32((item[FIELD_NAME_GL] as FieldLookupValue).LookupId.ToString());
+
+                scvItem.WBSID = Convert.ToInt32(item[FieldNameItem_WBSID]);
+                WBSMapping wbs = Common.WBSMasterService.Get(siteUrl, scvItem.WBSID);
+                scvItem.WBS = wbs.WBSIDDescription;
+
+                scvItem.GL = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_GL_VALUE] as FieldLookupValue).LookupValue.ToString());
+                scvItem.Amount = Convert.ToInt32(item[FIELD_NAME_AMOUNT]);
+
+                scaVoucherItemsVM.Add(scvItem);
             }
 
             return scaVoucherItemsVM;
@@ -341,13 +343,14 @@ namespace MCAWebAndAPI.Service.Finance
                 foreach (var viewModel in viewModels)
                 {
                     var columnValues = new Dictionary<string, object>
-                {
-                    {FIELD_NAME_TITLE,scaVoucherID},
-                    {FIELD_NAME_SCAVOUCHER,scaVoucherID},
-                    {FIELD_NAME_WBS,new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBSID) }},
-                    {FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
-                    {FIELD_NAME_AMOUNT,viewModel.Amount}
-                };
+                    {
+                        { FIELD_NAME_TITLE,scaVoucherID},
+                        { FIELD_NAME_SCAVOUCHER,scaVoucherID},
+                        { FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBSID) },
+                        { FIELD_NAME_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GLID) }},
+                        { FIELD_NAME_AMOUNT,viewModel.Amount}
+                    };
+
                     try
                     {
                         SPConnector.AddListItem(LIST_NAME_SCAVOUCHER_ITEM, columnValues, siteUrl);
