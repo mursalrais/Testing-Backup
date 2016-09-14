@@ -272,6 +272,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 byte[] pdfBuf = null;
                 string content;
 
+                data.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
                 ControllerContext.Controller.ViewData.Model = data;
                 ViewData = ControllerContext.Controller.ViewData;
                 TempData = ControllerContext.Controller.TempData;

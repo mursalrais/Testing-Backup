@@ -2,7 +2,7 @@
 
 @model AssetCheckFormHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckForm/Create" id="create-asset-CheckForm-form">
+<form class="form-horizontal" method="post" action="/ASSAssetCheckForm/Edit" id="create-asset-CheckForm-form">
     <fieldset>
         <legend>Asset Check Form</legend>
 
@@ -13,34 +13,11 @@
                     @Html.EditorFor(m => m.CreateDate)
                 </div>
             </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Office).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Office)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Floor).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Floor)
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Room).Class("col-md-4 control-label")
-                <div class="col-md-8">
-                    @Html.EditorFor(m => m.Room)
-                </div>
-            </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <div class="col-md-4">
-                    <input class="btn btn-primary" type="submit" name="calculate" value="Calculate" />
-                </div>
-            </div>
-        </div>
+
+        @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
         <div>
-            @Html.Partial("_Details", Model.Details)
+            @Html.Partial("_EditDetails", Model.Details)
         </div>
     </fieldset>
 

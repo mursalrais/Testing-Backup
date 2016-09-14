@@ -205,10 +205,21 @@ namespace MCAWebAndAPI.Web.Controllers
                     if (psaNumber != null)
                     {
                         psaID = exitProcedureService.GetPSAId(psaNumber);
+                        string professionalName = exitProcedureService.GetProfessionalName(viewModel.ID);
+                        string projectUnit = exitProcedureService.GetUnitBasedExitID(viewModel.ID);
+                        string positionName = exitProcedureService.GetPositionBasedExitID(viewModel.ID);
+
+
+                        int professionalID = exitProcedureService.GetProfessionalIDNumber(professionalName, projectUnit, positionName);
 
                         if (psaID != 0)
                         {
                             exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+                        }
+
+                        if(professionalID != 0)
+                        {
+                            exitProcedureService.UpdateLastWorkingDateOnProfessional(professionalID, lastWorkingDate);
                         }
                     }
                 }
@@ -271,8 +282,14 @@ namespace MCAWebAndAPI.Web.Controllers
             if (exitProcedureStatus == "Approved")
             {
                 DateTime lastWorkingDate = exitProcedureService.GetLastWorkingDate(exitProcID);
+                //string professionalName = exitProcedureService.GetProfessionalName(exitProcID);
+                //string projectUnitName = exitProcedureService.GetUnitBasedExitID(exitProcID);
+                //string positionName = exitProcedureService.GetPositionBasedExitID(exitProcID);
+                //string psaStatus = "Active";
+
                 string psaNumber = exitProcedureService.GetPSANumberOnExitProcedure(exitProcID);
                 int psaID = exitProcedureService.GetPSAId(psaNumber);
+                
                 exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
                 exitProcedureService.UpdateLastWorkingDateOnProfessional(viewModel.ProfessionalID, lastWorkingDate);
             }

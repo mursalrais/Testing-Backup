@@ -747,7 +747,7 @@ namespace MCAWebAndAPI.Service.Utils
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
                 clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                Web communitySite = clientContext.Site.OpenWeb("hrtraining");
+                Web communitySite = clientContext.Site.OpenWeb("hruat");
                 clientContext.Load(communitySite);
                 clientContext.ExecuteQuery();
 

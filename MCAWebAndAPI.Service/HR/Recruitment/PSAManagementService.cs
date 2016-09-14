@@ -120,7 +120,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             if (Convert.ToString(psaManagement.ProfessionalFullName) == null)
             {
                 var professionalData = SPConnector.GetListItem(SP_PROF_LIST_NAME, psaManagement.Professional.Value, _siteUrl);
-                psaManagement.ProfessionalFullName = Convert.ToString(professionalData["Title"]) + " " + Convert.ToString(professionalData["lastname"]);
+                psaManagement.ProfessionalFullName = Convert.ToString(professionalData["Title"]);
             }
 
             updatedValues.Add("professionalfullname", psaManagement.ProfessionalFullName);
@@ -136,6 +136,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 throw e;
             }
 
+            
             return SPConnector.GetLatestListItemID(SP_PSA_LIST_NAME, _siteUrl);
         }
 
@@ -388,7 +389,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updateValues.Add("PSAnumber", psaNumber);
             updateValues.Add("PSAstartdate", psaManagement.DateOfNewPSA.Value);
             updateValues.Add("PSAexpirydate", psaManagement.PSAExpiryDates.Value);
-            updateValues.Add("lastworkingdate", psaManagement.PSAExpiryDates.Value);
+            //updateValues.Add("lastworkingdate", psaManagement.PSAExpiryDates.Value);
                         
             try
             {

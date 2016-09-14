@@ -78,5 +78,13 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         bool UpdateLastWorkingDateOnProfessional(int? professionalID, System.DateTime lastWorkingDate);
 
         string GetProfessionalData(int? professionalID);
+
+        int GetProfessionalIDNumber(string professionalName, string projectUnit, string positionName);
+
+        string GetProfessionalName(int? exitProcID);
+
+        string GetUnitBasedExitID(int? exitProcID);
+
+        string GetPositionBasedExitID(int? exitProcID);
     }
 }

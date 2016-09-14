@@ -106,7 +106,7 @@
             var dayOffRequestFullOrHalf = [];
             var dayOffRequestRemarks = [];
             var dayOffRewquestTotalDays = [];
-
+            
             var rowgridBalanceDetail = $("#DayOffBalanceDetails").data("kendoGrid").tbody.find("tr");
             var j = 0;
 
@@ -1055,7 +1055,16 @@
             {
                 var returnToWork = GetReturnToWork(dayOffRequestStarDate, dayOffRequestEndDate);
 
-                displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays)
+                //returnToWork.forEach(function (cekReturnToWork) {
+                //    console.log(cekReturnToWork);
+                //});
+
+                //if (dayOffRequestStarDate.length > 1)
+                //{
+                //    var returnToWork = GetReturnToWork(dayOffRequestStarDate, dayOffRequestEndDate);
+                //}
+
+                displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork)
             }
         
         }
@@ -1064,94 +1073,604 @@
         {
             var lenStartDate = dayOffRequestStarDate.length;
             var lenEndDate = dayOffRequestEndDate.length;
-            
-            for (var i = 0; i < lenEndDate; i++)
+
+            var dayOffReturnToWork = [];
+
+            for(var i = 0; i < lenEndDate; i++)
             {
-                for(var j = 0; j < lenStartDate; j++)
+                var endDate = new Date(dayOffRequestEndDate[i]);
+                var returnToWork = endDate.setDate(endDate.getDate() + 1);
+                var datesReturnToWork = new Date(returnToWork);
+                var dayReturnToWork = datesReturnToWork.getDay();
+
+                var nameOfDayReturnToWork = checkWeekend(dayReturnToWork);
+                //var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+                if (nameOfDayReturnToWork == "Saturday")
                 {
-                    var endDate = new Date(dayOffRequestEndDate[i]);
-                    var returnToWork = new Date(setDate(endDate.getDate() + 1));
-                    var dateReturnToWork = returnToWork.getDate();
-                    var monthReturnToWork = returnToWork.getMonth() + 1;
-                    var yearReturnToWork = returnToWork.getFullYear();
+                    var AddTwoDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 2);
+                    var dateAddTwoDays = new Date(AddTwoDays);
+                    var datesDateAddTwoDays = dateAddTwoDays.getDate();
+                    var monthDateAddTwoDays = dateAddTwoDays.getMonth() + 1;
+                    var yearDateAddTwoDays = dateAddTwoDays.getFullYear();
+                    var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
+
+                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
+                    if (numberOfPublicHoliday > 0)
+                    {
+                        var AddOneDays = dateAddTwoDays.setDate(dateAddTwoDays.getDate() + 1);
+                        var dateAddOneDays = new Date(AddOneDays);
+                        var datesDateAddOneDays = dateAddOneDays.getDate();
+                        var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                        var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                        dayOffReturnToWork.push(strDateAddAddOneDays);
+                    }
+
+                }
+                else if (nameOfDayReturnToWork == "Sunday")
+                {
+                    var AddOneDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 1);
+                    var dateAddOneDays = new Date(AddOneDays);
+                    var datesDateAddOneDays = dateAddOneDays.getDate();
+                    var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                    var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                    var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddAddOneDays);
+
+                    if (numberOfPublicHoliday > 0) {
+                        var AddOneDaysAgain = dateAddOneDays.setDate(dateAddOneDays.getDate() + 1);
+                        var dateAddOneDaysAgain = new Date(AddOneDaysAgain);
+                        var datesDateAddOneDays = dateAddOneDays.getDate();
+                        var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                        var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + monthDateAddOneDays + '/' + monthDateAddOneDays;
+
+                        dayOffReturnToWork.push(strDateAddAddOneDays);
+                    }
+
+                    dayOffReturnToWork.push(strDateAddAddOneDays);
+                }
+                else
+                {
+                    var dateReturnToWork = datesReturnToWork.getDate();
+                    var monthReturnToWork = datesReturnToWork.getMonth() + 1;
+                    var yearReturnToWork = datesReturnToWork.getFullYear();
                     var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
 
-                    console.log("returnToWork: " + returnToWork);
-                    console.log("strReturnToWork: " + strReturnToWork);
-
-                    var startDateNext = new Date(dayOffRequestStarDate[j + 1]);
-                    var dateStartDateNext = startDateNext.getDate();
-                    var monthStartDateNext = startDateNext.getMonth() + 1;
-                    var yearStartDateNext = startDateNext.getFullYear();
-                    var strStartDateNext = monthStartDateNext + '/' + dateStartDateNext + '/' + yearStartDateNext;
                     
-                    console.log("startDateNext: " + startDateNext);
-                    console.log("strStartDateNext: " + strStartDateNext);
 
-                    if(strReturnToWork == strStartDateNext)
-                    {
-                        alert("strReturnToWork == strStartDateNext");
-                    }
-                    else
-                    {
-                        alert("strReturnToWork != strStartDateNext");
-                    }
-                    
+                    dayOffReturnToWork.push(strReturnToWork);
                 }
             }
 
-            var rowgridRequestDetail = $("#DayOffRequestDetails").data("kendoGrid").tbody.find("tr");
-            var j = 0;
+            return dayOffReturnToWork;
+            
+            //for (var i = 0; i < lenEndDate; i++)
+            //{
+            //    for(var j = 0; j < lenStartDate; j++)
+            //    {
+            //        var endDate = new Date(dayOffRequestEndDate[i]);
+            //        var returnToWork = endDate.setDate(endDate.getDate() + 1);
+            //        var datesReturnToWork = new Date(returnToWork);
 
-            rowgridBalanceDetail.each(function (e) {
-                var dayOffType = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text;
+            //        var dateReturnToWork = datesReturnToWork.getDate();
+            //        var monthReturnToWork = datesReturnToWork.getMonth() + 1;
+            //        var yearReturnToWork = datesReturnToWork.getFullYear();
+            //        var strReturnToWork = dateReturnToWork + '/' + monthReturnToWork + '/' + yearReturnToWork;
+                                        
+            //        console.log("strReturnToWork: " + strReturnToWork);
 
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Annual Day-Off") {
-                    balanceAnnualDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Special Day-Off") {
-                    balanceSpecialDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Paternity") {
-                    balancePaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional") {
-                    balanceMarriageOfProfessional = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional's Children") {
-                    balanceMarriageOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Circumcision of the Professional's Sons") {
-                    balanceCircumcisionOfProfessionalSon = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Baptism of the Professional's Children") {
-                    balanceBaptismOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws") {
-                    balanceDeathOfProfessionalDependent = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of a member of the Professional’s household other than the Professional’s dependent or parent") {
-                    balanceDeathOfProfessionalHousehold = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Professional’s separation date is on or after 19 of the month") {
-                    balanceProfessionalSeparationDate = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Compensatory Time") {
-                    balanceCompensatoryTime = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
-                if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Maternity") {
-                    balanceMaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                }
+            //        var startDateNext = new Date(dayOffRequestStarDate[j + 1]);
+            //        var dateStartDateNext = startDateNext.getDate();
+            //        var monthStartDateNext = startDateNext.getMonth() + 1;
+            //        var yearStartDateNext = startDateNext.getFullYear();
+            //        var strStartDateNext = dateStartDateNext + '/' + monthStartDateNext + '/' + yearStartDateNext;
+                    
+            //        console.log("startDateNext: " + startDateNext);
+            //        console.log("strStartDateNext: " + strStartDateNext);
 
-                j++;
-            });
+            //        if(strReturnToWork == strStartDateNext)
+            //        {
+            //            alert("strReturnToWork == strStartDateNext");
+            //        }
+            //        else
+            //        {
+            //            alert("strReturnToWork != strStartDateNext");
+            //        }
+                    
+            //    }
+            //}
+
+            //var rowgridRequestDetail = $("#DayOffRequestDetails").data("kendoGrid").tbody.find("tr");
+            //var j = 0;
+
+            //rowgridBalanceDetail.each(function (e) {
+            //    var dayOffType = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text;
+
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Annual Day-Off") {
+            //        balanceAnnualDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Special Day-Off") {
+            //        balanceSpecialDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Paternity") {
+            //        balancePaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional") {
+            //        balanceMarriageOfProfessional = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional's Children") {
+            //        balanceMarriageOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Circumcision of the Professional's Sons") {
+            //        balanceCircumcisionOfProfessionalSon = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Baptism of the Professional's Children") {
+            //        balanceBaptismOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws") {
+            //        balanceDeathOfProfessionalDependent = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of a member of the Professional’s household other than the Professional’s dependent or parent") {
+            //        balanceDeathOfProfessionalHousehold = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Professional’s separation date is on or after 19 of the month") {
+            //        balanceProfessionalSeparationDate = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Compensatory Time") {
+            //        balanceCompensatoryTime = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+            //    if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Maternity") {
+            //        balanceMaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+            //    }
+
+            //    j++;
+            //});
         }
 
-        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays)
+        function checkPublicHoliday(strReturnToWork)
+        {
+            var numberPublicHolidays = 0;
+            var year2016 = "2016";
+            var year2017 = "2017";
+            var year2018 = "2018";
+
+            var tahunBaru = new Date("01/01/2016");
+            var dateTahunBaru = tahunBaru.getDate();
+            var monthTahunBaru = tahunBaru.getMonth() + 1;
+            var yearTahunBaru = tahunBaru.getFullYear();
+            var strTahunBaru = dateTahunBaru + '/' + monthTahunBaru + '/' + yearTahunBaru;
+
+            var tahunBaru2017 = new Date("01/01/2017");
+            var dateTahunBaru2017 = tahunBaru2017.getDate();
+            var monthTahunBaru2017 = tahunBaru2017.getMonth() + 1;
+            var yearTahunBaru2017 = tahunBaru2017.getFullYear();
+            var strTahunBaru2017 = dateTahunBaru2017 + '/' + monthTahunBaru2017 + '/' + yearTahunBaru2017;
+
+            var tahunBaru2018 = new Date("01/01/2018");
+            var dateTahunBaru2018 = tahunBaru2018.getDate();
+            var monthTahunBaru2018 = tahunBaru2018.getMonth() + 1;
+            var yearTahunBaru2018 = tahunBaru2018.getFullYear();
+            var strTahunBaru2018 = dateTahunBaru2018 + '/' + monthTahunBaru2018 + '/' + yearTahunBaru2018;
+
+            var imlek = new Date("02/08/2016");
+            var dateImlek = imlek.getDate();
+            var monthImlek = imlek.getMonth() + 1;
+            var yearImlek = imlek.getFullYear();
+            var strImlek = dateImlek + '/' + monthImlek + '/' + yearImlek;
+
+            var imlek2017 = new Date("01/28/2017");
+            var dateImlek2017 = imlek2017.getDate();
+            var monthImlek2017 = imlek2017.getMonth() + 1;
+            var yearImlek2017 = imlek2017.getFullYear();
+            var strImlek2017 = dateImlek2017 + '/' + monthImlek2017 + '/' + yearImlek2017;
+
+            var imlek2018 = new Date("02/16/2018");
+            var dateImlek2018 = imlek2018.getDate();
+            var monthImlek2018 = imlek2018.getMonth() + 1;
+            var yearImlek2018 = imlek2018.getFullYear();
+            var strImlek2018 = dateImlek2018 + '/' + monthImlek2018 + '/' + yearImlek2018;
+
+            var idulAdha = new Date("09/12/2016");
+            var dateIdulAdha = idulAdha.getDate();
+            var monthIdulAdha = idulAdha.getMonth() + 1;
+            var yearIdulAdha = idulAdha.getFullYear();
+            var strIdulAdha = dateIdulAdha + '/' + monthIdulAdha + '/' + yearIdulAdha;
+
+            var idulAdha2017 = new Date("09/01/2017");
+            var dateIdulAdha2017 = idulAdha2017.getDate();
+            var monthIdulAdha2017 = idulAdha2017.getMonth() + 1;
+            var yearIdulAdha2017 = idulAdha2017.getFullYear();
+            var strIdulAdha2017 = dateIdulAdha2017 + '/' + monthIdulAdha2017 + '/' + yearIdulAdha2017;
+
+            var idulAdha2018 = new Date("08/22/2018");
+            var dateIdulAdha2018 = idulAdha2018.getDate();
+            var monthIdulAdha2018 = idulAdha2018.getMonth() + 1;
+            var yearIdulAdha2018 = idulAdha2018.getFullYear();
+            var strIdulAdha2018 = dateIdulAdha2018 + '/' + monthIdulAdha2018 + '/' + yearIdulAdha2018;
+
+            var nyepi = new Date("03/09/2016");
+            var dateNyepi = nyepi.getDate();
+            var monthNyepi = nyepi.getMonth() + 1;
+            var yearNyepi = nyepi.getFullYear();
+            var strNyepi = dateNyepi + '/' + monthNyepi + '/' + yearNyepi;
+
+            var nyepi2017 = new Date("03/28/2017");
+            var dateNyepi2017 = nyepi2017.getDate();
+            var monthNyepi2017 = nyepi2017.getMonth() + 1;
+            var yearNyepi2017 = nyepi2017.getFullYear();
+            var strNyepi2017 = dateNyepi2017 + '/' + monthNyepi2017 + '/' + yearNyepi2017;
+
+            var nyepi2018 = new Date("03/18/2018");
+            var dateNyepi2018 = nyepi2018.getDate();
+            var monthNyepi2018 = nyepi2018.getMonth() + 1;
+            var yearNyepi2018 = nyepi2018.getFullYear();
+            var strNyepi2018 = dateNyepi2018 + '/' + monthNyepi2018 + '/' + yearNyepi2018;
+
+            var wafatIsaAlMasih = new Date("03/25/2016");
+            var dateWafatIsaAlMasih = wafatIsaAlMasih.getDate();
+            var monthWafatIsaAlMasih = wafatIsaAlMasih.getMonth() + 1;
+            var yearWafatIsaAlMasih = wafatIsaAlMasih.getFullYear();
+            var strWafatIsaAlMasih = dateWafatIsaAlMasih + '/' + monthWafatIsaAlMasih + '/' + yearWafatIsaAlMasih;
+
+            var wafatIsaAlMasih2017 = new Date("04/14/2017");
+            var dateWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getDate();
+            var monthWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getMonth() + 1;
+            var yearWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getFullYear();
+            var strWafatIsaAlMasih2017 = dateWafatIsaAlMasih2017 + '/' + monthWafatIsaAlMasih2017 + '/' + yearWafatIsaAlMasih2017;
+
+            var wafatIsaAlMasih2018 = new Date("03/30/2018");
+            var dateWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getDate();
+            var monthWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getMonth() + 1;
+            var yearWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getFullYear();
+            var strWafatIsaAlMasih2018 = dateWafatIsaAlMasih2018 + '/' + monthWafatIsaAlMasih2018 + '/' + yearWafatIsaAlMasih2018;
+
+            var hariBuruh = new Date("05/01/2016");
+            var dateHariBuruh = hariBuruh.getDate();
+            var monthHariBuruh = hariBuruh.getMonth() + 1;
+            var yearHariBuruh = hariBuruh.getFullYear();
+            var strHariBuruh = dateHariBuruh + '/' + monthHariBuruh + '/' + yearHariBuruh;
+
+            var hariBuruh2017 = new Date("05/01/2017");
+            var dateHariBuruh2017 = hariBuruh2017.getDate();
+            var monthHariBuruh2017 = hariBuruh2017.getMonth() + 1;
+            var yearHariBuruh2017 = hariBuruh2017.getFullYear();
+            var strHariBuruh2017 = dateHariBuruh2017 + '/' + monthHariBuruh2017 + '/' + yearHariBuruh2017;
+
+            var hariBuruh2018 = new Date("05/01/2018");
+            var dateHariBuruh2018 = hariBuruh2018.getDate();
+            var monthHariBuruh2018 = hariBuruh2018.getMonth() + 1;
+            var yearHariBuruh2018 = hariBuruh2018.getFullYear();
+            var strHariBuruh2018 = dateHariBuruh2018 + '/' + monthHariBuruh2018 + '/' + yearHariBuruh2018;
+
+            var kenaikanYesus = new Date("05/05/2016");
+            var dateKenaikanYesus = kenaikanYesus.getDate();
+            var monthKenaikanYesus = kenaikanYesus.getMonth() + 1;
+            var yearKenaikanYesus = kenaikanYesus.getFullYear();
+            var strKenaikanYesus = dateKenaikanYesus + '/' + monthKenaikanYesus + '/' + yearKenaikanYesus;
+
+            var kenaikanYesus2017 = new Date("05/25/2017");
+            var dateKenaikanYesus2017 = kenaikanYesus2017.getDate();
+            var monthKenaikanYesus2017 = kenaikanYesus2017.getMonth() + 1;
+            var yearKenaikanYesus2017 = kenaikanYesus2017.getFullYear();
+            var strKenaikanYesus2017 = dateKenaikanYesus2017 + '/' + monthKenaikanYesus2017 + '/' + yearKenaikanYesus2017;
+
+            var kenaikanYesus2018 = new Date("05/10/2018");
+            var dateKenaikanYesus2018 = kenaikanYesus2018.getDate();
+            var monthKenaikanYesus2018 = kenaikanYesus2018.getMonth() + 1;
+            var yearKenaikanYesus2018 = kenaikanYesus2018.getFullYear();
+            var strKenaikanYesus2018 = dateKenaikanYesus2018 + '/' + monthKenaikanYesus2018 + '/' + yearKenaikanYesus2018;
+
+            var israMiraj = new Date("05/06/2016");
+            var dateIsraMiraj = israMiraj.getDate();
+            var monthIsraMiraj = israMiraj.getMonth() + 1;
+            var yearIsraMiraj = israMiraj.getFullYear();
+            var strIsraMiraj = dateIsraMiraj + '/' + monthIsraMiraj + '/' + yearIsraMiraj;
+
+            var israMiraj2017 = new Date("04/24/2017");
+            var dateIsraMiraj2017 = israMiraj2017.getDate();
+            var monthIsraMiraj2017 = israMiraj2017.getMonth() + 1;
+            var yearIsraMiraj2017 = israMiraj2017.getFullYear();
+            var strIsraMiraj2017 = dateIsraMiraj2017 + '/' + monthIsraMiraj2017 + '/' + yearIsraMiraj2017;
+
+            var israMiraj2018 = new Date("04/13/2018");
+            var dateIsraMiraj2018 = israMiraj2018.getDate();
+            var monthIsraMiraj2018 = israMiraj2018.getMonth() + 1;
+            var yearIsraMiraj2018 = israMiraj2018.getFullYear();
+            var strIsraMiraj2018 = dateIsraMiraj2018 + '/' + monthIsraMiraj2018 + '/' + yearIsraMiraj2018;
+
+            var waisak = new Date("05/22/2016");
+            var dateWaisak = waisak.getDate();
+            var monthWaisak = waisak.getMonth() + 1;
+            var yearWaisak = waisak.getFullYear();
+            var strWaisak = dateWaisak + '/' + monthWaisak + '/' + yearWaisak;
+
+            var waisak2017 = new Date("05/11/2017");
+            var dateWaisak2017 = waisak2017.getDate();
+            var monthWaisak2017 = waisak2017.getMonth() + 1;
+            var yearWaisak2017 = waisak2017.getFullYear();
+            var strWaisak2017 = dateWaisak2017 + '/' + monthWaisak2017 + '/' + yearWaisak2017;
+
+            var waisak2018 = new Date("05/29/2018");
+            var dateWaisak2018 = waisak2018.getDate();
+            var monthWaisak2018 = waisak2018.getMonth() + 1;
+            var yearWaisak2018 = waisak2018.getFullYear();
+            var strWaisak2018 = dateWaisak2018 + '/' + monthWaisak2018 + '/' + yearWaisak2018;
+
+            var idulFitri1 = new Date("07/06/2016");
+            var dateIdulFitri1 = idulFitri1.getDate();
+            var monthIdulFitri1 = idulFitri1.getMonth() + 1;
+            var yearIdulFitri1 = idulFitri1.getFullYear();
+            var strIdulFitri1 = dateIdulFitri1 + '/' + monthIdulFitri1 + '/' + yearIdulFitri1;
+
+            var idulFitri12017 = new Date("06/25/2017");
+            var dateIdulFitri12017 = idulFitri12017.getDate();
+            var monthIdulFitri12017 = idulFitri12017.getMonth() + 1;
+            var yearIdulFitri12017 = idulFitri12017.getFullYear();
+            var strIdulFitri12017 = dateIdulFitri12017 + '/' + monthIdulFitri12017 + '/' + yearIdulFitri12017;
+
+            var idulFitri12018 = new Date("06/15/2018");
+            var dateIdulFitri12018 = idulFitri12018.getDate();
+            var monthIdulFitri12018 = idulFitri12018.getMonth() + 1;
+            var yearIdulFitri12018 = idulFitri12018.getFullYear();
+            var strIdulFitri12018 = dateIdulFitri12018 + '/' + monthIdulFitri12018 + '/' + yearIdulFitri12018;
+
+            var idulFitri2 = new Date("07/07/2016");
+            var dateIdulFitri2 = idulFitri2.getDate();
+            var monthIdulFitri2 = idulFitri2.getMonth() + 1;
+            var yearIdulFitri2 = idulFitri2.getFullYear();
+            var strIdulFitri2 = dateIdulFitri2 + '/' + monthIdulFitri2 + '/' + yearIdulFitri2;
+
+            var idulFitri22017 = new Date("06/26/2017");
+            var dateIdulFitri22017 = idulFitri22017.getDate();
+            var monthIdulFitri22017 = idulFitri22017.getMonth() + 1;
+            var yearIdulFitri22017 = idulFitri22017.getFullYear();
+            var strIdulFitri22017 = dateIdulFitri22017 + '/' + monthIdulFitri22017 + '/' + yearIdulFitri22017;
+
+            var idulFitri22018 = new Date("06/16/2018");
+            var dateIdulFitri22018 = idulFitri22018.getDate();
+            var monthIdulFitri22018 = idulFitri22018.getMonth() + 1;
+            var yearIdulFitri22018 = idulFitri22018.getFullYear();
+            var strIdulFitri22018 = dateIdulFitri22018 + '/' + monthIdulFitri22018 + '/' + yearIdulFitri22018;
+
+            var hutRI = new Date("08/17/2016");
+            var dateHUTRI = hutRI.getDate();
+            var monthHUTRI = hutRI.getMonth() + 1;
+            var yearHUTRI = hutRI.getFullYear();
+            var strHUTRI = dateHUTRI + '/' + monthHUTRI + '/' + yearHUTRI;
+
+            var hutRI2017 = new Date("08/17/2017");
+            var dateHUTRI2017 = hutRI2017.getDate();
+            var monthHUTRI2017 = hutRI2017.getMonth() + 1;
+            var yearHUTRI2017 = hutRI2017.getFullYear();
+            var strHUTRI2017 = dateHUTRI2017 + '/' + monthHUTRI2017 + '/' + yearHUTRI2017;
+
+            var hutRI2018 = new Date("08/17/2018");
+            var dateHUTRI2018 = hutRI2018.getDate();
+            var monthHUTRI2018 = hutRI2018.getMonth() + 1;
+            var yearHUTRI2018 = hutRI2018.getFullYear();
+            var strHUTRI2018 = dateHUTRI2018 + '/' + monthHUTRI2018 + '/' + yearHUTRI2018;
+
+            var tahunBaruIslam = new Date("10/02/2016");
+            var dateTahunBaruIslam = tahunBaruIslam.getDate();
+            var monthTahunBaruIslam = tahunBaruIslam.getMonth() + 1;
+            var yearTahunBaruIslam = tahunBaruIslam.getFullYear();
+            var strTahunBaruIslam = dateTahunBaruIslam + '/' + monthTahunBaruIslam + '/' + yearTahunBaruIslam;
+
+            var tahunBaruIslam2017 = new Date("09/21/2017");
+            var dateTahunBaruIslam2017 = tahunBaruIslam2017.getDate();
+            var monthTahunBaruIslam2017 = tahunBaruIslam2017.getMonth() + 1;
+            var yearTahunBaruIslam2017 = tahunBaruIslam2017.getFullYear();
+            var strTahunBaruIslam2017 = dateTahunBaruIslam2017 + '/' + monthTahunBaruIslam2017 + '/' + yearTahunBaruIslam2017;
+
+            var tahunBaruIslam2018 = new Date("09/12/2018");
+            var dateTahunBaruIslam2018 = tahunBaruIslam2018.getDate();
+            var monthTahunBaruIslam2018 = tahunBaruIslam2018.getMonth() + 1;
+            var yearTahunBaruIslam2018 = tahunBaruIslam2018.getFullYear();
+            var strTahunBaruIslam2018 = dateTahunBaruIslam2018 + '/' + monthTahunBaruIslam2018 + '/' + yearTahunBaruIslam2018;
+
+            var maulidNabi = new Date("12/12/2016");
+            var dateMaulidNabi = maulidNabi.getDate();
+            var monthMaulidNabi = maulidNabi.getMonth() + 1;
+            var yearMaulidNabi = maulidNabi.getFullYear();
+            var strMaulidNabi = dateMaulidNabi + '/' + monthMaulidNabi + '/' + yearMaulidNabi;
+
+            var maulidNabi2017 = new Date("12/01/2017");
+            var dateMaulidNabi2017 = maulidNabi2017.getDate();
+            var monthMaulidNabi2017 = maulidNabi2017.getMonth() + 1;
+            var yearMaulidNabi2017 = maulidNabi2017.getFullYear();
+            var strMaulidNabi2017 = dateMaulidNabi2017 + '/' + monthMaulidNabi2017 + '/' + yearMaulidNabi2017;
+
+            var maulidNabi2018 = new Date("11/20/2018");
+            var dateMaulidNabi2018 = maulidNabi2018.getDate();
+            var monthMaulidNabi2018 = maulidNabi2018.getMonth() + 1;
+            var yearMaulidNabi2018 = maulidNabi2018.getFullYear();
+            var strMaulidNabi2018 = dateMaulidNabi2018 + '/' + monthMaulidNabi2018 + '/' + yearMaulidNabi;
+
+            var natal = new Date("12/25/2016");
+            var dateNatal = natal.getDate();
+            var monthNatal = natal.getMonth() + 1;
+            var yearNatal = natal.getFullYear();
+            var strNatal = dateNatal + '/' + monthNatal + '/' + yearNatal;
+
+            var natal2017 = new Date("12/25/2017");
+            var dateNatal2017 = natal2017.getDate();
+            var monthNatal2017 = natal2017.getMonth() + 1;
+            var yearNatal2017 = natal2017.getFullYear();
+            var strNatal2017 = dateNatal2017 + '/' + monthNatal2017 + '/' + yearNatal2017;
+
+            var natal2018 = new Date("12/25/2018");
+            var dateNatal2018 = natal2018.getDate();
+            var monthNatal2018 = natal2018.getMonth() + 1;
+            var yearNatal2018 = natal2018.getFullYear();
+            var strNatal2018 = dateNatal2018 + '/' + monthNatal2018 + '/' + yearNatal2018;
+
+            if (strReturnToWork == strTahunBaru) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strTahunBaru2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strTahunBaru2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulAdha) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulAdha2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulAdha2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strImlek) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strImlek2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strImlek2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNyepi) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNyepi2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNyepi2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWafatIsaAlMasih) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWafatIsaAlMasih2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWafatIsaAlMasih2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHariBuruh) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHariBuruh2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHariBuruh2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strKenaikanYesus) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strKenaikanYesus2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strKenaikanYesus2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIsraMiraj) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIsraMiraj2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIsraMiraj2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWaisak) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWaisak2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strWaisak2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulFitri1) {
+                numberPublicHolidays = numberPublicHolidays + 2;
+
+            }
+            if (strReturnToWork == strIdulFitri12017) {
+                numberPublicHolidays = numberPublicHolidays + 2;
+            }
+            if (strReturnToWork == strIdulFitri12018) {
+                numberPublicHolidays = numberPublicHolidays + 2;
+            }
+            if (strReturnToWork == strIdulFitri2) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulFitri22017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strIdulFitri22018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHUTRI) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHUTRI2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strHUTRI2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strTahunBaruIslam) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strTahunBaruIslam2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strTahunBaruIslam2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strMaulidNabi) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strMaulidNabi2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strMaulidNabi2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNatal) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNatal2017) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+            if (strReturnToWork == strNatal2018) {
+                numberPublicHolidays = numberPublicHolidays + 1;
+            }
+
+            return numberPublicHolidays;
+        }
+
+        function checkWeekend(dayReturnToWork)
+        {
+            var dayReturnToWorkInNumber = dayReturnToWork;
+
+            var weekday = new Array(7);
+            weekday[0] = "Sunday";
+            weekday[1] = "Monday";
+            weekday[2] = "Tuesday";
+            weekday[3] = "Wednesday";
+            weekday[4] = "Thursday";
+            weekday[5] = "Friday";
+            weekday[6] = "Saturday";
+
+            var weekdayName = weekday[dayReturnToWorkInNumber];
+
+            return weekdayName;
+        }
+
+        function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork)
         {
             console.log("dayOffRewquestTotalDays: " + dayOffRewquestTotalDays)
 
-            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf + "&dayOffRequestRemarks=" + dayOffRequestRemarks + "&dayOffRewquestTotalDays=" + dayOffRewquestTotalDays;
+            var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf + "&dayOffRequestRemarks=" + dayOffRequestRemarks + "&dayOffRewquestTotalDays=" + dayOffRewquestTotalDays + "&returnToWork=" + returnToWork;
             $('#' + domID).load(url);
 
             console.log(url)
@@ -1199,15 +1718,12 @@
 
         function checkPublicHolidays(dateStartRequestDate, dateEndRequestDate)
         {
-            
-
             var numberPublicHolidays = 0;
             var year2016 = "2016";
             var year2017 = "2017";
             var year2018 = "2018";
 
-            for (var d = dateStartRequestDate; d <= dateEndRequestDate; d.setDate(d.getDate() + 1))
-            {
+            for (var d = dateStartRequestDate; d <= dateEndRequestDate; d.setDate(d.getDate() + 1)) {
                 var checkDate = new Date(d);
                 var dateCheckDate = checkDate.getDate();
                 var monthCheckDate = checkDate.getMonth() + 1;
@@ -1220,11 +1736,35 @@
                 var yearTahunBaru = tahunBaru.getFullYear();
                 var strTahunBaru = dateTahunBaru + '/' + monthTahunBaru + '/' + yearTahunBaru;
 
+                var tahunBaru2017 = new Date("01/01/2017");
+                var dateTahunBaru2017 = tahunBaru2017.getDate();
+                var monthTahunBaru2017 = tahunBaru2017.getMonth() + 1;
+                var yearTahunBaru2017 = tahunBaru2017.getFullYear();
+                var strTahunBaru2017 = dateTahunBaru2017 + '/' + monthTahunBaru2017 + '/' + yearTahunBaru2017;
+
+                var tahunBaru2018 = new Date("01/01/2018");
+                var dateTahunBaru2018 = tahunBaru2018.getDate();
+                var monthTahunBaru2018 = tahunBaru2018.getMonth() + 1;
+                var yearTahunBaru2018 = tahunBaru2018.getFullYear();
+                var strTahunBaru2018 = dateTahunBaru2018 + '/' + monthTahunBaru2018 + '/' + yearTahunBaru2018;
+
                 var imlek = new Date("02/08/2016");
                 var dateImlek = imlek.getDate();
                 var monthImlek = imlek.getMonth() + 1;
                 var yearImlek = imlek.getFullYear();
                 var strImlek = dateImlek + '/' + monthImlek + '/' + yearImlek;
+
+                var imlek2017 = new Date("01/28/2017");
+                var dateImlek2017 = imlek2017.getDate();
+                var monthImlek2017 = imlek2017.getMonth() + 1;
+                var yearImlek2017 = imlek2017.getFullYear();
+                var strImlek2017 = dateImlek2017 + '/' + monthImlek2017 + '/' + yearImlek2017;
+
+                var imlek2018 = new Date("02/16/2018");
+                var dateImlek2018 = imlek2018.getDate();
+                var monthImlek2018 = imlek2018.getMonth() + 1;
+                var yearImlek2018 = imlek2018.getFullYear();
+                var strImlek2018 = dateImlek2018 + '/' + monthImlek2018 + '/' + yearImlek2018;
 
                 var idulAdha = new Date("09/12/2016");
                 var dateIdulAdha = idulAdha.getDate();
@@ -1232,11 +1772,35 @@
                 var yearIdulAdha = idulAdha.getFullYear();
                 var strIdulAdha = dateIdulAdha + '/' + monthIdulAdha + '/' + yearIdulAdha;
 
+                var idulAdha2017 = new Date("09/01/2017");
+                var dateIdulAdha2017 = idulAdha2017.getDate();
+                var monthIdulAdha2017 = idulAdha2017.getMonth() + 1;
+                var yearIdulAdha2017 = idulAdha2017.getFullYear();
+                var strIdulAdha2017 = dateIdulAdha2017 + '/' + monthIdulAdha2017 + '/' + yearIdulAdha2017;
+
+                var idulAdha2018 = new Date("08/22/2018");
+                var dateIdulAdha2018 = idulAdha2018.getDate();
+                var monthIdulAdha2018 = idulAdha2018.getMonth() + 1;
+                var yearIdulAdha2018 = idulAdha2018.getFullYear();
+                var strIdulAdha2018 = dateIdulAdha2018 + '/' + monthIdulAdha2018 + '/' + yearIdulAdha2018;
+
                 var nyepi = new Date("03/09/2016");
                 var dateNyepi = nyepi.getDate();
                 var monthNyepi = nyepi.getMonth() + 1;
                 var yearNyepi = nyepi.getFullYear();
                 var strNyepi = dateNyepi + '/' + monthNyepi + '/' + yearNyepi;
+
+                var nyepi2017 = new Date("03/28/2017");
+                var dateNyepi2017 = nyepi2017.getDate();
+                var monthNyepi2017 = nyepi2017.getMonth() + 1;
+                var yearNyepi2017 = nyepi2017.getFullYear();
+                var strNyepi2017 = dateNyepi2017 + '/' + monthNyepi2017 + '/' + yearNyepi2017;
+
+                var nyepi2018 = new Date("03/18/2018");
+                var dateNyepi2018 = nyepi2018.getDate();
+                var monthNyepi2018 = nyepi2018.getMonth() + 1;
+                var yearNyepi2018 = nyepi2018.getFullYear();
+                var strNyepi2018 = dateNyepi2018 + '/' + monthNyepi2018 + '/' + yearNyepi2018;
 
                 var wafatIsaAlMasih = new Date("03/25/2016");
                 var dateWafatIsaAlMasih = wafatIsaAlMasih.getDate();
@@ -1244,11 +1808,35 @@
                 var yearWafatIsaAlMasih = wafatIsaAlMasih.getFullYear();
                 var strWafatIsaAlMasih = dateWafatIsaAlMasih + '/' + monthWafatIsaAlMasih + '/' + yearWafatIsaAlMasih;
 
+                var wafatIsaAlMasih2017 = new Date("04/14/2017");
+                var dateWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getDate();
+                var monthWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getMonth() + 1;
+                var yearWafatIsaAlMasih2017 = wafatIsaAlMasih2017.getFullYear();
+                var strWafatIsaAlMasih2017 = dateWafatIsaAlMasih2017 + '/' + monthWafatIsaAlMasih2017 + '/' + yearWafatIsaAlMasih2017;
+
+                var wafatIsaAlMasih2018 = new Date("03/30/2018");
+                var dateWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getDate();
+                var monthWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getMonth() + 1;
+                var yearWafatIsaAlMasih2018 = wafatIsaAlMasih2018.getFullYear();
+                var strWafatIsaAlMasih2018 = dateWafatIsaAlMasih2018 + '/' + monthWafatIsaAlMasih2018 + '/' + yearWafatIsaAlMasih2018;
+
                 var hariBuruh = new Date("05/01/2016");
                 var dateHariBuruh = hariBuruh.getDate();
                 var monthHariBuruh = hariBuruh.getMonth() + 1;
                 var yearHariBuruh = hariBuruh.getFullYear();
                 var strHariBuruh = dateHariBuruh + '/' + monthHariBuruh + '/' + yearHariBuruh;
+
+                var hariBuruh2017 = new Date("05/01/2017");
+                var dateHariBuruh2017 = hariBuruh2017.getDate();
+                var monthHariBuruh2017 = hariBuruh2017.getMonth() + 1;
+                var yearHariBuruh2017 = hariBuruh2017.getFullYear();
+                var strHariBuruh2017 = dateHariBuruh2017 + '/' + monthHariBuruh2017 + '/' + yearHariBuruh2017;
+
+                var hariBuruh2018 = new Date("05/01/2018");
+                var dateHariBuruh2018 = hariBuruh2018.getDate();
+                var monthHariBuruh2018 = hariBuruh2018.getMonth() + 1;
+                var yearHariBuruh2018 = hariBuruh2018.getFullYear();
+                var strHariBuruh2018 = dateHariBuruh2018 + '/' + monthHariBuruh2018 + '/' + yearHariBuruh2018;
 
                 var kenaikanYesus = new Date("05/05/2016");
                 var dateKenaikanYesus = kenaikanYesus.getDate();
@@ -1256,11 +1844,35 @@
                 var yearKenaikanYesus = kenaikanYesus.getFullYear();
                 var strKenaikanYesus = dateKenaikanYesus + '/' + monthKenaikanYesus + '/' + yearKenaikanYesus;
 
+                var kenaikanYesus2017 = new Date("05/25/2017");
+                var dateKenaikanYesus2017 = kenaikanYesus2017.getDate();
+                var monthKenaikanYesus2017 = kenaikanYesus2017.getMonth() + 1;
+                var yearKenaikanYesus2017 = kenaikanYesus2017.getFullYear();
+                var strKenaikanYesus2017 = dateKenaikanYesus2017 + '/' + monthKenaikanYesus2017 + '/' + yearKenaikanYesus2017;
+
+                var kenaikanYesus2018 = new Date("05/10/2018");
+                var dateKenaikanYesus2018 = kenaikanYesus2018.getDate();
+                var monthKenaikanYesus2018 = kenaikanYesus2018.getMonth() + 1;
+                var yearKenaikanYesus2018 = kenaikanYesus2018.getFullYear();
+                var strKenaikanYesus2018 = dateKenaikanYesus2018 + '/' + monthKenaikanYesus2018 + '/' + yearKenaikanYesus2018;
+
                 var israMiraj = new Date("05/06/2016");
                 var dateIsraMiraj = israMiraj.getDate();
                 var monthIsraMiraj = israMiraj.getMonth() + 1;
                 var yearIsraMiraj = israMiraj.getFullYear();
                 var strIsraMiraj = dateIsraMiraj + '/' + monthIsraMiraj + '/' + yearIsraMiraj;
+
+                var israMiraj2017 = new Date("04/24/2017");
+                var dateIsraMiraj2017 = israMiraj2017.getDate();
+                var monthIsraMiraj2017 = israMiraj2017.getMonth() + 1;
+                var yearIsraMiraj2017 = israMiraj2017.getFullYear();
+                var strIsraMiraj2017 = dateIsraMiraj2017 + '/' + monthIsraMiraj2017 + '/' + yearIsraMiraj2017;
+
+                var israMiraj2018 = new Date("04/13/2018");
+                var dateIsraMiraj2018 = israMiraj2018.getDate();
+                var monthIsraMiraj2018 = israMiraj2018.getMonth() + 1;
+                var yearIsraMiraj2018 = israMiraj2018.getFullYear();
+                var strIsraMiraj2018 = dateIsraMiraj2018 + '/' + monthIsraMiraj2018 + '/' + yearIsraMiraj2018;
 
                 var waisak = new Date("05/22/2016");
                 var dateWaisak = waisak.getDate();
@@ -1268,17 +1880,53 @@
                 var yearWaisak = waisak.getFullYear();
                 var strWaisak = dateWaisak + '/' + monthWaisak + '/' + yearWaisak;
 
+                var waisak2017 = new Date("05/11/2017");
+                var dateWaisak2017 = waisak2017.getDate();
+                var monthWaisak2017 = waisak2017.getMonth() + 1;
+                var yearWaisak2017 = waisak2017.getFullYear();
+                var strWaisak2017 = dateWaisak2017 + '/' + monthWaisak2017 + '/' + yearWaisak2017;
+
+                var waisak2018 = new Date("05/29/2018");
+                var dateWaisak2018 = waisak2018.getDate();
+                var monthWaisak2018 = waisak2018.getMonth() + 1;
+                var yearWaisak2018 = waisak2018.getFullYear();
+                var strWaisak2018 = dateWaisak2018 + '/' + monthWaisak2018 + '/' + yearWaisak2018;
+
                 var idulFitri1 = new Date("07/06/2016");
                 var dateIdulFitri1 = idulFitri1.getDate();
                 var monthIdulFitri1 = idulFitri1.getMonth() + 1;
                 var yearIdulFitri1 = idulFitri1.getFullYear();
                 var strIdulFitri1 = dateIdulFitri1 + '/' + monthIdulFitri1 + '/' + yearIdulFitri1;
 
+                var idulFitri12017 = new Date("06/25/2017");
+                var dateIdulFitri12017 = idulFitri12017.getDate();
+                var monthIdulFitri12017 = idulFitri12017.getMonth() + 1;
+                var yearIdulFitri12017 = idulFitri12017.getFullYear();
+                var strIdulFitri12017 = dateIdulFitri12017 + '/' + monthIdulFitri12017 + '/' + yearIdulFitri12017;
+
+                var idulFitri12018 = new Date("06/15/2018");
+                var dateIdulFitri12018 = idulFitri12018.getDate();
+                var monthIdulFitri12018 = idulFitri12018.getMonth() + 1;
+                var yearIdulFitri12018 = idulFitri12018.getFullYear();
+                var strIdulFitri12018 = dateIdulFitri12018 + '/' + monthIdulFitri12018 + '/' + yearIdulFitri12018;
+
                 var idulFitri2 = new Date("07/07/2016");
-                var dateIdulFitri2 = idulFitri1.getDate();
-                var monthIdulFitri2 = idulFitri1.getMonth() + 1;
-                var yearIdulFitri2 = idulFitri1.getFullYear();
+                var dateIdulFitri2 = idulFitri2.getDate();
+                var monthIdulFitri2 = idulFitri2.getMonth() + 1;
+                var yearIdulFitri2 = idulFitri2.getFullYear();
                 var strIdulFitri2 = dateIdulFitri2 + '/' + monthIdulFitri2 + '/' + yearIdulFitri2;
+
+                var idulFitri22017 = new Date("06/26/2017");
+                var dateIdulFitri22017 = idulFitri22017.getDate();
+                var monthIdulFitri22017 = idulFitri22017.getMonth() + 1;
+                var yearIdulFitri22017 = idulFitri22017.getFullYear();
+                var strIdulFitri22017 = dateIdulFitri22017 + '/' + monthIdulFitri22017 + '/' + yearIdulFitri22017;
+
+                var idulFitri22018 = new Date("06/16/2018");
+                var dateIdulFitri22018 = idulFitri22018.getDate();
+                var monthIdulFitri22018 = idulFitri22018.getMonth() + 1;
+                var yearIdulFitri22018 = idulFitri22018.getFullYear();
+                var strIdulFitri22018 = dateIdulFitri22018 + '/' + monthIdulFitri22018 + '/' + yearIdulFitri22018;
 
                 var hutRI = new Date("08/17/2016");
                 var dateHUTRI = hutRI.getDate();
@@ -1286,11 +1934,35 @@
                 var yearHUTRI = hutRI.getFullYear();
                 var strHUTRI = dateHUTRI + '/' + monthHUTRI + '/' + yearHUTRI;
 
+                var hutRI2017 = new Date("08/17/2017");
+                var dateHUTRI2017 = hutRI2017.getDate();
+                var monthHUTRI2017 = hutRI2017.getMonth() + 1;
+                var yearHUTRI2017 = hutRI2017.getFullYear();
+                var strHUTRI2017 = dateHUTRI2017 + '/' + monthHUTRI2017 + '/' + yearHUTRI2017;
+
+                var hutRI2018 = new Date("08/17/2018");
+                var dateHUTRI2018 = hutRI2018.getDate();
+                var monthHUTRI2018 = hutRI2018.getMonth() + 1;
+                var yearHUTRI2018 = hutRI2018.getFullYear();
+                var strHUTRI2018 = dateHUTRI2018 + '/' + monthHUTRI2018 + '/' + yearHUTRI2018;
+
                 var tahunBaruIslam = new Date("10/02/2016");
                 var dateTahunBaruIslam = tahunBaruIslam.getDate();
                 var monthTahunBaruIslam = tahunBaruIslam.getMonth() + 1;
                 var yearTahunBaruIslam = tahunBaruIslam.getFullYear();
                 var strTahunBaruIslam = dateTahunBaruIslam + '/' + monthTahunBaruIslam + '/' + yearTahunBaruIslam;
+
+                var tahunBaruIslam2017 = new Date("09/21/2017");
+                var dateTahunBaruIslam2017 = tahunBaruIslam2017.getDate();
+                var monthTahunBaruIslam2017 = tahunBaruIslam2017.getMonth() + 1;
+                var yearTahunBaruIslam2017 = tahunBaruIslam2017.getFullYear();
+                var strTahunBaruIslam2017 = dateTahunBaruIslam2017 + '/' + monthTahunBaruIslam2017 + '/' + yearTahunBaruIslam2017;
+
+                var tahunBaruIslam2018 = new Date("09/12/2018");
+                var dateTahunBaruIslam2018 = tahunBaruIslam2018.getDate();
+                var monthTahunBaruIslam2018 = tahunBaruIslam2018.getMonth() + 1;
+                var yearTahunBaruIslam2018 = tahunBaruIslam2018.getFullYear();
+                var strTahunBaruIslam2018 = dateTahunBaruIslam2018 + '/' + monthTahunBaruIslam2018 + '/' + yearTahunBaruIslam2018;
 
                 var maulidNabi = new Date("12/12/2016");
                 var dateMaulidNabi = maulidNabi.getDate();
@@ -1298,75 +1970,174 @@
                 var yearMaulidNabi = maulidNabi.getFullYear();
                 var strMaulidNabi = dateMaulidNabi + '/' + monthMaulidNabi + '/' + yearMaulidNabi;
 
+                var maulidNabi2017 = new Date("12/01/2017");
+                var dateMaulidNabi2017 = maulidNabi2017.getDate();
+                var monthMaulidNabi2017 = maulidNabi2017.getMonth() + 1;
+                var yearMaulidNabi2017 = maulidNabi2017.getFullYear();
+                var strMaulidNabi2017 = dateMaulidNabi2017 + '/' + monthMaulidNabi2017 + '/' + yearMaulidNabi2017;
+
+                var maulidNabi2018 = new Date("11/20/2018");
+                var dateMaulidNabi2018 = maulidNabi2018.getDate();
+                var monthMaulidNabi2018 = maulidNabi2018.getMonth() + 1;
+                var yearMaulidNabi2018 = maulidNabi2018.getFullYear();
+                var strMaulidNabi2018 = dateMaulidNabi2018 + '/' + monthMaulidNabi2018 + '/' + yearMaulidNabi;
+
                 var natal = new Date("12/25/2016");
                 var dateNatal = natal.getDate();
                 var monthNatal = natal.getMonth() + 1;
                 var yearNatal = natal.getFullYear();
                 var strNatal = dateNatal + '/' + monthNatal + '/' + yearNatal;
-                
-                if (strCheckDate == strTahunBaru)
-                {
+
+                var natal2017 = new Date("12/25/2017");
+                var dateNatal2017 = natal2017.getDate();
+                var monthNatal2017 = natal2017.getMonth() + 1;
+                var yearNatal2017 = natal2017.getFullYear();
+                var strNatal2017 = dateNatal2017 + '/' + monthNatal2017 + '/' + yearNatal2017;
+
+                var natal2018 = new Date("12/25/2018");
+                var dateNatal2018 = natal2018.getDate();
+                var monthNatal2018 = natal2018.getMonth() + 1;
+                var yearNatal2018 = natal2018.getFullYear();
+                var strNatal2018 = dateNatal2018 + '/' + monthNatal2018 + '/' + yearNatal2018;
+
+                if (strCheckDate == strTahunBaru) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strIdulAdha)
-                {
+                if (strCheckDate == strTahunBaru2017) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strImlek)
-                {
+                if (strCheckDate == strTahunBaru2018) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strNyepi)
-                {
+                if (strCheckDate == strIdulAdha) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strWafatIsaAlMasih)
-                {
+                if (strCheckDate == strIdulAdha2017) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strHariBuruh)
-                {
+                if (strCheckDate == strIdulAdha2018) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strKenaikanYesus)
-                {
+                if (strCheckDate == strImlek) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strIsraMiraj)
-                {
+                if (strCheckDate == strImlek2017) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strWaisak)
-                {
+                if (strCheckDate == strImlek2018) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strIdulFitri1)
-                {
+                if (strCheckDate == strNyepi) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strIdulFitri2)
-                {
+                if (strCheckDate == strNyepi2017) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strHUTRI)
-                {
+                if (strCheckDate == strNyepi2018) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strTahunBaruIslam)
-                {
+                if (strCheckDate == strWafatIsaAlMasih) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strMaulidNabi)
-                {
+                if (strCheckDate == strWafatIsaAlMasih2017) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
-                if (strCheckDate == strNatal)
-                {
+                if (strCheckDate == strWafatIsaAlMasih2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHariBuruh) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHariBuruh2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHariBuruh2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strKenaikanYesus) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strKenaikanYesus2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strKenaikanYesus2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIsraMiraj) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIsraMiraj2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIsraMiraj2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strWaisak) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strWaisak2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strWaisak2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri1) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri12017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri12018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri2) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri22017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strIdulFitri22018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHUTRI) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHUTRI2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strHUTRI2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strTahunBaruIslam) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strTahunBaruIslam2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strTahunBaruIslam2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strMaulidNabi) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strMaulidNabi2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strMaulidNabi2018) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strNatal) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strNatal2017) {
+                    numberPublicHolidays = numberPublicHolidays + 1;
+                }
+                if (strCheckDate == strNatal2018) {
                     numberPublicHolidays = numberPublicHolidays + 1;
                 }
 
             }
-
+            
             return numberPublicHolidays;
         }
 

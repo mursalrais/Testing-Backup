@@ -23,6 +23,7 @@ namespace MCAWebAndAPI.Service.HR.Common
         const string SP_PROORG_LIST_NAME = "Professional Organization Detail";
         const string SP_PRODEP_LIST_NAME = "Dependent";
         const string SP_ADJUSTMENT_LIST_NAME = "Adjustment";
+        const string SP_PSA_LIST_NAME = "PSA";
 
         static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -117,7 +118,11 @@ namespace MCAWebAndAPI.Service.HR.Common
                         Convert.ToInt32((item["Position"] as FieldLookupValue).LookupId),
                 Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
                 OfficeEmail = Convert.ToString(item["officeemail"]),
+
+                //PSANumber = GetPSANumber(Convert.ToString(item["Title"]), Convert.ToString((item["Position"] as FieldLookupValue).LookupValue), Convert.ToString(item["Project_x002f_Unit"]), "Active"),
                 PSANumber = Convert.ToString(item["PSAnumber"]),
+
+                
                 PersonalMail = Convert.ToString(item["personalemail"]),
                 JoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime(),
                 JoinDateTemp = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime().ToShortDateString(),
@@ -132,6 +137,25 @@ namespace MCAWebAndAPI.Service.HR.Common
                 Currency = Convert.ToString(item["payrollcurrency"]),
                 BankName = Convert.ToString(item["payrollbankname"])
             };
+        }
+
+        private string GetPSANumber(string professionalName, string positionName, string projectUnit, string psaStatus)
+        {
+            string psaNumber = "";
+
+            var camlPSA = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq><Eq><FieldRef Name='ProjectOrUnit' /><Value Type='Choice'>" + projectUnit + @"</Value></Eq></And><Eq><FieldRef Name='position' /><Value Type='Lookup'>" + positionName + @"</Value></Eq></And><Eq><FieldRef Name='psastatus' /><Value Type='Text'>" + psaStatus + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, camlPSA))
+            {
+                psaNumber = Convert.ToString(psaData["Title"]);
+                break;
+            }
+
+            return psaNumber;
         }
 
         public IEnumerable<PositionMaster> GetPositions()

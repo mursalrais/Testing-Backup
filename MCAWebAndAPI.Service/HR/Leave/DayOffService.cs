@@ -235,16 +235,16 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
-        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays)
+        public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays, List<string> returnToWork)
         {
             var model = new DayOffRequestVM();
 
-            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay, remarks, totalDays);
+            model.DayOffRequestDetailsDisplay = GetDayOffRequestsDetailsDisplay(dayOffType, startDate, endDate, fullHalfDay, remarks, totalDays, returnToWork);
 
             return model;
         }
 
-        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays)
+        private IEnumerable<DayOffRequestDetailDisplayVM> GetDayOffRequestsDetailsDisplay(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays, List<string> returnToWork)
         {
             var dayOffRequestDetailDisplayData = new List<DayOffRequestDetailDisplayVM>();
 
@@ -254,6 +254,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             string[] fullHalfRequest = fullHalfDay[0].Split(',');
             string[] remarksRequest = remarks[0].Split(',');
             string[] totalDaysRequest = totalDays[0].Split(',');
+            string[] dateReturnToWork = returnToWork[0].Split(',');
 
             var dayOffRequest = new List<string>();
             var startRequest = new List<string>();
@@ -261,6 +262,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             var fullOrHalfRequest = new List<string>();
             var remarkRequest = new List<string>();
             var totalRequest = new List<string>();
+            var dateForReturnToWork = new List<string>();
 
             foreach (string checkDayOff in dayOffTypeRequest)
             {
@@ -292,17 +294,22 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 totalRequest.Add(checkTotalDays);
             }
 
+            foreach(string returnToWorkDate in dateReturnToWork)
+            {
+                dateForReturnToWork.Add(returnToWorkDate);
+            }
+
             int dataCount = dayOffRequest.Count;
 
             for (int i = 1; i <= dataCount; i++)
             {
-                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffRequest[i-1], startRequest[i-1], endRequest[i-1], fullOrHalfRequest[i-1], remarkRequest[i-1], totalRequest[i-1]));
+                dayOffRequestDetailDisplayData.Add(ConvertToDayOffRequestDetailsDisplay(dayOffRequest[i-1], startRequest[i-1], endRequest[i-1], fullOrHalfRequest[i-1], remarkRequest[i-1], totalRequest[i-1], dateForReturnToWork[i-1]));
             }
 
             return dayOffRequestDetailDisplayData;
         }
 
-        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks, string totalDays)
+        private DayOffRequestDetailDisplayVM ConvertToDayOffRequestDetailsDisplay(string dayOffType, string startDate, string endDate, string fullHalfDay, string remarks, string totalDays, string returnToWork)
         {
             var dayOffRequestDetailDisplay = new DayOffRequestDetailDisplayVM();
             string dayOffTypeRequest = "";
@@ -387,6 +394,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             dayOffRequestDetailDisplay.DayOffType = Convert.ToString(dayOffTypeRequest);
             dayOffRequestDetailDisplay.RequestStartDate = Convert.ToString(startDate);
             dayOffRequestDetailDisplay.RequestEndDate = Convert.ToString(endDate);
+            dayOffRequestDetailDisplay.StrReturnToWork = Convert.ToString(returnToWork);
 
             string subFullHalfDay1 = Convert.ToString(fullHalfDay).Substring(0,4);
             string subFullHalfDay2 = Convert.ToString(fullHalfDay).Substring(4,3);

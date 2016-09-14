@@ -54,8 +54,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
             updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
             updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
-            updatedValues.Add("psanumber", exitProcedure.PSANumber);
 
+            if(exitProcedure.PSANumber == null)
+            {
+                string psaNumber = GetPSANumber(exitProcedure.FullName, exitProcedure.Position, exitProcedure.ProjectUnit, "Active");
+                updatedValues.Add("psanumber", psaNumber);
+            }
+            else
+            {
+                updatedValues.Add("psanumber", exitProcedure.PSANumber);
+            }
+            
             if (exitProcedure.StatusForm == "Draft")
             {
                 statusExitProcedure = "Draft";
@@ -226,14 +235,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 viewModel.Position = FormatUtil.ConvertLookupToValue(item, "Position");
                 viewModel.RequestorPosition = FormatUtil.ConvertLookupToValue(item, "Position");
-                viewModel.FullName = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]);
+                viewModel.FullName = Convert.ToString(item["Title"]);
                 viewModel.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 positionID = FormatUtil.ConvertLookupToID(item, "Position");
                 viewModel.ProfessionalID = Convert.ToInt32(item["ID"]);
                 viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
                 viewModel.RequestorMailAddress = Convert.ToString(item["officeemail"]);
                 viewModel.ProfessionalPersonalMail = Convert.ToString(item["personalemail"]);
-                viewModel.PSANumber = Convert.ToString(item["PSAnumber"]);
+
+                string psaNumber = GetPSANumber(viewModel.FullName, viewModel.Position, viewModel.ProjectUnit, "Active");
+                viewModel.PSANumber = psaNumber;
                 break;
             }
 
@@ -273,6 +284,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return viewModel;
         }
 
+        private string GetPSANumber(string professionalName, string positionName, string projectUnit, string psaStatus)
+        {
+            string psaNumber = "";
+
+            var camlPSA = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq><FieldRef Name='professional' /><Value Type='Lookup'>" + professionalName + @"</Value></Eq><Eq><FieldRef Name='ProjectOrUnit' /><Value Type='Choice'>" + projectUnit + @"</Value></Eq></And><Eq><FieldRef Name='position' /><Value Type='Lookup'>" + positionName + @"</Value></Eq></And><Eq><FieldRef Name='psastatus' /><Value Type='Text'>" + psaStatus +@"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, camlPSA))
+            {
+                psaNumber = Convert.ToString(psaData["Title"]);
+                break;
+            }
+
+            return psaNumber;
+        }
+
         public ExitProcedureVM GetWorkflowExitProcedureHR(string listName, string professionalMail)
         {
             var viewModel = new ExitProcedureVM();
@@ -295,7 +325,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
                 viewModel.RequestorMailAddress = Convert.ToString(item["officeemail"]);
                 viewModel.ProfessionalPersonalMail = Convert.ToString(item["personalemail"]);
-                viewModel.PSANumber = Convert.ToString(item["PSAnumber"]);
+
+                string psaNumber = GetPSANumber(viewModel.FullName, viewModel.Position, viewModel.ProjectUnit, "Active");
+                viewModel.PSANumber = psaNumber;
+                
                 break;
             }
 
@@ -1268,6 +1301,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return professionalID;
         }
 
+        public int GetProfessionalIDNumber (string professionalName, string projectUnit, string position)
+        {
+            int professionalID = 0;
+
+            var camlProfessionalData = @"<View>  
+            <Query> 
+               <Where><And><And><Eq><FieldRef Name='Title' /><Value Type='Text'>" + professionalName + @"</Value></Eq><Eq><FieldRef Name='Position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And><Eq><FieldRef Name='Project_x002f_Unit' /><Value Type='Choice'>" + projectUnit + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach (var professionalData in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, camlProfessionalData))
+            {
+                professionalID = Convert.ToInt32(professionalData["ID"]);
+                break;
+            }
+
+            return professionalID;
+        }
+
         public void SendMailDocument(string requestorMail, string documentExitProcedure)
         {
             EmailUtil.Send(requestorMail, " ", documentExitProcedure);
@@ -1395,6 +1447,25 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             return true;
         }
 
+        public bool UpdateLastWorkingDateOnProfessional(int professionalID, DateTime lastWorkingDate)
+        {
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add("lastworkingdate", lastWorkingDate);
+
+            try
+            {
+                SPConnector.UpdateListItem(SP_PROMAS_LIST_NAME, professionalID, columnValues, _siteUrl);
+            }
+            catch (Exception e)
+            {
+                logger.Debug(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         public int GetPositionID(string requestorposition, string requestorunit, int positionID, int number)
         {
             var caml = @"<View>  
@@ -1490,6 +1561,63 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalMail = Convert.ToString(professionalData["officeemail"]);
 
             return professionalMail;
+        }
+
+        public string GetProfessionalName(int? exitProcID)
+        {
+            string professionalName = "";
+
+            var camlExitProcedure = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + exitProcID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var exitProcedureData in SPConnector.GetList(SP_EXP_LIST_NAME, _siteUrl, camlExitProcedure))
+            {
+                professionalName = Convert.ToString(exitProcedureData["Title"]);
+                break;
+            }
+
+            return professionalName;
+        }
+
+        public string GetUnitBasedExitID(int? exitProcID)
+        {
+            string projectUnit = "";
+
+            var camlExitProcedure = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + exitProcID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var exitProcedureData in SPConnector.GetList(SP_EXP_LIST_NAME, _siteUrl, camlExitProcedure))
+            {
+                projectUnit = Convert.ToString(exitProcedureData["projectunit"]);
+                break;
+            }
+
+            return projectUnit;
+        }
+
+        public string GetPositionBasedExitID(int? exitProcID)
+        {
+            string position = "";
+
+            var camlExitProcedure = @"<View>  
+            <Query> 
+               <Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>" + exitProcID + @"</Value></Eq></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var exitProcedureData in SPConnector.GetList(SP_EXP_LIST_NAME, _siteUrl, camlExitProcedure))
+            {
+                position = Convert.ToString(exitProcedureData["position"]);
+                break;
+            }
+
+            return position;
         }
     }
 }
