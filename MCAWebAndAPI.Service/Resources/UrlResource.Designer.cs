@@ -259,7 +259,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D25.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D1.
         /// </summary>
         public static string ExitProcedureExitInterviewForm {
             get {
@@ -268,7 +268,7 @@ namespace MCAWebAndAPI.Service.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash8089e8d5-b941-4a0c-9d8a-9be53d040f76=FilterField1%3DID-FilterValue1%3D24.
+        ///   Looks up a localized string similar to https://eceos2.sharepoint.com/sites/ims/hrtraining/ExitProcedureDocuments/Forms/AllItems.aspx#InplviewHash74436fc5-a236-4a9f-89af-25c300486abb=FilterField1%3DID-FilterValue1%3D2.
         /// </summary>
         public static string ExitProcedureNonDisclosureAgreement {
             get {
@@ -651,6 +651,15 @@ namespace MCAWebAndAPI.Service.Resources {
         public static string Timesheet {
             get {
                 return ResourceManager.GetString("Timesheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to /Lists/Vendor/AllItems.aspx.
+        /// </summary>
+        public static string VendorMaster {
+            get {
+                return ResourceManager.GetString("VendorMaster", resourceCulture);
             }
         }
     }

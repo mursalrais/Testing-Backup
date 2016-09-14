@@ -44,21 +44,21 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax.Value = typeOfTax;
             viewModel.TypeOfTax.OnSelectEventName = "onSelectTypeOfTax";
 
-            ViewBag.CancelUrl = string.Format(FirstIncomeTaxPageURL, siteUrl);
-
             return View(viewModel);
         }
 
         public ActionResult ItemIncomeTax(int? ID, string siteUrl)
         {
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            _taxExemptionDataService.SetSiteUrl(siteUrl);
+            SessionManager.Set(SITE_URL, siteUrl);
+
+            ViewBag.CancelUrl = string.Format(FirstIncomeTaxPageURL, siteUrl);
+
             if (!ID.HasValue)
             {
                 return Create(TaxTypeComboBoxVM.INCOME, siteUrl);
             }
-
-            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-            _taxExemptionDataService.SetSiteUrl(siteUrl);
-            SessionManager.Set(SITE_URL, siteUrl);
 
             var viewModel = new TaxExemptionVM();
             viewModel.ID = ID;
@@ -66,8 +66,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax = viewModel.TaxExemptionIncomeVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionIncomeVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionIncomeVM.DocumentUrl;
-
-            ViewBag.CancelUrl = string.Format(FirstIncomeTaxPageURL, siteUrl);
 
             return View(viewModel);
         }
@@ -77,6 +75,8 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
+
+            ViewBag.CancelUrl = string.Format(FirstVATTaxPageURL, siteUrl);
 
             if (!ID.HasValue)
             {
@@ -89,7 +89,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax= viewModel.TaxExemptionVATVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionVATVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionVATVM.DocumentUrl;
-            ViewBag.CancelUrl = string.Format(FirstVATTaxPageURL, siteUrl);
 
             return View(viewModel);
         }
@@ -100,8 +99,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _taxExemptionDataService.SetSiteUrl(siteUrl);
             SessionManager.Set(SITE_URL, siteUrl);
 
-            //If you don't set this up, the cancel button will either be gone or won't work.
-            ViewBag.PreviousUrl = string.Format(FirstOtherTaxPageURL, siteUrl);
+            ViewBag.CancelUrl = string.Format(FirstOtherTaxPageURL, siteUrl);
 
             if (!ID.HasValue)
             {
@@ -114,7 +112,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.TypeOfTax = viewModel.TaxExemptionOtherVM.TypeOfTax;
             viewModel.Remarks = viewModel.TaxExemptionOtherVM.Remarks;
             viewModel.DocumentUrl = viewModel.TaxExemptionOtherVM.DocumentUrl;
-            ViewBag.CancelUrl = string.Format(FirstOtherTaxPageURL, siteUrl);
 
             return View(viewModel);
         }
@@ -256,11 +253,6 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if (actionType != "Save")
-            {
-                return Redirect(string.Format(FirstVATTaxPageURL, siteUrl));
-            }
-
             if (_data.ID == null)
             {
                 return await Create(form, _data);
@@ -300,11 +292,6 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SITE_URL) ?? ConfigResource.DefaultBOSiteUrl;
             _taxExemptionDataService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
-            if (actionType != "Save")
-            {
-                return Redirect(string.Format(FirstOtherTaxPageURL, siteUrl));
-            }
 
             if (_data.ID == null)
             {

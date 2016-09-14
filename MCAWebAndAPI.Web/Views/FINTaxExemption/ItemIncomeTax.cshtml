@@ -3,6 +3,7 @@
 @using (Html.BeginForm("ItemIncomeTax", "FINTaxExemption", FormMethod.Post,
                                                             new
                                                             {
+                                                                @id = "form",
                                                                 @class = "form-horizontal",
                                                                 enctype = "multipart/form-data"
                                                             }))
@@ -80,6 +81,38 @@
         $(document).ready(function () {
 
         });
+
+        $('form').submit(function (evt) {
+            var $form = $(this);
+            var valid = true;
+            if (!$form.valid()) {
+                evt.preventDefault();
+                valid = false;
+            }
+            if (!validateTotalIncomeTaxBorneByGovernment())
+            {
+                evt.preventDefault();
+                valid = false;
+            }
+
+            return valid;
+        });
+
+        $('#TaxExemptionIncomeVM_TotalIncomeTaxBorneByGovernment').change(function(){
+            validateTotalIncomeTaxBorneByGovernment();
+        });
+
+        function validateTotalIncomeTaxBorneByGovernment()
+        {
+            if ($('#TaxExemptionIncomeVM_TotalIncomeTaxBorneByGovernment').val() == '') {
+                $('#totalIncomeTaxBorneByGovernmentRequiredMessage').show();
+                valid = false;
+            }
+            else {
+                $('#totalIncomeTaxBorneByGovernmentRequiredMessage').hide();
+                return true;
+            }
+        }
     </script>
 }
 

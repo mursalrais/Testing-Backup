@@ -3,162 +3,172 @@
 
 @model AssetDisposalVM
 
-@using (Ajax.BeginForm("Update", "ASSAssetDisposal",
-                                                                                        FormMethod.Post,
-                                                                                        new AjaxOptions
-                                                                                        {
-                                                                                            OnBegin = "onBeginForm",
-                                                                                            OnComplete = "onCompleteForm",
-                                                                                            OnSuccess = "onSuccessFormEmbed",
-                                                                                            OnFailure = "onFailureForm"
-                                                                                        }, new { @class = "form-horizontal" }))
-{<fieldset>
-        <legend>Form Asset Disposal</legend>
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary()
-        <div class="col-sm-6">  
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.DisplayFor(m => m.TransactionType)
-                  
+@using (Html.BeginForm("Update", "ASSAssetDisposal", FormMethod.Post,
+                                                                                                                                                new
+                                                                                                                                                {
+                                                                                                                                                    @class = "form-horizontal",
+                                                                                                                                                    enctype = "multipart/form-data"
+                                                                                                                                                }))
+
+{
+    <form class="form-horizontal" method="post" action="/ASSAssetDisposal/Update" id="create-asset-acquisition-form" enctype="multipart/form-data">
+        <fieldset>
+            <legend>Form Asset Disposal</legend>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+            <div class="col-sm-6">
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.DisplayFor(m => m.TransactionType)
+
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
+                    <div class="col-sm-8">
+                        @Html.EditorFor(m => m.Date)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        @*<input type="file"  name="attach" id="attach" style="width : 100%" />@Model.attach*@
+                        <input type="file"  name="filename" id="filename" value="@Model.filename" style="width : 100%" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+
+
+
+
             </div>
 
-            <div class="form-group">
-                @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
-                <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Date)
-                </div>
+
+            <legend>Asset Disposal Detail</legend>
+            <div class="row">
+                @Html.Partial("_AssetDisposalDetail", Model.Details)
             </div>
 
-        </div>
-        <div class="col-sm-6">
-
-
-
-
-        </div>
-     
-
-        <legend>Asset Disposal Detail</legend>
-        <div class="row">
-            @Html.Partial("_AssetDisposalDetail", Model.Details)
-        </div>
-
-    </fieldset>
-    @Html.HiddenFor(m => m.ID)
-    @Html.HiddenFor(m => m.CancelURL)
-}
-<div class="form-actions">
-    <div>
-        <center>
-
-            <input id="submit-button" onclick="return PreSaveAction()" class="k-button k-button-icontext k-grid-add" size="4" type="submit" value="Save" />
-
-            <a href="@Model.CancelURL" target='_parent'>
-                <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
-            </a>
-        </center>
-    </div>
-
-
-
-</div>
-@section scripts{
-    <script type="text/javascript">
-
-        //function saveDisposal() {
-        //    // alert("saving...");
-        //    //var idattach = document.querySelectorAll("[id^='attachRow']");
-        //    ////  alert(idattach.length);
-
-        //    //if (idattach.length == 0) {
-        //    //    alert("Please Attach the memo for disposal");
-        //    //} else {
-
-        //        $("form").submit();
-        //   // }
-
-
-        //}
-
-        //$(document).ready(function () {
-
-        //    $("#submit-button").click(function (e) {
-
-        //        // untuk postpone default Submit Form operation
-
-        //        e.preventDefault();
-
-
-
-        //        // cek DOM di upload control apakah contains filename
-
-        //        // cek perbedaan DOM sebelum dan sesudah upload file
-
-        //        // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
-
-        //        var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
-
-
-
-        //        if (isFileExist)
-
-        //            $('form').submit();
-
-        //        else
-
-        //            alert('Please Attach the memo for disposal');
-
-        //    });
-
-
-
-        });
-
-
-        //var idattach = document.querySelectorAll("[id^='attachRow']");
-        //$(document).ready(function () {
-        //    $("#submit-button").click(function () {
-        //        if (idattach.length == 0) {
-        //            alert("have to attach a file!");
-        //        } else {
-
-        //            $("form").submit();
-        //        }
-        //    });
-        //}
-        //  );
-
-        function PreSaveAction() {
-         
-            //var elm = document.getElementById("idAttachmentsTable");
-          
-            //if (elm == null || elm.rows.length == 0) {
-
-            //    // document.getElementById("idAttachmentsRow").style.display = 'none';
-            //    alert("Please attach the memo for disposal");
-            //    return false;
-            //}
-            //else {
-
-                $("form").submit();
-         //   }
+        </fieldset>
+    </form>
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.CancelURL)
         }
+        <div class="form-actions">
+            <div>
+                <center>
 
-        //function PreSaveAction() {
-        //    var elm = document.getElementById("idAttachmentsTable");
-        //    if (elm == null || elm.rows.length == 0) {
-        //        document.getElementById("idAttachmentsRow").style.display = 'none';
-        //        alert("Please attach the memo for disposal");
-        //        return false;
-        //    }
-        //    else {
+                    <input id="submit-button"
+                           class="k-button k-button-icontext k-grid-add" onclick="return PreSaveAction()" size="4" type="submit" value="Save" />
 
-        //        $("form").submit();
-        //    }
-        //}
 
-    </script>
-}
+                    <a href="@Model.CancelURL" target='_parent'>
+                        <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                    </a>
+                </center>
+            </div>
+
+
+
+        </div>
+        @section scripts{
+            <script type="text/javascript">
+
+                //function saveDisposal() {
+                //    // alert("saving...");
+                //    //var idattach = document.querySelectorAll("[id^='attachRow']");
+                //    ////  alert(idattach.length);
+
+                //    //if (idattach.length == 0) {
+                //    //    alert("Please Attach the memo for disposal");
+                //    //} else {
+
+                //        $("form").submit();
+                //   // }
+
+
+                //}
+
+                //$(document).ready(function () {
+
+                //    $("#submit-button").click(function (e) {
+
+                //        // untuk postpone default Submit Form operation
+
+                //        e.preventDefault();
+
+
+
+                //        // cek DOM di upload control apakah contains filename
+
+                //        // cek perbedaan DOM sebelum dan sesudah upload file
+
+                //        // di sini: http://demos.telerik.com/aspnet-mvc/upload/index
+
+                //        var isFileExist = $('.k-upload').find('ul.k-upload-files').length == 1;
+
+
+
+                //        if (isFileExist)
+
+                //            $('form').submit();
+
+                //        else
+
+                //            alert('Please Attach the memo for disposal');
+
+                //    });
+
+
+
+             //   });
+
+
+                //var idattach = document.querySelectorAll("[id^='attachRow']");
+                //$(document).ready(function () {
+                //    $("#submit-button").click(function () {
+                //        if (idattach.length == 0) {
+                //            alert("have to attach a file!");
+                //        } else {
+
+                //            $("form").submit();
+                //        }
+                //    });
+                //}
+                //  );
+
+                function PreSaveAction() {
+
+                    //var elm = document.getElementById("idAttachmentsTable");
+
+                    //if (elm == null || elm.rows.length == 0) {
+
+                    // document.getElementById("idAttachmentsRow").style.display = 'none';
+                    //alert("Please attach the memo for disposal");
+                    //return false;
+                    //}
+                    //else {
+
+                    $("form").submit();
+                    //  }
+                }
+                //function PreSaveAction() {
+                //    var elm = document.getElementById("idAttachmentsTable");
+                //    if (elm == null || elm.rows.length == 0) {
+                //        document.getElementById("idAttachmentsRow").style.display = 'none';
+                //        alert("Please attach the memo for disposal");
+                //        return false;
+                //    }
+                //    else {
+
+                //        $("form").submit();
+                //    }
+                //}
+
+            </script>
+        }

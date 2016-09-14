@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Model.HR.DataMaster;
+using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
@@ -54,19 +55,19 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PaidToProfessional = "Professional";
         private const string PaidToVendor = "Vendor";
 
-        readonly IPettyCashPaymentVoucherService _service;
+        readonly IPettyCashPaymentVoucherService service;
         public FINPettyCashPaymentVoucherController()
         {
-            _service = new PettyCashPaymentVoucherService();
+            service = new PettyCashPaymentVoucherService();
         }
 
         public ActionResult Create(string siteUrl = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-            _service.SetSiteUrl(siteUrl);
+            service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-            var viewModel = _service.GetPettyCashPaymentVoucher(null);
+            var viewModel = service.GetPettyCashPaymentVoucher(null);
             SetAdditionalSettingToViewModel(ref viewModel, true);
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
@@ -80,9 +81,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
                 SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-                _service.SetSiteUrl(siteUrl);
+                service.SetSiteUrl(siteUrl);
 
-                var viewModel = _service.GetPettyCashPaymentVoucher(ID.Value);
+                var viewModel = service.GetPettyCashPaymentVoucher(ID.Value);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
                 ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
@@ -99,7 +100,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public async Task<ActionResult> Create(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             if (actionType != "Save")
             {
@@ -109,8 +110,8 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = _service.Create(viewModel);
-                _service.CreatePettyCashAttachments(headerID, viewModel.Documents);
+                headerID = service.Create(viewModel);
+                service.CreatePettyCashAttachments(headerID, viewModel.Documents);
 
             }
             catch (Exception e)
@@ -130,8 +131,8 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(string actionType, FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            service.SetSiteUrl(siteUrl);
 
             if (actionType != "Save")
             {
@@ -140,8 +141,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                _service.Update(viewModel);
-                _service.EditPettyCashAttachments(viewModel.ID, viewModel.Documents);
+                WBSMapping wbs = COMWBSController.GetWBSMappings(Convert.ToInt32(viewModel.WBS.Value));
+                viewModel.WBSDescription = wbs.WBSIDDescription;
+
+                service.Update(viewModel);
+                service.EditPettyCashAttachments(viewModel.ID, viewModel.Documents);
             }
             catch (Exception e)
             {
@@ -164,8 +168,8 @@ namespace MCAWebAndAPI.Web.Controllers
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl);
-            viewModel = _service.GetPettyCashPaymentVoucher(viewModel.ID);
+            service.SetSiteUrl(siteUrl);
+            viewModel = service.GetPettyCashPaymentVoucher(viewModel.ID);
 
             if (viewModel.PaidTo.Text.Equals(PaidToProfessional))
             {
@@ -240,7 +244,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetPettyCashPaymentVouchers()
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             var vendors = PettyCashPaymentVoucherService.GetPettyCashPaymentVouchers(siteUrl);
 
@@ -285,6 +289,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.GL.TextField = FIELD_TEXT;
 
             viewModel.Currency.OnSelectEventName = CURRENCY_SELECTEVENTCHANGE;
+
             if (isCreate)
             {
                 //some default value

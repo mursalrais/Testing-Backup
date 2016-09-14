@@ -281,7 +281,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if (viewModel.StatusForm == "Pending Approval")
                 {
-                    exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+                    //exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+                    exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0} and Exit Interview Form on this url: {1}", UrlResource.ExitProcedureNonDisclosureAgreement, UrlResource.ExitProcedureExitInterviewForm));
 
                     string _siteUrl = siteUrl;
                     string urlExitProcedure = UrlResource.ExitProcedure;
@@ -391,7 +392,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     string professionalMail = exitProcedureService.GetProfessionalData(exitProcedure.ProfessionalID);
 
-                    exitProcedureService.SendMailDocument(professionalMail, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+                    //exitProcedureService.SendMailDocument(professionalMail, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
+                    exitProcedureService.SendMailDocument(professionalMail, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0} and Exit Interview Form on this url: {1}", UrlResource.ExitProcedureNonDisclosureAgreement, UrlResource.ExitProcedureExitInterviewForm));
 
                     string _siteUrl = siteUrl;
                     string urlExitProcedure = UrlResource.ExitProcedure;
@@ -430,7 +432,7 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public JsonResult GetApproverPositions(int approverUnit)
         {
-            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            exitProcedureService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var listName = SessionManager.Get<string>("ExitProcedureListName");
             var requestorPosition = SessionManager.Get<string>("ExitProcedureRequestorPosition");
             var requestorUnitName = SessionManager.Get<string>("ExitProcedureRequestorUnit");
@@ -446,7 +448,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetApproverNames(int position)
         {
-            exitProcedureService.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            exitProcedureService.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var positionName = exitProcedureService.GetPositionName(position);
             var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
                 ?? exitProcedureService.GetApproverNames(positionName);

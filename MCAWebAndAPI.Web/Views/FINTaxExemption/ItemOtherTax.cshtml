@@ -3,6 +3,7 @@
 @using (Html.BeginForm("ItemOtherTax", "FINTaxExemption", FormMethod.Post,
                                                                         new
                                                                         {
+                                                                            @id = "form",
                                                                             @class = "form-horizontal",
                                                                             enctype = "multipart/form-data"
                                                                         }))
@@ -67,12 +68,9 @@
                     <i class="fa fa-save"></i>
                     Submit
                 </button>
-                @if (!string.IsNullOrEmpty(@ViewBag.PreviousUrl))
-                {
                     <a href="@ViewBag.CancelUrl" target='_parent'>
                         <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                     </a>
-                }
             </div>
         </div>
     </div>
@@ -81,11 +79,57 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            $('#cancel-button').click(function () {
-                var url = "@ViewBag.PreviousUrl";
-                window.top.location = url;
-            });
+
         });
+
+        $('form').submit(function (evt) {
+            var $form = $(this);
+            var valid = true;
+            if (!$form.valid()) {
+                evt.preventDefault();
+                valid = false;
+            }
+            if (!validateGrossIncome()) {
+                evt.preventDefault();
+                valid = false;
+            }
+            if (!validateTotalTax()) {
+                evt.preventDefault();
+                valid = false;
+            }
+
+            return valid;
+        });
+
+        $('#TaxExemptionOtherVM_GrossIncome').change(function () {
+            validateGrossIncome();
+        });
+
+        function validateGrossIncome() {
+            if ($('#TaxExemptionOtherVM_GrossIncome').val() == '') {
+                $('#grossIncomeRequiredMessage').show();
+                valid = false;
+            }
+            else {
+                $('#grossIncomeRequiredMessage').hide();
+                return true;
+            }
+        }
+
+        $('#TaxExemptionOtherVM_TotalTax').change(function () {
+            validateTotalTax();
+        });
+
+        function validateTotalTax() {
+            if ($('#TaxExemptionOtherVM_TotalTax').val() == '') {
+                $('#totalTaxRequiredMessage').show();
+                valid = false;
+            }
+            else {
+                $('#totalTaxRequiredMessage').hide();
+                return true;
+            }
+        }
     </script>
 }
 

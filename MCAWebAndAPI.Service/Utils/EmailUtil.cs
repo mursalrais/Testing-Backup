@@ -59,7 +59,7 @@ namespace MCAWebAndAPI.Service.Utils
             {
                 mail.To.Add(new MailAddress(item));
             }
-          
+
             mail.Subject = subject;
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;

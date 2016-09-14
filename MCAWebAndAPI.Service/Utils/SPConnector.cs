@@ -747,7 +747,7 @@ namespace MCAWebAndAPI.Service.Utils
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
                 clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                Web communitySite = clientContext.Site.OpenWeb(strwebname);
+                Web communitySite = clientContext.Site.OpenWeb("hrtraining");
                 clientContext.Load(communitySite);
                 clientContext.ExecuteQuery();
 
@@ -775,7 +775,15 @@ namespace MCAWebAndAPI.Service.Utils
             ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
             ListItem oListItem = oList.GetItemById(listItemID);
 
+            //check if already an attachment
             clientContext.ExecuteQuery();
+            clientContext.Load(oListItem, li => li.AttachmentFiles);
+            clientContext.ExecuteQuery();
+            if(oListItem.AttachmentFiles.ToList().Count != 0)
+            {
+                oListItem.AttachmentFiles.ToList().ForEach(a => a.DeleteObject());
+                clientContext.ExecuteQuery();
+            }
 
             byte[] contents = new byte[Convert.ToInt32(file.ContentLength)];
             Stream fStream = file.InputStream;

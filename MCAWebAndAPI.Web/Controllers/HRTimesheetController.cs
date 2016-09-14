@@ -64,12 +64,13 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             SessionManager.Set("SiteUrl", siteUrl);
             _timesheetService.SetSiteUrl(siteUrl);
-            var viewModel = await _timesheetService.GetTimesheetLoadUpdate(id, userlogin);
-
+            var viewModel = await _timesheetService.GetTimesheetLoadUpdate(id, userlogin,true);
+            viewModel.URL = siteUrl;
             if (viewModel.UserPermission == "Not Authorized") return RedirectToAction("NotAuthorized", "HRTimesheet");
 
             SessionManager.Set("TimesheetDetails", viewModel.TimesheetDetails);
             SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+            SessionManager.Set("PrintTimesheet", viewModel);
             return View(viewModel);
         }
 
@@ -408,6 +409,9 @@ namespace MCAWebAndAPI.Web.Controllers
             _timesheetService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             // _timesheetService.CreateAxa(viewModel);
             // viewModel = _service.GetPopulatedModelAXA(false);
+
+            viewModel = SessionManager.Get<TimesheetVM>("PrintTimesheet");
+
 
             const string RelativePath = "~/Views/HRTimesheet/PrintTimesheet.cshtml";
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);

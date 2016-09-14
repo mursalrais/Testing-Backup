@@ -21,7 +21,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         void CreateShorlistSendintv(int? headerID, ApplicationShortlistVM ShortlistDetails);
 
-        void SendEmailValidation(string mailto, string position, string mailmessage);
+        void SendEmailValidation(List<string> mailto, string position, string mailmessage);
 
         string GetMailUrl(int? ID, string User);
 

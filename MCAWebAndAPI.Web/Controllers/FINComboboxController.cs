@@ -20,13 +20,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetSCAVouchers(string siteUrl)
         {
-            ISCAVoucherService service = new SCAVoucherService();
-
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-            service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            ISCAVoucherService service = new SCAVoucherService(siteUrl);
 
             var result = service.GetAllAjaxComboBoxVM().ToList();
             result.Insert(0, new AjaxComboBoxVM() { Value = 0, Text = "" });

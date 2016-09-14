@@ -21,6 +21,9 @@ namespace MCAWebAndAPI.Service.Finance
 
     public class OutstandingAdvanceService : IOutstandingAdvanceService
     {
+
+        #region Constants
+       
         private const string OutstandingAdvanceDocument_URL = "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
         private const string ListName = "Outstanding Advance";
         private const string ListName_Document = "Outstanding Advance Documents";
@@ -70,6 +73,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string ErrorDesc_Rule4 = "Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.";
         private const string ErrorDesc_Rule5 = "Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.";
         private const string ErrorDesc_Rule6 = "Data Project salah.";
+
+        #endregion
 
         private static string[] FieldNames = { "Date (Upload)", "Staff ID", "Staff Name", "Reference", "Due Date", "Currency", "Amount", "Project" };
 
@@ -181,7 +186,7 @@ namespace MCAWebAndAPI.Service.Finance
             }
         }
 
-        public async Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel)
+        public async Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, string siteUrlHR)
         {
             var staff = SPConnector.GetListItem(ListName_Vendor, viewModel.Staff.Value, siteUrl);
             viewModel.Staff.Text = staff[FieldName_VendorName] == null ? "" : staff[FieldName_VendorName].ToString();
@@ -203,7 +208,7 @@ namespace MCAWebAndAPI.Service.Finance
 
                 caml = string.Format(caml, FieldName_Position, item.Key, FieldName_UnitProject, item.Value);
 
-                var listItem = SPConnector.GetList(ListName_Professional, siteUrl, caml);
+                var listItem = SPConnector.GetList(ListName_Professional, siteUrlHR, caml);
                 foreach (var profesional in listItem)
                 {
                     var name = profesional[FieldName_Name] == null ? "" : profesional[FieldName_Name].ToString();
@@ -246,179 +251,51 @@ namespace MCAWebAndAPI.Service.Finance
             return viewModel;
         }
 
-        public List<VendorVM> GetAll()
-        {
-            var list = new List<VendorVM>();
-            var listItem = SPConnector.GetList(ListName_Vendor, siteUrl, null);
-            foreach (var item in listItem)
-            {
-                list.Add(
-                    new VendorVM
-                    {
-                        ID = item[FieldName_ID] == null ? 0 : Convert.ToInt32(item[FieldName_ID]),
-                        VendorId = item[FieldName_VendorID] == null ? "" : item[FieldName_VendorID].ToString(),
-                        Name = item[FieldName_VendorName] == null ? "" : item[FieldName_VendorName].ToString(),
-                        Email = item[FieldName_Email] == null ? "" : item[FieldName_Email].ToString()
-                    });
-            }
 
-            return list;
-        }
-
-        public async Task<List<CSVErrorLogVM>> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors)
+        #region CSV Upload
+        
+        public List<CSVErrorLogVM> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors, ref List<OutstandingAdvanceVM> listOutstandingAdvance)
         {
             List<CSVErrorLogVM> csvErrors = new List<CSVErrorLogVM>();
 
-            ProcessCSVFiles(documents, vendors, ref csvErrors);
+            ProcessCSVFiles(documents, vendors, ref csvErrors, ref listOutstandingAdvance);
 
             return csvErrors;
         }
 
-        public void ProcessCSVFiles(IEnumerable<HttpPostedFileBase> csvFiles, IEnumerable<VendorVM> vendors, ref List<CSVErrorLogVM> csvErrors)
+        public void ProcessCSVFiles(IEnumerable<HttpPostedFileBase> csvFiles, IEnumerable<VendorVM> vendors, ref List<CSVErrorLogVM> csvErrors, ref List<OutstandingAdvanceVM> listOutstandingAdvance)
         {
 
             foreach (var file in csvFiles)
             {
-                ProcessCSVFile(file, ref csvErrors, vendors);
+                ProcessCSVFile(file, ref csvErrors, vendors, ref listOutstandingAdvance);
             }
 
         }
 
-
-        private OutstandingAdvanceVM ConvertToVM(ListItem listItem)
-        {
-            OutstandingAdvanceVM viewModel = new OutstandingAdvanceVM();
-
-            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
-            viewModel.DateOfUpload = Convert.ToDateTime(listItem[FieldName_DateOfUpload]);
-            viewModel.Staff.Value = Convert.ToInt32((listItem[FieldName_Staff] as FieldLookupValue).LookupValue);
-            viewModel.Reference = Convert.ToString(listItem[FieldName_Reference]);
-            viewModel.DueDate = Convert.ToDateTime(listItem[FieldName_DueDate]);
-            viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
-            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
-            viewModel.Project.Value = Convert.ToString(listItem[FieldName_Project]);
-            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
-
-            return viewModel;
-        }
-
-        private string CreateMessage(string toName, string message, OutstandingAdvanceVM viewModel)
-        {
-            string toReturn = string.Empty;
-            toReturn = String.Format(message, toName, viewModel.Staff.Text, viewModel.Reference, viewModel.DueDate.ToString("dd/MM/yyyy"), viewModel.Currency.Value, viewModel.Amount, viewModel.Remarks);
-
-            return toReturn;
-        }
-
-        private void SaveAttachment(int? ID, string reference, IEnumerable<HttpPostedFileBase> attachment)
-        {
-            if (ID != null)
-            {
-                foreach (var doc in attachment)
-                {
-                    if (doc != null)
-                    {
-                        var updateValue = new Dictionary<string, object>();
-                        updateValue.Add(ListName_Document_OutstandingAdvance, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
-
-                        try
-                        {
-                            SPConnector.UploadDocument(ListName_Document, updateValue, doc.FileName, doc.InputStream, siteUrl);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                            throw e;
-                        }
-                    }
-                }
-            }
-        }
-
-        private string GetDocumentUrl(int? ID)
-        {
-            return string.Format(OutstandingAdvanceDocument_URL, siteUrl, ID);
-        }
-
-        private void ProcessCSVFile(HttpPostedFileBase file, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        private void ProcessCSVFile(HttpPostedFileBase file, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors, ref List<OutstandingAdvanceVM> listOutstandingAdvance)
         {
             string tempFolder = Path.GetTempPath();
             string filePath = tempFolder + "\\ims\\" + file.FileName;
 
             //TODO: potential problem, when testing with uploading all test files, seemed like not all files are properly processed
 
-            OutstandingAdvanceVM outstandingAdvance = ReadCSV(file, vendors, ref errorLog);
+            listOutstandingAdvance = ReadCSV(file, vendors, ref errorLog);
 
         }
 
-        private static OutstandingAdvanceVM ReadCSV(HttpPostedFileBase file, IEnumerable<VendorVM> vendors, ref List<CSVErrorLogVM> errorLog)
-        {
-            OutstandingAdvanceVM outstandingAdvance = new OutstandingAdvanceVM();
-            string fileName = file.FileName;
+        #endregion
 
-            BinaryReader b = new BinaryReader(file.InputStream);
-            byte[] binData = b.ReadBytes(file.ContentLength);
-            string csvData = System.Text.Encoding.UTF8.GetString(binData);
+        #region CSV Upload Validation
 
-            try
-            {
-                bool isHeader = true;
-                int r = 0;
-                string[] rows = csvData.Split('\n');
-
-                foreach (string row in rows)
-                {
-                    if (isHeader)
-                    {
-                        isHeader = false;
-                        continue;
-                    }
-
-                    ConvertRowToVM(fileName, row, ref outstandingAdvance, ref errorLog);
-
-                    Validate(outstandingAdvance, fileName, ref errorLog, vendors);
-
-                    r++;
-
-                }
-            }
-            catch (Exception e)
-            {
-
-                throw e;
-            }
-
-            return outstandingAdvance;
-        }
-
-        private static void ConvertRowToVM(string fileName,  string row,ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog)
-        {
-            if (!string.IsNullOrEmpty(row))
-            {
-                string[] data = row.Split(';');
-
-                oa.DateOfUpload = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DateOfUpload], Convert.ToString(data[(int)ImportedFields.DateOfUpload]), ref errorLog);
-
-                oa.Staff.Value = ConvertToInt32(fileName, FieldNames[(int)ImportedFields.StaffId], data[(int)ImportedFields.StaffId], ref errorLog);
-                oa.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
-
-                oa.Reference = Convert.ToString(data[(int)ImportedFields.Reference]);
-                oa.DueDate = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DueDate], Convert.ToString(data[(int)ImportedFields.DueDate]), ref errorLog);
-
-                oa.Currency.Value = Convert.ToString(data[(int)ImportedFields.Currency]);
-                oa.Amount = ConvertToDecimal(fileName, FieldNames[(int)ImportedFields.Amount], data[(int)ImportedFields.Amount], ref errorLog);
-                oa.Project.Value = Convert.ToString(data[(int)ImportedFields.Project]).Replace("\r", "");
-
-            }
-        }
 
         private static void Validate(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
             //1. The currency for Professional & IC must be in IDR
-            CheckValidationRule1(oa, fileName, ref errorLog);
+            CheckValidationRule1(oa, fileName, ref errorLog, vendors);
 
             //2. The currency for Grantees must be in USD
-            CheckValidationRule2(oa, fileName, ref errorLog);
+            CheckValidationRule2(oa, fileName, ref errorLog, vendors);
 
             //3. The format for date is mm/dd/yyyy
             //This has been checked when reading the data 
@@ -434,34 +311,43 @@ namespace MCAWebAndAPI.Service.Finance
             CheckValidationRule6(oa, fileName, ref errorLog);
         }
 
-        private static void CheckValidationRule1(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog)
+        private static void CheckValidationRule1(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
-            if (IsIdependentConsultant(oa.Staff.Value.ToString()) || IsProfessional(oa.Staff.Value.ToString()))
+            var vendor = vendors.ToList().Find(v => v.ID == oa.Staff.Value);
+
+            if (vendor != null)
             {
-                if (oa.Currency.Value != CurrencyComboBoxVM.CurrencyIDR)
+                if (IsIdependentConsultant(vendor.VendorId) || IsProfessional(vendor.VendorId))
+                {
+                    if (oa.Currency.Value != CurrencyComboBoxVM.CurrencyIDR)
+                    {
+                        errorLog.Add(new CSVErrorLogVM()
+                        {
+                            FileName = fileName,
+                            FieldName = FieldNames[(int)ImportedFields.Currency],
+                            Value = oa.Currency.Value,
+                            ErrorDescription = ErrorDesc_Rule1
+                        });
+                    }
+                }
+            }
+        }
+
+        private static void CheckValidationRule2(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        {
+            var vendor = vendors.ToList().Find(v => v.ID == oa.Staff.Value);
+            if (vendor != null)
+            {
+                if (IsGrantee(vendor.VendorId) && (oa.Currency.Value != CurrencyComboBoxVM.CurrencyUSD))
                 {
                     errorLog.Add(new CSVErrorLogVM()
                     {
                         FileName = fileName,
                         FieldName = FieldNames[(int)ImportedFields.Currency],
                         Value = oa.Currency.Value,
-                        ErrorDescription = ErrorDesc_Rule1
+                        ErrorDescription = ErrorDesc_Rule2
                     });
                 }
-            }
-        }
-
-        private static void CheckValidationRule2(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog)
-        {
-            if (IsGrantee(oa.Staff.Value.ToString()) && (oa.Currency.Value != CurrencyComboBoxVM.CurrencyUSD))
-            {
-                errorLog.Add(new CSVErrorLogVM()
-                {
-                    FileName = fileName,
-                    FieldName = FieldNames[(int)ImportedFields.Currency],
-                    Value = oa.Currency.Value,
-                    ErrorDescription = ErrorDesc_Rule2
-                });
             }
         }
 
@@ -483,7 +369,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             // Rule 4: "Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.";
 
-            VendorVM vendor = vendors.ToList().Find(v => v.VendorId == oa.Staff.Value.ToString());
+            VendorVM vendor = vendors.ToList().Find(v => v.ID == oa.Staff.Value);
 
             if (vendor == null)
             {
@@ -576,7 +462,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             Decimal result;
 
-            if (!Decimal.TryParse(value, out result))
+            if (!Decimal.TryParse(value.Replace(".", ""), out result))
             {
                 errorLog.Add(new CSVErrorLogVM()
                 {
@@ -607,5 +493,177 @@ namespace MCAWebAndAPI.Service.Finance
         {
             return staffId.ToString().Substring(0, 1) == StaffIDPrefix_Grantee;
         }
+
+        #endregion
+
+        #region Supply data to Landing Page
+
+        public static OutstandingAdvanceLandingPageVM GetChartDataOfProfessionalAndIndependentConsultant(string siteURL)
+        {
+            OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
+
+            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='"+ FieldName_StaffID +
+                       "'/> <Value Type='Text'>"+ StaffIDPrefix_Proffesional +"</Value></BeginsWith></Where></Query></View>";
+
+            decimal total = 0;
+            int count = 0;
+            foreach (var item in SPConnector.GetList(ListName, siteURL, caml))
+            {
+                total += total + Convert.ToDecimal(item[FieldName_Amount]);
+                count++;
+            }
+
+            result.Amount = total;
+            result.Count = count;
+            return result;
+        }
+
+        
+        public static OutstandingAdvanceLandingPageVM GetChartDataOfGrantee(string siteURL)
+        {
+            OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
+
+            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='" + FieldName_StaffID +
+                       "'/> <Value Type='Text'>" + StaffIDPrefix_Grantee + "</Value></BeginsWith></Where></Query></View>";
+
+            decimal total = 0;
+            int count = 0;
+            foreach (var item in SPConnector.GetList(ListName, siteURL, caml))
+            {
+                total += total + Convert.ToDecimal(item[FieldName_Amount]);
+                count++;
+            }
+
+            result.Amount = total;
+            result.Count = count;
+            return result;
+        }
+
+        #endregion
+
+        private OutstandingAdvanceVM ConvertToVM(ListItem listItem)
+        {
+            OutstandingAdvanceVM viewModel = new OutstandingAdvanceVM();
+
+            viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
+            viewModel.DateOfUpload = Convert.ToDateTime(listItem[FieldName_DateOfUpload]);
+            viewModel.Staff.Value = Convert.ToInt32((listItem[FieldName_Staff] as FieldLookupValue).LookupValue);
+            viewModel.Reference = Convert.ToString(listItem[FieldName_Reference]);
+            viewModel.DueDate = Convert.ToDateTime(listItem[FieldName_DueDate]);
+            viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
+            viewModel.Amount = Convert.ToDecimal(listItem[FieldName_Amount]);
+            viewModel.Project.Value = Convert.ToString(listItem[FieldName_Project]);
+            viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
+
+            return viewModel;
+        }
+
+        private string CreateMessage(string toName, string message, OutstandingAdvanceVM viewModel)
+        {
+            string toReturn = string.Empty;
+            toReturn = String.Format(message, toName, viewModel.Staff.Text, viewModel.Reference, viewModel.DueDate.ToString("MM/dd/yyyy"), viewModel.Currency.Value, viewModel.Amount, viewModel.Remarks);
+
+            return toReturn;
+        }
+
+        private void SaveAttachment(int? ID, string reference, IEnumerable<HttpPostedFileBase> attachment)
+        {
+            if (ID != null)
+            {
+                foreach (var doc in attachment)
+                {
+                    if (doc != null)
+                    {
+                        var updateValue = new Dictionary<string, object>();
+                        updateValue.Add(ListName_Document_OutstandingAdvance, new FieldLookupValue { LookupId = Convert.ToInt32(ID) });
+
+                        try
+                        {
+                            SPConnector.UploadDocument(ListName_Document, updateValue, doc.FileName, doc.InputStream, siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                    }
+                }
+            }
+        }
+
+        private string GetDocumentUrl(int? ID)
+        {
+            return string.Format(OutstandingAdvanceDocument_URL, siteUrl, ID);
+        }
+
+        private static List<OutstandingAdvanceVM> ReadCSV(HttpPostedFileBase file, IEnumerable<VendorVM> vendors, ref List<CSVErrorLogVM> errorLog)
+        {
+            List<OutstandingAdvanceVM> listOutstandingAdvance = new List<OutstandingAdvanceVM>();
+            OutstandingAdvanceVM outstandingAdvance = new OutstandingAdvanceVM();
+            string fileName = file.FileName;
+
+            BinaryReader b = new BinaryReader(file.InputStream);
+            byte[] binData = b.ReadBytes(file.ContentLength);
+            string csvData = System.Text.Encoding.UTF8.GetString(binData);
+
+            try
+            {
+                bool isHeader = true;
+                int r = 0;
+                string[] rows = csvData.Split('\n');
+
+                foreach (string row in rows)
+                {
+                    if (isHeader)
+                    {
+                        isHeader = false;
+                        continue;
+                    }
+
+                    ConvertRowToVM(fileName, row, ref outstandingAdvance, ref errorLog, vendors);
+
+                    Validate(outstandingAdvance, fileName, ref errorLog, vendors);
+
+                    listOutstandingAdvance.Add(outstandingAdvance);
+
+                    r++;
+
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            return listOutstandingAdvance;
+        }
+
+        private static void ConvertRowToVM(string fileName,  string row,ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        {
+            if (!string.IsNullOrEmpty(row))
+            {
+                string[] data = row.Split(';');
+
+                oa.DateOfUpload = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DateOfUpload], Convert.ToString(data[(int)ImportedFields.DateOfUpload]), ref errorLog);
+
+                oa.Staff.Value = GetIDVendor(ConvertToInt32(fileName, FieldNames[(int)ImportedFields.StaffId], data[(int)ImportedFields.StaffId], ref errorLog),vendors);
+                oa.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
+
+                oa.Reference = Convert.ToString(data[(int)ImportedFields.Reference]);
+                oa.DueDate = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DueDate], Convert.ToString(data[(int)ImportedFields.DueDate]), ref errorLog);
+
+                oa.Currency.Value = Convert.ToString(data[(int)ImportedFields.Currency]);
+                oa.Amount = ConvertToDecimal(fileName, FieldNames[(int)ImportedFields.Amount], data[(int)ImportedFields.Amount], ref errorLog);
+                oa.Project.Value = Convert.ToString(data[(int)ImportedFields.Project]).Replace("\r", "");
+
+            }
+        }
+
+        private static int? GetIDVendor(int staffId, IEnumerable<VendorVM> vendors)
+        {
+            return vendors.ToList().Find(v => v.VendorId == staffId.ToString()).ID;
+        }
+
     }
 }
