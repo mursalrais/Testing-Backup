@@ -155,9 +155,10 @@ namespace MCAWebAndAPI.Service.Asset
             }
         }
 
-        public AssetDisposalVM GetHeader(int? ID)
+        public AssetDisposalVM GetHeader(int? ID, string SiteUrl)
         {
-           
+
+
             var filename = SPConnector.GetAttachFileName("Asset Disposal", ID, _siteUrl);
             var listItem = SPConnector.GetListItem(SP_MON_FEE_LIST_NAME, ID, _siteUrl);
             var viewModel = new AssetDisposalVM();
@@ -218,6 +219,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.CancelURL = _siteUrl + UrlResource.AssetDisposal;
             var columnValues = new Dictionary<string, object>();
             var ID = Convert.ToInt32(viewmodel.ID);
+            var oldData = SPConnector.GetListItem("Asset Disposal", ID, _siteUrl);
             //columnValues.add
             columnValues.Add("Title", "Asset Disposal");
             
@@ -254,7 +256,7 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(SP_ASSACQDetails_LIST_NAME, item.ID, _siteUrl);
+                        SPConnector.DeleteListItem("Asset Disposal Detail", item.ID, _siteUrl);
                     }
                     catch (Exception e)
                     {
@@ -271,26 +273,33 @@ namespace MCAWebAndAPI.Service.Asset
                 var caml = @"<View><Query>
                            <Where>
                               <Eq>
-                                 <FieldRef Name='ID' />
-                                 <Value Type='Counter'>" + item.AssetSubAsset.Value.Value + @"</Value>
+                                 <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
+                                 <Value Type='Lookup'>" + item.AssetSubAsset.Value.Value + @"</Value>
                               </Eq>
                            </Where>
                         </Query>
                         <ViewFields>
                            <FieldRef Name='assetsubasset' />
-                           <FieldRef Name='Asset_x0020_Sub_x0020_Asset_x003' />
                         </ViewFields>
                         <QueryOptions /></View>";
-                var infoAcquisition = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
-                var assetID = 0;
-                foreach (var i in infoAcquisition)
+
+                var getAssetID = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+          
+               
+
+                foreach (var info in getAssetID)
                 {
-                    if (i["assetsubasset"] as FieldLookupValue != null)
+                    if ((info["assetsubasset"] as FieldLookupValue) != null)
                     {
-                        assetID = (i["assetsubasset"] as FieldLookupValue).LookupId;
+                        updatedValues.Add("assetsubasset", (info["assetsubasset"] as FieldLookupValue).LookupId);
+                    }
+                    if (getAssetID.Count > 1)
+                    {
+                        break;
                     }
                 }
-                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
+                // updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                //updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
                
                 updatedValues.Add("remarks", item.Remarks);
                 updatedValues.Add("status", "RETIRED");

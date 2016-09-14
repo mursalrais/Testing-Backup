@@ -68,7 +68,7 @@
         .DataSource(dataSource => dataSource.Ajax()
                    .Model(model =>
                    {
-                       model.Id(p => p.ID);
+                       model.Id(p => p);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetDisposalDetailVM.GetAssetSubAssetDefaultValue());
                        model.Field(m => m.ProvinceFrom);
                        model.Field(p => p.Status).Editable(false);

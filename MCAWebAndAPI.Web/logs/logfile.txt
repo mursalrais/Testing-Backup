@@ -743,3 +743,95 @@ Please try again.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
 2016-09-13 16:35:54.7277 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
    at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-13 21:08:33.2293 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:08:36.6195 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:18:52.6188 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:18:56.6916 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:20:28.9703 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:20:32.6398 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:22:56.8601 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:23:00.1462 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:25:39.4533 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:25:42.6805 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:31:11.6452 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:31:14.9731 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:38:01.2521 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:38:27.6820 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:38:32.2187 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:38:35.8783 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 21:39:25.7517 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 21:39:29.8225 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 22:09:52.0993 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 22:09:52.1754 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 22:09:52.8978 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 22:09:55.7096 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 22:09:56.3977 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 22:44:21.2096 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 22:44:43.0389 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 22:58:52.0377 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 22:58:56.0254 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 23:06:25.8052 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 23:06:29.5309 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 23:07:08.9025 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 23:07:12.3840 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 23:15:52.5358 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 23:27:00.3940 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 303
+2016-09-13 23:36:16.0535 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items)
+2016-09-14 00:14:56.2475 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 304
