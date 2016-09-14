@@ -261,6 +261,7 @@
 
         function OnSelectDependantName(e) {
             var dataItem = this.dataItem(e.item);
+            if (dataItem.ID === 0) return;
             var url = "/HRDataMaster/GetDependant/" + dataItem.ID;
             $('#IndividualInsuranceNumber').prop('value', '');
             // $('#OrganizationInsuranceID').prop('value', '');
