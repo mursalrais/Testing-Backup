@@ -205,10 +205,16 @@ namespace MCAWebAndAPI.Web.Controllers
                     if (psaNumber != null)
                     {
                         psaID = exitProcedureService.GetPSAId(psaNumber);
+                        int professionalID = exitProcedureService.GetProfessionalIDNumber(psaNumber);
 
                         if (psaID != 0)
                         {
                             exitProcedureService.UpdateLastWorkingDateOnPSA(psaID, lastWorkingDate);
+                        }
+
+                        if(professionalID != 0)
+                        {
+                            exitProcedureService.UpdateLastWorkingDateOnProfessional(professionalID, lastWorkingDate);
                         }
                     }
                 }

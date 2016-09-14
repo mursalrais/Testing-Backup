@@ -69,31 +69,27 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             Choices = new string[]
             {
-                "Executive Director",
-                "Executive Officer",
+                "Executive Office",
                 "Legal Unit",
                 "Monitoring & Evaluation Unit",
                 "Communications & Outreach Unit",
                 "Risk & Audit Unit",
-                "Program Div.",
+                "Program Division",
                 "Procurement Modernization Project",
-                "Community-Based Health & Nutrition Project",
+                "Community-based Health & Nutrition Project",
                 "Green Prosperity Project",
                 "Cross-Cutting Sector",
                 "Economic Analysis Unit",
-                "Social & Gender Assessment Unit",
                 "Environment & Social Performance Unit",
-                "Operations Support Div.",
+                "Social & Gender Assessment Unit",
+                "Operations Support Div",
                 "Finance Unit",
                 "Procurement Unit",
                 "Information Technology Unit",
                 "Human Resources Unit",
-                "Office Support Unit",
-                "Fiscal Agent (FA)",
-                "Procurement Agent (PA)"
-
+                "Office Management"
             },
-            Value = "Ops-P"
+            Value = "Executive Office"
         };
 
         [UIHint("AjaxCascadeComboBox")]

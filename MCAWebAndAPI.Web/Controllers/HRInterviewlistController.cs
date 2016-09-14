@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _serviceApplication = new ApplicationService();
         }
 
+        //Shortlist and Recommended Candidates
         public ActionResult InterviewlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
@@ -89,6 +90,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update data Input Interview Result (I)
         [HttpPost]
         public ActionResult CreateInterviewlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -144,6 +146,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Update data Shortlist and Recommended Candidates
         [HttpPost]
         public ActionResult SendMailCandidate(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -183,6 +186,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Input Interview Result I
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null, int? posMan = null )
         {
             //mandatory: get site url
@@ -197,6 +201,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update data Input Interview Result II
         [HttpPost]
         public ActionResult InputResultInterview(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -224,7 +229,7 @@ namespace MCAWebAndAPI.Web.Controllers
                    posMan = viewModel.ManPos
                });
         }
-
+        //Input Interview Result II
         public ActionResult InputInterviewResultDetail(string siteurl = null, int? ID = null, int? manPos = null)
         {
 

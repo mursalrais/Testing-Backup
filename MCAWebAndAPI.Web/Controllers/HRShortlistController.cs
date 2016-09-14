@@ -26,6 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
+        //Display Shortlist Step 1 by HR & Requestor
         public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
@@ -45,6 +46,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update Shortlist Step 1 by HR & Requestor
         [HttpPost]
         public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -70,6 +72,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string[] words = viewModel.SendTo.Split(delimiterChars);
 
+            //send mail by HR
             if (viewModel.useraccess == "HR")
             {
                 string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
@@ -84,6 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 _service.SendEmailValidation(lstEmail, viewModel.PositionName, bodymailHR);
             }
+            //send mail by Requestor
             else if (viewModel.useraccess == "REQ")
             {
                 string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
@@ -108,6 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
+        //Send invitation to candidate
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
         {
             //mandatory: set site url
@@ -119,6 +124,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update data Send invitation to candidate
         [HttpPost]
         public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -156,6 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Shortlist Step 3 by HR
         public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
          {
             //mandatory: set site url
