@@ -17,6 +17,7 @@ using System.Web.Script.Serialization;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using Newtonsoft.Json;
 using MCAWebAndAPI.Service.HR.Common;
+using MCAWebAndAPI.Service.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -37,7 +38,9 @@ namespace MCAWebAndAPI.Web.Controllers
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            return Redirect((siteUrl ?? ConfigResource.DefaultBOSiteUrl) + Service.Resources.UrlResource.AssetCheckResult);
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
+
+            return Content("<script>window.location = '"+url+"';</script>");     
         }
 
         public int PositionID(int? ID, string siteUrl)
