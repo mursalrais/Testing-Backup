@@ -108,36 +108,23 @@
 
             function saveAssignment() {
 
-                var asset = document.getElementsByClassName("asset");
-                var estdate = document.getElementsByClassName("estdate");
-                var loandate = new Date($('#LoanDate').val());
-                var grid = $('#AssetLoanAndReturnItem').data("kendoGrid").dataSource.data();
+                //var asset = document.getElementsByClassName("asset");
+                //var estdate = document.getElementsByClassName("estdate");
+                //var loandate = new Date($('#LoanDate').val());
+                //var grid = $('#AssetLoanAndReturnItem').data("kendoGrid").dataSource.data();
 
-                for (var j = 0; j < grid.length; j++) {
-                    if (grid[j].EstReturnDate < loandate) {
-                        var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
-                        showModalWindow(data);
-                        return false;
-                    }
-                }
-
-                console.log(loandate);
-                //for (var j = 0; j < asset.length; j++) {
-                //    if (asset[j].value == "null") {
-                //        alert("Asset Sub Asset / Province cannot be null!");
+                //for (var j = 0; j < grid.length; j++) {
+                //    if (grid[j].EstReturnDate < loandate) {
+                //        var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
+                //        showModalWindow(data);
                 //        return false;
                 //    }
                 //}
 
-                //var dateOne = new Date(2010, 00, 15); //Year, Month, Date
-                //var dateTwo = new Date(2011, 00, 15); //Year, Month, Date
-                //if (dateOne > dateTwo) {
-                //    alert("Date One is greather then Date Two.");
-                //} else {
-                //    alert("Date Two is greather then Date One.");
-                //}
-
-
+                //console.log(loandate);
+       
+               
+                window.top.location.href = "@Model.CancelURL";
 
             }
 

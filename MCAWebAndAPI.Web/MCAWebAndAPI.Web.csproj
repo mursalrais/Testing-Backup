@@ -427,6 +427,7 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="img\logomca.png" />
     <Content Include="JSLintNet.json" />
     <None Include="Properties\PublishProfiles\host.my-epmo.com.pubxml" />
     <None Include="Properties\PublishProfiles\mcaims-dev - FTP.pubxml" />
@@ -1185,6 +1186,8 @@
     <Content Include="Views\PROVendor\Create.cshtml" />
     <Content Include="Views\PROVendor\Edit.cshtml" />
     <Content Include="Views\PROVendor\Upload.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\Edit.cshtml" />
+    <Content Include="Views\ASSAssetCheckForm\_EditDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

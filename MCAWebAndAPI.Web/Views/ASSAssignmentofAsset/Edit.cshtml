@@ -4,16 +4,12 @@
 
 @model AssignmentOfAssetVM
 
-@using (Ajax.BeginForm("Update", "ASSAssignmentOfAsset",
-                                                                                                                                                   FormMethod.Post,
-                                                                                                                                                   new AjaxOptions
-                                                                                                                                                   {
-                                                                                                                                                       OnBegin = "onBeginForm",
-                                                                                                                                                       OnComplete = "onCompleteForm",
-                                                                                                                                                       OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                                       OnFailure = "onFailureForm"
-                                                                                                                                                   }, new { @class = "form-horizontal" }))
-
+@using (Html.BeginForm("Update", "ASSAssignmentOfAsset", FormMethod.Post,
+                                                                                                                                    new
+                                                                                                                                    {
+                                                                                                                                        @class = "form-horizontal",
+                                                                                                                                        enctype = "multipart/form-data"
+                                                                                                                                    }))
 {
     <form class="form-horizontal" method="post" action="/ASSAssignmentOfAsset/Update" id="create-asset-acquisition-form">
         <fieldset>
@@ -52,7 +48,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="file" disabled name="attach" id="attach" style="width : 100%" />@Model.filename
+                        <input type="file" name="attach" id="attach" style="width : 100%" /><div id="oldFile">@Model.filename</div>
                         @*<input type="text" readonly name="filename" id="filename" value="@Model.filename" style="width : 100%" />*@
                     </div>
                 </div>
@@ -69,6 +65,7 @@
         </fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
+        @Html.HiddenFor(m => m.filename)
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" />
@@ -84,6 +81,15 @@
 
 <script>
     $(document).ready(function () {
+        $("#attach").change(function () {
+            var filename = '@Model.filename';
+            //alert(filename);
+            if(filename != null || filename != "")
+            {
+                alert('Old Attachment will be Changed!');
+                document.getElementById("oldFile").style.textDecoration = "line-through";
+            }
+        });
         //$("#AssetHolder_Value").data("kendoDropDownList").value("");
     })
 
@@ -118,6 +124,11 @@
             alert("Detail cannot Empty");
             return false;
         }
+
+        var url = "/ASSAssignmentOfAsset/Update";
+        $.getJSON(url, function (data) {
+
+        })
     }
 
     function onAssetChange(e) {
