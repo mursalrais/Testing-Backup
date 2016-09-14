@@ -17,7 +17,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
       public DataTable dtDetails { get; set; } = new DataTable();
 
-      
+      public DataTable dtLocation { get; set; } = new DataTable();
+
+      public DataTable dtDayOff { get; set; } = new DataTable();
+
+
         //[UIHint("Date")]
         //public DateTime? Period { get; set; } = DateTime.Today;
 
@@ -81,6 +85,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public bool IsFullDay { get; set; }
 
         public string ProjectUnit { get; set; }
+
+        public string Position { get; set; }
 
         public string UserPermission { get; set; }
 

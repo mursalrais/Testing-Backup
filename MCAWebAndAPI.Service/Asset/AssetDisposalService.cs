@@ -38,7 +38,13 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
-            
+
+                var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                if (header.attach.FileName != "" || header.attach.FileName != null)
+                {
+                    SPConnector.AttachFile("Asset Disposal", id, header.attach, _siteUrl);
+                }
+
                 //var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
                 //var info = SPConnector.GetListItem("Asset Disposal", id, _siteUrl);
 
@@ -151,8 +157,11 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssetDisposalVM GetHeader(int? ID)
         {
+           
+            var filename = SPConnector.GetAttachFileName("Asset Disposal", ID, _siteUrl);
             var listItem = SPConnector.GetListItem(SP_MON_FEE_LIST_NAME, ID, _siteUrl);
             var viewModel = new AssetDisposalVM();
+            viewModel.filename = filename;
 
             viewModel.TransactionType = Convert.ToString(listItem["Title"]);
            
@@ -217,19 +226,13 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Disposal", ID, columnValues, _siteUrl);
-              
-                    var newData = SPConnector.GetListItem("Asset Assignment", ID, _siteUrl);
-                    if (Convert.ToBoolean(newData["Attachments"]) == false)
-                    {
-                        var oldcolumnValues = new Dictionary<string, object>();
-                        oldcolumnValues.Add("Title", "Asset Disposal");
-                        oldcolumnValues.Add("date", Convert.ToDateTime(viewmodel.Date));
-                     
 
-                        SPConnector.UpdateListItem("Asset Disposal", ID, oldcolumnValues, _siteUrl);
-                        return false;
-                    }
-            
+                var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+                if (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null)
+                {
+                    SPConnector.AttachFile("Asset Disposal", id, viewmodel.attach, _siteUrl);
+                }
+
             }
 
             catch (Exception e)

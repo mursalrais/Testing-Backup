@@ -1,4 +1,5 @@
-﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+﻿@using System.Data
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model TimesheetVM
 
 @{
@@ -22,163 +23,160 @@
         <div class="row">
             <div class="col-xs-12">
                 <table class="table table-striped">
-                    @*<thead>*@
-                    <tr>
-                        <td colspan="3" class="tdHeadergreen" >NAME</td>
-                        <td colspan="11" class="tdHeadergreen" ></td>
-                        <td colspan="4" class="tdHeadergray">POSITION</td>
-                        <td colspan="13" class="tdHeadergray"></td>
-                        <td colspan="1">Aug 20/2015 to Sep 19/2015</td>
-                        <td colspan="3" >Professional No.</td>
-                    </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                            <td>15</td>
-                            <td>16</td>
-                            <td>17</td>
-                            <td>18</td>
-                            <td>19</td>
-                            <td>20</td>
-                            <td>21</td>
-                            <td>22</td>
-                            <td>23</td>
-                            <td>24</td>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                            <td>29</td>
-                            <td>30</td>
-                            <td>31</td>
-                            <td rowspan="3">DETAILS    WORK LOCATION</td>
-                            <td rowspan="3">TOTAL DAY</td>
-                            <td colspan="2">OFFICE USE</td>
-                        </tr>
 
+                <tr>
+                    <td colspan="3" class="tdHeadergreen">NAME</td>
+                    <td colspan="11" class="tdHeadergreenLeft">@Model.Name</td>
+                    <td colspan="4" class="tdHeadergray">POSITION</td>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="12" class="tdHeadergrayLeft">@Model.Position</td>
+                    }
+                    else
+                    {
+                        <td colspan="13"  class="tdHeadergrayLeft">@Model.Position</td>
+                    }
+                    <td colspan="1" class="tdLeft">@Model.StartPeriod.Value.ToString("MMM dd/yyyy") to @Model.EndPeriod.Value.ToString("MMM dd/yyyy")</td>
+                    <td colspan="3" class="tdLeft">Professional No.</td>
+                </tr>
                     <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                        <td>10</td>
-                        <td>11</td>
-                        <td>12</td>
-                        <td>13</td>
-                        <td>14</td>
-                        <td>15</td>
-                        <td>16</td>
-                        <td>17</td>
-                        <td>18</td>
-                        <td>19</td>
-                        <td>20</td>
-                        <td>21</td>
-                        <td>22</td>
-                        <td>23</td>
-                        <td>24</td>
-                        <td>25</td>
-                        <td>26</td>
-                        <td>27</td>
-                        <td>28</td>
-                        <td>29</td>
-                        <td>30</td>
-                        <td>31</td>
-                        <td rowspan="2" colspan="2">ok</td>
-                    </tr>
+                        @for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
+                        {
 
-                        <tr>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>5</td>
-                            <td>6</td>
-                            <td>7</td>
-                            <td>8</td>
-                            <td>9</td>
-                            <td>10</td>
-                            <td>11</td>
-                            <td>12</td>
-                            <td>13</td>
-                            <td>14</td>
-                            <td>15</td>
-                            <td>16</td>
-                            <td>17</td>
-                            <td>18</td>
-                            <td>19</td>
-                            <td>20</td>
-                            <th>21</th>
-                            <td>22</td>
-                            <td>23</td>
-                            <td>24</td>
-                            <td>25</td>
-                            <td>26</td>
-                            <td>27</td>
-                            <td>28</td>
-                            <td>29</td>
-                            <td>30</td>
-                            <td>31</td>
-                        </tr>
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["No"])</td>
+                        }
+                        <td rowspan="3" class="tdLeft">DETAILS    WORK LOCATION</td>
+                        <td rowspan="3">TOTAL DAY</td>
+                        <td colspan="2">OFFICE USE</td>
+                    </tr>
 
                   
+                <tr>
+                    @for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
+                    {
+
+                        <td>@Convert.ToString(Model.dtDetails.Rows[i]["DayName"])</td>
+                    }
+                    <td rowspan="2" colspan="2"></td>
+                </tr>
+
+                    <tr>
+                        @for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
+                        {
+
+                            <td>@Convert.ToString(Model.dtDetails.Rows[i]["DateName"])</td>
+                        }
+                       
+                    </tr>
+
+                 
                  
 
                         @for (int i = 1; i <= 15 - 1; i++)
                         {
+
                             <tr>
-                                <td>@i.ToString()</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td>12</td>
-                                <td>13</td>
-                                <td>14</td>
-                                <td>15</td>
-                                <td>16</td>
-                                <td>17</td>
-                                <td>18</td>
-                                <td>19</td>
-                                <td>20</td>
-                                <td>21</td>
-                                <td>22</td>
-                                <td>23</td>
-                                <td>24</td>
-                                <td>25</td>
-                                <td>26</td>
-                                <td>27</td>
-                                <td>28</td>
-                                <td>29</td>
-                                <td>30</td>
-                                <td>31</td>
-                                <td>Location  @i.ToString()  : Jakarta</td>
-                                <td>0.0</td>
-                                <td>ok</td>
-                                <td>ok</td>
+
+                                @for (int x = 0; x <= Model.dtDetails.Rows.Count - 1; x++)
+                                {
+                                    if (Model.dtDetails.Rows[x]["Type"].ToString() == "Working Days" && i == 1)
+                                    {
+                                        <td>@Convert.ToString(Model.dtDetails.Rows[x]["HalfFullDay"])</td>
+                                    }
+                                    else if (i == 1)
+                                    {
+                                        <td>0</td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                }
+
+                               @if (i == 1 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 1)
+                               {
+                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                               }
+                               else if (i == 2 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 2)
+                               {
+                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                               }
+                               else if (i == 3 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 3)
+                               {
+                                <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
+                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
+                               }
+                               else if (i == 4 && Model.dtLocation != null && Model.dtLocation.Rows.Count ==4)
+                               {
+                                <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[3]["Location"].ToString()</td>
+                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[3]["Total"])</td>
+                               }
+                               else if (i == 5 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 5)
+                               {
+                                <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[4]["Location"].ToString()</td>
+                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[4]["Total"])</td>
+                               }
+                               else if (i == 6 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 6)
+                               {
+                                <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[5]["Location"].ToString()</td>
+                                <td>@Convert.ToDouble(Model.dtLocation.Rows[5]["Total"])</td>
+                               }
+                               else
+                               {
+                                   if (i <= 6)
+                                   {
+                                        <td class="tdLeft">Location @i.ToString() :</td>
+                                        <td>0.0</td>
+                                   }
+                                   else if (i == 7)
+                                   {
+                                    <td class="tdLeft">Sick Leave</td>
+                                        <td>0.0</td>
+                                   }
+                                   else if (i ==8)
+                                   {
+                                    <td class="tdLeft">Eligible Days Off</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 9)
+                                   {
+                                    <td class="tdLeft">Others*</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 10)
+                                   {
+                                    <td class="tdLeft">Public Holiday</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 11)
+                                   {
+                                    <td class="tdLeft">Unpaid Days Off</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 12)
+                                   {
+                                    <td class="tdLeft">Compensatory Days Off</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 13)
+                                   {
+                                    <td class="tdLeft">TOTAL</td>
+                                    <td>0.0</td>
+                                   }
+                                   else if (i == 14)
+                                   {
+                                    <td class="tdLeft">Compensatory Time (C): Work or Travel on Saturday & Sunday</td>
+                                    <td>0.0</td>
+                                   }
+                               }
+
+
+                                <td></td>
+                                <td></td>
                             </tr>
+
                         }
                     <tr>
                         <td colspan="31">NOTES :</td>
@@ -308,9 +306,21 @@ td {
   vertical-align: top;background-color: White;font-size:xx-small
 }
 
+.tdLeft {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
 .tdHeadergreen {
   border: 1px solid Black;
   padding: 5px 15px;text-align: center;vertical-align: text-top;
+  vertical-align: top;background-color:darkseagreen;;font-size:xx-small
+}
+
+.tdHeadergreenLeft {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: left;vertical-align: text-top;
   vertical-align: top;background-color:darkseagreen;;font-size:xx-small
 }
 
@@ -320,6 +330,11 @@ td {
   vertical-align: top;background-color:gray;;font-size:xx-small
 }
 
+.tdHeadergrayLeft {
+  border: 1px solid Black;
+  padding: 5px 15px;text-align: left;vertical-align: text-top;
+  vertical-align: top;background-color:gray;;font-size:xx-small
+}
 
 
 .thLeft {
