@@ -29,21 +29,15 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string EventBudgetText = "Title";
         private const string EventBudgetOnSelectEventName = "onSelectEventBudgetNo";
 
-        ISCAReimbursementService service;
-        IEventBudgetService serviceEB;
-
-        public FINSCAReimbursementController()
-        {
-            service = new SCAReimbursementService();
-            serviceEB = new EventBudgetService();
-        }
-
-
+        private ISCAReimbursementService service;
+        private IEventBudgetService serviceEB;
+        
         public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
         {
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
+
+            service = new SCAReimbursementService(siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
@@ -57,7 +51,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            serviceEB.SetSiteUrl(siteUrl);
+            serviceEB = new EventBudgetService(siteUrl);
 
             var header = serviceEB.Get(Convert.ToInt32(ID));
 
@@ -73,7 +67,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Save(FormCollection form, SCAReimbursementVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-            service.SetSiteUrl(siteUrl);
+
+            service = new SCAReimbursementService(siteUrl);
 
             try
             {
@@ -100,7 +95,8 @@ namespace MCAWebAndAPI.Web.Controllers
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-            service.SetSiteUrl(siteUrl);
+
+            service = new SCAReimbursementService(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
 
 

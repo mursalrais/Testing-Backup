@@ -1,0 +1,279 @@
+	.my-content {
+		background: #3f51b5;
+		color : white;
+	}
+
+	.center {
+    margin: auto;
+    width: 50%;
+	text-align: center;
+	}
+	.bold {
+		font-weight: bold;
+		margin : auto;
+	    width: 50%;
+		text-align: center;
+	}
+	.border{
+		border: 1px;
+		border-style : solid;
+		border-color: #9e9e9e;
+		padding : 0px;
+	}
+	.border-rg{
+		border-top: 0px;
+		border-right: 2px;
+		border-left: 0px;
+		border-bottom: 0px;
+		border-style : solid;
+		padding : 0px;
+		border-color : white;
+	}
+	.border-lf{
+		border-top: 0px;
+		border-right: 0px;
+		border-left: 5px;
+		border-bottom: 0px;
+		border-style : solid;
+		padding : 0px;
+		border-color : white;
+	}
+
+	.borderless-lf-rg {
+		border-left: 0px solid !important;
+		border-right: 0px solid !important;
+	}
+	
+	.header-colomn{
+		margin : 5px;
+		background: #9fa8da;
+	}
+	.wrapper{
+		width :100%;
+		height: 5px
+	}
+	.wrapperTable{
+		height : 10px !important;
+	}
+	.padding-less{
+		padding : 0px;
+	}
+	.add-margin{
+		margin-top : 10px;
+		margin-bottom : 10px;
+	}
+	.cos-width-50{
+		width :46%;
+		float :left;
+	}
+	.cos-width-74{
+		width :71%;
+		float :left;
+	}
+	.cos-width-2{
+		width :8%;
+		float :left;
+	}
+	.cos-width-24{
+		width :21%;
+		float :left;
+	}
+	.inherit{
+		position: inherit;
+	}
+
+	table {
+		float :left;
+	}
+	.padzero1 tr td {
+
+		border : 0px 0px 0px 0px solid;
+		padding : 0px;
+	}
+
+	.padzero2 tr th {
+
+		border : 0px 0px 0px 0px solid;
+		padding : 5px 0px 5px 0px;
+	}
+
+
+	table,th,td {
+		border : 0px solid red;
+		padding : 5px;
+		margin : 5px;
+		/*word-wrap: break-word !important;*/
+		text-align: center;
+	}
+
+	.width100 {
+		width : 100%;
+	}
+
+	.table-content {
+		width: 100%;
+		height: 145px;
+		overflow-y:auto;
+		overflow-x:hidden;
+		display : block !important;
+		left : 10px;
+	}
+
+	.font-inner-table {
+		font-size : 20pt;
+		font-weight: bold;
+	}
+
+	table .section-table{
+		margin : 0 auto;
+	}
+
+	.section3-table tr {
+		border-left: 0px solid !important;
+		border-right: 0px solid !important;
+	}	
+
+	.header-bg1{
+		background: #1e88e5;
+		color : white;
+		height :40px;
+	}
+
+	.border-bg1 {
+		border : 1px solid #1e88e5;
+	}
+
+	.header-bg1a{
+		background: #90caf9;
+		color : white;
+		border : 1px solid #90caf9;
+	}
+
+	.header-bg1b{
+		background: white;
+		color : #90caf9;
+		border : 1px solid #90caf9;
+	}
+
+	.isi-bg1a {
+		padding-top : 5px !important;
+		padding-bottom : 5px !important;
+		border : 1px solid #90caf9;
+		color : #9e9e9e !important;
+		font-weight : bold;
+	}
+
+	.border-bg1a {
+		border : 1px solid #90caf9;
+	}
+
+	.header-bg2 {
+		background: #00bfa5;
+		color : white;
+		border :1px solid #00bfa5;
+		height :40px;
+		width : 156.67px;
+	}
+
+	.border-bg2 {
+		border : 1px solid #00bfa5;
+		padding : 5px;
+		height : 119.67px;
+		font-size : 15pt;
+		font-weight: bold;
+		color : #9e9e9e;
+	}
+
+	.header-bg3{
+		background: #1e88e5;
+		color : white;
+		height :40px;
+	}
+
+	.border-bg3 {
+		border : 1px solid #1e88e5;
+	}
+
+	.header-bg3x {
+		background: ;
+		color : white;
+		border : ;
+		height : 29.78px;
+	}
+
+	.isi-bg3x {
+		padding-top : 5px !important;
+		padding-bottom : 5px !important;
+		border : ;
+		color : black !important;
+		font-weight : bold;
+		text-align : center;
+	}
+
+	.header-bg3b{
+		background: white;
+		color : #90caf9;
+		border : 1px solid #90caf9;
+	}
+
+	.header-bg3a{
+		background: #90caf9;
+		color : white;
+		border : 1px solid #90caf9;
+	}
+
+	.border-bg3a {
+		border : 1px solid #90caf9;
+	}
+
+	.header-bg3b{
+		background: white;
+		color : #90caf9;
+		border : 1px solid #90caf9;
+	}
+
+	.isi-bg3a {
+		padding-top : 5px !important;
+		padding-bottom : 5px !important;
+		border : 1px solid #90caf9;
+		color : #9e9e9e !important;
+		font-weight : bold;
+	}
+
+	.add-widthbg3 {
+		width : 134.44px !important;
+	}
+
+	.header-bg4{
+		background: #1e88e5;
+		color : white;
+		height :40px;
+	}
+
+	.border-bg4 {
+		border : 1px solid #1e88e5;
+	}
+
+	.header-bg4a{
+		background: #90caf9;
+		color : white;
+		border : 1px solid #90caf9;
+	}
+
+	.isi-bg4a {
+		padding-top : 5px !important;
+		padding-bottom : 5px !important;
+		border : 1px solid #90caf9;
+		color : #9e9e9e !important;
+		font-weight : bold;
+		width: 25%;
+	}
+
+	.wd-10{
+		width: 16% !important;
+	}
+
+	.wd-30{
+		width: 28% !important;
+		position: inline !important;
+	}

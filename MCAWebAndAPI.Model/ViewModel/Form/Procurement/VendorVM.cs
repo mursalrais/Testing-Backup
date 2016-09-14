@@ -13,9 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Procurement
     {
         public string CancelUrl { get; set; }
 
-        private ComboBoxVM _profid;
+        private ComboBoxVM _profid, _currency, _group;
         [UIHint("ComboBox")]
-        [Required]
+        //[Required]
         public ComboBoxVM ProfessionalID
         {
             get
@@ -38,16 +38,66 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Procurement
             }
         }
 
+        [Required]
         public string VendorID { get; set; }
+        [Required]
         public string VendorName { get; set; }
         //dropdown profid
+        [Required]
         public string ProfessionalName { get; set; }
+        [Required]
         public string Street { get; set; }
+        [Required]
         public string PostalCode { get; set; }
+        [Required]
         public string City { get; set; }
-        public string Currency { get; set; }
+        [UIHint("ComboBox")]
+        [Required]
+        public ComboBoxVM Currency
+        {
+            get
+            {
+                if (_currency == null)
+                    _currency = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            ""
+                        }
+
+                    };
+                return _currency;
+            }
+            set
+            {
+                _currency = value;
+            }
+        }
+        [Required]
         public string HomeNumber { get; set; }
-        public string Group { get; set; }
+        [UIHint("ComboBox")]
+        [Required]
+        public ComboBoxVM Group
+        {
+            get
+            {
+                if (_group == null)
+                    _group = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                        {
+                            ""
+                        }
+
+                    };
+                return _group;
+            }
+            set
+            {
+                _group = value;
+            }
+        }
+        [Required]
         public string Email { get; set; }
 
     }

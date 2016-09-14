@@ -39,6 +39,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [DataType(DataType.Date)]
+        [UIHint("Month")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MMM-yyyy}")]
         [DisplayName("Tax Period")]
         public DateTime TaxPeriod

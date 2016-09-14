@@ -36,15 +36,21 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public CurrencyComboBoxVM Currency { get; set; } = new CurrencyComboBoxVM();
 
         [Required]
+        [UIHint("Currency")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:N2}")]
         [DisplayName("Special Cash Advance")]
         public decimal SpecialCashAdvanceAmount { get; set; }
 
         [Required]
         [DisplayName("Total Expense")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:N2}")]
+        [UIHint("Currency")]
         public decimal TotalExpense { get; set; }
 
         [Required]
         [DisplayName("Received from/to")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:N2}")]
+        [UIHint("Currency")]
         public decimal ReceivedFromTo { get; set; }
         
         public IEnumerable<SCASettlementItemVM> ItemDetails { get; set; } = new List<SCASettlementItemVM>();

@@ -14,7 +14,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
     public interface IRequisitionNoteService
     {
-        void SetSiteUrl(string siteUrl);
         RequisitionNoteVM Get(int? ID);
 
         Task<RequisitionNoteVM> GetAsync(int? ID);
@@ -37,7 +36,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         
         void DeleteDetail(int id);
 
-        Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId);
+        Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId);
 
     }
 }

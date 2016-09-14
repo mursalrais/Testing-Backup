@@ -26,6 +26,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new HRShortlistService();
         }
 
+        //Display Shortlist Ste 1 By HR & Requestor
         public ActionResult ShortlistData(string siteurl = null, int? position = null, string username = null, string useraccess = null)
         {
             //mandatory: set site url
@@ -45,6 +46,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update Shortlist Ste 1 By HR & Requestor
         [HttpPost]
         public ActionResult UpdateShortlistData(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -70,6 +72,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             string[] words = viewModel.SendTo.Split(delimiterChars);
 
+            //Send Mail By HR
             if (viewModel.useraccess == "HR")
             {
                 string bodymailHR = string.Format(EmailResource.EmailShortlistToRequestor, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
@@ -84,6 +87,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 _service.SendEmailValidation(lstEmail, viewModel.PositionName, bodymailHR);
             }
+            //Send Mail By Requestor
             else if (viewModel.useraccess == "REQ")
             {
                 string bodymailREQ = string.Format(EmailResource.EmailShortlistToHR, _service.GetMailUrl(Convert.ToInt32(viewModel.Position), viewModel.useraccess), viewModel.PositionName);
@@ -108,6 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
+        //Send Invitation To Candidate
         public ActionResult ShortlistSendInvite(string siteurl = null, int? ID = null)
         {
             //mandatory: set site url
@@ -119,6 +124,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
+        //Update Send Invitation To Candidate
         [HttpPost]
         public ActionResult CreateSendInvite(FormCollection form, ApplicationShortlistVM viewModel)
         {
@@ -156,6 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
+        //Shortlist Step3 By HR
         public ActionResult ShortlistIntvinvite(string siteurl = null, int? position = null, string username = null, string useraccess = null)
          {
             //mandatory: set site url
@@ -168,17 +175,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult ShortlistInterviewPanel(string siteurl = null, int? position = null, string username = null, string useraccess = null)
-        {
-            //mandatory: set site url
-            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //tidak dipakai
+        //public ActionResult ShortlistInterviewPanel(string siteurl = null, int? position = null, string username = null, string useraccess = null)
+        //{
+        //    //mandatory: set site url
+        //    _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+        //    SessionManager.Set("siteurl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
 
-            var viewmodel = _service.GetShortlist(position, username, useraccess);
-            //viewmodel.SendTo = "";
+        //    var viewmodel = _service.GetShortlist(position, username, useraccess);
+        //    //viewmodel.SendTo = "";
 
-            return View(viewmodel);
-        }
+        //    return View(viewmodel);
+        //}
 
         [HttpPost]
         public ActionResult CreateIntvinvite(FormCollection form, ApplicationShortlistVM viewModel)

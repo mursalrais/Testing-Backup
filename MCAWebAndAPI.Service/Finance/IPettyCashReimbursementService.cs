@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Service.Finance
 {
@@ -19,7 +20,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         void SetSiteUrl(string siteUrl);
 
-        int? Create(ref PettyCashReimbursementVM viewModel);
+        int? Save(ref PettyCashReimbursementVM viewModel, IEnumerable<ProfessionalMaster> professionals);
 
         Task CreateAttachmentAsync(int? ID, IEnumerable<HttpPostedFileBase> attachment);
 

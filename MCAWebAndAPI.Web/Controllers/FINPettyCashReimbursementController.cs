@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace MCAWebAndAPI.Web.Controllers
 {
     /// <summary>
-    ///     Wireframe FIN12: Petty Cash Reimbursement: Petty Cash Reimbursement
+    ///     Wireframe FIN12: Petty Cash Reimbursement
     ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
     ///         user has not asked for any petty cash advance.
     ///
@@ -70,11 +70,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service.SetSiteUrl(siteUrl);
 
             var viewModel = service.GetPettyCashReimbursement(model.ID);
-            if (viewModel.WBS.Value > 0)
-            {
-                var wbs = COMWBSController.GetWBSMappings(viewModel.WBS.Value);
-                viewModel.WBS.Text = wbs.WBSID + " - " + wbs.WBSDescription;
-            }
+            
             if (viewModel.Professional.Value > 0)
             {
                 var profesional = COMProfessionalController.Get(siteUrl, viewModel.Professional.Value);
@@ -117,7 +113,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             int? ID = null;
-            ID = service.Create(ref viewModel);
+            ID = service.Save(ref viewModel, COMProfessionalController.GetAll());
             Task createApplicationDocumentTask = service.CreateAttachmentAsync(ID, viewModel.Documents);
             Task allTasks = Task.WhenAll(createApplicationDocumentTask);
 

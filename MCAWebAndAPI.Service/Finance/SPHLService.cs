@@ -155,5 +155,23 @@ namespace MCAWebAndAPI.Service.Finance
         {
             return string.Format(UrlResource.SPHLDocumentByID, _siteUrl, ID);
         }
+
+        #region Supply data to Landing Page
+
+        public static decimal GetAmount(string siteUrl)
+        {
+            var caml = @"<View><ViewFields> <FieldRef Name='" + ListName_Amount + "' />  </ViewFields></View>";
+            decimal result = 0;
+
+            foreach (var listItem in SPConnector.GetList(ListName, siteUrl, caml))
+            {
+                result += Convert.ToDecimal(listItem[ListName_Amount]);
+            }
+
+            return result;
+        }
+
+        #endregion
+
     }
 }

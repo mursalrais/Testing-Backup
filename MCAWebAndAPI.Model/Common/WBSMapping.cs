@@ -79,5 +79,13 @@ namespace MCAWebAndAPI.Model.ProjectManagement.Common
                 _Project = value;
             }
         }
+
+        public string WBSIDDescription
+        {
+            get
+            {
+                return string.Format("{0}-{1}", this.WBSID, this.WBSDescription);
+            }
+        }
     }
 }
