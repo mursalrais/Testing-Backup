@@ -86,6 +86,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string RequisitionNoteNo { get; set; }
 
+        public int SCAVoucherId { get; set; }
+
         public string SCAVoucherNo { get; set; }
 
         public string UserEmail { get; set; }

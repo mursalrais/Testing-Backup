@@ -44,7 +44,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailGLNo = "GLMasterId_x003a_GL_x0020_No";
         private const string FieldNameDetailGLDesc = "GLMasterId_x003a_GL_x0020_Descri";
 
-        public void SetSiteUrl(string siteUrl)
+        public SCAReimbursementService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
@@ -225,5 +225,6 @@ namespace MCAWebAndAPI.Service.Finance
 
             return viewModel;
         }
-    }
+
+  }
 }

@@ -39,9 +39,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string LIST_WF_MAPPING = "Workflow Mapping Master";
 
         const string LIST_PROFESSIONAL = "Professional Master";
-        private List<DateTime> lstpublicHoliday;
-        private Dictionary<DateTime, double> lstCompensatory;
-        private Dictionary<DateTime, string> lstDayOff;
+        //private List<DateTime> lstpublicHoliday;
+        //private Dictionary<DateTime, double> lstCompensatory;
+        //private Dictionary<DateTime, string> lstDayOff;
 
         private IDataMasterService _dataService;
        // private IProfessionalService _professionalService;
@@ -53,7 +53,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         }
 
-        public async Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin)
+        public async Task<TimesheetVM> GetTimesheetLoadUpdate(int? id, string userlogin, bool? bprint = null)
         {
             var viewModel = new TimesheetVM();
             try
@@ -72,6 +72,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 viewModel.Name = FormatUtil.ConvertLookupToValue(listItem, "professional");
                 viewModel.Period = Convert.ToDateTime(listItem["DatePeriod"]);
                 viewModel.ProjectUnit = Convert.ToString(professionalDataId["Project_x002f_Unit"]);
+                viewModel.Position = FormatUtil.ConvertLookupToValue(professionalDataId, "Position");
                 viewModel.ProfessionalName.Value = viewModel.ProfessionalID;
                 viewModel.ProfessionalName.Text = viewModel.Name;
                 viewModel.ApprovalLevel = Convert.ToString(listItem["approvallevel"]);
@@ -121,6 +122,13 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 viewModel.TimesheetDetails = await GetTimesheetDetailsLoadUpdate(id,
                     Convert.ToDateTime(viewModel.Period), viewModel.ProfesionalUserLogin, viewModel.Name);
 
+
+                if (bprint != null)
+                {
+                    viewModel.dtDetails =  GetTimesheetPrintAsync(viewModel);
+                    viewModel.dtLocation = GetTimesheetLocation(viewModel.dtDetails);
+                }
+               
 
 
             }
@@ -183,6 +191,118 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         //    return viewModel;
         //}
+
+        private string GetDayofWeekShort(string strDay)
+        {
+            var strResult = "";
+
+            switch (strDay)
+            {
+                case "Sunday":
+                    strResult = "Sun";
+                    break;
+                case "Monday":
+                    strResult = "Mon";
+                    break;
+                case "Tuesday":
+                    strResult = "Tue";
+                    break;
+                case "Wednesday":
+                    strResult = "Wed";
+                    break;
+                case "Thursday":
+                    strResult = "Thur";
+                    break;
+                case "Friday":
+                    strResult = "Fri";
+                    break;
+                case "Saturday":
+                    strResult = "Sat";
+                    break;
+            }
+
+            return strResult;
+        }
+        public DataTable GetTimesheetPrintAsync(TimesheetVM viewModel)
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("No", typeof(string));
+            dt.Columns.Add("DayName", typeof(string));
+            dt.Columns.Add("DateName", typeof(string));
+            dt.Columns.Add("HalfFullDay", typeof(double));
+            dt.Columns.Add("Location", typeof(string));
+            dt.Columns.Add("Type", typeof(string));
+
+            DateTime startdate = Convert.ToDateTime(viewModel.StartPeriod);
+            DateTime finishdate= Convert.ToDateTime(viewModel.EndPeriod);
+            var dateRange = startdate.EachDay(finishdate);
+            var i = 1;
+
+
+            foreach (var itm in dateRange)
+            {
+                var dfull = 0;
+                DataRow row = dt.NewRow();
+                row["No"] = i.ToString();
+                row["DayName"] = GetDayofWeekShort(Convert.ToString(itm.DayOfWeek));
+                row["DateName"] = itm.Date.ToString("dd");
+
+                var timesheetDetail = viewModel.TimesheetDetails.FirstOrDefault(x => x.Date != null && 
+                Convert.ToDateTime(x.Date).ToString("yy-MM-dd")==itm.ToString("yy-MM-dd"));
+                if (timesheetDetail != null)
+                {
+
+                    row["HalfFullDay"] = timesheetDetail.FullHalf;
+                    if (timesheetDetail.Location != null) row["Location"] = Convert.ToString(timesheetDetail.Location);
+
+                    if (!string.IsNullOrEmpty(timesheetDetail.Type))
+                    {
+                        row["Type"] = Convert.ToString(timesheetDetail.Type);
+                    }
+                    else
+                    {
+                        row["Type"] = Convert.ToString(timesheetDetail.SubType);
+                    }
+                }
+                dt.Rows.Add(row);
+
+                i++;
+
+            }
+            return dt;
+        }
+
+        public DataTable GetTimesheetLocation(DataTable dtDetails)
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("Location", typeof(string));
+            dt.Columns.Add("Total", typeof(double));
+
+         
+            DataTable dtDistinct = dtDetails.DefaultView.ToTable(true, "Location");
+
+            for (int i = 0; i <= dtDistinct.Rows.Count-1; i++)
+            {
+                object sumObject;
+                var strLoc = Convert.ToString(dtDistinct.Rows[i]["Location"]);
+                if (string.IsNullOrEmpty(strLoc))continue;
+                sumObject = dtDetails.Compute("Sum(HalfFullDay)", "Location='" + strLoc + "'");
+                DataRow row = dt.NewRow();
+                row["Location"] = strLoc;
+                if (sumObject != null)
+                {
+                    row["Total"] = Convert.ToDouble(sumObject);
+                }
+                dt.Rows.Add(row);
+
+            }
+
+
+
+            return dt;
+        }
 
         public async Task<IEnumerable<TimesheetDetailVM>> GetTimesheetDetailsLoadUpdate(int? id, DateTime period,
             string userlogin, string strName)
@@ -375,7 +495,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         private async Task<List<DateTime>> GetPublicHoliday(string strUrl)
         {
             var listItem = SPConnector.GetList(LIST_PUB_HOLIDAY, strUrl);
-            //List<DateTime> lstpublicHoliday = new List<DateTime>();
+            List<DateTime> lstpublicHoliday = new List<DateTime>();
             lstpublicHoliday = new List<DateTime>();
             foreach (var item in listItem)
             {
@@ -388,7 +508,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
         private async Task<Dictionary<DateTime, double>> GetCompensatory(string strUrl, string strName)
         {
-            //  Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
             lstCompensatory = new Dictionary<DateTime, double>();
             var caml = @"<View><Query><Where><And><Eq><FieldRef Name='professional' />
                         <Value Type='Lookup'>" + strName + "</Value></Eq>" +
@@ -454,7 +574,11 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     var dateRange = startdate.EachDay(finishdate);
                     foreach (var itm in dateRange)
                     {
-                        lstDayOff.Add(itm, typeDayoff + ";" + fullhalf + ";" + otherCat);
+                        if (!lstDayOff.ContainsKey(itm))
+                        {
+                            lstDayOff.Add(itm, typeDayoff + ";" + fullhalf + ";" + otherCat);
+                        }
+                      
                     }
 
                 }
@@ -469,13 +593,26 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             var finishDate = period.GetLastPayrollDay();
             var dateRange = startDate.EachDay(finishDate);
 
-            var listHoliday = GetPublicHoliday(_siteUrl);
-            var listDayOff = GetUserDayOff(_siteUrl, strName);
-            var listCompen = GetCompensatory(_siteUrl, strName);
+            //var listHoliday = GetPublicHoliday(_siteUrl);
+            //var listDayOff = GetUserDayOff(_siteUrl, strName);
+            //var listCompen = GetCompensatory(_siteUrl, strName);
 
-            Task allTask = Task.WhenAll(listHoliday, listDayOff, listCompen);
+          
 
-            await allTask;
+            Task<List<DateTime>> getPublicHolidayTask = GetPublicHoliday(_siteUrl);
+            Task<Dictionary<DateTime, double>> getCompensatoryTask = GetCompensatory(_siteUrl, strName);
+            Task<Dictionary<DateTime, string>> getUserDayOffTask = GetUserDayOff(_siteUrl, strName);
+
+            var lstpublicHoliday = await getPublicHolidayTask;
+            var lstCompensatory = await getCompensatoryTask;
+            var lstDayOff = await getUserDayOffTask;
+
+            //List <DateTime> lstpublicHoliday = new List<DateTime>();
+            //Dictionary<DateTime, double> lstCompensatory = new Dictionary<DateTime, double>();
+            //Dictionary<DateTime, string> lstDayOff = new Dictionary<DateTime, string>();
+            //Task allTask = Task.WhenAll(listHoliday, listDayOff, listCompen);
+
+            //await allTask;
 
             var timesheetDetails = new List<TimesheetDetailVM>();
 

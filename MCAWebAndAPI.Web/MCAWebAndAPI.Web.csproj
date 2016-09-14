@@ -310,6 +310,7 @@
     <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
     <Content Include="Content\custom.css" />
+    <Content Include="Content\fin-style.css" />
     <Content Include="Content\home.css" />
     <Content Include="Content\kendo\2016.2.714\Fiori\editor.png" />
     <Content Include="Content\kendo\2016.2.714\Fiori\imagebrowser.png" />
@@ -1181,6 +1182,9 @@
     <Content Include="Views\HRTimesheet\ViewProfessional.cshtml" />
     <Content Include="Views\HRTimesheet\DisplayTimesheet.cshtml" />
     <Content Include="Views\ASSAssetAcquisition\_DisplayGrid.cshtml" />
+    <Content Include="Views\PROVendor\Create.cshtml" />
+    <Content Include="Views\PROVendor\Edit.cshtml" />
+    <Content Include="Views\PROVendor\Upload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1231,6 +1235,7 @@
     <Compile Include="Controllers\FINSCASettlementController.cs" />
     <Compile Include="Controllers\FINSCAVoucherController.cs" />
     <Compile Include="Controllers\HRDayOffController.cs" />
+    <Compile Include="Controllers\PROVendorController.cs" />
     <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Controllers\SharedController.cs" />
     <Compile Include="Controllers\SharedFinanceController.cs" />
@@ -1330,7 +1335,6 @@
     <Folder Include="App_Code\" />
     <Folder Include="Scripts\apps\controlls\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\COMWBS\" />
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
@@ -1359,6 +1363,9 @@
       <CustomToolNamespace>MCAWebAndAPI.Web.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

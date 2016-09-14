@@ -27,7 +27,8 @@
 <div class="form-group">
     @Html.Bootstrap().LabelFor(m => m.TotalIncomeTaxBorneByGovernment).Class("col-md-4 control-label")
     <div class="col-md-8">
-        @Html.EditorFor(m => m.TotalIncomeTaxBorneByGovernment)
+        @Html.EditorFor(m => m.TotalIncomeTaxBorneByGovernment, new { onchange = "OnTotalIncomeTaxBorneByGovernmentChangeEvent()" })
+        <span class="field-validation-error" id="totalIncomeTaxBorneByGovernmentRequiredMessage" style="display:none;">The Total Income Tax Borne by Government field is required</span>
     </div>
 </div>
 

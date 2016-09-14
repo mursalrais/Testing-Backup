@@ -16,16 +16,19 @@ using MCAWebAndAPI.Service.Converter;
 using System.Web.Script.Serialization;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using Newtonsoft.Json;
+using MCAWebAndAPI.Service.HR.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class ASSAssetCheckResultController : Controller
     {
         IAssetCheckResultService assetCheckResultService;
+        IDataMasterService _dataMasterService;
 
         public ASSAssetCheckResultController()
         {
             assetCheckResultService = new AssetCheckResultService();
+            _dataMasterService = new DataMasterService();
         }
 
         // GET: AssetCheckResult
@@ -82,6 +85,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //assetCheckResultService.UpdatePosition();
 
             if (!string.IsNullOrEmpty(GetData))
             {
@@ -171,7 +175,69 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        private IEnumerable<ProfessionalMaster> GetFromExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
+            var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
 
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["ProfessionalMaster"] = professionals;
+            return professionals;
+        }
+
+        private IEnumerable<PositionMaster> GetFromPositionsExistingSession()
+        {
+            //Get existing session variable
+            var sessionVariable = System.Web.HttpContext.Current.Session["PositionMaster"] as IEnumerable<PositionMaster>;
+            var positions = sessionVariable ?? _dataMasterService.GetPositions();
+
+            if (sessionVariable == null) // If no session variable is found
+                System.Web.HttpContext.Current.Session["PositionMaster"] = positions;
+            return positions;
+        }
+
+        public JsonResult GetPositions()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+
+            var positions = GetFromPositionsExistingSession();
+            return Json(positions.Select(e =>
+                new {
+                    e.ID,
+                    e.PositionName,
+                    e.PositionStatus,
+                    e.Remarks,
+                    e.IsKeyPosition,
+                    e.ProjectUnit,
+                    Desc = string.Format("{0}", e.PositionName)
+                }),
+                JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProfessionals()
+        {
+            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+
+            var professionals = GetFromExistingSession();
+            professionals = professionals.OrderBy(e => e.FirstMiddleName);
+
+            return Json(professionals.Select(e =>
+                new {
+                    e.ID,
+                    e.Name,
+                    e.FirstMiddleName,
+                    e.Position,
+                    e.Status,
+                    e.OfficeEmail,
+                    e.Project_Unit,
+
+
+                    Desc = string.Format("{0}", e.Name),
+                    Desc1 = string.Format("{0} - {1}", e.Name, e.Position),
+                    Desc2 = string.Format("{0}", e.FirstMiddleName)
+                }), JsonRequestBehavior.AllowGet);
+        }
 
 
         public ActionResult View(string siteUrl,

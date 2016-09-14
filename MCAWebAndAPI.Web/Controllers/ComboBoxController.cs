@@ -13,7 +13,6 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class ComboBoxController : Controller
     {
-        private const string SiteUrl = "SiteUrl";
         IComboBoxService service;
 
         public ComboBoxController()
@@ -26,11 +25,21 @@ namespace MCAWebAndAPI.Web.Controllers
             return new HRDataMasterController().GetProfessionals();
         }
 
-        public JsonResult GetEventBudgets()
+        public JsonResult GetEventBudgetsDirectPayment()
         {
-            service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            return GetEventBudgets(EventBudgetService.GetChoice.DirectPayment);
+        }
 
-            var result = service.GetEventBudgets().ToList();
+        public JsonResult GetEventBudgetsSCA()
+        {
+            return GetEventBudgets(EventBudgetService.GetChoice.SCA);
+        }
+
+        public JsonResult GetEventBudgets(EventBudgetService.GetChoice choice)
+        {
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
+            var result = EventBudgetService.GetAllAjaxComboBoxVMs(choice, siteUrl).ToList();
             result.Insert(0, new AjaxComboBoxVM() { Value = 0, Text = "" });
 
             return Json(result.Select(e =>
@@ -44,7 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetActivities()
         {
-            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var activities = Service.Shared.ActivityService.GetActivities(siteUrl);
 
@@ -58,7 +67,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetActivitiesByProject(string projectValue)
         {
-            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var activities = Service.Shared.ActivityService.GetActivities(siteUrl,projectValue);
 
@@ -75,8 +84,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int activityID = 0;
             List<AjaxComboBoxVM> result = new List<AjaxComboBoxVM>();
 
-            ISCAVoucherService _scaVoucherService = new SCAVoucherService();
-            _scaVoucherService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            ISCAVoucherService _scaVoucherService = new SCAVoucherService(ConfigResource.DefaultBOSiteUrl);
             service.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
 
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
@@ -96,7 +104,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetVendors()
         {
-            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl);
 
@@ -110,7 +118,7 @@ namespace MCAWebAndAPI.Web.Controllers
         
         public JsonResult GetGLMasters()
         {
-            var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 

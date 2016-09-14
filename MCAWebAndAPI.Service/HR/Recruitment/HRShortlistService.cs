@@ -298,24 +298,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             foreach (var viewModel in viewModels)
             {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(SP_APPDATA_LIST_NAME, viewModel.ID, _siteUrl);
-
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
-                }
-
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add("applicationstatus", viewModel.Status.Text);
                 updatedValue.Add("applicationremarks", viewModel.Remarks);
@@ -374,11 +356,11 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             
         }
 
-        public void SendEmailValidation(string emailTo, string position, string emailMessages)
+        public void SendEmailValidation(List<string> emailTo, string position, string emailMessages)
         {
             try
             {
-                EmailUtil.Send(emailTo, "Shortlist Candidate for Position " + position, emailMessages);
+                EmailUtil.SendMultiple(emailTo, "Shortlist Candidate for Position " + position, emailMessages);
             }
             catch (Exception e)
             {

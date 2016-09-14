@@ -35,7 +35,7 @@
             <tbody>
                 @foreach(var item in Model.ItemDetails) { 
                 <tr>
-                    <td>@item.Date</td>
+                    <td>@item.Date.ToString("MM/dd/yyyy")</td>
                     <td>@item.PCVNo</td>
                     <td>@item.Payee</td>
                     <td>@item.DescOfExpenses</td>
@@ -119,7 +119,7 @@
                         <td width="20%" style="font-style:italic;"></td>
                     </tr>
                     <tr>
-                        <td colspan="5" style="height: 100px;">Date: @DateTime.Now.ToString("yyyy/MM/dd")<div style="border-bottom:1px solid black; width:250px;"></div></td>
+                        <td colspan="5" style="height: 100px;">Date: @DateTime.Now.ToString("MM/dd/yyyy")<div style="border-bottom:1px solid black; width:250px;"></div></td>
                     </tr>
                 </tbody>
             </table>

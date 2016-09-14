@@ -18,6 +18,8 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
     public class RequisitionNoteService : IRequisitionNoteService
     {
+        #region Constants
+
         private const string ListName_GLMaster = "GL Master";
         private const string ListName_WBSMaster = "WBS Master";
         private const string ListName_Activity = "Activity";
@@ -42,6 +44,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string FIELD_MODIFIED = "Modified";
         private const string FIELD_CREATED = "Created";
         private const string FIELD_USER_EMAIL = "UserEmail";
+        private const string FieldName_VisibleTo = "VisibleTo";
 
         private const string FIELD_RN_HEADERID = "Requisition_x0020_Note_x0020_ID";
         private const string FIELD_RN_ACTIVITY = "Activity";
@@ -61,14 +64,16 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
         private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
 
-        string _siteUrl = null;
+        #endregion 
+
+        string siteUrl = null;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public RequisitionNoteService(string siteUrl)
         {
-            _siteUrl = siteUrl;
+            this.siteUrl = siteUrl;
         }
-
+        
         public async Task<RequisitionNoteVM> GetAsync(int? ID)
         {
             return Get(ID);
@@ -80,7 +85,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             if (ID != null)
             {
-                var listItem = SPConnector.GetListItem(ListName_RequisitionNote, ID, _siteUrl);
+                var listItem = SPConnector.GetListItem(ListName_RequisitionNote, ID, siteUrl);
                 viewModel = ConvertToRequisitionNoteVM(listItem);
 
                 viewModel.ItemDetails = GetRequisitionNoteItemDetails(ID.Value);
@@ -101,7 +106,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         {
             var glMasters = new List<GLMasterVM>();
 
-            foreach (var item in SPConnector.GetList(ListName_GLMaster, _siteUrl, null))
+            foreach (var item in SPConnector.GetList(ListName_GLMaster, siteUrl, null))
             {
                 glMasters.Add(ConvertToGLMasterModel(item));
             }
@@ -115,7 +120,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                  (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
 
             string valuesText = string.Empty;
-            ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, _siteUrl, camlGetSubactivity);
+            ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, siteUrl, camlGetSubactivity);
             string camlGetWbs = string.Empty;
 
             if (subActivityLits.Count > 0)
@@ -135,7 +140,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                                 valuesText + "</Values></In></Where></Query></View>";
             var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(ListName_WBSMaster, _siteUrl, camlGetWbs))
+            foreach (var item in SPConnector.GetList(ListName_WBSMaster, siteUrl, camlGetWbs))
             {
                 wbsMasters.Add(ConvertToWBSMasterModel(item));
             }
@@ -163,14 +168,17 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
 
-            string docNo = DocumentNumbering.Create(_siteUrl, documentNoFormat, 5);
+            //TODO: figure out how to make this work
+            // updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl, "??"));
+
+            string docNo = DocumentNumbering.Create(siteUrl, documentNoFormat, 5);
             updatedValue.Add(FIELD_TITLE, docNo);
 
             viewModel.Title = docNo;
 
             try
             {
-                SPConnector.AddListItem(ListName_RequisitionNote, updatedValue, _siteUrl);
+                SPConnector.AddListItem(ListName_RequisitionNote, updatedValue, siteUrl);
             }
             catch (Exception e)
             {
@@ -178,7 +186,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 throw new Exception(ErrorResource.SPInsertError);
             }
 
-            return SPConnector.GetLatestListItemID(ListName_RequisitionNote, _siteUrl);
+            return SPConnector.GetLatestListItemID(ListName_RequisitionNote, siteUrl);
         }
 
         public bool UpdateRequisitionNote(RequisitionNoteVM viewModel)
@@ -198,9 +206,12 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
 
+            //TODO: figure out how to make this work
+            //    updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl, "??"));
+
             try
             {
-                SPConnector.UpdateListItem(ListName_RequisitionNote, viewModel.ID, updatedValue, _siteUrl);
+                SPConnector.UpdateListItem(ListName_RequisitionNote, viewModel.ID, updatedValue, siteUrl);
             }
             catch (Exception e)
             {
@@ -231,7 +242,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 try
                 {
-                    SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, _siteUrl);
+                    SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -251,7 +262,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updateValue.Add(FIELD_RN_DOCUMENTS_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -272,7 +283,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 {
                     try
                     {
-                        SPConnector.DeleteListItem(ListName_RequisitionNoteItem, viewModel.ID, _siteUrl);
+                        SPConnector.DeleteListItem(ListName_RequisitionNoteItem, viewModel.ID, siteUrl);
 
                     }
                     catch (Exception e)
@@ -299,11 +310,11 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 {
                     if (Item.CheckIfCreated(viewModel))
                     {
-                        SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, _siteUrl);
+                        SPConnector.AddListItem(ListName_RequisitionNoteItem, updatedValue, siteUrl);
                     }
                     else
                     {
-                        SPConnector.UpdateListItem(ListName_RequisitionNoteItem, viewModel.ID, updatedValue, _siteUrl);
+                        SPConnector.UpdateListItem(ListName_RequisitionNoteItem, viewModel.ID, updatedValue, siteUrl);
                     }
                 }
                 catch (Exception e)
@@ -324,7 +335,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updateValue.Add(FIELD_RN_DOCUMENTS_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 try
                 {
-                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, _siteUrl);
+                    SPConnector.UploadDocument(ListName_Attachment, updateValue, doc.FileName, doc.InputStream, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -333,7 +344,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 }
             }
         }
-
 
         public async Task CreateRequisitionNoteItemsAsync(int? headerID, IEnumerable<RequisitionNoteItemVM> noteItems)
         {
@@ -357,16 +367,16 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
         public void DeleteDetail(int id)
         {
-            SPConnector.DeleteListItem(ListName_RequisitionNoteItem, id, _siteUrl);
+            SPConnector.DeleteListItem(ListName_RequisitionNoteItem, id, siteUrl);
         }
 
-        public Tuple<int, string> GetRequisitioNoteIdAndNoByEventBudgetID(int eventBudgetId)
+        public Tuple<int, string> GetIdAndNoByEventBudgetID(int eventBudgetId)
         {
             var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FIELD_REQUISITION_EVENTBUDGETNO + "' /><Value Type='Lookup'>" + eventBudgetId.ToString() + "</Value></Eq></Where></Query> <RowLimit>1</RowLimit> </View>";
             string number = string.Empty;
             int id = 0;
 
-            foreach (var item in SPConnector.GetList(ListName_RequisitionNote, _siteUrl, caml))
+            foreach (var item in SPConnector.GetList(ListName_RequisitionNote, siteUrl, caml))
             {
                 number = Convert.ToString(item[FIELD_TITLE]);
                 id = Convert.ToInt32(item[FIELD_ID]);
@@ -374,6 +384,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             return new Tuple<int, string>(id, number);
         }
+
 
         private ActivityVM ConvertToActivityModel(ListItem item)
         {
@@ -446,7 +457,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 details = new List<RequisitionNoteItemVM>();
 
-                foreach (var item in SPConnector.GetList(ListName_RequisitionNoteItem, _siteUrl, caml))
+                foreach (var item in SPConnector.GetList(ListName_RequisitionNoteItem, siteUrl, caml))
                 {
                     details.Add(ConvertToRequisitionNoteItemVM(item));
                 }
@@ -481,7 +492,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
         private string GetDocumentUrl(int? iD)
         {
-            return string.Format(UrlResource.RequisitionNoteDocumentByID, _siteUrl, iD);
+            return string.Format(UrlResource.RequisitionNoteDocumentByID, siteUrl, iD);
         }
 
     }

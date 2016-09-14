@@ -333,8 +333,11 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 PCVNo = item.TransactionNo,
                 Date = item.Date,
-                Payee = item.Title,
-                Amount = (decimal)item.Amount
+                Payee = item.Payee,
+                DescOfExpenses = item.DescOfExpenses,
+                Amount = (decimal)item.Amount,
+                WBS  = item.WBSName,
+                GL = item.GLName
             };
         }
 

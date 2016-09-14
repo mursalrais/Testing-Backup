@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Utils;
@@ -51,11 +48,11 @@ namespace MCAWebAndAPI.Service.Finance
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public void SetSiteUrl(string siteUrl)
+        public SCASettlementService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
-
+        
         public SCASettlementVM Get(Operations op, int? id = default(int?))
         {
             if (op != Operations.c && id == null)
@@ -117,6 +114,24 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return result;
+        }
+
+        public decimal GetAllSCAVoucherAmount(int scaVoucherId, int scaSettlementID)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='" + FieldNameSCAVoucherId + "' /><Value Type='Lookup'>" + scaVoucherId.ToString() + "</Value></Eq></Where></Query>" +
+                         "<ViewFields> <FieldRef Name='" + FieldNameTotalExpense + "' />  </ViewFields></View>";
+
+            decimal result = 0;
+            foreach (var listItem in SPConnector.GetList(ListName, siteUrl, caml))
+            {
+                if (!Convert.ToString(listItem[FieldNameId]).Equals(scaSettlementID.ToString()))
+                {
+                    result += Convert.ToDecimal(listItem[FieldNameTotalExpense]);
+                }
+            }
+
+            return result;
+
         }
 
         private void SaveSCASettlementDetailItems(int? headerID, IEnumerable<SCASettlementItemVM> viewModels)
