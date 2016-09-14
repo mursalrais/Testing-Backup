@@ -50,7 +50,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetApproverNames(int position)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var positionName = _service.GetPositionName(position);
             var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers", "Position" + position)
                 ?? _service.GetApproverNames(positionName);
@@ -66,7 +66,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public JsonResult GetApproverUserNames()
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            _service.SetSiteUrl(SessionManager.Get<string>("SiteUrl"));
             var viewModel = SessionManager.Get<IEnumerable<ProfessionalMaster>>("WorkflowApprovers")
                 ?? _service.GetApproverUser();
             SessionManager.Set("WorkflowApprovers", viewModel);

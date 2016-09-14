@@ -36,8 +36,13 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssignmentOfAssetVM GetHeader(int? ID, string SiteUrl)
         {
-            var filename = SPConnector.GetAttachFileName("Asset Assignment", ID, _siteUrl);
             var listItem = SPConnector.GetListItem("Asset Assignment", ID, SiteUrl);
+            var filename = "";
+            if (Convert.ToBoolean(listItem["Attachments"]) != false)
+            {
+                 filename = SPConnector.GetAttachFileName("Asset Assignment", ID, _siteUrl);
+            }
+            
             var viewModel = new AssignmentOfAssetVM();
             viewModel.filename = filename;
             viewModel.position = listItem["position"].ToString();
@@ -666,13 +671,37 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
-            var province = (item["province"] as FieldLookupValue).LookupValue;
+            var province = (item["province"] as FieldLookupValue).LookupId;
             var caml = @"<View><Query>
                        <Where>
-                          <Eq>
-                             <FieldRef Name='Province' />
-                             <Value Type='Lookup'>"+ province + @"</Value>
-                          </Eq>
+                          <And>
+                             <Eq>
+                                <FieldRef Name='Province_x003a_ID' />
+                                <Value Type='Lookup'>"+province+@"</Value>
+                             </Eq>
+                             <And>
+                                <Eq>
+                                   <FieldRef Name='city' />
+                                   <Value Type='Text'>"+Convert.ToString(item["city"])+@"</Value>
+                                </Eq>
+                                <And>
+                                   <Eq>
+                                      <FieldRef Name='Title' />
+                                      <Value Type='Text'>"+Convert.ToString(item["office"])+@"</Value>
+                                   </Eq>
+                                   <And>
+                                      <Eq>
+                                         <FieldRef Name='Room' />
+                                         <Value Type='Text'>"+ Convert.ToString(item["room"]) + @"</Value>
+                                      </Eq>
+                                      <Eq>
+                                         <FieldRef Name='Floor' />
+                                         <Value Type='Text'>"+ Convert.ToString(item["floor"]) + @"</Value>
+                                      </Eq>
+                                   </And>
+                                </And>
+                             </And>
+                          </And>
                        </Where>
                     </Query>
                     <ViewFields>

@@ -107,7 +107,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            if (_data.attach.FileName != "" || _data.attach.FileName != null)
+            if (_data.attach != null)
             {
                 if (_data.CompletionStatus.Value != "Complete")
                 {
@@ -171,7 +171,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (_data.CompletionStatus.Value == "Complete")
             {
-                if (_data.attach.FileName == "" || _data.attach.FileName == null)
+                if ((_data.attach == null && _data.filename == null)  || (_data.attach == null && _data.filename != null))
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
@@ -180,14 +180,14 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
             }
 
-            if (_data.attach.FileName != "" || _data.attach.FileName != null)
+            if (_data.CompletionStatus.Value != "Complete")
             {
-                if (_data.CompletionStatus.Value != "Complete")
+                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete");
                 }
             }
 
