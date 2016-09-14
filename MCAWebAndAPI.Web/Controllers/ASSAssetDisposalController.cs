@@ -70,6 +70,14 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            if (viewModel.attach.FileName == "" || viewModel.attach.FileName == null)
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
+            }
+
             int? headerID = null;
             try
             {
@@ -113,6 +121,14 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            //if (_data.attach.FileName == "" || _data.attach.FileName == null)
+            //{
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
+            //}
 
             try
             {

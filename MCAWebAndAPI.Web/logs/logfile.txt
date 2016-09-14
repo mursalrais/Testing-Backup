@@ -728,3 +728,29 @@ Please try again.
 2016-09-08 14:23:02.7083 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService The object is used in the context different from the one associated with the object.
 2016-09-09 00:46:07.4095 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService List 'Asset Loan Return' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
 2016-09-09 00:48:13.3345 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService List 'Asset Loan Return' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
+2016-09-09 01:44:02.0955 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService List 'Asset Loan Return' does not exist at site with URL 'https://eceos2.sharepoint.com/sites/mca-dev/hr'.
+2016-09-13 18:50:05.5083 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 18:50:12.1454 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetDisposalService.cs:line 304
+2016-09-13 18:54:08.5703 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 18:54:12.6345 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items)
+2016-09-13 18:54:55.0523 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 18:54:58.5398 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items)
+2016-09-13 18:56:19.4451 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 18:56:23.3566 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items)
+2016-09-13 19:01:24.7057 MCAWebAndAPI.Service.Asset.AssetDisposalService Item does not exist. It may have been deleted by another user.
+2016-09-13 19:01:28.9765 MCAWebAndAPI.Service.Asset.AssetDisposalService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl)
+   at MCAWebAndAPI.Service.Asset.AssetDisposalService.UpdateDetails(Nullable`1 headerID, IEnumerable`1 items)
