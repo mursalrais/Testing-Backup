@@ -39,7 +39,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.Bootstrap().LabelFor(m => m.RecommendedForPosition).Class("col-xs-2 control-label")
                         <div class="col-xs-4">
                             @Html.EditorFor(m => m.RecommendedForPosition)
                         </div>
@@ -52,7 +51,7 @@
                 </div>
                     <div class="form-group">
                         @Html.Bootstrap().LabelFor(m => m.AttDocuments).Class("col-xs-2 control-label")
-                        <div class="col-xs-2">
+                        <div class="col-xs-4">
                             @Html.EditorFor(m => m.AttDocuments)
                         </div>
                     </div>
@@ -60,6 +59,7 @@
                         @Html.Bootstrap().LabelFor(m => m.Attachmentname).Class("col-sm-2 control-label")
                         <div class="col-sm-6">
                             <input id="attachment-id" class="form-control" value="" />
+                            @Html.Bootstrap().LabelFor(m => m.RecommendedForPosition).Class("col-xs-2 control-label")
                         </div>
                     </div>
                     <div class="form-group">
