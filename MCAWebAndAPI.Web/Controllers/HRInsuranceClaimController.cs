@@ -198,24 +198,30 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ReadProfessional([DataSourceRequest] DataSourceRequest request, string useremail = null)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            // _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            // SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getViewProfessionalClaim(useremail);
             return Json(data.ToDataSourceResult(request));
         }
 
         public ActionResult ReadClaimAll([DataSourceRequest] DataSourceRequest request)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getViewClaimHR("All items");
             return Json(data.ToDataSourceResult(request));
         }
 
         public ActionResult ReadClaimOutStanding([DataSourceRequest] DataSourceRequest request)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getViewClaimHR("Outstanding Claim");
             return Json(data.ToDataSourceResult(request));
         }
@@ -223,8 +229,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult DeleteClaimId(int id, string siteUrl = null)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+           // var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             _service.DeleteClaim(id);
            
 
@@ -234,8 +242,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Read([DataSourceRequest] DataSourceRequest request)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getComponentAXAdetails();
             return Json(data.ToDataSourceResult(request));
         }
@@ -252,8 +262,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ReadExportExcel([DataSourceRequest] DataSourceRequest request)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getViewAXA();
             return Json(data.ToDataSourceResult(request));
         }
@@ -262,7 +274,9 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult ExportToExcel(InsuranceClaimAXAVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _service.SetSiteUrl(siteUrl);
+            //var siteUrl = SessionManager.Get<string>("SiteUrl");
+            //_service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             _service.CreateAxa(viewModel);
             viewModel = _service.GetPopulatedModelAXA(false);
             return View(viewModel);
@@ -273,8 +287,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult PrintToPDF(string siteUrl = null)
         {
-            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+           // var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             var viewModel = _service.GetPopulatedModelAXA(false);
             viewModel.dtDetails = _service.getViewAXA();
 
@@ -367,8 +383,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult ReadPrintToPDF([DataSourceRequest] DataSourceRequest request)
         {
-            _service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl);
+            //_service.SetSiteUrl(ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", ConfigResource.DefaultHRSiteUrl);
             DataTable data = _service.getViewAXA();
             return Json(data.ToDataSourceResult(request));
         }
