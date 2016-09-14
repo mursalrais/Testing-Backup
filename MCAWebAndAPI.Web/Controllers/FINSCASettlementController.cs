@@ -137,20 +137,24 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
-        public ActionResult GetReceiveFromTo(decimal totalExpense, decimal totalScaVocuherAmount, int scaVoucherID, string scaSettlementID)
+        public ActionResult GetReceiveFromTo(decimal totalExpense, decimal totalScaVocuherAmount, int? scaVoucherID, string scaSettlementID)
         {
-            decimal prevTotalExpense = 0;
-            if (scaVoucherID > 0)
+            decimal receiveAmount = 0;
+            int scavId = Convert.ToInt32(scaVoucherID);
+
+            if (scavId > 0)
             {
                 var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
                 service = new SCASettlementService(siteUrl);
 
-                prevTotalExpense = service.GetAllSCAVoucherAmount(scaVoucherID, (string.IsNullOrWhiteSpace(scaSettlementID) ? 0 : Convert.ToInt32(scaSettlementID)));
+                decimal prevTotalExpense = service.GetAllSCAVoucherAmount(scavId, (string.IsNullOrWhiteSpace(scaSettlementID) ? 0 : Convert.ToInt32(scaSettlementID)));
+
+                receiveAmount = totalScaVocuherAmount - prevTotalExpense - totalExpense;
             }
 
             return Json(
-                new { receiveAmount = totalScaVocuherAmount - prevTotalExpense - totalExpense }, JsonRequestBehavior.AllowGet);
+                new { receiveAmount }, JsonRequestBehavior.AllowGet);
         }
 
         private void SetAdditionalSettingToViewModel(ref SCASettlementVM viewModel)
