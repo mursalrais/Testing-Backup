@@ -22,7 +22,6 @@
         var url = "/ASSAssetCheckResult/PositionID/" + idNama;
 
         $.post(url, function (data) {
-            //alert(data);
             var dropdownlist = $("#Position_Value").data("kendoDropDownList");
             dropdownlist.bind("dataBound", function (e) {
                 dropdownlist.select(parseInt(data));
