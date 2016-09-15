@@ -76,19 +76,40 @@ namespace MCAWebAndAPI.Web.Controllers
             return 0;
         }
 
-        //[HttpPost]
+        public ActionResult Create(string siteUrl)
+        {
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //assetCheckResultService.UpdatePosition();
+            
+            var viewModel = assetCheckResultService.GetPopulatedModel(null,null);
+            return View(viewModel);
+        }
+
+        [HttpPost]
         public ActionResult Create(string siteUrl,
             AssetCheckResultHeaderVM data,
             string GetData,
             string Calculate,
             string SubmitForApproval,
             string SaveAsDraft,
-            string Cancel
+            string Cancel,
+            HttpPostedFileBase file
         )
         {
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //assetCheckResultService.UpdatePosition();
+
+            var fileName = "";
+            if (file != null && file.ContentLength > 0)
+            {
+                fileName = Path.GetFileName(file.FileName);
+                fileName = "Asset-Check-" + fileName;
+                data.filename = fileName;
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                file.SaveAs(path);
+            }
 
             if (!string.IsNullOrEmpty(GetData))
             {
@@ -144,12 +165,23 @@ namespace MCAWebAndAPI.Web.Controllers
             string Calculate,
             string SubmitForApproval,
             string SaveAsDraft,
-            string Cancel
+            string Cancel,
+            HttpPostedFileBase file
         )
         {
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var fileName = "";
+            if (file != null && file.ContentLength > 0)
+            {
+                fileName = Path.GetFileName(file.FileName);
+                fileName = "Asset-Check-" + fileName;
+                data.filename = fileName;
+                var path = Path.Combine(Server.MapPath("~/App_Data"), fileName);
+                file.SaveAs(path);
+            }
 
             if (data.ID != null)
             {
@@ -175,7 +207,16 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value);
+            if(!string.IsNullOrEmpty(viewModel.filename))
+            {
+                viewModel.filenameUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/App_Data/"+ viewModel.filename);
+            }
             return View(viewModel);
+        }
+
+        public FileResult Download(string filename)
+        {
+            return File("~/App_Data/" + filename, System.Net.Mime.MediaTypeNames.Application.Octet);
         }
 
         private IEnumerable<ProfessionalMaster> GetFromExistingSession()
@@ -301,6 +342,10 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
+            if (!string.IsNullOrEmpty(viewModel.filename))
+            {
+                viewModel.filenameUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/App_Data/" + viewModel.filename);
+            }
             return View(viewModel);
         }
 

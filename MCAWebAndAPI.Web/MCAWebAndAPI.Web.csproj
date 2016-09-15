@@ -1285,6 +1285,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\CsHtmlRazorViewEngine.cs" />
+    <Compile Include="Helpers\FileTypeHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />

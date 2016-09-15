@@ -2,7 +2,7 @@
 
 @model AssetCheckResultHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+<form enctype="multipart/form-data" class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
@@ -39,7 +39,11 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Attachment)
+                    <input type="file" name="file" />
+                    @if (Model.filename != null)
+                    {
+                        @Html.ActionLink("Download", @Model.filename, new { filename = @Model.filename })
+                    }
                 </div>
             </div>
             <div class="form-group">
@@ -56,6 +60,8 @@
         </div>
 
                 @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
+                @Html.HiddenFor(m => m.filename, new { Value = Model.filename })
 
                 @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
 
