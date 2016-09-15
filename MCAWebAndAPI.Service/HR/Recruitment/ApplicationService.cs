@@ -596,7 +596,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("idcardtype", GetIDCardType().FirstOrDefault(e => e.Key == viewModel.IDCardType.Value).Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
-            updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position) });
+            updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionID) });
             updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
                 COMPANY_DOMAIN_EMAIL));
             updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED));
