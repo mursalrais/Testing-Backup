@@ -10,8 +10,6 @@
     Layout = "~/Views/Shared/_LayoutPDF.cshtml";
 }
 
-
-
 <div class="form-horizontal">
 
     <fieldset>
@@ -140,111 +138,240 @@
                                     }
                                 }
 
-                                @if (i == 1 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 1)
+                            @if (Model.dtLocation != null && Model.dtLocation.Rows.Count > 0 && i <= 6)
+                            {
+                                switch (Model.dtLocation.Rows.Count)
                                 {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                    case 1:
+
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        break;
+                                    case 2:
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else {if (i == 2)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        }
+                                        break;
+                                    case 3:
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else {if (i == 2)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                        }
+                                        else if (i == 3)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        }
+                                        break;
+                                    case 4:
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else {if (i == 2)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                        }
+                                        else if (i == 3)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
+                                        }
+                                        else if (i == 4)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[3]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[3]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        }
+                                        break;
+                                    case 5:
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else {if (i == 2)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                        }
+                                        else if (i == 3)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
+                                        }
+                                        else if (i == 4)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[3]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[3]["Total"])</td>
+                                        }
+                                        else if (i == 5)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[4]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[4]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        }
+                                        break;
+                                    case 6:
+                                        if (i == 1)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[0]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[0]["Total"])</td>
+                                        }
+                                        else {if (i == 2)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                        }
+                                        else if (i == 3)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
+                                        }
+                                        else if (i == 4)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[3]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[3]["Total"])</td>
+                                        }
+                                        else if (i == 5)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[4]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[4]["Total"])</td>
+                                        }
+                                        else if (i == 6)
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[5]["Location"].ToString()</td>
+                                            <td>@Convert.ToDouble(Model.dtLocation.Rows[5]["Total"])</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="tdLeft">Location @i.ToString() :</td>
+                                            <td>0.0</td>
+                                        }
+                                        }
+                                        break;
                                 }
-                                else if (i == 2 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 2)
+                            }
+                            else
+                            {
+                                if (i <= 6)
                                 {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[1]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[1]["Total"])</td>
+                                    <td class="tdLeft">Location @i.ToString() :</td>
+                                        <td>0.0</td>
                                 }
-                                else if (i == 3 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 3)
+                                else if (i == 7)
                                 {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[2]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[2]["Total"])</td>
-                                }
-                                else if (i == 4 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 4)
-                                {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[3]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[3]["Total"])</td>
-                                }
-                                else if (i == 5 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 5)
-                                {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[4]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[4]["Total"])</td>
-                                }
-                                else if (i == 6 && Model.dtLocation != null && Model.dtLocation.Rows.Count == 6)
-                                {
-                                    <td class="tdLeft">Location @i.ToString() : @Model.dtLocation.Rows[5]["Location"].ToString()</td>
-                                    <td>@Convert.ToDouble(Model.dtLocation.Rows[5]["Total"])</td>
-                                }
-                                else
-                                {
-                                    if (i <= 6)
+                                    <td class="tdLeft">Sick Leave</td>
+                                    object sumObject = null;
+                                    Model.dtDetails.DefaultView.RowFilter = "SubType='Sick Day-Off'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Sick Day-Off'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
-                                        <td class="tdLeft">Location @i.ToString() :</td>
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                    }
+                                    else
+                                    {
                                         <td>0.0</td>
                                     }
-                                    else if (i == 7)
+                                }
+                                else if (i == 8)
+                                {
+                                    <td class="tdLeft">Eligible Days Off</td>
+                                    object sumObject = null;
+                                    Model.dtDetails.DefaultView.RowFilter = "SubType='Annual Day-Off'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Annual Day-Off'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
-                                        <td class="tdLeft">Sick Leave</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "SubType='Sick Day-Off'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Sick Day-Off'");
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
-                                            <td>@Convert.ToDouble(sumObject)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>0.0</td>
-                                        }
+                                        <td>@Convert.ToDouble(sumObject)</td>
                                     }
-                                    else if (i == 8)
+                                    else
                                     {
-                                        <td class="tdLeft">Eligible Days Off</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "SubType='Annual Day-Off'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Annual Day-Off'");
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
-                                            <td>@Convert.ToDouble(sumObject)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>0.0</td>
-                                        }
+                                        <td>0.0</td>
                                     }
-                                    else if (i == 9)
+                                }
+                                else if (i == 9)
+                                {
+                                    <td class="tdLeft">Others*</td>
+                                    object sumObject = null;
+                                    Model.dtDetails.DefaultView.RowFilter = "SubType='Others'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Others'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
-                                        <td class="tdLeft">Others*</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "SubType='Others'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Others'");
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
-                                            <td>@Convert.ToDouble(sumObject)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>0.0</td>
-                                        }
+                                        <td>@Convert.ToDouble(sumObject)</td>
                                     }
-                                    else if (i == 10)
+                                    else
                                     {
-                                        <td class="tdLeft">Public Holiday</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "Type='Public Holiday'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Public Holiday'");
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
-                                            <td>@Convert.ToDouble(sumObject)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>0.0</td>
-                                        }
+                                        <td>0.0</td>
                                     }
-                                    else if (i == 11)
+                                }
+                                else if (i == 10)
+                                {
+                                    <td class="tdLeft">Public Holiday</td>
+                                    object sumObject = null;
+                                    Model.dtDetails.DefaultView.RowFilter = "Type='Public Holiday'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Public Holiday'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
-                                        <td class="tdLeft">Unpaid Days Off</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "Type='Unpaid Day-Off'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Unpaid Day-Off'");
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                    }
+                                    else
+                                    {
+                                        <td>0.0</td>
+                                    }
+                                }
+                                else if (i == 11)
+                                {
+                                    <td class="tdLeft">Unpaid Days Off</td>
+                                    object sumObject = null;
+                                    Model.dtDetails.DefaultView.RowFilter = "Type='Unpaid Day-Off'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Unpaid Day-Off'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                    {
                                             <td>@Convert.ToDouble(sumObject)</td>
                                         }
                                         else
