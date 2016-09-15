@@ -39,7 +39,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             columnValues.Add("professional", new FieldLookupValue { LookupId = (int)header.NameID });
             columnValues.Add("Position", new FieldLookupValue { LookupId = (int)header.PositionAndDepartementID });
             columnValues.Add("performanceplan", new FieldLookupValue { LookupId = (int)header.PerformancePeriodID });
-            columnValues.Add("visibleto", SPConnector.GetUser(requestor, _siteUrl, "hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(requestor, _siteUrl));
             if (header.StatusForm == "DraftInitiated")
             {
                 columnValues.Add("pppstatus", "Draft");
@@ -381,13 +381,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                        EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
-                        //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
-
-                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
                         try
                         {
                             SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                        }
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
                         }
                         catch (Exception e)
                         {
@@ -402,12 +408,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
-
-                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
                     try
                     {
                         SPConnector.UpdateListItem(SP_PPP_LIST_NAME, headerID, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
+
+                    try
+                    {
+                        EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
                     }
                     catch (Exception e)
                     {
@@ -420,7 +433,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
+                    try
+                    {
+                        EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
                 }
             }
 
@@ -432,8 +452,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     {
                         professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
-
-                        EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                        try
+                        {
+                            EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                        }
                     }
                 }
             }

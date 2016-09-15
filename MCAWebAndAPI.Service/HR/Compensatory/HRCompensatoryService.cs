@@ -444,7 +444,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var cratedValueDetail = new Dictionary<string, object>();
 
             cratedValueDetail.Add("Title", Convert.ToString(viewModels.cmpYearDate));
-            cratedValueDetail.Add("visibleto", SPConnector.GetUser(viewModels.cmpEmail, _siteUrl, "hr"));
+            cratedValueDetail.Add("visibleto", SPConnector.GetUser(viewModels.cmpEmail, _siteUrl));
 
             if (viewModels.StatusForm == "Pending Approval 1 of 2")
             {
@@ -803,7 +803,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
             }
 
-            columnValues.Add("edited", SPConnector.GetUser(header.cmpEmail, _siteUrl, "hr"));
+            columnValues.Add("edited", SPConnector.GetUser(header.cmpEmail, _siteUrl));
 
             try
             {

@@ -56,7 +56,7 @@ namespace MCAWebAndAPI.Service.HR.MedicalCheckUp
                 columnValues.Add("professional", header.ProfessionalID);
             }
 
-            columnValues.Add("visibleto", SPConnector.GetUser(header.OfficeEmail, _siteUrl, "hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(header.OfficeEmail, _siteUrl));
 
             SPConnector.AddListItem(SpMedicalListName, columnValues, _siteUrl);
 

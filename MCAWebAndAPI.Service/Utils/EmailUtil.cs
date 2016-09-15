@@ -14,7 +14,7 @@ namespace MCAWebAndAPI.Service.Utils
             Send(emailAddress, subject, emailMessage);
         }
 
-        public static void Send(string emailAddress, string subject, string emailMessage)
+        public async static Task Send(string emailAddress, string subject, string emailMessage)
         {
             var smtp = new SmtpClient();
             {
@@ -32,11 +32,19 @@ namespace MCAWebAndAPI.Service.Utils
             mail.To.Add(new MailAddress(emailAddress));
             mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
             mail.CC.Add(new MailAddress("heidy@eceos.com"));
+            mail.CC.Add(new MailAddress("rezaf.fikri@gmail.com"));
             mail.Subject = subject;
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-            smtp.SendAsync(mail, DateTime.Now);
+            try
+            {
+                await smtp.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static void SendMultiple(List<String> lstEmail, string subject, string emailMessage)
