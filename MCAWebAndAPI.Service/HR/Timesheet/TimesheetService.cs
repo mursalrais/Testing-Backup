@@ -1501,7 +1501,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 columnValues.Add("professional", header.ProfessionalID);
             }
 
-            columnValues.Add("visibleto", SPConnector.GetUser(header.ProfesionalUserLogin, _siteUrl, "hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(header.ProfesionalUserLogin, _siteUrl));
 
             try
             {
