@@ -829,7 +829,7 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             }
 
             var professional = GetProfessionalPosition(header.ProfessionalID);
-            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl,"hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(professional.OfficeEmail,_siteUrl));
 
             try
             {

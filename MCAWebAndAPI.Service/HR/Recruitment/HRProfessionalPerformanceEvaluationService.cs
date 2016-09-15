@@ -270,7 +270,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                     if (header.StatusForm == "Initiated" || header.StatusForm == null)
                     {
-                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
                         try
                         {
                             SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
@@ -291,7 +291,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
                     //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
 
-                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
                     try
                     {
                         SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);

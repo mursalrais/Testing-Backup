@@ -1029,7 +1029,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 var professionalData = SPConnector.GetListItem(SP_PRO_MAS_LIST_NAME, dayOffRequest.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
             }
             if (dayOffRequest.StatusForm == "Pending Approval")
             {
@@ -1038,7 +1038,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
                 var professionalData = SPConnector.GetListItem(SP_PRO_MAS_LIST_NAME, dayOffRequest.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
             }
             //if (exitProcedure.StatusForm == "Saved by HR")
             //{
@@ -1047,7 +1047,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
             //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
             //}
             //if (exitProcedure.StatusForm == "Approved by HR")
             //{
@@ -1056,7 +1056,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             //    var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
             //    string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+            //    updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
             //}
 
             //updatedValues.Add("status", statusExitProcedure);
@@ -1410,7 +1410,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
         //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
         //    }
         //    if (exitProcedure.StatusForm == "Pending Approval")
         //    {
@@ -1419,7 +1419,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
         //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
         //    }
         //    if (exitProcedure.StatusForm == "Saved by HR")
         //    {
@@ -1428,7 +1428,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
         //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
         //    }
         //    if (exitProcedure.StatusForm == "Approved by HR")
         //    {
@@ -1437,7 +1437,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
         //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
         //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
         //    }
 
         //    updatedValues.Add("status", statusExitProcedure);
