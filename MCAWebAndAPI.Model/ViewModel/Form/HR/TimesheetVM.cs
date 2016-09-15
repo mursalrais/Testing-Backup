@@ -54,6 +54,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string ProfesionalUserLogin { get; set; }
 
         // public string UserEmail { get; set; }
+        [DisplayName("Period")]
+        public string PeriodText { get; set; }
 
         public string Name { get; set; }
 

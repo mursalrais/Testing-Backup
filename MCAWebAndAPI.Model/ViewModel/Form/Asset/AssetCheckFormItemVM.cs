@@ -12,6 +12,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckFormItemVM : Item
     {
+
+        public string assetSubAssetID { get; set; }
+        public string assetSubAssetDescription { get; set; }
+
         [DisplayName("Asset ID")]
         public int AssetID { get; set; }
 

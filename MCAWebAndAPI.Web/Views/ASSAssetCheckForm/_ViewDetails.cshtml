@@ -49,10 +49,18 @@
 
             columns.Bound(p => p.physicalQty).ClientTemplate("#= physicalQty #" +
                 "<input type='hidden' name='Details[#= index(data)#].physicalQty' value='#= physicalQty #' />"
-            ); 
+            );
 
             columns.Bound(p => p.AssetID).Hidden().ClientTemplate("#= AssetID #" +
                 "<input type='hidden' name='Details[#= index(data)#].AssetID' value='#= AssetID #' />"
+            );
+
+            columns.Bound(p => p.assetSubAssetDescription).Hidden().ClientTemplate("#= assetSubAssetDescription #" +
+                "<input type='hidden' name='Details[#= index(data)#].assetSubAssetDescription' value='#= assetSubAssetDescription #' />"
+            );
+
+            columns.Bound(p => p.assetSubAssetID).Hidden().ClientTemplate("#= assetSubAssetID #" +
+                "<input type='hidden' name='Details[#= index(data)#].assetSubAssetID' value='#= assetSubAssetID #' />"
             );
 
 
