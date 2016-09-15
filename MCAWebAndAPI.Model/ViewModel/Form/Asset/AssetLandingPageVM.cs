@@ -9,15 +9,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetLandingPageVM
     {
-        private IEnumerable<AssetLandingPageFixedAssetVM> _fixedAsset;
-        private IEnumerable<AssetLandingPageSmallValueAssetVM> _smallValueAsset;
+        private AssetLandingPageFixedAssetVM _fixedAsset;
+        private AssetLandingPageSmallValueAssetVM _smallValueAsset;
 
-        public IEnumerable<AssetLandingPageFixedAssetVM> FixedAsset
+
+        public AssetLandingPageFixedAssetVM FixedAsset
         {
             get
             {
                 if (_fixedAsset == null)
-                    _fixedAsset = new List<AssetLandingPageFixedAssetVM>();
+                    _fixedAsset = new AssetLandingPageFixedAssetVM();
                 return _fixedAsset;
             }
             set
@@ -26,12 +27,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }
 
-        public IEnumerable<AssetLandingPageSmallValueAssetVM> SmallValueAsset
+        public AssetLandingPageSmallValueAssetVM SmallValueAsset
         {
             get
             {
                 if (_smallValueAsset == null)
-                    _smallValueAsset = new List<AssetLandingPageSmallValueAssetVM>();
+                    _smallValueAsset = new AssetLandingPageSmallValueAssetVM();
                 return _smallValueAsset;
             }
             set

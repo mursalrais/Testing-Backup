@@ -251,7 +251,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.PositionID = (int)FormatUtil.ConvertLookupToID(listItem, "vacantposition");
             viewModel.Position = GetPositionName(Convert.ToInt32(viewModel.PositionID));
-
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);

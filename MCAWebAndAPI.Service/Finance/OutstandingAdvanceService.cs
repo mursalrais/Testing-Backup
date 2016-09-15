@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.Finance
     {
 
         #region Constants
-       
+
         private const string OutstandingAdvanceDocument_URL = "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
         private const string ListName = "Outstanding Advance";
         private const string ListName_Document = "Outstanding Advance Documents";
@@ -67,12 +67,12 @@ namespace MCAWebAndAPI.Service.Finance
         private const Int32 DefaultInvalid_Int32 = Int32.MinValue;
         private const string ErrorDesc_InvalidValue = "Invalid value";
 
-        private const string ErrorDesc_Rule1 = "The currency for Professional & IC must be in IDR";
-        private const string ErrorDesc_Rule2 = "The currency for Grantees must be in USD";
-        private const string ErrorDesc_Rule3 = "The format for date is mm/dd/yyyy";
-        private const string ErrorDesc_Rule4 = "Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.";
-        private const string ErrorDesc_Rule5 = "Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.";
-        private const string ErrorDesc_Rule6 = "Data Project salah.";
+        private const string ErrorDesc_Rule1 = "The currency for Professional & IC must be in IDR.";
+        private const string ErrorDesc_Rule2 = "The currency for Grantees must be in USD.";
+        private const string ErrorDesc_Rule3 = "The format for date is mm/dd/yyyy.";
+        private const string ErrorDesc_Rule4 = "Unidentified Staff ID.";
+        private const string ErrorDesc_Rule5 = "Unidentified Staff Name.";
+        private const string ErrorDesc_Rule6 = "Unidentified Project Name.";
 
         #endregion
 
@@ -253,7 +253,7 @@ namespace MCAWebAndAPI.Service.Finance
 
 
         #region CSV Upload
-        
+
         public List<CSVErrorLogVM> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors, ref List<OutstandingAdvanceVM> listOutstandingAdvance)
         {
             List<CSVErrorLogVM> csvErrors = new List<CSVErrorLogVM>();
@@ -291,6 +291,15 @@ namespace MCAWebAndAPI.Service.Finance
 
         private static void Validate(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
+            // Urutan ini jangan diubah
+
+            ////4. Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.
+            //CheckValidationRule4(oa, fileName, ref errorLog, vendors);
+
+            ////5. Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.
+            //CheckValidationRule5(oa, fileName, ref errorLog, vendors);
+
+
             //1. The currency for Professional & IC must be in IDR
             CheckValidationRule1(oa, fileName, ref errorLog, vendors);
 
@@ -300,12 +309,6 @@ namespace MCAWebAndAPI.Service.Finance
             //3. The format for date is mm/dd/yyyy
             //This has been checked when reading the data 
             //CheckValidationRule3(oa, fileName, ref errorLog);
-
-            //4. Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.
-            CheckValidationRule4(oa, fileName, ref errorLog, vendors);
-
-            //5. Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.
-            CheckValidationRule5(oa, fileName, ref errorLog, vendors);
 
             //6. Data Project salah.
             CheckValidationRule6(oa, fileName, ref errorLog);
@@ -353,6 +356,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         //private static void CheckValidationRule3(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLog> errorLog)
         //{
+        ////This has been checked when reading the data 
         //    if (IsGrantee(oa.Staff.Value.ToString()) && (oa.Currency.Value != CurrencyComboBoxVM.CurrencyUSD))
         //    {
         //        errorLog.Add(new CSVErrorLog()
@@ -365,40 +369,41 @@ namespace MCAWebAndAPI.Service.Finance
         //    }
         //}
 
-        private static void CheckValidationRule4(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
-        {
-            // Rule 4: "Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.";
+        ////TODO: CheckValidationRule4 mungkin sudah tidak diperlukan karena sudah ada checking di ConvertRowToVM
+        //private static void CheckValidationRule4(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        //{
+        //    // Rule 4: "Staff ID harus ada di Vendor Master, kalo ga ada di sana itu error.";
 
-            VendorVM vendor = vendors.ToList().Find(v => v.ID == oa.Staff.Value);
+        //    VendorVM vendor = vendors.ToList().Find(v => v.ID == oa.Staff.Value);
 
-            if (vendor == null)
-            {
-                errorLog.Add(new CSVErrorLogVM()
-                {
-                    FileName = fileName,
-                    FieldName = FieldNames[(int)ImportedFields.StaffId],
-                    Value = oa.Staff.Value.ToString(),
-                    ErrorDescription = ErrorDesc_Rule4
-                });
-            }
-        }
+        //    if (vendor == null)
+        //    {
+        //        errorLog.Add(new CSVErrorLogVM()
+        //        {
+        //            FileName = fileName,
+        //            FieldName = FieldNames[(int)ImportedFields.StaffId],
+        //            Value = oa.Staff.Value.ToString(),
+        //            ErrorDescription = ErrorDesc_Rule4
+        //        });
+        //    }
+        //}
 
-        private static void CheckValidationRule5(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
-        {
-            // Rule 5: Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.
-            VendorVM vendor = vendors.ToList().Find(v => v.Name == oa.Staff.Text.ToString());
+        //private static void CheckValidationRule5(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        //{
+        //    // Rule 5: Staff name harus sesuai sama yg di Vendor Name yang di Vendor Master, kalo typo atau tidak sesuai itu error.
+        //    VendorVM vendor = vendors.ToList().Find(v => v.Name == oa.Staff.Text.ToString());
 
-            if (vendor == null)
-            {
-                errorLog.Add(new CSVErrorLogVM()
-                {
-                    FileName = fileName,
-                    FieldName = FieldNames[(int)ImportedFields.StaffName],
-                    Value = oa.Staff.Text.ToString(),
-                    ErrorDescription = ErrorDesc_Rule5
-                });
-            }
-        }
+        //    if (vendor == null)
+        //    {
+        //        errorLog.Add(new CSVErrorLogVM()
+        //        {
+        //            FileName = fileName,
+        //            FieldName = FieldNames[(int)ImportedFields.StaffName],
+        //            Value = oa.Staff.Text.ToString(),
+        //            ErrorDescription = ErrorDesc_Rule5
+        //        });
+        //    }
+        //}
 
         private static void CheckValidationRule6(OutstandingAdvanceVM oa, string fileName, ref List<CSVErrorLogVM> errorLog)
         {
@@ -502,8 +507,8 @@ namespace MCAWebAndAPI.Service.Finance
         {
             OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
 
-            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='"+ FieldName_StaffID +
-                       "'/> <Value Type='Text'>"+ StaffIDPrefix_Proffesional +"</Value></BeginsWith></Where></Query></View>";
+            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='" + FieldName_StaffID +
+                       "'/> <Value Type='Text'>" + StaffIDPrefix_Proffesional + "</Value></BeginsWith></Where></Query></View>";
 
             decimal total = 0;
             int count = 0;
@@ -518,7 +523,7 @@ namespace MCAWebAndAPI.Service.Finance
             return result;
         }
 
-        
+
         public static OutstandingAdvanceLandingPageVM GetChartDataOfGrantee(string siteURL)
         {
             OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
@@ -639,7 +644,7 @@ namespace MCAWebAndAPI.Service.Finance
             return listOutstandingAdvance;
         }
 
-        private static void ConvertRowToVM(string fileName,  string row,ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        private static void ConvertRowToVM(string fileName, string row, ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
             if (!string.IsNullOrEmpty(row))
             {
@@ -647,8 +652,58 @@ namespace MCAWebAndAPI.Service.Finance
 
                 oa.DateOfUpload = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DateOfUpload], Convert.ToString(data[(int)ImportedFields.DateOfUpload]), ref errorLog);
 
-                oa.Staff.Value = GetIDVendor(ConvertToInt32(fileName, FieldNames[(int)ImportedFields.StaffId], data[(int)ImportedFields.StaffId], ref errorLog),vendors);
-                oa.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
+                var fieldName = FieldNames[(int)ImportedFields.StaffId];
+                var staffName = data[(int)ImportedFields.StaffName];
+                var staffId = ConvertToInt32(fileName, fieldName, data[(int)ImportedFields.StaffId], ref errorLog);
+                var vendor = vendors.ToList().Find(v => v.VendorId == staffId.ToString());
+
+                if (vendor == null)
+                {
+                    // Log error for invalid Staff ID
+                    errorLog.Add(new CSVErrorLogVM()
+                    {
+                        FileName = fileName,
+                        FieldName = fieldName,
+                        Value = staffId.ToString(),
+                        ErrorDescription = ErrorDesc_Rule4
+                    });
+
+                    // If Staff ID is invalid, Staff Name should be invalid too
+                    // Log error for invalid Staff Name
+                    errorLog.Add(new CSVErrorLogVM()
+                    {
+                        FileName = fileName,
+                        FieldName = fieldName,
+                        Value = staffName,
+                        ErrorDescription = ErrorDesc_Rule5
+                    });
+                }
+                else
+                {
+                    oa.Staff.Value = vendor.ID;
+
+                    // Just because the ID is correct doesn't mean the name is correct too. So, check the name
+                    vendor = vendors.ToList().Find(v => v.Name == staffName);
+
+                    if (vendor == null)
+                    {
+                        errorLog.Add(new CSVErrorLogVM()
+                        {
+                            FileName = fileName,
+                            FieldName = fieldName,
+                            Value = staffName,
+                            ErrorDescription = ErrorDesc_Rule5
+                        });
+                    }
+                    else
+                    {
+                        oa.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
+                    }
+
+                    // Actually we are not safe yet.
+                    // How if both ID and Name exist in the database but they do not belong to the same person?
+                    // Logic should be developed here.
+                }
 
                 oa.Reference = Convert.ToString(data[(int)ImportedFields.Reference]);
                 oa.DueDate = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DueDate], Convert.ToString(data[(int)ImportedFields.DueDate]), ref errorLog);
@@ -656,14 +711,13 @@ namespace MCAWebAndAPI.Service.Finance
                 oa.Currency.Value = Convert.ToString(data[(int)ImportedFields.Currency]);
                 oa.Amount = ConvertToDecimal(fileName, FieldNames[(int)ImportedFields.Amount], data[(int)ImportedFields.Amount], ref errorLog);
                 oa.Project.Value = Convert.ToString(data[(int)ImportedFields.Project]).Replace("\r", "");
-
             }
         }
 
-        private static int? GetIDVendor(int staffId, IEnumerable<VendorVM> vendors)
-        {
-            return vendors.ToList().Find(v => v.VendorId == staffId.ToString()).ID;
-        }
+        //private static int? GetIDVendor(int staffId, IEnumerable<VendorVM> vendors)
+        //{
+        //    return vendors.ToList().Find(v => v.VendorId == staffId.ToString()).ID;
+        //}
 
     }
 }

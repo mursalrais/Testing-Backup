@@ -147,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             try
-            {
+            { 
                 //update items
                 assetDisposalService.UpdateDetails(_data.ID, _data.Details);
             }
