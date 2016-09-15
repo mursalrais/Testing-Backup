@@ -268,7 +268,7 @@ Kindly check the link as per below to go to direct page accordingly. You may che
 
 page in IMS (My Approval View). Thank you.    
 
-Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}</value>
+Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower?ID={1}</value>
   </data>
   <data name="ManpowerDisplay" xml:space="preserve">
     <value>Dear Respective {2},
@@ -279,7 +279,7 @@ Kindly check the link as per below to go to direct page accordingly.
 
 Thank you.    
 
-Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}</value>
+Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}</value>
   </data>
   <data name="PerformanceEvaluation" xml:space="preserve">
     <value>Dear Respective Professional
