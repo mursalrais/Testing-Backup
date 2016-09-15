@@ -262,7 +262,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///page in IMS (My Approval View). Thank you.    
         ///
-        ///Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
+        ///Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}.
         /// </summary>
         public static string ManpowerApproval {
             get {
@@ -279,7 +279,7 @@ namespace MCAWebAndAPI.Web.Resources {
         ///
         ///Thank you.    
         ///
-        ///Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}.
+        ///Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
         /// </summary>
         public static string ManpowerDisplay {
             get {

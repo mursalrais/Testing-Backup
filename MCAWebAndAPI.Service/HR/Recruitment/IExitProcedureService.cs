@@ -79,6 +79,12 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
         string GetProfessionalData(int? professionalID);
 
-        int GetProfessionalIDNumber(string psaNumber);
+        int GetProfessionalIDNumber(string professionalName, string projectUnit, string positionName);
+
+        string GetProfessionalName(int? exitProcID);
+
+        string GetUnitBasedExitID(int? exitProcID);
+
+        string GetPositionBasedExitID(int? exitProcID);
     }
 }

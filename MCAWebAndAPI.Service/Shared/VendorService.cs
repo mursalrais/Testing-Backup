@@ -33,9 +33,17 @@ namespace MCAWebAndAPI.Service.Shared
 
         public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl)
         {
+            return GetVendorMaster(siteUrl, true);
+        }
+
+        public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl, bool appendEmpty)
+        {
             var vendors = new List<VendorVM>();
 
-            vendors.Add(new VendorVM() { ID = -1, Title = string.Empty });
+            if (appendEmpty)
+            {
+                vendors.Add(new VendorVM() { ID = -1, Title = string.Empty });
+            }
 
             foreach (var item in SPConnector.GetList(VENDOR_SITE_LIST, siteUrl, null))
             {
@@ -50,8 +58,11 @@ namespace MCAWebAndAPI.Service.Shared
             var vendor = new VendorVM();
 
             var listItem = SPConnector.GetListItem(VENDOR_SITE_LIST, ID, siteUrl);
-            vendor = ConvertToVendorModel(listItem);
-
+            if (listItem != null)
+            {
+                vendor = ConvertToVendorModel(listItem);
+            }
+ 
             return vendor;
         }
 

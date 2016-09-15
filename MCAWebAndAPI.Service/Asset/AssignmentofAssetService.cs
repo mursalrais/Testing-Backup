@@ -199,7 +199,7 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 SPConnector.AddListItem("Asset Assignment", columnValues, _siteUrl);
                 var id = SPConnector.GetLatestListItemID("Asset Assignment", _siteUrl);
-                if(viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
+                if (viewmodel.CompletionStatus.Value == "Complete" && viewmodel.attach != null)
                 {
                     SPConnector.AttachFile("Asset Assignment", id, viewmodel.attach, _siteUrl);
                 }
@@ -270,7 +270,7 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Assignment", ID, columnValues, _siteUrl);
-                if (viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
+                if (viewmodel.CompletionStatus.Value == "Complete" && viewmodel.attach != null)
                 {
                     SPConnector.AttachFile("Asset Assignment", ID, viewmodel.attach, _siteUrl);
                 }

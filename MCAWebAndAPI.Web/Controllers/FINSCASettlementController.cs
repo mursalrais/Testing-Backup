@@ -102,6 +102,7 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult Print(FormCollection form, SCASettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
 
@@ -120,6 +121,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
+                content = content.Replace("{XIMGPATHX}", domain);
 
                 // Get PDF Bytes
                 try
