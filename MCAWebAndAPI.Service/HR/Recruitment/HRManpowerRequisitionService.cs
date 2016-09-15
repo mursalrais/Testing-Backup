@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var updatedValue = new Dictionary<string, object>();
             string emailApprover;
-            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username, _siteUrl, "hr");
+            FieldUserValue visibleTo = SPConnector.GetUser(viewModel.Username, _siteUrl);
             FieldUserValue Approver;
             if ((viewModel.Status.Value == "Pending Approval"))
             {
@@ -41,7 +41,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emailApprover = GetApprover("Deputy Executive Director");
                 }
-                Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
+                Approver = SPConnector.GetUser(emailApprover, _siteUrl);
                 updatedValue.Add("currentapprover", Approver);
             }
             else
@@ -230,7 +230,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emailApprover = GetApprover("Deputy Executive Director");
                 }
-                Approver = SPConnector.GetUser(emailApprover, _siteUrl, "hr");
+                Approver = SPConnector.GetUser(emailApprover, _siteUrl);
                 updatedValue.Add("currentapprover", Approver);
             }
 

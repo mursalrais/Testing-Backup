@@ -115,7 +115,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 updatedValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(item["ID"]) });
                 emailTo = Convert.ToString(item["officeemail"]);
-                visibleTo = SPConnector.GetUser(emailTo, _siteUrl, "hr");
+                visibleTo = SPConnector.GetUser(emailTo, _siteUrl);
                 updatedValues.Add("visibleto", visibleTo);
                 try
                 {
