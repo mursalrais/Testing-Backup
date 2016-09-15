@@ -1080,7 +1080,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
                 if (i == 1) updatedValue.Add("currentstate", "Yes");
                 // mastervalueInsert.Add(i + ";Add", updatedValue);requestor
-
+                //if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail, "HR");
+                //columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
                 if (Item.CheckIfUpdated(item)) mastervalueUpdate.Add(item.ID + ";Edit", updatedValue);
                 else mastervalueInsert.Add(i + ";Add", updatedValue);
 
