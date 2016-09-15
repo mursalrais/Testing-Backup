@@ -83,6 +83,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 viewModel.StartPeriod = Convert.ToDateTime(viewModel.Period).GetFirstPayrollDay(); ;
                 viewModel.EndPeriod = Convert.ToDateTime(viewModel.Period).GetLastPayrollDay();
 
+                viewModel.PeriodText = Convert.ToString(listItem["Title"]);
+
                 if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
                 {
                     viewModel.UserPermission = "HR";

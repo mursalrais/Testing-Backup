@@ -250,6 +250,7 @@
     <Compile Include="HR\Recruitment\IPerformanceMonitoringService.cs" />
     <Compile Include="HR\Payroll\PayrollServiceExtention.cs" />
     <Compile Include="HR\Common\IProfessionalService.cs" />
+    <Compile Include="HR\Recruitment\PayrollHelper.cs" />
     <Compile Include="HR\Recruitment\PerformanceEvaluationService.cs" />
     <Compile Include="HR\Recruitment\PerformanceMonitoringService.cs" />
     <Compile Include="HR\Timesheet\ITimesheetService.cs" />

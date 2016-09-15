@@ -262,6 +262,7 @@ namespace MCAWebAndAPI.Web.Controllers
             if(viewModel.PaidTo.Choices.Any())
             {
                 List<string> tempString = viewModel.PaidTo.Choices.ToList();
+                tempString.Remove(string.Empty);
                 tempString.Remove(PAIDTO_DRIVER);
                 viewModel.PaidTo.Choices = tempString;
             }

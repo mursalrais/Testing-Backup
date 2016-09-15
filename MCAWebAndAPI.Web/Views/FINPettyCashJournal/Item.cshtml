@@ -68,30 +68,30 @@ new
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar1).Class("col-xs-9 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Advances1).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.EditorFor(m => m.AdvancesForOperationalCar1, new { @Value = "0" })
+                        @Html.EditorFor(m => m.Advances1, new { @Value = "0" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar2).Class("col-xs-9 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Advances2).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.EditorFor(m => m.AdvancesForOperationalCar2, new { @Value = "0" })
+                        @Html.EditorFor(m => m.Advances2, new { @Value = "0" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.AdvancesForOperationalCar3).Class("col-xs-9 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.Advances3).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.EditorFor(m => m.AdvancesForOperationalCar3, new { @Value = "0" })
+                        @Html.EditorFor(m => m.Advances3, new { @Value = "0" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.Bootstrap().LabelFor(m => m.CashOnhand).Class("col-xs-9 control-label")
+                    @Html.Bootstrap().LabelFor(m => m.CashOnHand).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.DisplayFor(m => m.CashOnhand)
+                        @Html.DisplayFor(m => m.CashOnHand)
                     </div>
                 </div>
 
@@ -127,7 +127,9 @@ new
 }
 
 <script>
+
     $(document).ready(function () {
+
         $("#view-button").on('click', function () {
             if ($("#DateFrom").val() > $("#DateTo").val()) {
                 alert("Date (to) cannot be less than Date (from)");
@@ -135,6 +137,8 @@ new
                 $("#ItemEdited").val(true);
                 $("#ItemDetails").data("kendoGrid").dataSource.read();
             }
+
+            calcCashOnHand();
         });
 
         $("#FINPettyCashJournalForm,#print-button").on('submit', function () {
@@ -174,9 +178,28 @@ new
             $('form').submit();
             
         });
+
+        calcCashOnHand();
     });
-    
+
+    $('#Advances1').keyup(calcCashOnHand);
+    $('#Advances2').keyup(calcCashOnHand);
+    $('#Advances3').keyup(calcCashOnHand);
+
+    function calcCashOnHand() {
+        var totalAmount = $('#TotalAmount').val();
+        var advances1 = $('#Advances1').val();
+        var advances2 = $('#Advances2').val();
+        var advances3 = $('#Advances3').val();
+        var totalPettyCashFund = $('#TotalPettyCashFund').val();
+
+        var cashOnHand = totalPettyCashFund - totalAmount - advances1 - advances2 - advances3;
+
+        $('#CashOnHand').val(cashOnHand);
+    }
+
 </script>
+
 <style>
     #Fund,#AmountReimbursed,#TotalAmount,#TotalPettyCashFund,#CashOnhand{
         background-color: #dedede;

@@ -61,7 +61,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FIELD_NAME_TRANSTATUS = "Transaction_x0020_Status";
         private const string FIELD_NAME_SCA_GL_ID = "GL_x0020_Master_x0020_ID_x003a_G";
         private const string FIELD_NAME_SCA_GL_VALUE = "GL_x0020_Master_x0020_ID_x003a_G0";
-
+  
         private const string FieldNameItem_WBSID = "WBSID";
         private const string FieldNameItem_WBSDescription = "WBSDescription";
 
@@ -87,7 +87,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         private string siteUrl = string.Empty;
         static Logger logger = LogManager.GetCurrentClassLogger();
-
+        
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
             int activityID = 0;

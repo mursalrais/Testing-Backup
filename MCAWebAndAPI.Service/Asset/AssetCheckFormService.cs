@@ -322,6 +322,8 @@ namespace MCAWebAndAPI.Service.Asset
                 modelDetailItem.AssetID = (item["assetmaster"] as FieldLookupValue).LookupId;
                 modelDetailItem.item = i;
                 modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                modelDetailItem.assetSubAssetID = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString());
+                modelDetailItem.assetSubAssetDescription = (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
                 modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
                 modelDetailItem.province = (item["assetprovince"] == null ? "" : item["assetprovince"].ToString());
                 modelDetailItem.location = (item["assetlocation"] == null ? "" : item["assetlocation"].ToString());
