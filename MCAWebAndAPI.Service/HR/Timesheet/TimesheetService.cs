@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
         const string TYPE_PUB_HOLIDAY = "Public Holiday";
         const string TYPE_HOLIDAY = "Holiday";
         const string TYPE_DAYOFF = "Day-Off";
-        const string TYPE_COMP_LEAVE = "Compensatory Time";
+        const string TYPE_COMP_LEAVE = "Compensatory Time Type";
         const string LIST_PUB_HOLIDAY = "Event Calendar";
         const string LIST_DAY_OFF = "Day-Off Request";
         const string LIST_DAY_OFF_DETAIL = "Day-Off Request Detail";
@@ -125,7 +125,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
                 if (bprint != null)
                 {
-                    viewModel.dtDetails =  GetTimesheetPrintAsync(viewModel);
+                    viewModel.dtDetails = GetTimesheetPrint(viewModel);
                     viewModel.dtLocation = GetTimesheetLocation(viewModel.dtDetails);
                 }
                
@@ -223,7 +223,33 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             return strResult;
         }
-        public DataTable GetTimesheetPrintAsync(TimesheetVM viewModel)
+
+        private string GetDayOffName(string strType)
+        {
+            var strResult = "";
+
+            switch (strType)
+            {
+                case "Sick Day-Off":
+                    strResult = "Sick Leave";
+                    break;
+                case "Annual Day-Off":
+                    strResult = "Eligible Days Off";
+                    break;
+                case "Unpaid Day-Off":
+                    strResult = "Unpaid Days Off";
+                    break;
+                case "Compensatory Time":
+                    strResult = "Compensatory Days Off";
+                    break;
+                case "Others":
+                    strResult = "Others";
+                    break;
+            }
+
+            return strResult;
+        }
+        public DataTable GetTimesheetPrint(TimesheetVM viewModel)
         {
             DataTable dt = new DataTable();
 
@@ -233,6 +259,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             dt.Columns.Add("HalfFullDay", typeof(double));
             dt.Columns.Add("Location", typeof(string));
             dt.Columns.Add("Type", typeof(string));
+            dt.Columns.Add("SubType", typeof(string));
 
             DateTime startdate = Convert.ToDateTime(viewModel.StartPeriod);
             DateTime finishdate= Convert.ToDateTime(viewModel.EndPeriod);
@@ -254,15 +281,15 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 {
 
                     row["HalfFullDay"] = timesheetDetail.FullHalf;
-                    if (timesheetDetail.Location != null) row["Location"] = Convert.ToString(timesheetDetail.Location);
+                    if (!string.IsNullOrEmpty(timesheetDetail.Location)) row["Location"] = Convert.ToString(timesheetDetail.Location);
 
                     if (!string.IsNullOrEmpty(timesheetDetail.Type))
                     {
                         row["Type"] = Convert.ToString(timesheetDetail.Type);
                     }
-                    else
+                    else if (!string.IsNullOrEmpty(timesheetDetail.SubType))
                     {
-                        row["Type"] = Convert.ToString(timesheetDetail.SubType);
+                        row["SubType"] = Convert.ToString(timesheetDetail.SubType);
                     }
                 }
                 dt.Rows.Add(row);
@@ -278,6 +305,9 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
             DataTable dt = new DataTable();
 
             dt.Columns.Add("Location", typeof(string));
+            dt.Columns.Add("Type", typeof(string));
+            dt.Columns.Add("SubType", typeof(string));
+            dt.Columns.Add("DisplayName", typeof(string));
             dt.Columns.Add("Total", typeof(double));
 
          
@@ -285,19 +315,94 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
             for (int i = 0; i <= dtDistinct.Rows.Count-1; i++)
             {
-                object sumObject;
+                object sumObject=null;
                 var strLoc = Convert.ToString(dtDistinct.Rows[i]["Location"]);
                 if (string.IsNullOrEmpty(strLoc))continue;
+                if (dtDetails.DefaultView == null) continue;
+                dtDetails.DefaultView.RowFilter = "Location='" + strLoc + "'";
                 sumObject = dtDetails.Compute("Sum(HalfFullDay)", "Location='" + strLoc + "'");
                 DataRow row = dt.NewRow();
                 row["Location"] = strLoc;
-                if (sumObject != null)
+                if (dtDetails.DefaultView != null && dtDetails.DefaultView.Count > 0)
                 {
                     row["Total"] = Convert.ToDouble(sumObject);
                 }
                 dt.Rows.Add(row);
-
             }
+
+
+           //var caml = string.Format(@"<View><Query>
+           //                            <Where>
+           //                               <Eq>
+           //                                  <FieldRef Name='othercategory' />
+           //                                  <Value Type='Boolean'>true</Value>
+           //                               </Eq>
+           //                            </Where>
+           //                         </Query>
+           //                         <ViewFields>
+           //                            <FieldRef Name='Title' />
+           //                            <FieldRef Name='othercategory' />
+           //                         </ViewFields></View>");
+
+           // var listMasterDayOff = SPConnector.GetList("Master Day Off Type", _siteUrl, caml);
+
+           // foreach (var item in listMasterDayOff)
+           // {
+
+           //     object sumObject=null;
+           //     var strType = Convert.ToString(Convert.ToString(item["Title"]));
+           //     if (string.IsNullOrEmpty(strType)) continue;
+           //     if (dtDetails.DefaultView == null) continue;
+           //     dtDetails.DefaultView.RowFilter = "SubType='" + strType + "'";
+               
+           //     sumObject = dtDetails.Compute("Sum(HalfFullDay)", "SubType='" + strType + "'");
+           //     DataRow row = dt.NewRow();
+           //     row["SubType"] = strType;
+           //     row["DisplayName"] = GetDayOffName(strType);
+           //     if (dtDetails.DefaultView != null && dtDetails.DefaultView.Count > 0)
+           //     {
+           //         row["Total"] = Convert.ToDouble(sumObject);
+           //     }
+           //     else
+           //     {
+           //         continue;
+           //     }
+
+               
+           //     dt.Rows.Add(row);
+           // }
+
+
+            //if (dtDetails.DefaultView != null)
+            //{
+            //    object sumObject = null;
+            //    dtDetails.DefaultView.RowFilter = "Type='Compensatory Time'";
+            //    sumObject = dtDetails.Compute("Sum(HalfFullDay)", "Type='Compensatory Time'");
+            //    DataRow row = dt.NewRow();
+            //    row["Type"] = "Compensatory Time";
+            //    if (dtDetails.DefaultView != null && dtDetails.DefaultView.Count > 0)
+            //    {
+            //        row["Total"] = Convert.ToDouble(sumObject);
+            //        dt.Rows.Add(row);
+            //    }
+
+            //}
+
+
+            //if (dtDetails.DefaultView != null)
+            //{
+            //    object sumObject = null;
+            //    dtDetails.DefaultView.RowFilter = "Type='Public Holiday'";
+            //    sumObject = dtDetails.Compute("Sum(HalfFullDay)", "Type='Public Holiday'");
+            //    DataRow row = dt.NewRow();
+            //    row["Type"] = "Public Holiday";
+            //    if (dtDetails.DefaultView != null && dtDetails.DefaultView.Count > 0)
+            //    {
+            //        row["Total"] = Convert.ToDouble(sumObject);
+            //        dt.Rows.Add(row);
+            //    }
+               
+            //}
 
 
 

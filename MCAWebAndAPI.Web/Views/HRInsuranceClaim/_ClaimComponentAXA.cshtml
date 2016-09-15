@@ -4,6 +4,7 @@
     @(Html.Kendo().Grid<dynamic>()
           .Name("gridDataView")
           .Scrollable()
+          .HtmlAttributes(new { style = "height: 500px" })
           .Columns(columns =>
           {
               foreach (System.Data.DataColumn column in Model.Columns)
@@ -13,6 +14,7 @@
                   {
                       //columns.Bound(column.ColumnName).HeaderHtmlAttributes(new
                       //{ style = "overflow: visible; white-space: normal" });
+                    
                       columns.Bound(column.ColumnName).HeaderHtmlAttributes(new
                       { style = "overflow: visible; white-space: normal" }).Width(150);
 

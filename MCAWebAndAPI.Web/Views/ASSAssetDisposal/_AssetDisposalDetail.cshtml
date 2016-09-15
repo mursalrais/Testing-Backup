@@ -17,14 +17,14 @@
         .Columns(columns =>
         {
             columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
-                          "<input type='hidden' class='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
-                        ).EditorViewData(new
-                        {
-                            DataTextField = "Text",
-                            DataValueField = "Value",
-                            ControllerName = "ASSAssetDisposal",
-                            ActionName = "GetAssetSubSAssetGrid"
-                        });
+                                   "<input type='hidden' class='asset' name='Details[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+                                 ).EditorViewData(new
+                                 {
+                                     DataTextField = "Text",
+                                     DataValueField = "Value",
+                                     ControllerName = "ASSAssignmentOfAsset",
+                                     ActionName = "GetAssetSubSAssetGrid"
+                                 });
 
             //columns.Bound(p => p.ProvinceFrom).ClientTemplate("#= ProvinceFrom.Text #" +
             //              "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].ProvinceFrom.Value' value='#= ProvinceFrom.value #' />"
@@ -50,15 +50,15 @@
             //    "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].Remarks' value='#= Remarks #' />"
             //    );
 
-            //    columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
-            //  "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
+            columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+          "<input type='hidden' name=Details[#= getWorkingRelationshipDetails(data)#].ID value=#= ID # />"
 
 
-            //);
+           );
             columns.Bound(p => p.EditMode).Hidden()
-         .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
+                                         .ClientTemplate("#= EditMode #<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].EditMode' value='#= EditMode #' />");
             columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-            .Click("onDeleteKendoDetail")).Width(100);
+                        .Click("onDeleteKendoDetail")).Width(100);
         })
         .Events(e =>
         {
@@ -70,7 +70,6 @@
                    {
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetDisposalDetailVM.GetAssetSubAssetDefaultValue());
-                       model.Field(m => m.ProvinceFrom);
                        model.Field(p => p.Status).Editable(false);
                        model.Field(p => p.Remarks);
                        //model.Field(m => m.WBS).DefaultValue(AssetAcquisitionItemVM.GetWBSDefaultValue());

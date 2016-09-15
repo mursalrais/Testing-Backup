@@ -40,12 +40,12 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreateAssetDisposal", viewModel);
         }
 
-        public ActionResult Edit(int ID, string siteUrl)
+        public ActionResult Edit(int ID, string SiteUrl)
         {
-            assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            assetDisposalService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var viewModel = assetDisposalService.GetHeader(ID);
+            var viewModel = assetDisposalService.GetHeader(ID,SiteUrl);
 
             int? headerID = null;
             headerID = viewModel.ID;
@@ -108,7 +108,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //try
             //{
             //    viewModel.AssetTransferDetail = BindMonthlyFeeDetailDetails(form, viewModel.MonthlyFeeDetails);
-            //    _hRPayrollService.CreateMonthlyFeeDetails(headerID, viewModel.MonthlyFeeDetails);
+            //    _hRPayrollService.CreateMonthlyFeeDetails(headerID, viewModel.MonthlyFeeDetails); 
             //}
             //catch (Exception e)
             //{
@@ -117,18 +117,19 @@ namespace MCAWebAndAPI.Web.Controllers
             //}            
         }
 
+        [HttpPost]
         public ActionResult Update(AssetDisposalVM _data, string SiteUrl)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            //if (_data.attach.FileName == "" || _data.attach.FileName == null)
-            //{
-            //    Response.TrySkipIisCustomErrors = true;
-            //    Response.TrySkipIisCustomErrors = true;
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
-            //}
+            if ((_data.attach == null && _data.filename == null) || (_data.attach == null && _data.filename == ""))
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+            }
 
             try
             {

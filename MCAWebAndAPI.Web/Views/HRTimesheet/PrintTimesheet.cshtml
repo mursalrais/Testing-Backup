@@ -1,4 +1,5 @@
 ﻿@using System.Data
+@using MCAWebAndAPI.Model.ViewModel.Form.Common
 @using MCAWebAndAPI.Model.ViewModel.Form.HR
 @model TimesheetVM
 
@@ -36,8 +37,8 @@
                     {
                         <td colspan="13"  class="tdHeadergrayLeft">@Model.Position</td>
                     }
-                    <td colspan="1" class="tdLeft">@Model.StartPeriod.Value.ToString("MMM dd/yyyy") to @Model.EndPeriod.Value.ToString("MMM dd/yyyy")</td>
-                    <td colspan="3" class="tdLeft">Professional No.</td>
+                    <td colspan="1" class="tdHeadergrayLeft">@Model.StartPeriod.Value.ToString("MMM dd/yyyy") to @Model.EndPeriod.Value.ToString("MMM dd/yyyy")</td>
+                    <td colspan="3" class="tdHeadergrayLeft">Professional No.</td>
                 </tr>
                     <tr>
                         @for (int i = 0; i <= Model.dtDetails.Rows.Count - 1; i++)
@@ -45,8 +46,8 @@
 
                             <td>@Convert.ToString(Model.dtDetails.Rows[i]["No"])</td>
                         }
-                        <td rowspan="3" class="tdLeft">DETAILS    WORK LOCATION</td>
-                        <td rowspan="3">TOTAL DAY</td>
+                        <td rowspan="3" class="tdLeft">DETAILS  <br/>  WORK LOCATION</td>
+                        <td rowspan="3">TOTAL <br/>DAY</td>
                         <td colspan="2">OFFICE USE</td>
                     </tr>
 
@@ -132,43 +133,125 @@
                                    }
                                    else if (i == 7)
                                    {
-                                    <td class="tdLeft">Sick Leave</td>
+                                       <td class="tdLeft">Sick Leave</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "SubType='Sick Day-Off'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Sick Day-Off'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
                                         <td>0.0</td>
+                                       }
                                    }
-                                   else if (i ==8)
+                                   else if (i == 8)
                                    {
                                     <td class="tdLeft">Eligible Days Off</td>
-                                    <td>0.0</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "SubType='Annual Day-Off'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Annual Day-Off'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 9)
                                    {
                                     <td class="tdLeft">Others*</td>
-                                    <td>0.0</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "SubType='Others'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Others'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 10)
                                    {
                                     <td class="tdLeft">Public Holiday</td>
-                                    <td>0.0</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "Type='Public Holiday'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Public Holiday'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 11)
                                    {
                                     <td class="tdLeft">Unpaid Days Off</td>
-                                    <td>0.0</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "Type='Unpaid Day-Off'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Unpaid Day-Off'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 12)
                                    {
                                     <td class="tdLeft">Compensatory Days Off</td>
-                                    <td>0.0</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "SubType='Compensatory Time'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Compensatory Time'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 13)
                                    {
-                                    <td class="tdLeft">TOTAL</td>
-                                    <td>0.0</td>
+                                       <td class="tdLeft">TOTAL</td>
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "Type <> 'Compensatory Time' and Type<>'Holiday'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type <> 'Compensatory Time'  and Type<>'Holiday'");
+                                     
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td> @Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                    else if (i == 14)
                                    {
-                                    <td class="tdLeft">Compensatory Time (C): Work or Travel on Saturday & Sunday</td>
-                                    <td>0.0</td>
+                                    <td class="tdLeft">Compensatory Time (C): Work or <br/> Travel on Saturday & Sunday</td>
+
+                                       object sumObject = null;
+                                       Model.dtDetails.DefaultView.RowFilter = "Type='Compensatory Time'";
+                                       sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Compensatory Time'");
+                                       if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
+                                       {
+                                        <td>@Convert.ToDouble(sumObject)</td>
+                                       }
+                                       else
+                                       {
+                                        <td>0.0</td>
+                                       }
                                    }
                                }
 
@@ -178,82 +261,220 @@
                             </tr>
 
                         }
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="30" class="tdLeftNoBorderBottom"><strong>NOTES :</strong></td>
+                    }
+                    else
+                    {
+                        <td colspan="31" class="tdLeftNoBorderBottom"><strong>NOTES :</strong></td>
+                    }
+                    <td ></td>
+                    <td ></td>
+                    <td ></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="34" class="tdLeftNoBorderTopBottom">*Mark <strong>location</strong> as place where the night is spent.</td>
+                    }
+                    else
+                    {
+                        <td colspan="35" class="tdLeftNoBorderTopBottom">*Mark <strong>location</strong> as place where the night is spent.</td>
+                    }
+
+                </tr>
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="7" class="tdLeftNoBorderTopBottomRight">Travel Itinerary (dates, locations) </td>
+                        <td colspan="27" class="tdLeftNoBorderTopLeft"></td>
+                    }
+                    else
+                    {
+                        <td colspan="7" class="tdLeftNoBorderTopBottomRight">Travel Itinerary (dates, locations) </td>
+                        <td colspan="28" class="tdLeftNoBorderTopLeft"> </td>
+                    }
+                  
+
+                </tr>
                     <tr>
-                        <td colspan="31">NOTES :</td>
-                        <td ></td>
-                        <td ></td>
-                        <td ></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="35">*Mark location as place where the night is spent.</td>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="1" class="tdLeftNoBorderTopBottomRight"></td>
+                            <td colspan="33" class="tdLeftNoBorderTopLeft"></td>
+                        }
+                        else
+                        {
+                            <td colspan="1" class="tdLeftNoBorderTopBottomRight"></td>
+                            <td colspan="34" class="tdLeftNoBorderTopLeft"></td>
+                        }
 
                     </tr>
                     <tr>
-                        <td colspan="35">Travel Itinerary (dates, locations) </td>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="7" class="tdLeftNoBorderTopBottomRight">Other explanatory notes: </td>
+                            <td colspan="27" class="tdLeftNoBorderTopLeft"></td>
+                        }
+                        else
+                        {
+                            <td colspan="7" class="tdLeftNoBorderTopBottomRight">Other explanatory notes: </td>
+                            <td colspan="28" class="tdLeftNoBorderTopLeft"></td>
+                        }
 
-                    </tr>
+
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="1" class="tdLeftNoBorderTopBottomRight"></td>
+                        <td colspan="33" class="tdLeftNoBorderTopLeft"></td>
+                    }
+                    else
+                    {
+                        <td colspan="1" class="tdLeftNoBorderTopBottomRight"></td>
+                        <td colspan="34" class="tdLeftNoBorderTopLeft"></td>
+                    }
+
+                </tr>
                     <tr>
-                        <td colspan="35"></td>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="34" class="tdLeftNoBorderTopBottom"></td>
+                        }
+                        else
+                        {
+                            <td colspan="35" class="tdLeftNoBorderTopBottom"></td>
+                        }
+
 
                     </tr>
-                    <tr>
-                        <td colspan="35">Other explanatory notes: </td>
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="15" class="tdLeftNoBorderTopBottomRightYellow">Please check accuracy against Days Off forms before signing</td>
+                        <td colspan="19" class="tdLeftNoBorderTopBottomLeft"></td>
+                    }
+                    else
+                    {
+                        <td colspan="16" class="tdLeftNoBorderTopBottomRightYellow">Please check accuracy against Days Off forms before signing</td>
+                        <td colspan="19" class="tdLeftNoBorderTopBottomLeft"></td>
+                    }
+                  
 
-                    </tr>
-                    <tr>
-                        <td colspan="35"></td>
+                </tr>
 
-                    </tr>
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="34" class="tdLeftNoBorderTopBottom"></td>
+                    }
+                    else
+                    {
+                        <td colspan="35" class="tdLeftNoBorderTopBottom"></td>
+                    }
+                   
+
+                </tr>
                         <tr>
-                            <td colspan="35">Please check accuracy against Days Off forms before signing</td>
-
+                            <td colspan="3" class="tdLeftNoBorderTopBottomRight">1. Professional :</td>
+                            <td colspan="2" class="tdLeftNoBorderAll">Name</td>
+                            @if (Model.dtDetails.Rows.Count == 30)
+                            {
+                                <td colspan="9" class="tdLeftNoBorderTopRightLeft"></td>
+                            }
+                            else
+                            {
+                                <td colspan="10" class="tdLeftNoBorderTopRightLeft"></td>
+                            }
+                            
+                            <td colspan="3" class="tdLeftNoBorderAll">Designation :</td>
+                            <td colspan="5" class="tdLeftNoBorderTopRightLeft">
+                                @{
+                                    string tes = "";
+                                    //WorkflowItemVM first = null;
+                                    foreach (var x in Model.WorkflowItems)
+                                    {
+                                        if (x.Level.Equals("1"))
+                                        {
+                                           // first = x;
+                                            tes = x.ApproverPositionText;
+                                            break;
+                                        }
+                                    }
+                                }
+                                @tes</td>
+                            <td colspan="3" class="tdLeftNoBorderAll">Signature :</td>
+                            <td colspan="5" class="tdLeftNoBorderTopRightLeft"></td>
+                            <td colspan="4" class="tdLeftNoBorderTopBottomLeft">Date :</td>
                         </tr>
+               
+                    <tr>
+                        <td colspan="3" class="tdLeftNoBorderTopBottomRight">2. Checked by: :</td>
+                        <td colspan="2" class="tdLeftNoBorderAll">Name</td>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="9" class="tdLeftNoBorderTopRightLeft"></td>
+                        }
+                        else
+                        {
+                            <td colspan="10" class="tdLeftNoBorderTopRightLeft"></td>
+                        }
+
+                        <td colspan="3" class="tdLeftNoBorderAll">Designation :</td>
+                        <td colspan="5" class="tdLeftNoBorderTopRightLeft">ME Director</td>
+                        <td colspan="3" class="tdLeftNoBorderAll">Signature :</td>
+                        <td colspan="5" class="tdLeftNoBorderTopRightLeft"></td>
+                        <td colspan="4" class="tdLeftNoBorderTopBottomLeft">Date :</td>
+                    </tr>
 
                     <tr>
+                        <td colspan="3" class="tdLeftNoBorderTopBottomRight">3. Authorised by :</td>
+                        <td colspan="2" class="tdLeftNoBorderAll">Name</td>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="9" class="tdLeftNoBorderTopRightLeft"></td>
+                        }
+                        else
+                        {
+                            <td colspan="10" class="tdLeftNoBorderTopRightLeft"></td>
+                        }
+
+                        <td colspan="3" class="tdLeftNoBorderAll">Designation :</td>
+                        <td colspan="5" class="tdLeftNoBorderTopRightLeft">ME Director</td>
+                        <td colspan="3" class="tdLeftNoBorderAll">Signature :</td>
+                        <td colspan="5" class="tdLeftNoBorderTopRightLeft"></td>
+                        <td colspan="4" class="tdLeftNoBorderTopBottomLeft">Date :</td>
+                    </tr>
+
+
+
+                <tr>
+                    @if (Model.dtDetails.Rows.Count == 30)
+                    {
+                        <td colspan="34"></td>
+                    }
+                    else
+                    {
                         <td colspan="35"></td>
+                    }
 
-                    </tr>
-                        <tr>
-                            <td colspan="5">1. Professional</td>
-                            <td colspan="2">Name</td>
-                            <td colspan="11"></td>
-                            <td colspan="2"></td>
-                            <td colspan="3">Designation</td>
-                            <td colspan="5">ME Director</td>
-                            <td colspan="2"></td>
-                            <td colspan="3">Signature:</td>
-                            <td colspan="1">Signature:</td>
-                            <td colspan="1">Date:</td>
-                        </tr>
-                    <tr>
-                        <td colspan="5">1. Professional</td>
-                        <td colspan="2">Name</td>
-                        <td colspan="11"></td>
-                        <td colspan="2"></td>
-                        <td colspan="3">Designation</td>
-                        <td colspan="5">ME Director</td>
-                        <td colspan="2"></td>
-                        <td colspan="3">Signature:</td>
-                        <td colspan="1">Signature:</td>
-                        <td colspan="1">Date:</td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">1. Professional</td>
-                        <td colspan="2">Name</td>
-                        <td colspan="11"></td>
-                        <td colspan="2"></td>
-                        <td colspan="3">Designation</td>
-                        <td colspan="5">ME Director</td>
-                        <td colspan="2"></td>
-                        <td colspan="3">Signature:</td>
-                        <td colspan="1">Signature:</td>
-                        <td colspan="1">Date:</td>
-                    </tr>
-                        <tr>
+
+                </tr>
+                    @*<tr>
+                        @if (Model.dtDetails.Rows.Count == 30)
+                        {
+                            <td colspan="34"></td>
+                        }
+                        else
+                        {
                             <td colspan="35"></td>
+                        }
 
-                        </tr>
+
+                    </tr>*@
                   
 </table>
 
@@ -271,6 +492,8 @@
         width: 100%;
         text-align: center;
         font-size: 150%;
+        font-family: Arial;
+         font-weight: bold;
     }
 
     .wrpTTD {
@@ -308,6 +531,71 @@ td {
 
 .tdLeft {
   border: 1px solid Black;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderAll {
+   border: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTopBottom {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTopBottomLeft {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  border-left: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTopLeft {
+  border-top: 1px solid white;
+  border-left: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+
+.tdLeftNoBorderTopRightLeft {
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+  border-left: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTopBottomRight {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTopBottomRightYellow {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  border-right: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;background-color: yellow;
+  vertical-align: text-bottom;background-color: yellow;font-size: xx-small;color: red;
+}
+
+.tdLeftNoBorderBottom {
+    border-bottom: 1px solid white;
+  padding: 5px 15px;text-align: left;vertical-align: bottom;
+  vertical-align: text-bottom;background-color: White;font-size:xx-small
+}
+
+.tdLeftNoBorderTop {
+  border-top: 1px solid white;
   padding: 5px 15px;text-align: left;vertical-align: bottom;
   vertical-align: text-bottom;background-color: White;font-size:xx-small
 }
