@@ -460,9 +460,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public IEnumerable<LocationMasterVM> GetProvince()
+        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetProvince()
         {
-            var models = new List<LocationMasterVM>();
+            var models = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
             var caml = @"<View><Query>
                        <Where>
                           <IsNotNull>
@@ -491,9 +491,9 @@ namespace MCAWebAndAPI.Service.Asset
             return models;
         }
 
-        private LocationMasterVM ConvertToProvince(ListItem item)
+        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToProvince(ListItem item)
         {
-            var viewModel = new LocationMasterVM();
+            var viewModel = new Model.ViewModel.Form.Asset.LocationMasterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             var province = "";
@@ -509,7 +509,7 @@ namespace MCAWebAndAPI.Service.Asset
             return viewModel;
         }
 
-        public LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
+        public Model.ViewModel.Form.Asset.LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
         {
             var caml = @"<View>
                         <Query>
@@ -529,7 +529,7 @@ namespace MCAWebAndAPI.Service.Asset
                         </ViewFields>
                         <QueryOptions /></View>";
             var list = SPConnector.GetList("Location Master", SiteUrl, caml);
-            var viewmodel = new LocationMasterVM();
+            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
             foreach (var item in list)
             {
                 viewmodel.ID = Convert.ToInt32(item["ID"]);
@@ -601,9 +601,9 @@ namespace MCAWebAndAPI.Service.Asset
             }
         }
 
-        public IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province)
+        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetOfficeName(string SiteUrl, string province)
         {
-            var model = new List<LocationMasterVM>();
+            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
             string caml = "";
             if (province == null)
             {
@@ -649,9 +649,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private LocationMasterVM ConvertToOfficeName(ListItem item)
+        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToOfficeName(ListItem item)
         {
-            var viewmodel = new LocationMasterVM();
+            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
 
             viewmodel.ID = Convert.ToInt32(item["ID"]);
             viewmodel.OfficeName = Convert.ToString(item["Title"]);
@@ -1103,9 +1103,9 @@ namespace MCAWebAndAPI.Service.Asset
             return true;
         }
 
-        public IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null)
+        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetFloorList(string SiteUrl, string office = null)
         {
-            var model = new List<LocationMasterVM>();
+            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
             string caml = "";
             if (office == null)
             {
@@ -1160,18 +1160,18 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private LocationMasterVM ConvertToFloorList(ListItem item)
+        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToFloorList(ListItem item)
         {
-            var viewmodel = new LocationMasterVM();
+            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
             viewmodel.OfficeName = Convert.ToString(item["Floor"]);
 
             return viewmodel;
 
         }
 
-        public IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null)
+        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetRoomList(string SiteUrl, string floor = null)
         {
-            var model = new List<LocationMasterVM>();
+            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
             string caml = "";
             if (floor == null)
             {
@@ -1225,9 +1225,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private LocationMasterVM ConvertToRoomList(ListItem item)
+        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToRoomList(ListItem item)
         {
-            var viewmodel = new LocationMasterVM();
+            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
 
             //viewmodel.ID = Convert.ToInt32(item["ID"]);
             viewmodel.RoomName = Convert.ToString(item["Room"]);
