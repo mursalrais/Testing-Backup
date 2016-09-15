@@ -94,10 +94,32 @@ namespace MCAWebAndAPI.Web.Controllers
             siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
+            if (_data.CompletionStatus.Value == "Complete")
+            {
+                if (_data.attach.FileName == "" || _data.attach.FileName == null)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
+
+            if (_data.attach.FileName != "" || _data.attach.FileName != null)
+            {
+                if (_data.CompletionStatus.Value != "Complete")
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                }
+            }
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
             {
+                var postedFile = Request.Files["attach"];
                 headerID = _service.CreateHeader(_data, siteUrl);
                 if (headerID == 0)
                 {
@@ -136,7 +158,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail");
             }
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+			return Redirect(siteUrl + UrlResource.AssetTransfer);
         }
 
         [HttpPost]
@@ -144,6 +166,28 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+			if (_data.CompletionStatus.Value == "Complete")
+			{
+				if ((_data.attach == null && _data.filename == null) || (_data.attach == null && _data.filename == ""))
+				{
+					Response.TrySkipIisCustomErrors = true;
+					Response.TrySkipIisCustomErrors = true;
+					Response.StatusCode = (int)HttpStatusCode.BadRequest;
+					return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+				}
+			}
+
+			if (_data.CompletionStatus.Value != "Complete")
+			{
+				if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
+				{
+					Response.TrySkipIisCustomErrors = true;
+					Response.TrySkipIisCustomErrors = true;
+					Response.StatusCode = (int)HttpStatusCode.BadRequest;
+					return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete");
+				}
+			}
 
             try
             {
@@ -177,7 +221,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
+			return Redirect(siteUrl + UrlResource.AssetTransfer);
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)
@@ -411,7 +455,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -441,7 +485,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="request"></param>
         /// <param name="viewModel"></param>

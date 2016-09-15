@@ -752,3 +752,17 @@ Please try again.
 2016-09-15 13:35:31.3023 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
 2016-09-15 13:36:33.1779 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
 2016-09-15 13:40:52.6720 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
+2016-09-15 15:16:54.6916 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 39
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 139
+2016-09-15 15:20:58.9497 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
+   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
+   at System.Net.ClosableStream.Close()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 39
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 139

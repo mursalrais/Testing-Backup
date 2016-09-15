@@ -1,0 +1,71 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+@model AssetLandingPageFixedAssetVM
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<form class="form-horizontal" method="post" action="/ASSAssetFixedAsset/Create" id="create-asset-FixedAsset-form">
+    <fieldset>
+        <legend>Fixed Asset</legend>
+        <div class="row">
+            <div class="col-sm-4">
+                <table class="table table-bordered">
+                    <thead>
+                    <td colspan="3" align="center" bgcolor="#f37370">PC-FF</td>
+                    <tr align="center">
+                        <td>Total Asset</td>
+                        <td>Value (IDR)</td>
+                        <td>Value (USD)</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr align="center">
+                            <td> @Html.DisplayTextFor(m => m.totalAsset_PCFF) </td>
+                            <td> @Html.DisplayTextFor(m => m.valueIDR_PCFF) </td>
+                            <td> @Html.DisplayTextFor(m => m.valueUSD_PCFF) </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <table class="table table-bordered">
+                    <thead>
+                    <td colspan="3" align="center" bgcolor="#f4ed3d">PC-OE</td>
+                    <tr align="center">
+                        <td>Total Asset</td>
+                        <td>Value (IDR)</td>
+                        <td>Value (USD)</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr align="center">
+                            <td>@Html.DisplayTextFor(m => m.totalAsset_PCOE)</td>
+                            <td>@Html.DisplayTextFor(m => m.valueIDR_PCOE)</td>
+                            <td>@Html.DisplayTextFor(m => m.valueUSD_PCOE)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <table class="table table-bordered">
+                    <thead>
+                    <td colspan="3" align="center" bgcolor="#3df449">GP-OE</td>
+                    <tr align="center">
+                        <td>Total Asset</td>
+                        <td>Value (IDR)</td>
+                        <td>Value (USD)</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr align="center">
+                            <td>@Html.DisplayTextFor(m => m.totalAsset_GPOE)</td>
+                            <td>@Html.DisplayTextFor(m => m.valueIDR_GPOE)</td>
+                            <td>@Html.DisplayTextFor(m => m.valueUSD_GPOE)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+</form>

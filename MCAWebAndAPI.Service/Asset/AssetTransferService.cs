@@ -40,8 +40,10 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssetTransferVM GetHeader(int? ID, string SiteUrl)
         {
+            var filename = SPConnector.GetAttachFileName("Asset Transfer", ID, _siteUrl);
             var listItem = SPConnector.GetListItem("Asset Transfer", ID, SiteUrl);
             var viewModel = new AssetTransferVM();
+            viewModel.filename = filename;
             viewModel.positionFrom = listItem["positionfrom"].ToString();
             viewModel.nameOnlyFrom = listItem["assetholderfrom"].ToString();
             viewModel.positionTo = listItem["positionto"].ToString();
@@ -232,22 +234,9 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 SPConnector.AddListItem("Asset Transfer", columnValues, _siteUrl);
                 var id = SPConnector.GetLatestListItemID("Asset Transfer", _siteUrl);
-                var info = SPConnector.GetListItem("Asset Transfer", id, _siteUrl);
-                if (viewmodel.CompletionStatus.Value == "Complete")
+                if (viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
                 {
-                    if (Convert.ToBoolean(info["Attachments"]) == false)
-                    {
-                        SPConnector.DeleteListItem("Asset Transfer", id, _siteUrl);
-                        return 0;
-                    }
-                }
-                else
-                {
-                    if (Convert.ToBoolean(info["Attachments"]) == true)
-                    {
-                        SPConnector.DeleteListItem("Asset Transfer", id, _siteUrl);
-                        return -1;
-                    }
+                    SPConnector.AttachFile("Asset Transfer", id, viewmodel.attach, _siteUrl);
                 }
             }
             catch (Exception e)
@@ -310,6 +299,10 @@ namespace MCAWebAndAPI.Service.Asset
             try
             {
                 SPConnector.UpdateListItem("Asset Transfer", ID, columnValues, _siteUrl);
+                if (viewmodel.CompletionStatus.Value == "Complete" && (viewmodel.attach.FileName != "" || viewmodel.attach.FileName != null))
+                {
+                    SPConnector.AttachFile("Asset Transfer", ID, viewmodel.attach, _siteUrl);
+                }
                 var newData = SPConnector.GetListItem("Asset Transfer", ID, _siteUrl);
                 if (viewmodel.CompletionStatus.Value == "Complete")
                 {
@@ -377,7 +370,7 @@ namespace MCAWebAndAPI.Service.Asset
                     </Query>
                     <ViewFields>
                        <FieldRef Name='Title' />
-                        <FieldRef Name='ID' />   
+                        <FieldRef Name='ID' />
                        <FieldRef Name='Position' />
                        <FieldRef Name='Project_x002f_Unit' />
                        <FieldRef Name='mobilephonenr' />
@@ -467,9 +460,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetProvince()
+        public IEnumerable<LocationMasterVM> GetProvince()
         {
-            var models = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
+            var models = new List<LocationMasterVM>();
             var caml = @"<View><Query>
                        <Where>
                           <IsNotNull>
@@ -498,9 +491,9 @@ namespace MCAWebAndAPI.Service.Asset
             return models;
         }
 
-        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToProvince(ListItem item)
+        private LocationMasterVM ConvertToProvince(ListItem item)
         {
-            var viewModel = new Model.ViewModel.Form.Asset.LocationMasterVM();
+            var viewModel = new LocationMasterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
             var province = "";
@@ -516,7 +509,7 @@ namespace MCAWebAndAPI.Service.Asset
             return viewModel;
         }
 
-        public Model.ViewModel.Form.Asset.LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
+        public LocationMasterVM GetProvinceInfo(string province, string SiteUrl)
         {
             var caml = @"<View>
                         <Query>
@@ -536,7 +529,7 @@ namespace MCAWebAndAPI.Service.Asset
                         </ViewFields>
                         <QueryOptions /></View>";
             var list = SPConnector.GetList("Location Master", SiteUrl, caml);
-            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
+            var viewmodel = new LocationMasterVM();
             foreach (var item in list)
             {
                 viewmodel.ID = Convert.ToInt32(item["ID"]);
@@ -608,9 +601,9 @@ namespace MCAWebAndAPI.Service.Asset
             }
         }
 
-        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetOfficeName(string SiteUrl, string province)
+        public IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province)
         {
-            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
+            var model = new List<LocationMasterVM>();
             string caml = "";
             if (province == null)
             {
@@ -656,9 +649,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToOfficeName(ListItem item)
+        private LocationMasterVM ConvertToOfficeName(ListItem item)
         {
-            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
+            var viewmodel = new LocationMasterVM();
 
             viewmodel.ID = Convert.ToInt32(item["ID"]);
             viewmodel.OfficeName = Convert.ToString(item["Title"]);
@@ -669,7 +662,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetTransferDetailVM> IAssetTransferService.GetDetails(int? headerID)
         {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='assettransfer' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+			var caml = @"<View><Query><Where><Eq><FieldRef Name='assettransfer' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssetTransferDetailVM>();
 
             foreach (var item in SPConnector.GetList("Asset Transfer Detail", _siteUrl, caml))
@@ -1110,9 +1103,9 @@ namespace MCAWebAndAPI.Service.Asset
             return true;
         }
 
-        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetFloorList(string SiteUrl, string office = null)
+        public IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null)
         {
-            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
+            var model = new List<LocationMasterVM>();
             string caml = "";
             if (office == null)
             {
@@ -1167,18 +1160,18 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToFloorList(ListItem item)
+        private LocationMasterVM ConvertToFloorList(ListItem item)
         {
-            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
+            var viewmodel = new LocationMasterVM();
             viewmodel.OfficeName = Convert.ToString(item["Floor"]);
 
             return viewmodel;
 
         }
 
-        public IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetRoomList(string SiteUrl, string floor = null)
+        public IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null)
         {
-            var model = new List<Model.ViewModel.Form.Asset.LocationMasterVM>();
+            var model = new List<LocationMasterVM>();
             string caml = "";
             if (floor == null)
             {
@@ -1232,9 +1225,9 @@ namespace MCAWebAndAPI.Service.Asset
             return model;
         }
 
-        private Model.ViewModel.Form.Asset.LocationMasterVM ConvertToRoomList(ListItem item)
+        private LocationMasterVM ConvertToRoomList(ListItem item)
         {
-            var viewmodel = new Model.ViewModel.Form.Asset.LocationMasterVM();
+            var viewmodel = new LocationMasterVM();
 
             //viewmodel.ID = Convert.ToInt32(item["ID"]);
             viewmodel.RoomName = Convert.ToString(item["Room"]);

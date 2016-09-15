@@ -1,4 +1,5 @@
 ﻿using MCAWebAndAPI.Model.ViewModel.Form.HR;
+using System.Collections.Generic;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
