@@ -49,7 +49,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.CompletionStatus)
+                    @Html.EditorFor(m => m.CompletionStatus)
                 </div>
             </div>
         </div>
@@ -96,4 +96,10 @@
     //        $('#CompletionStatus').prop('value', data.CompletionStatus);
     //    });
     //}
+
+    var res;
+    function onSelectedLocation(e) {
+        res = this.dataItem(e.item).split("-")
+        //alert("Location ID : " + res[0]);
+    }
 </script>

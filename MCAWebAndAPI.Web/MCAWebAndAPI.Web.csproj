@@ -208,8 +208,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\AM01.PNG" />
-    <Content Include="App_Data\Asset-Check-icon-mca.png" />
+    <Content Include="App_Data\2016.xlsx" />
+    <Content Include="App_Data\askjasjoi_Application.pdf" />
+    <Content Include="App_Data\Dewa_Application.pdf" />
+    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
+    <Content Include="App_Data\PayrollWorksheet-Period--RunOn-2016-00-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2014-06-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-07-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-08-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\Rahadian1_Application.pdf" />
+    <Content Include="App_Data\Rahadian_Application.pdf" />
+    <Content Include="App_Data\Randi_Application.pdf" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -421,17 +430,6 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
-    <Content Include="App_Data\2016.xlsx" />
-    <Content Include="App_Data\askjasjoi_Application.pdf" />
-    <Content Include="App_Data\Dewa_Application.pdf" />
-    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
-    <Content Include="App_Data\PayrollWorksheet-Period--RunOn-2016-00-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2014-06-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-07-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-08-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\Rahadian1_Application.pdf" />
-    <Content Include="App_Data\Rahadian_Application.pdf" />
-    <Content Include="App_Data\Randi_Application.pdf" />
     <None Include="bin\MCAWebAndAPI.Web.dll.config" />
     <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />

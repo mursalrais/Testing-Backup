@@ -2,7 +2,7 @@
 
 @model AssetCheckResultHeaderVM
 
-<form enctype="multipart/form-data" class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+<form onsubmit="return ValidationEvent()" enctype="multipart/form-data" class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
@@ -42,7 +42,7 @@
                     <input type="file" name="file" />
                     @if (Model.filename != null)
                     {
-                        @Html.ActionLink("Download", @Model.filename, new { filename = @Model.filename })
+                        @Html.ActionLink(@Model.filename,"Download", new { filename = @Model.filename })
                     }
                 </div>
             </div>
@@ -101,4 +101,19 @@
     //        $('#CompletionStatus').prop('value', data.CompletionStatus);
     //    });
     //}
+
+    function ValidationEvent() {
+        @*var a = @Model.ApprovalStatus;
+        if(a == "Approved")
+        {
+            alert("you can not edit he data since it has been approved");
+            return false;
+        }
+        if(a == "Rejected")
+        {
+            alert("you can not edit he data since it has been rejected");
+            return false;
+        }*@
+        return true;
+    }
 </script>
