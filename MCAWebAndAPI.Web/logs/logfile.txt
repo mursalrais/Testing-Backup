@@ -748,3 +748,7 @@ Please try again.
 2016-09-14 17:16:44.5856 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Object reference not set to an instance of an object.
 2016-09-14 21:38:59.2486 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
 2016-09-14 22:46:54.1487 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The underlying connection was closed: A connection that was expected to be kept alive was closed by the server.
+2016-09-15 13:10:33.2166 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
+2016-09-15 13:35:31.3023 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
+2016-09-15 13:36:33.1779 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!
+2016-09-15 13:40:52.6720 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Document MCC Aprroval must be uploaded first!

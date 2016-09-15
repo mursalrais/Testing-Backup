@@ -199,6 +199,22 @@
 
     <script>
 
+        function submitForApproval()
+        {
+            //var x = document.getElementById('Status_Value').value;
+            //var dropdownStatus = $("#Status_Value").data("kendoDropDownList");
+            //var oldChoices = dropdownStatus.dataSource.data();
+            //console.log("Banyak choices : " + oldChoices.length);
+            //for (var i = 0; i < oldChoices.length; i++) {
+            //    console.log("oldChoices[" + i + "] : " + oldChoices[i]);
+            //    if (oldChoices[i] == x) {
+            //        console.log("Samaaaa");
+            //        dropdownStatus.dataSource.data(oldChoices);
+            //        dropdownStatus.select(i);
+            //    }
+            //}
+        }
+
         function filterLevel() {
             return {
                 Level: $('#DivisionProjectUnit_Value').data("kendoDropDownList").dataItem($('#DivisionProjectUnit_Value').data("kendoDropDownList").select())
@@ -238,12 +254,14 @@
             //    }
             //}
 
-            if (($("#Position_Value").val() == null) || ($("#Position_Value").val() == "")) {
+            //if (($("#Position_Value").val() == null) || ($("#Position_Value").val() == "") || ($("#Position_Text").val() == null)) {
+            if (($("#Position_Text").val() == null)) {
                 alert("Position value cannot null");
                 return false;
             }
             return true;
         }
+
         $(document).ready(function () {
             var id = $("#ID").val();
             var isHR = '@(ViewBag.IsHRView)';
@@ -290,6 +308,8 @@
                 }
             });
             $("#submit-button").click(function () {
+                //$("form").submit();
+                //showLoading();
                 var isValid = checkGrid();
                 if (isValid && ($('.form-horizontal').valid())) {
                     $("#Status_Value").prop("value", "Pending Approval");
