@@ -11,7 +11,6 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
-        AssetLandingPageFixedAssetVM GetPopulatedModelFixedAsset(int? ID = null);
-        AssetLandingPageSmallValueAssetVM GetPopulatedModelSmallValueAsset(int? ID = null);
+        AssetLandingPageVM GetPopulatedModel(int? ID = null);
     }
 }
