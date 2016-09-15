@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
             assetLandingPageService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            var viewModelDetail = assetLandingPageService.GetPopulatedModelFixedAsset();
+            var viewModelDetail = assetLandingPageService.GetPopulatedModel();
 
             return View(viewModelDetail);
         }
