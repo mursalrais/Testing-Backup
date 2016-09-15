@@ -84,10 +84,10 @@ namespace MCAWebAndAPI.Service.Finance
                 {FieldName_DateFrom, viewModel.DateFrom},
                 {FieldName_DateTo, viewModel.DateTo},
                 {FieldName_TotalAmountToBeReplenished, viewModel.TotalAmount},
-                {FieldName_Additional1, viewModel.AdvancesForOperationalCar1},
-                {FieldName_Additional2, viewModel.AdvancesForOperationalCar2},
-                {FieldName_Additional3, viewModel.AdvancesForOperationalCar3},
-                {FieldName_CashOnHand, viewModel.CashOnhand}
+                {FieldName_Additional1, viewModel.Advances1},
+                {FieldName_Additional2, viewModel.Advances2},
+                {FieldName_Additional3, viewModel.Advances3},
+                {FieldName_CashOnHand, viewModel.CashOnHand}
             };
 
             try
@@ -184,6 +184,8 @@ namespace MCAWebAndAPI.Service.Finance
 
                     break;
             }
+            
+            viewModel.CashOnHand = viewModel.TotalPettyCashFund - viewModel.TotalAmount - viewModel.Advances1 - viewModel.Advances2 - viewModel.Advances3;
 
             viewModel.Operation = op;
 
@@ -304,10 +306,10 @@ namespace MCAWebAndAPI.Service.Finance
                 DateFrom = Convert.ToDateTime(listItem[FieldName_DateFrom]),
                 DateTo = Convert.ToDateTime(listItem[FieldName_DateTo]),
                 TotalAmount = Convert.ToDecimal(listItem[FieldName_TotalAmountToBeReplenished]),
-                AdvancesForOperationalCar1 = Convert.ToDecimal(listItem[FieldName_Additional1]),
-                AdvancesForOperationalCar2 = Convert.ToDecimal(listItem[FieldName_Additional2]),
-                AdvancesForOperationalCar3 = Convert.ToDecimal(listItem[FieldName_Additional3]),
-                CashOnhand = Convert.ToDecimal(listItem[FieldName_CashOnHand])
+                Advances1 = Convert.ToDecimal(listItem[FieldName_Additional1]),
+                Advances2 = Convert.ToDecimal(listItem[FieldName_Additional2]),
+                Advances3 = Convert.ToDecimal(listItem[FieldName_Additional3]),
+                CashOnHand = Convert.ToDecimal(listItem[FieldName_CashOnHand])
             };
         }
 
