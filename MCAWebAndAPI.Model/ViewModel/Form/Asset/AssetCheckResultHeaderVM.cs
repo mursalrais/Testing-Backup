@@ -13,6 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultHeaderVM : Item
     {
+        public string filename { get; set; }
+        public string filenameUrl { get; set; }
+
         public int? ID { get; set; }
 
         public string hFormID { get; set; }

@@ -78,6 +78,11 @@ namespace MCAWebAndAPI.Service.Asset
 
                 model.ID = ID;
                 model.FormID.Value = cekResult["assetcheckformid"].ToString();
+                if(cekResult["attachment"] != null)
+                {
+                    model.filename = cekResult["attachment"].ToString();
+                }
+                
                 if (cekResult["Created"] != null)
                 {
                     model.CreateDate = Convert.ToDateTime(cekResult["Created"].ToString());
@@ -395,8 +400,11 @@ namespace MCAWebAndAPI.Service.Asset
                 columnValues.Add("assetcheckcountdate", model.CountDate);
                 columnValues.Add("assetcheckcountedby1", model.CountedBy1.Value);
                 columnValues.Add("assetcheckcountedby2", model.CountedBy2.Value);
-                columnValues.Add("assetcheckcountedby3", model.CountedBy3.Value);
-
+                if (!string.IsNullOrEmpty(model.filename))
+                {
+                    columnValues.Add("attachment", model.filename);
+                }
+                
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", model.Name.Value);
@@ -484,6 +492,10 @@ namespace MCAWebAndAPI.Service.Asset
                 columnValues.Add("assetcheckcountedby2", data.CountedBy2.Value);
                 columnValues.Add("assetcheckcountedby3", data.CountedBy3.Value);
                 columnValues.Add("completionstatus", data.CompletionStatus);
+                if (!string.IsNullOrEmpty(model.filename))
+                {
+                    columnValues.Add("attachment", model.filename);
+                }
 
                 if (isApproval)
                 {
