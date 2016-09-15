@@ -1188,6 +1188,8 @@
     <Content Include="Views\PROVendor\Upload.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\Edit.cshtml" />
     <Content Include="Views\ASSAssetCheckForm\_EditDetails.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\FixedAsset.cshtml" />
+    <Content Include="Views\ASSAssetLandingPage\SmallValueAsset.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
