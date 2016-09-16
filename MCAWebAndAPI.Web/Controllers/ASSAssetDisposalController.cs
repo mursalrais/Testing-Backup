@@ -40,6 +40,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("CreateAssetDisposal", viewModel);
         }
 
+        public ActionResult Index(string siteUrl)
+        {
+            assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetDisposal;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
+        }
+
         public ActionResult Edit(int ID, string SiteUrl)
         {
             assetDisposalService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -104,7 +114,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Redirect(siteUrl + UrlResource.AssetDisposal);
+            return RedirectToAction("Index");
+           // return Redirect(siteUrl + UrlResource.AssetDisposal);
             //try
             //{
             //    viewModel.AssetTransferDetail = BindMonthlyFeeDetailDetails(form, viewModel.MonthlyFeeDetails);
@@ -157,7 +168,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return Redirect(siteUrl + UrlResource.AssetDisposal);
+            return RedirectToAction("Index");
         }
 
         //IEnumerable<AssetDisposalDetailVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetDisposalDetailVM> monthlyFeeDetails)
