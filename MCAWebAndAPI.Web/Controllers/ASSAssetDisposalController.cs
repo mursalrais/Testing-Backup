@@ -76,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if (viewModel.attach.FileName == "" || viewModel.attach.FileName == null)
+            if (viewModel.filename == "" || viewModel.filename == null)
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.TrySkipIisCustomErrors = true;
