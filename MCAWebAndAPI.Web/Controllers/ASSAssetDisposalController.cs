@@ -118,6 +118,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    //var mesej = "Have To Attach File to Change Completion Status into Complete";
+                    //return Json(mesej, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception e)

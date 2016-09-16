@@ -64,6 +64,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        // GET: ASSAssetCheckForm
+        public ActionResult Index(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetAssignment;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
+        }
+
         public ActionResult View(int ID, string SiteUrl)
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -164,7 +175,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail");
             }
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
-            return Redirect(siteUrl + UrlResource.AssetAssignment);
+            //return Redirect(siteUrl + UrlResource.AssetAssignment);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -228,7 +240,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
-            return Redirect(siteUrl + UrlResource.AssetAssignment);
+            //return Redirect(siteUrl + UrlResource.AssetAssignment);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)

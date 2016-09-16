@@ -150,6 +150,25 @@
                         return false;
                     }
 
+                    showLoading();
+                    var url = '@Model.CancelURL';
+                    var url = url.split('/', 6);
+                    var url = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/" + url[4] + "/" + url[5];
+                    var url = "/ASSAssetDisposal/SubmitAssetDisposal?SiteUrl=" + url;
+                    $.getJSON(url, function (data) {
+                        if (data != "" || data != null) {
+                            alert(data);
+                        }
+                        else {
+                            var query = window.location.search;
+                            //alert(query);
+                            query = query.split('=');
+                            query = query[1].split('&');
+                            alert("Redirecting....");
+                            window.top.location.href = query[0] + "/Lists/Asset%20Disposal/AllItems.aspx";
+                        }
+                    });
+
                     $("form").submit();
                     //  }
                 }
