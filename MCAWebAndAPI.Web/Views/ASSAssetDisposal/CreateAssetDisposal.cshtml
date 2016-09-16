@@ -144,6 +144,12 @@
                     //}
                     //else {
 
+                    if ($('#attach').val() == "" || $('#attach').val() == null)
+                    {
+                        alert("Attachment Must be filled");
+                        return false;
+                    }
+
                     $("form").submit();
                     //  }
                 }

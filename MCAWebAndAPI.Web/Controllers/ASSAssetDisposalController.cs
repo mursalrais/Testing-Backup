@@ -70,19 +70,45 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        public ActionResult View(int ID, string SiteUrl)
+        {
+            assetDisposalService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = assetDisposalService.GetHeader(ID, SiteUrl);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = assetDisposalService.GetDetails(headerID);
+                viewModel.Details = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data...s");
+            }
+
+            return View(viewModel);
+        }
+
         [HttpPost]
         public ActionResult SubmitAssetDisposal(FormCollection form, AssetDisposalVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            if (viewModel.filename == "" || viewModel.filename == null)
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
-            }
+            //if (viewModel.filename == "" || viewModel.filename == null)
+            //{
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse("Please Attach the memo for disposal");
+            //}
 
             int? headerID = null;
             try

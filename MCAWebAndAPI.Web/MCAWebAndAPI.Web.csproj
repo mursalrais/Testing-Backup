@@ -1210,6 +1210,8 @@
     <Content Include="Views\TRAAuthAdvRequest\_OthersInternational.cshtml" />
     <Content Include="Views\TRAAuthAdvRequest\_PerDiemInCountry.cshtml" />
     <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\View.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetailView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1398,6 +1400,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
