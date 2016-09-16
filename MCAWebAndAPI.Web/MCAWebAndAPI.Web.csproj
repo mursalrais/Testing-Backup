@@ -1210,6 +1210,8 @@
     <Content Include="Views\TRAAuthAdvRequest\_OthersInternational.cshtml" />
     <Content Include="Views\TRAAuthAdvRequest\_PerDiemInCountry.cshtml" />
     <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\View.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetailView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -4,11 +4,11 @@
 @model AssetDisposalVM
 
 @using (Html.BeginForm("Update", "ASSAssetDisposal", FormMethod.Post,
-                                                                                                                                                            new
-                                                                                                                                                            {
-                                                                                                                                                                @class = "form-horizontal",
-                                                                                                                                                                enctype = "multipart/form-data"
-                                                                                                                                                            }))
+                                                                                                                                                                        new
+                                                                                                                                                                        {
+                                                                                                                                                                            @class = "form-horizontal",
+                                                                                                                                                                            enctype = "multipart/form-data"
+                                                                                                                                                                        }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSAssetDisposal/Update" id="create-asset-acquisition-form" enctype="multipart/form-data">
@@ -28,14 +28,14 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.Date).Class("col-sm-4 control-label")
                     <div class="col-sm-8">
-                        @Html.EditorFor(m => m.Date)
+                        @Html.DisplayFor(m => m.Date)
                     </div>
                 </div>
 
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="file" name="attach" id="attach" style="width : 100%" /><div id="oldFile">@Model.filename</div>
+                        <input type="file" disabled name="attach" id="attach" style="width : 100%" /><div id="oldFile">@Model.filename</div>
 
                     </div>
                 </div>
@@ -51,7 +51,7 @@
 
             <legend>Asset Disposal Detail</legend>
             <div class="row">
-                @Html.Partial("_AssetDisposalDetail", Model.Details)
+                @Html.Partial("_AssetDisposalDetailView", Model.Details)
             </div>
 
         </fieldset>
@@ -59,13 +59,12 @@
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
         @Html.HiddenFor(m => m.filename)
-        
+
         <div class="form-actions">
             <div>
                 <center>
 
-                    <input id="submit-button"
-                           class="k-button k-button-icontext k-grid-add" onclick="return PreSaveAction()" size="4" type="submit" value="Save" />
+                    
 
 
                     <a href="@Model.CancelURL" target='_parent'>
@@ -76,9 +75,9 @@
     </form>
 }
 
-      
-    @section scripts{
-        <script type="text/javascript">
+
+@section scripts{
+    <script type="text/javascript">
 
             $(document).ready(function () {
                 $("#attach").change(function () {
@@ -183,5 +182,5 @@
             //    }
             //}
 
-        </script>
-    }
+    </script>
+}
