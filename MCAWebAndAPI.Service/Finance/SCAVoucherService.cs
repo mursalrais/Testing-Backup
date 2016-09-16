@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -126,9 +127,7 @@ namespace MCAWebAndAPI.Service.Finance
                 { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
                 { FIELD_NAME_REMARKS,scaVoucher.Remarks},
                 { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
-           
-            //TODO: figure out how to make this work
-            //     { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
+                { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl) }
             };
 
             try
@@ -152,6 +151,8 @@ namespace MCAWebAndAPI.Service.Finance
         public bool UpdateSCAVoucher(SCAVoucherVM scaVoucher)
         {
             bool result = false;
+            var user = SPConnector.GetUser(scaVoucher.UserEmail, siteUrl);
+
             var columnValues = new Dictionary<string, object>
             {
                 { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
@@ -169,9 +170,7 @@ namespace MCAWebAndAPI.Service.Finance
                 { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
                 { FIELD_NAME_REMARKS,scaVoucher.Remarks},
                 { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
-              
-            //TODO: figure out how to make this work
-            //  { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl, "??") }
+                { FieldName_VisibleTo, user }
             };
 
             if (scaVoucher.Action == SCAVoucherVM.ActionType.approve.ToString())

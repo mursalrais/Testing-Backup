@@ -41,6 +41,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PaymentVoucherPicker_ValueProperty = "ID";
         private const string PaymentVoucherPicker_TextProperty = "Desc";
         private const string PaymentVoucherPicker_SelectEventName = "onSelectPaymentVoucher";
+        
 
         private const string SuccessMsgFormatUpdated = "PC settlement for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Petty%20Cash%20Settlement/AllItems.aspx";
@@ -95,9 +96,7 @@ namespace MCAWebAndAPI.Web.Controllers
                    previousUrl = string.Format(FirstPageUrl, siteUrl)
                });
         }
-
-
-        [HttpPost]
+      
         public ActionResult Print(FormCollection form, PettyCashSettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
@@ -136,7 +135,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return File(pdfBuf, "application/pdf");
         }
 
-        public JsonResult GetPettyCashVouchers(int? id, string title)
+        public JsonResult GetPettyCashVouchers()
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
@@ -149,8 +148,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Desc = e.ID == -1 ? string.Empty : string.Format("{0} - {1}", e.TransactionNo, e.PaidTo.Value)
             }), JsonRequestBehavior.AllowGet);
         }
-
-
+        
         public ActionResult GetPaymentVoucherById(int paymentVoucherID)
         {
             pettyCashPaymentVoucherService = new PettyCashPaymentVoucherService();
@@ -158,18 +156,23 @@ namespace MCAWebAndAPI.Web.Controllers
 
             pettyCashPaymentVoucherService.SetSiteUrl(siteUrl);
 
-            var paymentVoucher = pettyCashPaymentVoucherService.GetPettyCashPaymentVoucher(paymentVoucherID);
+            var paymentVoucher = new PettyCashPaymentVoucherVM();
 
-            if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
+            if (paymentVoucherID > 0)
             {
-                paymentVoucher.PaidTo.Text = paymentVoucher.Professional.Text;
-            }
-            else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
-            {
-                VendorService vendorSvc = new VendorService();
-                vendorSvc.SetSiteUrl(siteUrl);
-                var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
-                paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name);
+                paymentVoucher = pettyCashPaymentVoucherService.GetPettyCashPaymentVoucher(paymentVoucherID);
+
+                if (paymentVoucher.PaidTo.Text.Equals(PaidToProfessional))
+                {
+                    paymentVoucher.PaidTo.Text = paymentVoucher.Professional.Text;
+                }
+                else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
+                {
+                    VendorService vendorSvc = new VendorService();
+                    vendorSvc.SetSiteUrl(siteUrl);
+                    var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
+                    paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name);
+                }
             }
 
             return Json(new
@@ -190,7 +193,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private void SetAdditionalSettingToViewModel(ref PettyCashSettlementVM viewModel)
         {
-            viewModel.PettyCashVoucher = new AjaxComboBoxVM
+            viewModel.PettyCashVoucher = new AjaxCascadeComboBoxVM
             {
                 ControllerName = PaymentVoucherPicker_ControllerName,
                 ActionName = PaymentVoucherPicker_ActionName,

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -19,9 +20,9 @@ namespace MCAWebAndAPI.Service.Finance
         void SetSiteUrl(string siteUrl);
         PettyCashPaymentVoucherVM GetPettyCashPaymentVoucher(int? ID);
 
-        int Create(PettyCashPaymentVoucherVM viewModel);
+        int Create(PettyCashPaymentVoucherVM viewModel, IEnumerable<ProfessionalMaster> professionals);
         
-        bool Update(PettyCashPaymentVoucherVM viewModel);
+        bool Update(PettyCashPaymentVoucherVM viewModel, IEnumerable<ProfessionalMaster> professionals);
 
         void CreatePettyCashAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents);
         void EditPettyCashAttachments(int? headerID, IEnumerable<HttpPostedFileBase> documents);

@@ -1201,6 +1201,15 @@
     <Content Include="Views\ASSAssetCheckForm\_EditDetails.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\FixedAsset.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\SmallValueAsset.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\Item.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1288,6 +1297,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRAAuthAdvRequestController.cs" />
     <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Controllers\UpdateManualController.cs" />
     <Compile Include="Controllers\VendorController.cs" />

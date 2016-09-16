@@ -80,7 +80,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [UIHint("Decimal")]
         [Required]
         [DisplayName("Amount paid")]
-        [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public decimal Amount { get; set; } = 0;
     }
 }
