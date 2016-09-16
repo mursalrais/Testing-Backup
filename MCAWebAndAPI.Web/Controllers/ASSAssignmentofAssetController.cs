@@ -100,10 +100,13 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if ((_data.attach == null && _data.filename == null) || (_data.attach == null && _data.filename == ""))
                 {
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    //Response.TrySkipIisCustomErrors = true;
+                    //Response.TrySkipIisCustomErrors = true;
+                    //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    //return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+
+                    var mesej = "Have To Attach File to Change Completion Status into Complete";
+                    return Json(mesej, JsonRequestBehavior.AllowGet);
                 }
             }
 
