@@ -22,11 +22,7 @@ namespace MCAWebAndAPI.Web.Controllers
             assetDisposalService = new AssetDisposalService();
         }
 
-        // GET: ASSAssetDisposal
-        public ActionResult Index()
-        {
-            return View();
-        }
+       
         public ActionResult CreateAssetDisposal(string siteUrl = null)
         {
             // MANDATORY: Set Site URL
