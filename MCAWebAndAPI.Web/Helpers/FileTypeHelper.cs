@@ -170,6 +170,9 @@ namespace MCAWebAndAPI.Web.Helpers
                 case ".xwd": return "image/x-xwindowdump";
                 case ".xyz": return "chemical/x-pdb";
                 case ".zip": return "application/zip";
+                case ".docx": return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                case ".xlsx": return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                case ".pptx": return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
                 default: return string.Format("application/{0}", extension);
             }
         }
