@@ -33,11 +33,10 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetTransfer;
 
             return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
-
         public ActionResult Create(string SiteUrl)
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
