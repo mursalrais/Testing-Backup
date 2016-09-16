@@ -769,10 +769,4 @@ Please try again.
 2016-09-15 18:15:12.6538 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-15 18:20:31.7518 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (403) Forbidden.
 2016-09-16 00:02:03.2159 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
-2016-09-16 15:26:56.6406 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:33:47.6175 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:34:20.9365 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:36:57.4393 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:41:20.9531 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:43:55.4190 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
-2016-09-16 15:46:34.5337 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
+2016-09-16 03:40:16.2471 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.

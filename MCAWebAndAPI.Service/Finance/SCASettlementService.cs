@@ -35,24 +35,25 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailReceiptNo = "ReceiptNo";
         private const string FieldNameDetailPayee = "Payee";
         private const string FieldNameDetailDescription = "DescriptionOfExpense";
-        private const string FieldNameDetailWBS = "WBS";
+
+        private const string FieldNameDetailWBSId = "WBSID";
+        private const string FieldNameDetailWBSDescription = "WBSDescription";
+
         private const string FieldNameDetailGL = "GL";
         private const string FieldNameDetailAmount = "AmountPerItem";
         private const string FieldNameDetailSCAHeaderID = "SCA_x0020_Settlement";
-        private const string FieldNameDetailWBSNo = "WBS_x003a_WBS_x0020_ID";
-        private const string FieldNameDetailWBSDesc = "WBS_x003a_WBS_x0020_Description";
         private const string FieldNameDetailGLNo = "GL_x003a_GL_x0020_No";
         private const string FieldNameDetailGLDesc = "GL_x003a_GL_x0020_Description";
         private const string FieldNameTypeOfSettlement = "Type_x0020_of_x0020_Settlement";
-         
+
         private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public SCASettlementService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
-        
+
         public SCASettlementVM Get(Operations op, int? id = default(int?))
         {
             if (op != Operations.c && id == null)
@@ -62,7 +63,6 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (id != null)
             {
-                //To Do
                 var listItem = SPConnector.GetListItem(ListName, id, siteUrl);
                 viewModel = ConvertToSCASettlementVM(listItem);
 
@@ -97,7 +97,6 @@ namespace MCAWebAndAPI.Service.Finance
                     result = SPConnector.GetLatestListItemID(ListName, siteUrl);
 
                     scaSettlement.ID = result;
-
                 }
                 else if (scaSettlement.Operation == Operations.e)
                 {
@@ -131,7 +130,6 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             return result;
-
         }
 
         private void SaveSCASettlementDetailItems(int? headerID, IEnumerable<SCASettlementItemVM> viewModels)
@@ -155,18 +153,22 @@ namespace MCAWebAndAPI.Service.Finance
                     continue;
                 }
 
-
                 var updatedValue = new Dictionary<string, object>();
-                
+
                 updatedValue.Add(FieldNameDetailSCAHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-                updatedValue.Add(FieldNameDetailWBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+                var wbsId = Convert.ToInt32(viewModel.WBS.Value);
+                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+                updatedValue.Add(FieldNameDetailWBSId, wbsId);
+                updatedValue.Add(FieldNameDetailWBSDescription, wbs.WBSIDDescription);
+
                 updatedValue.Add(FieldNameDetailGL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FieldNameDetailReceiptDate, viewModel.ReceiptDate);
                 updatedValue.Add(FieldNameDetailReceiptNo, viewModel.ReceiptNo);
                 updatedValue.Add(FieldNameDetailPayee, viewModel.Payee);
                 updatedValue.Add(FieldNameDetailDescription, viewModel.DescriptionOfExpense);
                 updatedValue.Add(FieldNameDetailAmount, viewModel.Amount);
-      
+
                 try
                 {
                     if (Item.CheckIfCreated(viewModel))
@@ -215,8 +217,10 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Payee = Convert.ToString(listItem[FieldNameDetailPayee]);
             viewModel.DescriptionOfExpense = Convert.ToString(listItem[FieldNameDetailDescription]);
 
-            viewModel.WBS.Value = (listItem[FieldNameDetailWBS] as FieldLookupValue).LookupId;
-            viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FieldNameDetailWBSNo] as FieldLookupValue).LookupValue, (listItem[FieldNameDetailWBSDesc] as FieldLookupValue).LookupValue);
+            var wbsId = (listItem[FieldNameDetailGLNo] as FieldLookupValue).LookupId;
+            var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+            viewModel.WBS.Value = wbsId;
+            viewModel.WBS.Text = wbs.WBSIDDescription;
 
             viewModel.GL.Value = (listItem[FieldNameDetailGL] as FieldLookupValue).LookupId;
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FieldNameDetailGLNo] as FieldLookupValue).LookupValue, (listItem[FieldNameDetailGLDesc] as FieldLookupValue).LookupValue);
@@ -241,9 +245,9 @@ namespace MCAWebAndAPI.Service.Finance
             }
 
             viewModel.Description = (listItem[FieldNameSCAPurpose] as FieldLookupValue).LookupValue;
-            viewModel.Fund = (listItem[FieldNameSCAFund] as FieldLookupValue).LookupValue;  
+            viewModel.Fund = (listItem[FieldNameSCAFund] as FieldLookupValue).LookupValue;
             viewModel.Currency.Value = (listItem[FieldNameSCACurrency] as FieldLookupValue).LookupValue;
-            viewModel.SpecialCashAdvanceAmount =  Convert.ToDecimal((listItem[FieldNameSCAAmount] as FieldLookupValue).LookupValue);
+            viewModel.SpecialCashAdvanceAmount = Convert.ToDecimal((listItem[FieldNameSCAAmount] as FieldLookupValue).LookupValue);
             viewModel.EditMode = (int)Item.Mode.UPDATED;
             viewModel.TotalExpense = Convert.ToDecimal(listItem[FieldNameTotalExpense]);
             viewModel.ReceivedFromTo = Convert.ToDecimal(listItem[FieldNameReceivedFromTo]);
@@ -251,6 +255,5 @@ namespace MCAWebAndAPI.Service.Finance
 
             return viewModel;
         }
-
     }
 }

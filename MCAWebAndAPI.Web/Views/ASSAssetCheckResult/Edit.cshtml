@@ -49,7 +49,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.DisplayFor(m => m.CompletionStatus)
+                    @Html.EditorFor(m => m.CompletionStatus)
                 </div>
             </div>
         </div>
@@ -87,23 +87,22 @@
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" name="SubmitForApproval" value="Submit for approval" />
                 <input class="k-button k-button-icontext k-grid-add" type="submit" name="SaveAsDraft" value="Save as draft" />
-                <input class="k-button k-button-icontext k-grid-add" type="submit" name="Cancel" value="Cancel" />
+                <a href="@Url.Action("Index", "ASSAssetCheckResult")" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
             </center>
         </div>
     </fieldset>
+
+    <input type="hidden" id="hStatusApproval" value="@Model.ApprovalStatus" />
+
+    <input type="hidden" id="hIsApprovalChange" value="0" />
 </form>
 
 <script type="text/javascript">
-    //function onSelectedId(e) {
-    //    var res = this.dataItem(e.item)
-    //    var url = "/ASSAssetCheckResult/GetCheckInfo?IDAssetCheck=" + res;
-    //    $.getJSON(url, function (data) {
-    //        $('#CompletionStatus').prop('value', data.CompletionStatus);
-    //    });
-    //}
-
     function ValidationEvent() {
-        @*var a = @Model.ApprovalStatus;
+        var a = $("#hStatusApproval").val();
+        var b = $("#hIsApprovalChange").val();
         if(a == "Approved")
         {
             alert("you can not edit he data since it has been approved");
@@ -113,7 +112,19 @@
         {
             alert("you can not edit he data since it has been rejected");
             return false;
-        }*@
+        }
+        if (a == "Pending approval" && b == "1") {
+            alert("you can not change the approver's name since it is already submitted for approval");
+            return false;
+        }
+        if (a == "Approved" && b == "1") {
+            alert("you can not delete the data since it has been submitted for approval.  need to unapprove the result and re-submit the approval");
+            return false;
+        }
         return true;
     }
+
+    function onSelectedLocation(e) {
+    }
+
 </script>
