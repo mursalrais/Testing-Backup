@@ -72,7 +72,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
             }
             if (exitProcedure.StatusForm == "Pending Approval")
             {
@@ -81,7 +81,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
             }
             if (exitProcedure.StatusForm == "Saved by HR")
             {
@@ -90,7 +90,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
             }
             if (exitProcedure.StatusForm == "Approved by HR")
             {
@@ -99,7 +99,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
             }
 
             updatedValues.Add("status", statusExitProcedure);
@@ -857,7 +857,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
                 columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", exitProcedure.StatusForm);
             }
@@ -911,7 +911,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
                 string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
 
-                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hr"));
+                columnValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl, "hruat"));
                 columnValues.Add("startdateapproval", exitProcedure.StartDateApproval.ToLocalTime());
                 columnValues.Add("status", statusApproved);
             }
@@ -1214,59 +1214,59 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 if(i == 1)
                 {
-                    columnValues.Add("visibletoapprover1", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover1", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if(i == 2)
                 {
-                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if(i == 3)
                 {
-                    columnValues.Add("visibletoapprover3", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover3", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if(i == 4)
                 {
-                    columnValues.Add("visibletoapprover4", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover4", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 5)
                 {
-                    columnValues.Add("visibletoapprover5", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover5", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 6)
                 {
-                    columnValues.Add("visibletoapprover6", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover6", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 7)
                 {
-                    columnValues.Add("visibletoapprover7", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover7", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 8)
                 {
-                    columnValues.Add("visibletoapprover8", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover8", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 9)
                 {
-                    columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover9", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 10)
                 {
-                    columnValues.Add("visibletoapprover10", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover10", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 11)
                 {
-                    columnValues.Add("visibletoapprover11", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover11", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 12)
                 {
-                    columnValues.Add("visibletoapprover12", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover12", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 13)
                 {
-                    columnValues.Add("visibletoapprover13", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover13", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
                 else if (i == 14)
                 {
-                    columnValues.Add("visibletoapprover14", SPConnector.GetUser(item, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover14", SPConnector.GetUser(item, _siteUrl, "hruat"));
                 }
 
                 i++;
