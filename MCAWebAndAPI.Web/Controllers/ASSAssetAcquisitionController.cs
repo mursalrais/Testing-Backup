@@ -513,10 +513,12 @@ namespace MCAWebAndAPI.Web.Controllers
                             }
 
                         }
-                        Response.TrySkipIisCustomErrors = true;
-                        Response.TrySkipIisCustomErrors = true;
-                        Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                        //Response.TrySkipIisCustomErrors = false;
+                        //Response.TrySkipIisCustomErrors = false;
+                        //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                        //return JsonHelper.GenerateJsonErrorResponse("Invalid data, rolling back!");
+                        var mesej = "Invalid Data";
+                        return Json(mesej, JsonRequestBehavior.AllowGet);
                     }
                 }
 

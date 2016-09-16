@@ -97,6 +97,7 @@ namespace MCAWebAndAPI.Service.Asset
                         {
                             //continue fetch data from asset acquisition and also check from asset replacement then asset disposal
                             model.vendor = Convert.ToString(infoParentAkuisisi["vendorid"]) + "-" + Convert.ToString(infoParentAkuisisi["vendorname"]);
+                            model.pono = Convert.ToString(infoParentAkuisisi["pono"]);
                             model.purchasedate = Convert.ToDateTime(infoParentAkuisisi["purchasedate"]).ToShortDateString();
                             model.purchasedesc = Regex.Replace(Convert.ToString(infoParentAkuisisi["purchasedescription"]), "<.*?>", string.Empty);
                             model.quantity = 1;
@@ -151,7 +152,7 @@ namespace MCAWebAndAPI.Service.Asset
                                                <Where>
                                                   <Eq>
                                                      <FieldRef Name='assetsubasset_x003a_ID' />
-                                                     <Value Type='Lookup'>"+Convert.ToInt32(info1["ID"])+@"</Value>
+                                                     <Value Type='Lookup'>"+Convert.ToInt32(info1["ID"])+ @"</Value>
                                                   </Eq>
                                                </Where>
                                             </Query>
@@ -159,6 +160,8 @@ namespace MCAWebAndAPI.Service.Asset
                                                <FieldRef Name='province' />
                                                <FieldRef Name='city' />
                                                <FieldRef Name='office' />
+                                                <FieldRef Name='room' />
+                                                <FieldRef Name='floor' />
                                                <FieldRef Name='assetassignment' />
                                                <FieldRef Name='assetsubasset' />
                                             </ViewFields>
@@ -170,7 +173,7 @@ namespace MCAWebAndAPI.Service.Asset
                             foreach (var info4 in infoAssignment)
                             {
                                 model.province = Convert.ToString(info4["city"]) +"-"+ (info4["province"] as FieldLookupValue).LookupValue;
-                                model.location = Convert.ToString(info4["office"]);
+                                model.location = Convert.ToString(info4["office"]) +"/"+ Convert.ToString(info4["floor"] +"/"+ Convert.ToString(info4["room"]));
                                 idParentAssigment = (info4["assetassignment"] as FieldLookupValue).LookupId;
                             }
                             var infoParentAssignment = SPConnector.GetListItem("Asset Assignment", idParentAssigment, SiteUrl);
@@ -186,7 +189,7 @@ namespace MCAWebAndAPI.Service.Asset
                         {
 
                         }
-                        break;
+                        //break;
                     }
                 }
                 else
@@ -224,6 +227,8 @@ namespace MCAWebAndAPI.Service.Asset
             tab.Columns.Add("Location", typeof(string));
             var info = GetReport(_siteUrl, mode);
             var no = 1;
+            var WE = "";
+            var PD = "";
             foreach(var i in info)
             {
                 DataRow row = tab.NewRow();
@@ -236,12 +241,17 @@ namespace MCAWebAndAPI.Service.Asset
                 row["Quantity"] = Convert.ToString(i.quantity);
                 row["Specification"] = Convert.ToString(i.specification);
                 row["SerialNumber"] = Convert.ToString(i.serialnumber);
-                row["WarrantyExpires"] = Convert.ToString(i.warrantyexpires);
+                if(Convert.ToDateTime(i.warrantyexpires) == DateTime.MinValue || Convert.ToDateTime(i.purchasedate) == DateTime.MinValue)
+                {
+                    WE = "";
+                    PD = "";
+                }
+                row["WarrantyExpires"] = WE;
                 row["Condition"] = Convert.ToString(i.condition);
                 row["CostIDR"] = Convert.ToString(i.costidr);
                 row["CostUSD"] = Convert.ToString(i.costusd);
                 row["Vendor"] = Convert.ToString(i.vendor);
-                row["PurchaseDate"] = Convert.ToString(i.purchasedate);
+                row["PurchaseDate"] = PD;
                 row["PurchaseDesc"] = Convert.ToString(i.purchasedesc);
                 row["AssetHolder"] = Convert.ToString(i.assetholdername);
                 row["Province"] = Convert.ToString(i.province);
