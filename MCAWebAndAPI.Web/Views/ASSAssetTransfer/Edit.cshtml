@@ -136,10 +136,12 @@
         var asset = document.getElementsByClassName("asset");
         var province = document.getElementsByClassName("province");
         for (var j = 0; j < asset.length; j++) {
-            if (asset[j].value == "null" || province[j].value == "null")
+            if (asset.length == 1)
             {
-                alert("Asset Sub Asset / Province cannot be null!");
-                return false;
+                if (asset[j].value == "null" || province[j].value == "null") {
+                    alert("Asset Sub Asset / Province cannot be null!");
+                    return false;
+                }
             }
         }
 

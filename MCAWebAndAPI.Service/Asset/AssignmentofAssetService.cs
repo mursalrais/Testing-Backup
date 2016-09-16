@@ -538,7 +538,7 @@ namespace MCAWebAndAPI.Service.Asset
                     updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
                 }
                 updatedValues.Add("city", provinceinfo["city"]);
-                updatedValues.Add("office", provinceinfo["Title"]);
+                updatedValues.Add("office", provinceinfo["ID"]);
                 updatedValues.Add("floor", provinceinfo["Floor"]);
                 updatedValues.Add("room", provinceinfo["Room"]);
                 updatedValues.Add("remarks", item.Remarks);
@@ -836,7 +836,7 @@ namespace MCAWebAndAPI.Service.Asset
                                 updatedValues.Add("province", (pro["Province"] as FieldLookupValue).LookupId);
                             }
                             updatedValues.Add("city", pro["city"]);
-                            updatedValues.Add("office", pro["Title"]);
+                            updatedValues.Add("office", pro["ID"]);
                             updatedValues.Add("floor", pro["Floor"]);
                             updatedValues.Add("room", pro["Room"]);
                         }

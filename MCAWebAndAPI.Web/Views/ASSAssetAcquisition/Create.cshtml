@@ -102,10 +102,12 @@
         var costusd = document.getElementsByClassName("costusd");
         for (var j = 0; j < assetsubasset.length; j++)
         {
-            if(assetsubasset[j].value == "null" || wbs[j].value == "null" || costidr[j].value == "null" || costusd[j].value == "null")
+            if (assetsubasset.length == 1)
             {
-                alert("Asset Sub Asset / WBS / CostIDR / CostUSD cannot be null!");
-                return false;
+                if (assetsubasset[j].value == "null" || wbs[j].value == "null" || costidr[j].value == "null" || costusd[j].value == "null") {
+                    alert("Asset Sub Asset / WBS / CostIDR / CostUSD cannot be null!");
+                    return false;
+                }
             }
         }
 
