@@ -65,7 +65,7 @@
         @Html.HiddenFor(m => m.CancelURL)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" id="button" type="submit" onclick="return saveAssignment()" value="Save" />
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -80,10 +80,38 @@
     $(document).ready(function () {
         $("#AssetHolder_Value").data("kendoDropDownList").value("");
         //alert($("#Province").data("kendoDropDownList").text());
+      
 
     })
 
-    function saveAssignment() {
+    //function test() {
+    //    alert("test");
+    //}
+
+    @*function importCSV(e) {
+        showLoading();
+        var url = '@Model.CancelURL';
+        var url = url.split('/', 6);
+        var url = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/" + url[4] + "/" + url[5];
+        var url = "/ASSAssignmentOfAsset/Submit?SiteUrl=" + url;
+  
+        $.getJSON(url, function (data) {
+            if (data == "Have To Attach File to Change Completion Status into Complete") {
+                alert(data);
+            }
+            else {
+                var query = window.location.search;
+                //alert(query);
+                query = query.split('=');
+                query = query[1].split('&');
+                alert("Redirecting....");
+                window.top.location.href = query[0] + "/Lists/Asset%20Acquisition/AllItems.aspx";
+            }
+        });
+
+    }*@
+
+    function saveAssignment(e) {
         if ($('#AssetHolder_Value').val() == "") {
             alert("Asset Holder Cannot be Empty");
             return false;
@@ -98,7 +126,23 @@
             }
         }
 
+        if ($('#CompletionStatus_Value').val() == "Complete") {
+            if ($('#attach').val() == "" || $('#attach').val() == null) {
+                alert("Have To Attach File to Change Completion Status into Complete");
+                return false;
+            }
+            //return false;
+        }
 
+        if ($('#CompletionStatus_Value').val() == "In Progress") {
+            if ($('#attach').val() != "" || $('#attach').val() != null) {
+                alert("Have To Change Completion Status into Complete");
+                return false;
+            }
+            //return false;
+        }
+
+     
         var deleteRow = 0;
         var matches = document.querySelectorAll("[name^='Details[']");
         for (var i = 0; i < matches.length; i++) {
@@ -116,12 +160,32 @@
             return false;
         }
 
-        showLoading();
+        //var a = $('#CompletionStatus').val();
+        //alert(a);
+        var select = document.getElementById("CompletionStatus");
+        var option = select.options[select.selectedIndex];
+        alert(option.id);
+
+       // if ($('#CompletionStatus').val() == "Complete") {
+       //     alert("Have To Attach File to Change Completion Status into Complete");
+       //     if ($('#attach').val() == "" || $('#attach').val() == null) {
+       //         alert("Have To Attach File to Change Completion Status into Complete");
+       //         return false;
+       //     }
+
+       //}
+
+
+        @*showLoading();
+
         var url = '@Model.CancelURL';
+        alert(url);
         var url = url.split('/', 6);
         var url = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/" + url[4] + "/" + url[5];
         var url = "/ASSAssignmentOfAsset/Submit?SiteUrl=" + url;
+
         $.getJSON(url, function (data) {
+            alert(data);
             if (data != "" || data != null) {
                 alert(data);
             }
@@ -133,7 +197,7 @@
                 alert("Redirecting....");
                 window.top.location.href = query[0] + "/Lists/Asset%20Assignment/AllItems.aspx";
             }
-        });
+        });*@
 
     }
 
