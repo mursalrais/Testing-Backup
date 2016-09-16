@@ -123,7 +123,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (_data.CompletionStatus.Value != "Complete")
             {
-                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
+                if (_data.filename != null || _data.attach != null)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
@@ -200,7 +200,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (_data.CompletionStatus.Value != "Complete")
             {
-                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
+                if (_data.filename != null || _data.attach != null)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
