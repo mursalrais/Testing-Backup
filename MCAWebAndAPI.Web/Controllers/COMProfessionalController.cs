@@ -140,7 +140,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 siteUrl = ConfigResource.DefaultHRSiteUrl;
                 service.SetSiteUrl(siteUrl);
 
-                professionals = service.GetProfessionals();
+                professionals = service.GetProfessionalsActive();
             }
             else
             {

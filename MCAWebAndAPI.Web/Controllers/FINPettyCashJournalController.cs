@@ -103,7 +103,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, PettyCashJournalVM param)
         {
             string RelativePath = PRINT_PAGE_URL;

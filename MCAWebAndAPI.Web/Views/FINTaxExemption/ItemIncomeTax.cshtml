@@ -106,7 +106,7 @@
         {
             if ($('#TaxExemptionIncomeVM_TotalIncomeTaxBorneByGovernment').val() == '') {
                 $('#totalIncomeTaxBorneByGovernmentRequiredMessage').show();
-                valid = false;
+                return false;
             }
             else {
                 $('#totalIncomeTaxBorneByGovernmentRequiredMessage').hide();

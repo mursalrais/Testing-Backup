@@ -1,0 +1,152 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Travel
+@model AuthAdvRequestVM
+
+@*
+    Wireframe TR03: Travel Authorization and Advance Request
+*@
+
+
+
+@using (Html.BeginForm(
+    "Save", "TRAAuthAdvRequest",
+    FormMethod.Post,
+    new
+    {
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
+{
+
+    <fieldset>
+        <legend>Travel Authorization and Advance Request (TAARF)</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+
+        <!-- Flight -->
+
+        <legend>Flight (In Country)</legend>
+        <div class="row">
+            @Html.Partial("_FlightInCountry", Model.FlightsInCountry)
+        </div>
+
+        <legend>Flight (International)</legend>
+        <div class="row">
+            @Html.Partial("_FlightInternational", Model.FlightsInternational)
+        </div>
+
+        <!-- Lodging -->
+
+        <legend>Lodging (In Country)</legend>
+        <div class="row">
+            @Html.Partial("_FlightInCountry", Model.LodgingsInCountry)
+        </div>
+
+        <legend>Lodging (International)</legend>
+        <div class="row">
+            @Html.Partial("_FlightInternational", Model.LodgingsInternational)
+        </div>
+
+
+        <!-- Per Diem -->
+
+        <legend>Per Diem (In Country)</legend>
+        <div class="row">
+            @Html.Partial("_PerDiemInCountry", Model.PerDiemsInCountry)
+        </div>
+
+        <legend>Per Diem (International)</legend>
+        <div class="row">
+            @Html.Partial("_PerDiemInternational", Model.PerDiemsInternational)
+        </div>
+
+
+        <!-- Others-->
+
+        <legend>Others (In Country)</legend>
+        <div class="row">
+            @Html.Partial("_OthersInCountry", Model.OthersInCountry)
+        </div>
+
+        <legend>Others (International)</legend>
+        <div class="row">
+            @Html.Partial("_OthersInternational", Model.OthersInternational)
+        </div>
+
+
+    </fieldset>
+
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                @if (Model.ID > 0)
+                {
+                    <button id="print-button" class="btn btn-default" type="button">
+                        Print
+                    </button>
+                }
+                &nbsp;
+
+                <button id="submit-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Submit
+                </button>
+                <a href="@ViewBag.CancelUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#print-button').click(function (e) {
+                if (!$('form').valid()) {
+                    alert('Please make sure that all required fields are filled');
+                    return;
+                }
+
+                var actionUrl = $('form').attr("action");
+                var newActionUrl = actionUrl.replace("Save", "Print");
+
+                $('form').prop('action', newActionUrl);
+                $('form').submit();
+
+            });
+
+        });
+
+        function onSelectEventBudgetNo(e)
+        {
+            var data = this.dataItem(e.item);
+
+            var url = '@Url.Action("GetEventBudgetByID", "FINSCAReimbursement")';
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: { ID: data.ID },
+                success: function (response) {
+                    $('#Description').val(response.Description);
+
+                },
+                error: function (response) {
+
+                }
+            });
+        }
+    </script>
+}
+
+<style media="screen">
+    .k-button-icontext {
+        height: 35px;
+        margin-left: 5px;
+    }
+</style>

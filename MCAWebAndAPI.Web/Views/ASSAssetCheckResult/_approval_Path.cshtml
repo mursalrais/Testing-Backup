@@ -40,6 +40,17 @@
         });
 
         $("#Name_Value").change(function () {
+            @*var a = @Model.ApprovalStatus;
+            if(a == "Pending approval")
+            {
+                alert("you can not change the approver's name since it is already submitted for approval");
+                return false;
+            }
+            if(a == "Approved")
+            {
+                alert("you can not delete the data since it has been submitted for approval.  need to unapprove the result and re-submit the approval");
+                return false;
+            }*@
             idNama = $('#Name_Value').val();
 
             url = "/ASSAssetCheckResult/PositionID/" + idNama;

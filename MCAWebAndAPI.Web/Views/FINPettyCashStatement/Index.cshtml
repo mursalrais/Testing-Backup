@@ -30,13 +30,16 @@
                 <div class="col-sm-8">
                     @Html.EditorFor(m => m.DateTo)
                 </div>
+
+            </div>
+            <div class="col-sm-3 control-label"></div>
+            <div class="col-sm-8">
+                <span class="field-validation-error" id="dateFromToValidationText" style="display:none;">Date (to) cannot be less than Date (from)</span>
             </div>
         </div>
-
         <div class="form-actions">
             <div class="row">
                 <div class="col-sm-12">
-
                     <button id="submit-button" class="btn btn-primary" type="submit">
                         <i class="fa fa-save"></i>
                         Submit
@@ -46,4 +49,38 @@
         </div>
 </fieldset>
 
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+        });
+
+        $('form').submit(function (evt) {
+            var $form = $(this);
+            var valid = true;
+            if (!$form.valid()) {
+                evt.preventDefault();
+                valid = false;
+            }
+            if (!validateDateToAndFrom())
+            {
+                evt.preventDefault();
+                valid = false;
+            }
+
+            return valid;
+        });
+
+        function validateDateToAndFrom()
+        {
+            if ($('#DateFrom').val() > $('#DateTo').val())
+            {
+                $('#dateFromToValidationText').show();
+                return false;
+            }
+            $('#dateFromToValidationText').hide();
+            return true;
+        }
+    </script>
 }

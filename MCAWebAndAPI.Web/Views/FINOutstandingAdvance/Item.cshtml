@@ -154,9 +154,7 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            $("#DateOfUpload").kendoDatePicker({
-                format: "mm/dd/yyyy"
-            });
+
             $("#formOA").on('submit', function () {
                 if ($("#Staff_Value").val() == -1) {
                     $("#txtStaffRole").html("The Staff field is required.");

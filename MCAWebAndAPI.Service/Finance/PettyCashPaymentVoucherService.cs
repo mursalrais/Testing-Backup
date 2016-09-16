@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Common;
@@ -9,6 +10,7 @@ using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
+using System.Linq;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.PettyCashTransactionItem;
 
 namespace MCAWebAndAPI.Service.Finance
@@ -78,7 +80,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         }
 
-        public int Create(PettyCashPaymentVoucherVM viewModel)
+        public int Create(PettyCashPaymentVoucherVM viewModel, IEnumerable<ProfessionalMaster> professionals)
         {
             var newItem = new Dictionary<string, object>();
             string documentNoFormat = string.Format(FIELD_FORMAT_DOC, DateTimeExtensions.GetMonthInRoman(DateTime.Now), DateTime.Now.ToString("yy")) + "{0}";
@@ -90,10 +92,13 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 var professionalId = Convert.ToInt32(viewModel.Professional.Value);
-                var professional = ProfessionalService.Get(siteUrl, professionalId);
+                var professional = professionals.FirstOrDefault(x => x.ID == professionalId);
 
-                newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
-                newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+                if (professional != null)
+                {
+                    newItem.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                    newItem.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+                }
             }
 
             if (viewModel.Vendor.Value.HasValue)
@@ -136,7 +141,7 @@ namespace MCAWebAndAPI.Service.Finance
             return SPConnector.GetLatestListItemID(LISTNAME, siteUrl);
         }
 
-        public bool Update(PettyCashPaymentVoucherVM viewModel)
+        public bool Update(PettyCashPaymentVoucherVM viewModel, IEnumerable<ProfessionalMaster> professionals)
         {
             var updatedValue = new Dictionary<string, object>();
 
@@ -147,10 +152,13 @@ namespace MCAWebAndAPI.Service.Finance
             if (viewModel.Professional.Value.HasValue)
             {
                 var professionalId = Convert.ToInt32(viewModel.Professional.Value);
-                var professional =  ProfessionalService.Get(this.siteUrl, professionalId);
+                var professional = professionals.FirstOrDefault(x => x.ID == professionalId);
 
-                updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
-                updatedValue.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+                if (professional != null)
+                {
+                    updatedValue.Add(FIELD_PROFESSIONALID, new FieldLookupValue { LookupId = professionalId });
+                    updatedValue.Add(FIELD_PROFESSIONAL_POSITION, professional.Position);
+                }
 
                 updatedValue.Add(FIELD_VENDORID, "");
             }

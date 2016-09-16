@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -168,8 +169,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
 
-            //TODO: figure out how to make this work
-            // updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl, "??"));
+            updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl));
 
             string docNo = DocumentNumbering.Create(siteUrl, documentNoFormat, 5);
             updatedValue.Add(FIELD_TITLE, docNo);
@@ -206,8 +206,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
 
-            //TODO: figure out how to make this work
-            //    updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl, "??"));
+            updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl));
 
             try
             {

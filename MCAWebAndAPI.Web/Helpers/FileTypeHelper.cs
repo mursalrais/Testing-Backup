@@ -7,10 +7,10 @@ namespace MCAWebAndAPI.Web.Helpers
 {
     public static class FileTypeHelper
     {
-        public static string GetContentType(string SourceFileName)
+        public static string GetContentType(string extension)
         {
-            //var extension = Path.GetExtension(SourceFileName).ToLower();
-            switch (SourceFileName)
+            extension = "."+extension.ToLower();
+            switch (extension)
             {
                 case ".ai": return "application/postscript";
                 case ".aif": return "audio/x-aiff";
@@ -170,7 +170,7 @@ namespace MCAWebAndAPI.Web.Helpers
                 case ".xwd": return "image/x-xwindowdump";
                 case ".xyz": return "chemical/x-pdb";
                 case ".zip": return "application/zip";
-                default: return string.Format("application/{0}", SourceFileName);
+                default: return string.Format("application/{0}", extension);
             }
         }
     }

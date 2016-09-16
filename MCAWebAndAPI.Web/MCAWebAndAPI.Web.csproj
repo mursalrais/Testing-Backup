@@ -208,8 +208,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\AM01.PNG" />
-    <Content Include="App_Data\Asset-Check-icon-mca.png" />
+    <Content Include="App_Data\2016.xlsx" />
+    <Content Include="App_Data\askjasjoi_Application.pdf" />
+    <Content Include="App_Data\Dewa_Application.pdf" />
+    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
+    <Content Include="App_Data\PayrollWorksheet-Period--RunOn-2016-00-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2014-06-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-07-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-08-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\Rahadian1_Application.pdf" />
+    <Content Include="App_Data\Rahadian_Application.pdf" />
+    <Content Include="App_Data\Randi_Application.pdf" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -421,17 +430,6 @@
     <Content Include="Content\kendo\2016.2.714\fonts\glyphs\KendoUIGlyphs.woff" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.ttf" />
     <Content Include="Content\kendo\2016.2.714\images\kendoui.woff" />
-    <Content Include="App_Data\2016.xlsx" />
-    <Content Include="App_Data\askjasjoi_Application.pdf" />
-    <Content Include="App_Data\Dewa_Application.pdf" />
-    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
-    <Content Include="App_Data\PayrollWorksheet-Period--RunOn-2016-00-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2014-06-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-07-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-08-RunOn-2016-08-04.xlsx" />
-    <Content Include="App_Data\Rahadian1_Application.pdf" />
-    <Content Include="App_Data\Rahadian_Application.pdf" />
-    <Content Include="App_Data\Randi_Application.pdf" />
     <None Include="bin\MCAWebAndAPI.Web.dll.config" />
     <Content Include="bin\NLog.config" />
     <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
@@ -1203,6 +1201,15 @@
     <Content Include="Views\ASSAssetCheckForm\_EditDetails.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\FixedAsset.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\SmallValueAsset.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\Item.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1290,6 +1297,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRAAuthAdvRequestController.cs" />
     <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Controllers\UpdateManualController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
