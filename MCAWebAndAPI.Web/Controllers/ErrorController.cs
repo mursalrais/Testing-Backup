@@ -4,13 +4,12 @@ namespace MCAWebAndAPI.Web.Controllers
 {
     public class ErrorController : Controller
     {
-        // GET: Error
-        public ActionResult Index(string errorMessage = null)
+        public ActionResult Index(string errorMessage = null, string errorMessageDetail = null)
         {
             ViewBag.ErrorMessage = errorMessage;
+            ViewBag.ErrorMessageDetail = errorMessageDetail;
+
             return View();
         }
-
-        
     }
 }
