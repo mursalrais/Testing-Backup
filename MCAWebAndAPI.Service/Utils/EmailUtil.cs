@@ -36,7 +36,14 @@ namespace MCAWebAndAPI.Service.Utils
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-            smtp.SendAsync(mail, DateTime.Now);
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static void SendMultiple(List<String> lstEmail, string subject, string emailMessage)

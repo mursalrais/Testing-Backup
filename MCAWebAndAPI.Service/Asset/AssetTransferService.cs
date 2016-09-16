@@ -453,7 +453,7 @@ namespace MCAWebAndAPI.Service.Asset
             foreach (var item in list)
             {
                 model.ID = Convert.ToInt32(item["ID"]);
-                model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
+                 model.AssetNoAssetDesc.Text = Convert.ToString(item["AssetID"]);
                 model.AssetDesc = Convert.ToString(item["Title"]);
             }
 

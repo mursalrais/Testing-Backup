@@ -72,26 +72,36 @@
                     var xEdit = $("#Editid" + i).val();
                     var j = -1;
                     rowgrid.each(function (e) {
-                        j++;
-                        var yprof = $("#Profid" + j).val();
-                        var yEdit = $("#Editid" + j).val();
-                        if (i !== j) {
-                            if (xprof != "undifined" && yprof != "undifined") {
-                                if (xEdit != -1) {
-                                    if (yEdit != -1) {
-                                        if (xprof == yprof) {
-                                            valdate = false;
-                                            return false;
+                        i++;
+                        var xprof = $("#Profid" + i).val();
+                        var xadjus = $("#ajusmentType" + i).val();
+                        var xEdit = $("#Editid" + i).val();
+                        var j = -1;
+                        rowgrid.each(function (e) {
+                            j++;
+                            var yprof = $("#Profid" + j).val();
+                            var yadjus = $("#ajusmentType" + j).val();
+                            var yEdit = $("#Editid" + j).val();
+                            if (i !== j) {
+                                if (xprof != "undifined" && yprof != "undifined") {
+                                    if (xEdit != -1) {
+                                        if (yEdit != -1) {
+                                            if (xprof == yprof) {
+                                                if (xadjus == yadjus) {
+                                                    valdate = false;
+                                                    return false;
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
+                        });
                     });
                 });
 
                 if (valdate == false) {
-                    alert("Cannot input same professional in one date..!!");
+                    alert("professional with same adjustment type already add in same period..!!");
                 } else {
                     $("form").submit();
                 }

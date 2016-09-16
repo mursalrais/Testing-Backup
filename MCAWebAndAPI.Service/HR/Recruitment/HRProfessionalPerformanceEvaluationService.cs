@@ -270,7 +270,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
                     if (header.StatusForm == "Initiated" || header.StatusForm == null)
                     {
-                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
                         try
                         {
                             SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
@@ -288,13 +288,19 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
-                    //SPConnector.SendEmail(item, message, "Ask for Approval Level 2", _siteUrl);
-
-                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl, "hr"));
+                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
                     try
                     {
                         SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
+
+                    try
+                    {
+                        EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
                     }
                     catch (Exception e)
                     {
@@ -307,7 +313,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
+                    try
+                    {
+                        EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
                 }
             }
             if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
@@ -317,7 +330,14 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                     professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
                     Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
+                    try
+                    {
+                        EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
                 }
             }
         }

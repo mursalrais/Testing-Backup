@@ -43,6 +43,7 @@
                     @Html.Bootstrap().LabelFor(m => m.PettyCashVoucher).Class("col-sm-3 control-label")
                     <div class="col-sm-7">
                         @Html.EditorFor(m => m.PettyCashVoucher)
+                        <span id="txtSCAnoError" style="color:#b94a48; font-size:85%; margin-top:10px; display:block;"></span>
                     </div>
                 </div>
 
@@ -205,6 +206,7 @@
         var statusPaid = "Paid";
 
         function onSelectPaymentVoucher(e) {
+            $('#txtSCAnoError').text('');
             var data = this.dataItem(e.item);
 
             var url = '@Url.Action("GetPaymentVoucherById", "FINPettyCashSettlement")';
@@ -243,6 +245,9 @@
             var numerictextbox = $("#Amount").data("kendoNumericTextBox");
             numerictextbox.readonly();
 
+            var dropdownlist = $("#PettyCashVoucher_Value").data("kendoDropDownList");
+            dropdownlist.enable(true);
+
             $('#print-button').click(function (e) {
                 if (!$('form').valid()) {
                     alert('Please make sure that all required fields are filled');
@@ -259,9 +264,18 @@
         });
 
         $("#formSPC").on('submit', function() {
+            var IsError = 0;
+
             // do validation here
+            var voucherNo = $('#PettyCashVoucher_Value').val();
+            if (voucherNo === '0') {
+                $('#txtSCAnoError').text('Petty Cash Voucher No is required.');
+                IsError = 1
+            }
+           
+
             var status = $('#Status').val();
-            if (status !== statusPaid)
+            if ((status !== statusPaid) || IsError === 1)
                 return false;
             else
                 return true;
@@ -282,6 +296,7 @@
             $('#txtRole').text('');
             
         });
+
     </script>
 }
 

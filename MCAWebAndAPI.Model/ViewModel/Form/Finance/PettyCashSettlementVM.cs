@@ -36,8 +36,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [DisplayName("Petty Cash Voucher No.")]
-        [UIHint("AjaxComboBox")]
-        public AjaxComboBoxVM PettyCashVoucher { get; set; }
+        [UIHint("AjaxCascadeComboBox")]
+        public AjaxCascadeComboBoxVM PettyCashVoucher { get; set; }
 
         [DisplayName("Advance Received Date")]
         [DataType(DataType.Date)]

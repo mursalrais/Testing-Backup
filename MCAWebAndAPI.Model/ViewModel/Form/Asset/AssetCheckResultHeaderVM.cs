@@ -13,6 +13,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetCheckResultHeaderVM : Item
     {
+        public string filename { get; set; }
+        public string filenameUrl { get; set; }
+
         public int? ID { get; set; }
 
         public string hFormID { get; set; }
@@ -123,7 +126,31 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
             }
         }*/
 
-        public string CompletionStatus;
+        private ComboBoxVM _CompletionStatus;
+
+        [UIHint("ComboBox")]
+        public ComboBoxVM CompletionStatus
+        {
+            get
+            {
+                if (_CompletionStatus == null)
+                    _CompletionStatus = new ComboBoxVM()
+                    {
+                        Choices = new string[]
+                    {
+                        ""
+                    },
+                        OnSelectEventName = "onSelectedLocation"
+                    };
+                return _CompletionStatus;
+            }
+            set
+            {
+                _CompletionStatus = value;
+            }
+        }
+
+        public string ApprovalStatus;
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Position { get; set; } = new AjaxComboBoxVM

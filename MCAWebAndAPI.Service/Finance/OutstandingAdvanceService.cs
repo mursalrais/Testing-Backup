@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.Finance
     {
 
         #region Constants
-
+       
         private const string OutstandingAdvanceDocument_URL = "{0}/Outstanding%20Advance%20Documents/Forms/AllItems.aspx?FilterField1=Outstanding_x0020_Advance&FilterValue1={1}";
         private const string ListName = "Outstanding Advance";
         private const string ListName_Document = "Outstanding Advance Documents";
@@ -253,7 +253,7 @@ namespace MCAWebAndAPI.Service.Finance
 
 
         #region CSV Upload
-
+        
         public List<CSVErrorLogVM> ProcessCSVFilesAsync(IEnumerable<HttpPostedFileBase> documents, IEnumerable<VendorVM> vendors, ref List<OutstandingAdvanceVM> listOutstandingAdvance)
         {
             List<CSVErrorLogVM> csvErrors = new List<CSVErrorLogVM>();
@@ -507,8 +507,8 @@ namespace MCAWebAndAPI.Service.Finance
         {
             OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
 
-            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='" + FieldName_StaffID +
-                       "'/> <Value Type='Text'>" + StaffIDPrefix_Proffesional + "</Value></BeginsWith></Where></Query></View>";
+            var caml = "<View><Query><Where><BeginsWith><FieldRef Name='"+ FieldName_StaffID +
+                       "'/> <Value Type='Text'>"+ StaffIDPrefix_Proffesional +"</Value></BeginsWith></Where></Query></View>";
 
             decimal total = 0;
             int count = 0;
@@ -523,7 +523,7 @@ namespace MCAWebAndAPI.Service.Finance
             return result;
         }
 
-
+        
         public static OutstandingAdvanceLandingPageVM GetChartDataOfGrantee(string siteURL)
         {
             OutstandingAdvanceLandingPageVM result = new OutstandingAdvanceLandingPageVM();
@@ -644,7 +644,7 @@ namespace MCAWebAndAPI.Service.Finance
             return listOutstandingAdvance;
         }
 
-        private static void ConvertRowToVM(string fileName, string row, ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        private static void ConvertRowToVM(string fileName,  string row,ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
             if (!string.IsNullOrEmpty(row))
             {

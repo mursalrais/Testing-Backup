@@ -16,22 +16,22 @@ namespace MCAWebAndAPI.Service.Utils
         static string UserName = "";
         static string Password = "";
 
-        public static Task ExecuteQueryAsync(ClientContext clientContext)
-        {
-            try
-            {
-                return Task.Factory.StartNew(() =>
-                {
-                    clientContext.ExecuteQuery();
-                });
-            }
-            catch (Exception ex)
-            {
+        //public static Task ExecuteQueryAsync(ClientContext clientContext)
+        //{
+        //    try
+        //    {
+        //        return Task.Factory.StartNew(() =>
+        //        {
+        //            clientContext.ExecuteQuery();
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw new Exception(ex.Message);
-            }
+        //        throw new Exception(ex.Message);
+        //    }
 
-        }
+        //}
 
         private static void MapCredential(string url)
         {
@@ -255,7 +255,8 @@ namespace MCAWebAndAPI.Service.Utils
 
                 try
                 {
-                    ExecuteQueryAsync(context);
+                    //ExecuteQueryAsync(context);
+                    context.ExecuteQuery();
                 }
                 catch (Exception e)
                 {
@@ -306,7 +307,8 @@ namespace MCAWebAndAPI.Service.Utils
 
                     try
                     {
-                        ExecuteQueryAsync(context);
+                        context.ExecuteQuery();
+                        //ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {
@@ -450,7 +452,8 @@ namespace MCAWebAndAPI.Service.Utils
                     try
                     {
                         newItem.Update();
-                        ExecuteQueryAsync(context);
+                        context.ExecuteQuery();
+                        //ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {
@@ -696,8 +699,8 @@ namespace MCAWebAndAPI.Service.Utils
 
                 try
                 {
-                    // context.ExecuteQuery();
-                    ExecuteQueryAsync(context);
+                     context.ExecuteQuery();
+                    //ExecuteQueryAsync(context);
                 }
                 catch (Exception e)
                 {
@@ -726,7 +729,8 @@ namespace MCAWebAndAPI.Service.Utils
 
                     try
                     {
-                        ExecuteQueryAsync(context);
+                        context.ExecuteQuery();
+                       // ExecuteQueryAsync(context);
                     }
                     catch (Exception e)
                     {
@@ -739,7 +743,7 @@ namespace MCAWebAndAPI.Service.Utils
         }
 
 
-        public static FieldUserValue GetUser(string useremail, string siteUrl, string strwebname)
+        public static FieldUserValue GetUser(string useremail, string siteUrl)
         {
 
             using (ClientContext clientContext = new ClientContext(siteUrl))
@@ -747,7 +751,7 @@ namespace MCAWebAndAPI.Service.Utils
                 SecureString secureString = new SecureString();
                 Password.ToList().ForEach(secureString.AppendChar);
                 clientContext.Credentials = new SharePointOnlineCredentials(UserName, secureString);
-                Web communitySite = clientContext.Site.OpenWeb("hruat");
+                Web communitySite = clientContext.Site.RootWeb;
                 clientContext.Load(communitySite);
                 clientContext.ExecuteQuery();
 

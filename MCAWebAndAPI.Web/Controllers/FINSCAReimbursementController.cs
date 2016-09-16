@@ -89,7 +89,6 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, SCAReimbursementVM viewModel)
         {
             string RelativePath = PrintPageUrl;

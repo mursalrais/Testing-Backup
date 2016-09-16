@@ -8,16 +8,17 @@ using Elmah;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+
 using FinService = MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Common;
-using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Web.Controllers.Finance
 {
@@ -27,7 +28,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
     /// </summary>
 
     [Filters.HandleError]
-    public class FINRequisitionNoteController : Controller 
+    public class FINRequisitionNoteController : Controller
     {
         public const string Action_UpdateFromEBChanged = "ufebc";
 
@@ -51,7 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         private IRequisitionNoteService reqNoteService;
         private IEventBudgetService eventBudgetService;
-        
+
         public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
             if (userEmail == string.Empty)
@@ -63,7 +64,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             ViewBag.ListName = WORKFLOW_TITLE;
-            
+
             reqNoteService = new RequisitionNoteService(siteUrl);
 
             var viewModel = reqNoteService.Get(null);
@@ -109,7 +110,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return JsonHelper.GenerateJsonErrorResponse(DATA_NOT_EXISTS);
             }
         }
-
 
         [HttpPost]
         public async Task<ActionResult> CreateRequisitionNote(string actionType, FormCollection form, RequisitionNoteVM viewModel)
@@ -193,7 +193,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                     viewModel.EventBudgetNo.Text = eventBdgt.No;
                     viewModel.Project.Value = eventBdgt.Project.Value;
                 }
-            } 
+            }
 
             try
             {
@@ -228,7 +228,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 });
         }
 
-
         [HttpPost]
         public JsonResult GetRequisitionNoteDetailsByEventBudgetId([DataSourceRequest] DataSourceRequest request, int? eventBudgetId)
         {
@@ -237,35 +236,32 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             eventBudgetService = new EventBudgetService(siteUrl);
 
             var details = new List<RequisitionNoteItemVM>();
-            
+
             if (eventBudgetId.HasValue && eventBudgetId.Value > 0)
             {
-                var eventbudget =eventBudgetService.Get(eventBudgetId.Value);
-                if(eventbudget != null)
+                var eventbudget = eventBudgetService.Get(eventBudgetId.Value);
+                if (eventbudget != null)
                 {
                     foreach (var item in eventbudget.ItemDetails)
                     {
-                        if (item.DirectPayment > 0)
-                        {
-                            var itemRNDetail = new RequisitionNoteItemVM();
+                        var itemRNDetail = new RequisitionNoteItemVM();
 
-                            itemRNDetail.ID = null;
-                            itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
-                            itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
-                            itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
-                            itemRNDetail.Specification = item.Description;
-                            itemRNDetail.Quantity = item.Quantity;
-                            itemRNDetail.Price = item.UnitPrice;
-                            itemRNDetail.EditMode = (int)Item.Mode.CREATED;
-                            itemRNDetail.IsFromEventBudget = true;
-                            itemRNDetail.Frequency = item.Frequency;
-                            itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
-                            details.Add(itemRNDetail);
-                        }
+                        itemRNDetail.ID = null;
+                        itemRNDetail.Activity = new AjaxComboBoxVM() { Value = Convert.ToInt32(eventbudget.Activity.Value), Text = eventbudget.Activity.Text };
+                        itemRNDetail.WBS = new AjaxComboBoxVM() { Value = item.WBS.Value, Text = item.WBS.Text };
+                        itemRNDetail.GL = new AjaxComboBoxVM() { Value = item.GL.Value, Text = item.GL.Text };
+                        itemRNDetail.Specification = item.Description;
+                        itemRNDetail.Quantity = item.Quantity;
+                        itemRNDetail.Price = item.UnitPrice;
+                        itemRNDetail.EditMode = (int)Item.Mode.CREATED;
+                        itemRNDetail.IsFromEventBudget = true;
+                        itemRNDetail.Frequency = item.Frequency;
+                        itemRNDetail.Total = item.Frequency * itemRNDetail.Price * itemRNDetail.Quantity;
+                        details.Add(itemRNDetail);
                     }
                 }
             }
-                       
+
             // Convert to Kendo DataSource
             DataSourceResult result = details.ToDataSourceResult(request);
             // Convert to Json
@@ -274,11 +270,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             return json;
         }
 
-
         public JsonResult GetGLMaster()
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-           
+
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 
             return Json(glMasters.Select(e => new
@@ -288,7 +283,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMaster(string activity=null)
+        public JsonResult GetWBSMaster(string activity = null)
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
 
@@ -352,7 +347,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
-        
+
         private void SetAdditionalSettingToViewModel(ref RequisitionNoteVM viewModel, bool create)
         {
             viewModel.Category.Choices = new string[] { CATEGORY_EVENT, CATEGORY_NON_EVENT };
@@ -368,7 +363,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             {
                 viewModel.Category.Value = CATEGORY_EVENT;
             }
-            
         }
     }
 }

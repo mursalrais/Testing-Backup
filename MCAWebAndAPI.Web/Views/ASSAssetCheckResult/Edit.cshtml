@@ -2,7 +2,7 @@
 
 @model AssetCheckResultHeaderVM
 
-<form class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+<form onsubmit="return ValidationEvent()" enctype="multipart/form-data" class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
     <fieldset>
         <legend>Form Asset Check Result</legend>
         <div class="col-md-6">
@@ -39,7 +39,11 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Attachment)
+                    <input type="file" name="file" />
+                    @if (Model.filename != null)
+                    {
+                        @Html.ActionLink(@Model.filename,"Download", new { filename = @Model.filename })
+                    }
                 </div>
             </div>
             <div class="form-group">
@@ -56,6 +60,8 @@
         </div>
 
                 @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
+                @Html.HiddenFor(m => m.filename, new { Value = Model.filename })
 
                 @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
 
@@ -95,4 +101,19 @@
     //        $('#CompletionStatus').prop('value', data.CompletionStatus);
     //    });
     //}
+
+    function ValidationEvent() {
+        @*var a = @Model.ApprovalStatus;
+        if(a == "Approved")
+        {
+            alert("you can not edit he data since it has been approved");
+            return false;
+        }
+        if(a == "Rejected")
+        {
+            alert("you can not edit he data since it has been rejected");
+            return false;
+        }*@
+        return true;
+    }
 </script>

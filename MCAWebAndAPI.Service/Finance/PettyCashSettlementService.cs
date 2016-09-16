@@ -182,7 +182,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             PettyCashSettlementVM viewModel = ConvertToVMShort(siteUrl, listItem, Post.DR);
 
-            viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxComboBoxVM();
+            viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxCascadeComboBoxVM();
             viewModel.PettyCashVoucher.Value = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupId;
             viewModel.PettyCashVoucher.Text = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupValue;
             viewModel.AdvanceReceivedDate = Convert.ToDateTime((listItem[FieldName_PettyCashVoucherAdvanceReceivedDate] as FieldLookupValue).LookupValue);

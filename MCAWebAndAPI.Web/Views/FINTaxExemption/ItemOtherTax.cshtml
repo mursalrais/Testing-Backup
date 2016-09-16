@@ -108,7 +108,7 @@
         function validateGrossIncome() {
             if ($('#TaxExemptionOtherVM_GrossIncome').val() == '') {
                 $('#grossIncomeRequiredMessage').show();
-                valid = false;
+                return false;
             }
             else {
                 $('#grossIncomeRequiredMessage').hide();

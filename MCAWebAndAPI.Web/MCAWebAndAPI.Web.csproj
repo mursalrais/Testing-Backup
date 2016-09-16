@@ -208,6 +208,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\2016.xlsx" />
+    <Content Include="App_Data\askjasjoi_Application.pdf" />
+    <Content Include="App_Data\Dewa_Application.pdf" />
+    <Content Include="App_Data\kjahkjhjah_Application.pdf" />
+    <Content Include="App_Data\PayrollWorksheet-Period--RunOn-2016-00-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2014-06-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-07-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\PayrollWorksheet\PayrollWorksheet-Period-2016-08-RunOn-2016-08-04.xlsx" />
+    <Content Include="App_Data\Rahadian1_Application.pdf" />
+    <Content Include="App_Data\Rahadian_Application.pdf" />
+    <Content Include="App_Data\Randi_Application.pdf" />
     <Content Include="bin\Antlr3.Runtime.dll" />
     <Content Include="bin\Antlr3.Runtime.pdb" />
     <Content Include="bin\AspNet.ScriptManager.bootstrap.dll" />
@@ -1190,6 +1201,17 @@
     <Content Include="Views\ASSAssetCheckForm\_EditDetails.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\FixedAsset.cshtml" />
     <Content Include="Views\ASSAssetLandingPage\SmallValueAsset.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\Item.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_FlightInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_LodgingInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_OthersInternational.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInCountry.cshtml" />
+    <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\View.cshtml" />
+    <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetailView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1277,6 +1299,7 @@
     <Compile Include="Controllers\RIAController.cs" />
     <Compile Include="Controllers\SuccessController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
+    <Compile Include="Controllers\TRAAuthAdvRequestController.cs" />
     <Compile Include="Controllers\TRPlaceMasterController.cs" />
     <Compile Include="Controllers\UpdateManualController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
@@ -1287,6 +1310,7 @@
     </Compile>
     <Compile Include="Helpers\BindHelper.cs" />
     <Compile Include="Helpers\CsHtmlRazorViewEngine.cs" />
+    <Compile Include="Helpers\FileTypeHelper.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\JsonpResult.cs" />
@@ -1353,6 +1377,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="App_Data\ConfigResource.resx" />
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ConfigResource.Designer.cs</LastGenOutput>
@@ -1375,6 +1400,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

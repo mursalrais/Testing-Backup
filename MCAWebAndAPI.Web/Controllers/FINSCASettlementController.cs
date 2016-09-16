@@ -98,7 +98,6 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, SCASettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;

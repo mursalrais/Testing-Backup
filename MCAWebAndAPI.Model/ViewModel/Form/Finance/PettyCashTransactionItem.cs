@@ -36,6 +36,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [Required]
         [UIHint("Decimal")]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
         public decimal? Amount { get; set; } = 0;
 
         [Required]
