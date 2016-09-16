@@ -29,6 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET: ASSAssetLoanAndReturn
+        // GET: ASSAssetCheckForm
         public ActionResult Index(string siteUrl)
         {
             assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
