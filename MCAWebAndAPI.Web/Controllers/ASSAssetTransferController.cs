@@ -114,17 +114,6 @@ namespace MCAWebAndAPI.Web.Controllers
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
                 }
             }
-
-            if (_data.CompletionStatus.Value != "Complete")
-            {
-                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
-                {
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete");
-                }
-            }
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
