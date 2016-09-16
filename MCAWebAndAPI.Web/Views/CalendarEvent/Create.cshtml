@@ -137,6 +137,9 @@
 
 @section scripts{
     <script type="text/javascript">
+
+        $("#CalendarEventDate").data('datepicker').getFormattedDate('yyyy-mm-dd');
+
         $(document).ready(function () {
             $("#submit-button").click(function () {
                 $("form").submit();

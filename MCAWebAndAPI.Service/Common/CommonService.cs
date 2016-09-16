@@ -5,6 +5,7 @@ namespace MCAWebAndAPI.Service.Common
     public class CommonService
     {
         public enum Sites { HR, BO, CP}
+        public static string[] SiteNames = { "bo", "hr", "" };
 
         private const string SiteUrl_BO = "bo";
         private const string SiteUrl_HR = "hr";

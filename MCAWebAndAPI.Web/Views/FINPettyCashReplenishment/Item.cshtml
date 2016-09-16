@@ -8,14 +8,13 @@
     ViewBag.Title = "Item";
 }
 
-
 @using (Html.BeginForm("Save", "FINPettyCashReplenishment",
-    FormMethod.Post,
-    new
-    {
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                            FormMethod.Post,
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
 {
     <fieldset>
         <legend>Petty Cash Replenishment</legend>
@@ -75,17 +74,16 @@
                             </div>
                         </div>
                         <script>
-                $('#application-document-button').click(function () {
-                    parent.postMessage({
-                        result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
-                });
+                            $('#application-document-button').click(function () {
+                                parent.postMessage({
+                                    result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                                }, "@Model.DocumentUrl");
+                            });
                         </script>
                     </div>
                 }
-
             </div>
         </div>
-
     </fieldset>
 
     <div class="form-actions">
@@ -100,7 +98,6 @@
                 <a href="@ViewBag.CancelUrl" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
-
             </div>
         </div>
     </div>
@@ -110,9 +107,8 @@
     <script>
         $(document).ready(function () {
             $("#Date").kendoDatePicker({
-                format: "mm/dd/yyyy"
+                format: "MM/dd/yyyy"
             });
-
         });
     </script>
 }
@@ -123,5 +119,3 @@
         margin-left: 5px;
     }
 </style>
-
-

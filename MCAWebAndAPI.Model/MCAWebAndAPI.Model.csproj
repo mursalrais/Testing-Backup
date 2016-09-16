@@ -155,6 +155,8 @@
     <Compile Include="ViewModel\Form\HR\AdjustmentDataVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDayOffBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\AdjustmentDetailsVM.cs" />
+    <Compile Include="ViewModel\Form\HR\ClaimComponentDetailAXAVM.cs" />
+    <Compile Include="ViewModel\Form\HR\DayOffBalance.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffNextBalanceVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailDisplayVM.cs" />
     <Compile Include="ViewModel\Form\HR\DayOffRequestDetailVM.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="ViewModel\Form\HR\FeeSlipDetailVM.cs" />
     <Compile Include="ViewModel\Form\HR\FeeSlipVM.cs" />
     <Compile Include="ViewModel\Form\HR\IndividualGoalDetailVM.cs" />
+    <Compile Include="ViewModel\Form\HR\LocationMasterVM.cs" />
     <Compile Include="ViewModel\Form\HR\MedicalCheckUpVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollRunVM.cs" />
     <Compile Include="ViewModel\Form\HR\PayrollWorksheetDraftVM.cs" />
@@ -308,6 +311,15 @@
     <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvRequestVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInCountryVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInternationalVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_LodgingInCountryVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_LodgingInternationalVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_OthersInCountryVM .cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_OthersInternationalVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_PerDiemInCountryVM%27.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_PerDiemInternationalVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttTasksVM.cs" />
   </ItemGroup>

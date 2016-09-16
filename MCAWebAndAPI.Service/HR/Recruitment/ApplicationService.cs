@@ -38,7 +38,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("Title", viewModel.FirstMiddleName);
             updatedValue.Add("vacantposition",
                 new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
-
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
@@ -252,7 +251,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.PositionID = (int)FormatUtil.ConvertLookupToID(listItem, "vacantposition");
             viewModel.Position = GetPositionName(Convert.ToInt32(viewModel.PositionID));
-
             viewModel.ID = Convert.ToInt32(listItem["ID"]);
             viewModel.FirstMiddleName = Convert.ToString(listItem["Title"]);
             viewModel.LastName = Convert.ToString(listItem["lastname"]);
@@ -596,7 +594,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             updatedValue.Add("idcardtype", GetIDCardType().FirstOrDefault(e => e.Key == viewModel.IDCardType.Value).Value);
             updatedValue.Add("idcardexpirydate", viewModel.IDCardExpiry);
             updatedValue.Add("nationality", new FieldLookupValue { LookupId = (int)viewModel.Nationality.Value });
-            updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Position) });
+            updatedValue.Add("Position", new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.PositionID) });
             updatedValue.Add("officeemail", string.Format("{0}.{1}@{2}", viewModel.FirstMiddleName, viewModel.LastName,
                 COMPANY_DOMAIN_EMAIL));
             updatedValue.Add("datavalidationstatus", Workflow.GetProfessionalValidationStatus(Workflow.ProfessionalValidationStatus.VALIDATED));

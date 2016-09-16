@@ -10,13 +10,13 @@
 }
 
 @using (Html.BeginForm("Save", "FINOutstandingAdvance",
-    FormMethod.Post,
-    new
-    {
-        @id= "formOA",
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                            FormMethod.Post,
+                            new
+                            {
+                                @id = "formOA",
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
 {
     <fieldset>
         <legend>Outstanding Advance</legend>
@@ -104,7 +104,8 @@
                         <script>
                             $('#application-document-button').click(function () {
                                 parent.postMessage({
-                                    result : "Success", urlToRedirect : "@Model.DocumentUrl" }, "@Model.DocumentUrl" );
+                                    result: "Success", urlToRedirect: "@Model.DocumentUrl"
+                                }, "@Model.DocumentUrl");
                             });
                         </script>
                     </div>
@@ -133,7 +134,6 @@
 
             break;
 
-
         case Shared.Operations.v:
             <div class="form-actions">
                 <div class="row">
@@ -147,16 +147,13 @@
 
             break;
 
-
     }
 }
 
 @section scripts{
     <script>
         $(document).ready(function () {
-            $("#DateOfUpload").kendoDatePicker({
-                format: "mm/dd/yyyy"
-            });
+
             $("#formOA").on('submit', function () {
                 if ($("#Staff_Value").val() == -1) {
                     $("#txtStaffRole").html("The Staff field is required.");
@@ -176,6 +173,10 @@
                 }
                 return true;
             });
+
+            $("#DateOfUpload").kendoDatePicker({
+                format: "MM/dd/yyyy"
+            });
         });
 
         function OnSelectStaff(e) {
@@ -187,15 +188,17 @@
 }
 
 <style>
-    .custom-validation{
-        color:#b94a48; font-size:85%; display:block;margin-top: 6px;
+    .custom-validation {
+        color: #b94a48;
+        font-size: 85%;
+        display: block;
+        margin-top: 6px;
     }
 </style>
 
 <style media="screen">
-   .k-button-icontext {
+    .k-button-icontext {
         height: 35px;
         margin-left: 5px;
     }
-
 </style>

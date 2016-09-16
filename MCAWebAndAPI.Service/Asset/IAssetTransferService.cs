@@ -36,11 +36,11 @@ namespace MCAWebAndAPI.Service.Asset
         ProfessionalDataVM GetProfMasterInfo(string fullname, string SiteUrl);
 
         IEnumerable<AssignmentOfAssetDetailsVM> GetAssetSubAsset();
-        IEnumerable<LocationMasterVM> GetProvince();
-        LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
-        IEnumerable<LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);
-        IEnumerable<LocationMasterVM> GetFloorList(string SiteUrl, string office = null);
-        IEnumerable<LocationMasterVM> GetRoomList(string SiteUrl, string floor = null);
+        IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetProvince();
+        Model.ViewModel.Form.Asset.LocationMasterVM GetProvinceInfo(string province, string SiteUrl);
+        IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetOfficeName(string SiteUrl, string province = null);
+        IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetFloorList(string SiteUrl, string office = null);
+        IEnumerable<Model.ViewModel.Form.Asset.LocationMasterVM> GetRoomList(string SiteUrl, string floor = null);
 
         int? MassUploadHeaderDetail(string ListName, DataTable CSVDataTable, string SiteUrl = null);
         void RollbackParentChildrenUpload(string listNameHeader, int? latestIDHeader, string siteUrl);

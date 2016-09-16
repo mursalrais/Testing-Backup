@@ -169,7 +169,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.ID = Convert.ToInt32(listItem[FieldName_ID]);
             viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocumentNo]);
-            viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountReimbursedOrReturned]);
+            viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.WBSName = Convert.ToString(listItem[FieldName_WBS]);
             viewModel.GLName = Convert.ToString(listItem[FieldName_GL]);
             viewModel.Payee = Convert.ToString(listItem[FieldName_PaidTo]);
@@ -182,7 +182,7 @@ namespace MCAWebAndAPI.Service.Finance
         {
             PettyCashSettlementVM viewModel = ConvertToVMShort(siteUrl, listItem, Post.DR);
 
-            viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxComboBoxVM();
+            viewModel.PettyCashVoucher = new Model.ViewModel.Control.AjaxCascadeComboBoxVM();
             viewModel.PettyCashVoucher.Value = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupId;
             viewModel.PettyCashVoucher.Text = (listItem[FieldName_PettyCashVoucherNo] as FieldLookupValue).LookupValue;
             viewModel.AdvanceReceivedDate = Convert.ToDateTime((listItem[FieldName_PettyCashVoucherAdvanceReceivedDate] as FieldLookupValue).LookupValue);

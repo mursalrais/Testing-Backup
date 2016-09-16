@@ -3,12 +3,16 @@ using MCAWebAndAPI.Model.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetTransferVM : Item
     {
         public string CancelURL { get; set; }
+
+        public HttpPostedFileBase attach { get; set; }
+        public string filename { get; set; }
 
         public string AssetIDs { get; set; }
         public string nameOnlyFrom { get; set; }

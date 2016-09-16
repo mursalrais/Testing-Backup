@@ -179,7 +179,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
         {
             string RelativePath = PrintPageUrl;

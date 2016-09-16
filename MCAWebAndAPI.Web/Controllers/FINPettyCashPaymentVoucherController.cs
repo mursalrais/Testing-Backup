@@ -33,7 +33,8 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PAIDTO_PROFESIONAL = "Professional";
         private const string PAIDTO_SELECTEVENTCHANGE = "onSelectPaidTo";
         private const string COMBOBOX_CONTROLLER = "ComboBox";
-        private const string ACTIONNAME_PROFESSIONAL = "GetProfessionals";
+        private const string COMProfesional_CONTROLLER = "COMProfessional";
+        private const string ACTIONNAME_PROFESSIONAL = "GetForCombo";
         private const string ACTIONNAME_VENDORS = "GetVendors";
         private const string ACTIONNAME_WBSMASTERS = "GetWBSMasters";
         private const string ACTIONNAME_GLMASTERS = "GetGLMasters";
@@ -43,7 +44,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string FIELD_VALUE = "Value";
         private const string FIELD_TEXT = "Text";
         private const string Field_Desc = "Desc";
-        private const string FIELD_DESC1 = "Desc1";
+        private const string FIELD_DESC1 = "NameAndPos";
 
         private const string DATA_NOT_EXISTS = "Data Does not exists!";
 
@@ -110,7 +111,7 @@ namespace MCAWebAndAPI.Web.Controllers
             int? headerID = null;
             try
             {
-                headerID = service.Create(viewModel);
+                headerID = service.Create(viewModel, COMProfessionalController.GetAll());
                 service.CreatePettyCashAttachments(headerID, viewModel.Documents);
 
             }
@@ -144,7 +145,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 WBSMapping wbs = COMWBSController.GetWBSMappings(Convert.ToInt32(viewModel.WBS.Value));
                 viewModel.WBSDescription = wbs.WBSIDDescription;
 
-                service.Update(viewModel);
+                service.Update(viewModel, COMProfessionalController.GetAll());
                 service.EditPettyCashAttachments(viewModel.ID, viewModel.Documents);
             }
             catch (Exception e)
@@ -161,7 +162,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
             string RelativePath = PrintPageUrl;
@@ -262,13 +262,14 @@ namespace MCAWebAndAPI.Web.Controllers
             if(viewModel.PaidTo.Choices.Any())
             {
                 List<string> tempString = viewModel.PaidTo.Choices.ToList();
+                tempString.Remove(string.Empty);
                 tempString.Remove(PAIDTO_DRIVER);
                 viewModel.PaidTo.Choices = tempString;
             }
             
             viewModel.PaidTo.OnSelectEventName = PAIDTO_SELECTEVENTCHANGE;
 
-            viewModel.Professional.ControllerName = COMBOBOX_CONTROLLER;
+            viewModel.Professional.ControllerName = COMProfesional_CONTROLLER;
             viewModel.Professional.ActionName = ACTIONNAME_PROFESSIONAL;
             viewModel.Professional.ValueField = FIELD_ID;
             viewModel.Professional.TextField = FIELD_DESC1;

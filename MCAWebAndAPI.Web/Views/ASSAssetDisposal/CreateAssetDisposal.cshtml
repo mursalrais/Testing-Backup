@@ -114,7 +114,7 @@
                 //        if (isFileExist)
 
                 //            $('form').submit();
-
+                  
                 //        else
 
                 //            alert('Please Attach the memo for disposal');
@@ -143,6 +143,12 @@
                     //return false;
                     //}
                     //else {
+
+                    if ($('#attach').val() == "" || $('#attach').val() == null)
+                    {
+                        alert("Attachment Must be filled");
+                        return false;
+                    }
 
                     $("form").submit();
                     //  }

@@ -10,7 +10,6 @@ using MCAWebAndAPI.Web.Resources;
 
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
 
-
 namespace MCAWebAndAPI.Web.Controllers
 {
     /// <summary>
@@ -20,7 +19,6 @@ namespace MCAWebAndAPI.Web.Controllers
     [Filters.HandleError]
     public class FINSCASettlementController : Controller
     {
-
         private const string PrintPageUrl = "~/Views/FINSCASettlement/Print.cshtml";
         private const string SuccessMsgFormatUpdated = "SCA settlement for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/SCA%20Settlement/AllItems.aspx";
@@ -45,6 +43,7 @@ namespace MCAWebAndAPI.Web.Controllers
             service = new SCASettlementService(siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel);
 
@@ -81,13 +80,20 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                int? ID = null;
-                ID = service.Save(viewModel);
+                int? id = null;
+                id = service.Save(viewModel);
             }
             catch (Exception e)
             {
                 ErrorSignal.FromCurrentContext().Raise(e);
-                return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
+
+                return RedirectToAction(
+                    "Index", "Error",
+                    new
+                    {
+                        errorMessage = e.Message,
+                        errorMessageDetail = e.StackTrace
+                    });
             }
 
             return RedirectToAction("Index", "Success",
@@ -98,10 +104,10 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, SCASettlementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
 
@@ -120,6 +126,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
+                content = content.Replace("{XIMGPATHX}", domain);
 
                 // Get PDF Bytes
                 try
@@ -167,7 +174,5 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.TypeOfSettlement.Choices = new string[] { PartialSettlement, LastSettlement };
         }
-
-
     }
 }

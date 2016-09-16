@@ -59,7 +59,7 @@ Wireframe FIN10: Petty Cash Voucher
 
 
         $(document).ready(function () {
-            SetBaseOnPaidTo($("#PaidTo_Value").data("kendoDropDownList").value());
+            SetBaseOnPaidTo($("#PaidTo_Value").data("kendoDropDownList").value(), false);
           
             $('#AmountPaidInWord').css({ "background-color": GREY_COLOR });
             $('#AmountPaidInWord').attr("readonly", "readonly");
@@ -101,34 +101,40 @@ Wireframe FIN10: Petty Cash Voucher
         function onSelectPaidTo(e) {
             var data = this.dataItem(e.item);
 
-            SetBaseOnPaidTo(data);
+            SetBaseOnPaidTo(data, true);
 
 
         }
 
-        function SetBaseOnPaidTo(data) {
+        function SetBaseOnPaidTo(data, resetSelection) {
             var professionalDropDownList = $("#Professional_Value").data("kendoDropDownList");
             var vendorDropDownList = $("#Vendor_Value").data("kendoDropDownList");
 
             switch (data) {
                 case PAIDTO_PROFESSIONAL:
                     professionalDropDownList.enable(true);
-
+                    if (resetSelection) {
+                        professionalDropDownList.select(0);
+                    }
                     vendorDropDownList.options.optionLabel = "";
                     vendorDropDownList.refresh();
                     vendorDropDownList.select(0);
                     vendorDropDownList.enable(false);
+                    vendorDropDownList.text("");
                     break;
 
                 case PAIDTO_VENDOR:
                     professionalDropDownList.options.optionLabel = "";
                     professionalDropDownList.refresh();
-                    professionalDropDownList.select(-1);
+                    professionalDropDownList.select(0);
                     professionalDropDownList.text("");
-                   
                     professionalDropDownList.enable(false);
 
                     vendorDropDownList.enable(true);
+                    if (resetSelection) {
+                        vendorDropDownList.select(0);
+                    }
+
                     break;
 
                 default:

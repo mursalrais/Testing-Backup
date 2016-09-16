@@ -23,6 +23,7 @@
         
         
     </fieldset>
+
 </form>
 
 <script>
@@ -36,10 +37,12 @@
             dropdownlist.bind("dataBound", function (e) {
                 dropdownlist.select(parseInt(data));
             });
-            
+
         });
 
-        $("#Name_Value").change(function () {
+        $("#Name_Value").data("kendoDropDownList")
+        .bind("change", function (e) {
+            $("#hIsApprovalChange").val("1");
             idNama = $('#Name_Value').val();
 
             url = "/ASSAssetCheckResult/PositionID/" + idNama;
@@ -49,5 +52,6 @@
                 dropdownlist.select(parseInt(data));
             });
         });
+
     });
 </script>

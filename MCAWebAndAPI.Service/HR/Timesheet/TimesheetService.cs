@@ -83,6 +83,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 viewModel.StartPeriod = Convert.ToDateTime(viewModel.Period).GetFirstPayrollDay(); ;
                 viewModel.EndPeriod = Convert.ToDateTime(viewModel.Period).GetLastPayrollDay();
 
+                viewModel.PeriodText = Convert.ToString(listItem["Title"]);
+
                 if (Convert.ToString(professionalDataEmail["Project_x002f_Unit"]) == "Human Resources Unit")
                 {
                     viewModel.UserPermission = "HR";
@@ -1078,7 +1080,8 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
 
                 if (i == 1) updatedValue.Add("currentstate", "Yes");
                 // mastervalueInsert.Add(i + ";Add", updatedValue);requestor
-
+                //if (header.UserPermission == "HR") UpdateHeaderApprover(headerId, "3", strApproverPosition, strApproverEmail, "HR");
+                //columnValues.Add("currentstate", header.UserPermission != "HR" ? "No" : "Yes");
                 if (Item.CheckIfUpdated(item)) mastervalueUpdate.Add(item.ID + ";Edit", updatedValue);
                 else mastervalueInsert.Add(i + ";Add", updatedValue);
 
@@ -1498,7 +1501,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 columnValues.Add("professional", header.ProfessionalID);
             }
 
-            columnValues.Add("visibleto", SPConnector.GetUser(header.ProfesionalUserLogin, _siteUrl, "hr"));
+            columnValues.Add("visibleto", SPConnector.GetUser(header.ProfesionalUserLogin, _siteUrl));
 
             try
             {

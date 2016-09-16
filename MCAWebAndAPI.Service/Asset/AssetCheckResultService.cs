@@ -70,14 +70,29 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetCheckResultHeaderVM GetPopulatedModel(int? ID = default(int?), string FormID = null, AssetCheckResultHeaderVM dataAssetResult = null)
         {
             var model = new AssetCheckResultHeaderVM();
+
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+
+            List<string> a = new List<string>();
+            a.Add("In Progress");
+            a.Add("Complete");
+
+            model.CompletionStatus.Choices = a.ToArray();
 
             if (ID != null)
             {
                 var cekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
-
+                if(cekResult["approvalstatus"] != null)
+                {
+                    model.ApprovalStatus = cekResult["approvalstatus"].ToString();
+                }
                 model.ID = ID;
                 model.FormID.Value = cekResult["assetcheckformid"].ToString();
+                if(cekResult["attachment"] != null)
+                {
+                    model.filename = cekResult["attachment"].ToString();
+                }
+                
                 if (cekResult["Created"] != null)
                 {
                     model.CreateDate = Convert.ToDateTime(cekResult["Created"].ToString());
@@ -100,7 +115,7 @@ namespace MCAWebAndAPI.Service.Asset
                 model.hCountedBy2Nama = model.hCountedBy2.Split('-')[0];
                 model.hCountedBy3Nama = model.hCountedBy3.Split('-')[0];
 
-                model.CompletionStatus = cekResult["completionstatus"].ToString();
+                model.CompletionStatus.Value = cekResult["completionstatus"].ToString();
 
                 if ((cekResult["approvalname"] as FieldLookupValue) != null)
                 {
@@ -186,7 +201,7 @@ namespace MCAWebAndAPI.Service.Asset
             return dataCountedBy1["Title"].ToString();
         }
 
-        public EmailHelperAssetCheckResult RequestApproveEmail(int? id, string formid = "", DateTime? conductedDate = null, string inputtedBy = "", string urlPath = "")
+        public EmailHelperAssetCheckResult RequestApproveEmail(int? id, string formid = "", DateTime? conductedDate = null, string inputtedBy1 = "", string inputtedBy2 = "", string inputtedBy3 = "", string urlPath = "")
         {
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
             //var siteHr = _siteUrl.Replace("/bo", "/hr");
@@ -195,7 +210,7 @@ namespace MCAWebAndAPI.Service.Asset
             email.EmailTo = dataItemPropesional["officeemail"].ToString();
             email.EmailContent = "Dear Mr " + dataItemPropesional["Title"].ToString() + "," + Environment.NewLine + Environment.NewLine +
                 "You are authorized as an approver  for asset check result (form ID: " + formid.ToString() + ") conducted on " + conductedDate.ToString() + "." + Environment.NewLine +
-                "The result is inputted by  " + inputtedBy + Environment.NewLine +
+                "The result is inputted by  " + inputtedBy1 + ", " + inputtedBy2 + ", " + inputtedBy3 + Environment.NewLine +
                 "Please complete the approval process immediately." + Environment.NewLine +
                 "To view detail of asset check result, please click the following link: " + Environment.NewLine +
                 urlPath + Environment.NewLine + Environment.NewLine +
@@ -256,7 +271,13 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetCheckResultHeaderVM();
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
-            model.CompletionStatus = "In Progress";
+
+            List<string> a = new List<string>();
+            a.Add("In Progress");
+            a.Add("Complete");
+            model.CompletionStatus.Choices = a.ToArray();
+
+            model.CompletionStatus.Text = "In Progress";
 
             var modelDetail = new List<AssetCheckResultItemVM>();
 
@@ -319,9 +340,15 @@ namespace MCAWebAndAPI.Service.Asset
             var model = data;
 
             model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
+
+            List<string> a = new List<string>();
+            a.Add("In Progress");
+            a.Add("Complete");
+            model.CompletionStatus.Choices = a.ToArray();
+
             if (ID == null)
             {
-                model.CompletionStatus = "In Progress";
+                model.CompletionStatus.Text = "In Progress";
             }
             else
             {
@@ -364,6 +391,11 @@ namespace MCAWebAndAPI.Service.Asset
                 var model = data;
                 model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
 
+                List<string> a = new List<string>();
+                a.Add("In Progress");
+                a.Add("Complete");
+                model.CompletionStatus.Choices = a.ToArray();
+
                 var caml = @"";
                 int i = 0;
                 foreach (var item in model.Details)
@@ -395,12 +427,17 @@ namespace MCAWebAndAPI.Service.Asset
                 columnValues.Add("assetcheckcountdate", model.CountDate);
                 columnValues.Add("assetcheckcountedby1", model.CountedBy1.Value);
                 columnValues.Add("assetcheckcountedby2", model.CountedBy2.Value);
-                columnValues.Add("assetcheckcountedby3", model.CountedBy3.Value);
-
+                if (!string.IsNullOrEmpty(model.filename))
+                {
+                    columnValues.Add("attachment", model.filename);
+                }
+                
+                //edit approval
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", model.Name.Value);
                     columnValues.Add("approvalposision", model.Position.Value);
+                    columnValues.Add("approvalstatus", "Pending approval");
 
                     EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
                     email = RequestApproveEmail(
@@ -408,8 +445,14 @@ namespace MCAWebAndAPI.Service.Asset
                         model.hFormID,
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
+                        GetFullName(model.CountedBy2.Value),
+                        GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, ID.ToString()));
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                }
+                else
+                {
+                    columnValues.Add("approvalstatus", "Draft");
                 }
 
                 SPConnector.UpdateListItem("Asset Check Result", ID, columnValues, _siteUrl);
@@ -436,7 +479,13 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 var model = data;
                 model.FormID.Choices = GetChoicesFromList("Asset Check", "assetcheckformid");
-                model.CompletionStatus = "In Progress";
+
+                List<string> a = new List<string>();
+                a.Add("In Progress");
+                a.Add("Complete");
+                model.CompletionStatus.Choices = a.ToArray();
+
+                model.CompletionStatus.Text = "In Progress";
 
                 var caml = @"";
                 int i = 0;
@@ -483,12 +532,22 @@ namespace MCAWebAndAPI.Service.Asset
                 columnValues.Add("assetcheckcountedby1", data.CountedBy1.Value);
                 columnValues.Add("assetcheckcountedby2", data.CountedBy2.Value);
                 columnValues.Add("assetcheckcountedby3", data.CountedBy3.Value);
-                columnValues.Add("completionstatus", data.CompletionStatus);
+                columnValues.Add("completionstatus", data.CompletionStatus.Text);
+                if (!string.IsNullOrEmpty(model.filename))
+                {
+                    columnValues.Add("attachment", model.filename);
+                }
 
+                //create new approval
                 if (isApproval)
                 {
                     columnValues.Add("approvalname", data.Name.Value);
                     columnValues.Add("approvalposision", data.Position.Value);
+                    columnValues.Add("approvalstatus", "Pending approval");
+                }
+                else
+                {
+                    columnValues.Add("approvalstatus", "Draft");
                 }
 
                 SPConnector.AddListItem("Asset Check Result", columnValues, _siteUrl);
@@ -512,7 +571,7 @@ namespace MCAWebAndAPI.Service.Asset
                     columnValues.Add("isdisposed", item.Dispose);
                     columnValues.Add("assetmaster_x003a_serialno", item.AssetID);
                     columnValues.Add("assetcheckstatus", item.Status);
-                    columnValues.Add("completionstatus", model.CompletionStatus);
+                    columnValues.Add("completionstatus", model.CompletionStatus.Text);
                     columnValues.Add("remarks", item.Remarks);
 
                     SPConnector.AddListItem("Asset Check Result Detail", columnValues, _siteUrl);
@@ -526,7 +585,7 @@ namespace MCAWebAndAPI.Service.Asset
                     IDResult = Convert.ToInt32(item["ID"].ToString());
                 }
 
-
+                //create ne approval
                 if (isApproval)
                 {
                     EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
@@ -535,6 +594,8 @@ namespace MCAWebAndAPI.Service.Asset
                         assetcheckformid.ToString(),
                         model.CountDate,
                         GetFullName(model.CountedBy1.Value),
+                        GetFullName(model.CountedBy2.Value),
+                        GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, IDResult.ToString()));
                     EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
@@ -548,6 +609,11 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetCheckResultHeaderVM();
             var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
+
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add("approvalstatus", "Approved");
+            SPConnector.UpdateListItem("Asset Check Result", ID, columnValues, _siteUrl);
+
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
             email = ApproveEmail(
@@ -566,6 +632,12 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetCheckResultHeaderVM();
             var dataCekResult = SPConnector.GetListItem("Asset Check Result", ID, _siteUrl);
+
+
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add("approvalstatus", "Rejected");
+            SPConnector.UpdateListItem("Asset Check Result", ID, columnValues, _siteUrl);
+
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
             email = ApproveEmail(
@@ -612,7 +684,7 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.ID = Convert.ToInt32(ID);
             if (list["assetstatus"] != null)
             {
-                viewmodel.CompletionStatus = Convert.ToString(list["assetstatus"]);
+                viewmodel.CompletionStatus.Text = Convert.ToString(list["assetstatus"]);
             }
 
             return viewmodel;

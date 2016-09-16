@@ -32,24 +32,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public decimal TotalAmount { get; set; } = 0;
 
         [UIHint("Decimal")]
-        [DisplayName("Advances for Operational Car 1")]
+        [DisplayName("Advances 1")]
         [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal AdvancesForOperationalCar1 { get; set; }
+        public decimal Advances1 { get; set; }
 
         [UIHint("Decimal")]
-        [DisplayName("Advances for Operational Car 2")]
+        [DisplayName("Advances 2")]
         [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal AdvancesForOperationalCar2 { get; set; }
+        public decimal Advances2 { get; set; }
 
         [UIHint("Decimal")]
-        [DisplayName("Advances for Operational Car 3")]
+        [DisplayName("Advances 3")]
         [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal AdvancesForOperationalCar3 { get; set; }
+        public decimal Advances3 { get; set; }
 
         [UIHint("Decimal")]
         [DisplayName("Cash on hand")]
         [DisplayFormat(DataFormatString = "{0:#}", ApplyFormatInEditMode = true)]
-        public decimal CashOnhand { get; set; } = 0;
+        public decimal CashOnHand { get; set; } = 0;
 
         [UIHint("Decimal")]
         [DisplayName("Total petty cash fund")]

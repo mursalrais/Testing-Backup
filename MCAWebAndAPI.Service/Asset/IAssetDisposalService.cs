@@ -23,7 +23,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetAcquisitionItemVM> GetAssetSubAsset();
 
-        AssetDisposalVM GetHeader(int? ID);
+        AssetDisposalVM GetHeader(int? ID, string SiteUrl);
 
         IEnumerable<AssetDisposalDetailVM> GetDetails(int? headerID);
 

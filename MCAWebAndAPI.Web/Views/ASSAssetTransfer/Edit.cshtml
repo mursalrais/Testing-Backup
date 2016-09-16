@@ -4,15 +4,12 @@
 
 @model AssetTransferVM
 
-@using (Ajax.BeginForm("Update", "ASSAssetTransfer",
-                                                                                                                                       FormMethod.Post,
-                                                                                                                                       new AjaxOptions
-                                                                                                                                       {
-                                                                                                                                           OnBegin = "onBeginForm",
-                                                                                                                                           OnComplete = "onCompleteForm",
-                                                                                                                                           OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                           OnFailure = "onFailureForm"
-                                                                                                                                       }, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Update", "ASSAssetTransfer", FormMethod.Post,
+                                                                                                                                                new
+                                                                                                                                                {
+                                                                                                                                                    @class = "form-horizontal",
+                                                                                                                                                    enctype = "multipart/form-data"
+                                                                                                                                                }))
 
 {
     <form class="form-horizontal" method="post" action="/ASSAssetTransfer/Update" id="create-asset-acquisition-form">
@@ -22,7 +19,7 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TransactionType).Class("col-md-4 control-label")
                     <div class="col-md-8">
-                        <input type="text" disabled name="TransactionType" value="Assignment Of Asset" style="width : 100%"/>
+                        <input type="text" disabled name="TransactionType" value="Asset Transfer" style="width : 100%"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -75,6 +72,13 @@
                         <input type="text" disabled name="ContactNoTo" id="ContactNoTo" value="@Model.ContactNoTo" style="width : 100%" />
                     </div>
                 </div>
+                <div class="form-group">
+                    @Html.Bootstrap().LabelFor(m => m.attach).Class("col-md-4 control-label")
+                    <div class="col-md-8">
+                        <input type="file" name="attach" id="attach" style="width : 100%" /><div id="oldFile">@Model.filename</div>
+                        @*<input type="text" readonly name="filename" id="filename" value="@Model.filename" style="width : 100%" />*@
+                    </div>
+                </div>
             </div>
             <div>
                 @Html.Partial("_Details", Model.Details)
@@ -82,6 +86,7 @@
         </fieldset>
         @Html.HiddenFor(m => m.ID)
         @Html.HiddenFor(m => m.CancelURL)
+		@Html.HiddenFor(m => m.filename)
         <div>
             <center>
                 <input class="k-button k-button-icontext k-grid-add" type="submit" onclick="return saveAssignment()" value="Save" />
@@ -98,7 +103,28 @@
 <script>
     $(document).ready(function () {
         //$("#AssetHolder_Value").data("kendoDropDownList").value("");
-        })
+        $("#attach").change(function () {
+            var filename = '@Model.filename';
+            //alert(filename);
+            if (filename != null || filename != "") {
+                alert('Old Attachment will be Changed!');
+                document.getElementById("oldFile").style.textDecoration = "line-through";
+            }
+        });
+    	$.validator.methods.date = function (value, element) {
+    		if ($.browser.webkit) {
+
+    			//ES - Chrome does not use the locale when new Date objects instantiated:
+    			var d = new Date();
+
+    			return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
+    		}
+    		else {
+
+    			return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
+    		}
+    	};
+    })
 
     function saveAssignment()
     {
@@ -106,7 +132,10 @@
             alert("Asset Holder Cannot be Empty");
             return false;
         }
-
+        if ($('#attach').val() == "" || $('#attach').val() == null) {
+            alert("Attachment must be filled");
+            return false;
+        }
         var asset = document.getElementsByClassName("asset");
         var province = document.getElementsByClassName("province");
         for (var j = 0; j < asset.length; j++) {

@@ -9,6 +9,7 @@ using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
@@ -196,8 +197,7 @@ namespace MCAWebAndAPI.Service.Finance
             updatedValue.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
             updatedValue.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
 
-            //TODO: figure out how to make this work
-            //updatedValue.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl, "??"));
+            updatedValue.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl));
 
             try
             {
@@ -303,8 +303,7 @@ namespace MCAWebAndAPI.Service.Finance
             newObject.Add(EventBudgetFieldName_TransactionStatus, eventBudget.TransactionStatus.Value);
             newObject.Add(EventBudgetFieldName_UserEmail, eventBudget.UserEmail);
 
-            //TODO: figure out how to make this work
-            // newObject.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl, "??"));
+            newObject.Add(EventBudgetFieldName_VisibleTo, SPConnector.GetUser(eventBudget.UserEmail, siteUrl));
 
             eventBudget.No = DocumentNumbering.Create(siteUrl, DocumentNo, 5);
             newObject.Add(EventBudgetFieldName_No, eventBudget.No);

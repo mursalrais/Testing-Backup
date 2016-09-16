@@ -89,12 +89,12 @@ namespace MCAWebAndAPI.Web.Controllers
                });
         }
 
-        [HttpPost]
         public ActionResult Print(FormCollection form, SCAReimbursementVM viewModel)
         {
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             service = new SCAReimbursementService(siteUrl);
             viewModel = service.Get(Operations.e, viewModel.ID);
@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 view.View.Render(context, writer);
                 writer.Flush();
                 content = writer.ToString();
-
+                content = content.Replace("{XIMGPATHX}", domain);
                 // Get PDF Bytes
                 try
                 {
