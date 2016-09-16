@@ -1,0 +1,8 @@
+﻿<legend>Open approval page?</legend>
+
+<a href="@Url.Action("Approve", "ASSAssetCheckResult", new { ID = @ViewBag.ID })" target='_parent'>
+    <input class="k-button k-button-icontext k-grid-add" size="4" value="Yes" />
+</a>
+<a href="@Url.Action("Index", "ASSAssetCheckResult")" target='_parent'>
+    <input class="k-button k-button-icontext k-grid-add" size="4" value="No" />
+</a>

@@ -1212,6 +1212,7 @@
     <Content Include="Views\TRAAuthAdvRequest\_PerDiemInternational.cshtml" />
     <Content Include="Views\ASSAssetDisposal\View.cshtml" />
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetailView.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Toapproval.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

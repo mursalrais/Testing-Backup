@@ -192,7 +192,9 @@ namespace MCAWebAndAPI.Web.Controllers
             if (!string.IsNullOrEmpty(SubmitForApproval))
             {
                 var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true, ID);
-                return RedirectToAction("Index");
+                //kasus email
+                //return RedirectToAction("Index");
+                return RedirectToAction("Toapproval", new { ID = ID });
             }
 
             if (!string.IsNullOrEmpty(SaveAsDraft))
@@ -426,6 +428,12 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = new AssetCheckResultVM();
 
             return View(viewModel);
+        }
+
+        public ActionResult Toapproval(int? ID)
+        {
+            ViewBag.ID = ID;
+            return View();
         }
     }
 }
