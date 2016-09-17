@@ -769,3 +769,5 @@ Please try again.
 2016-09-15 18:15:12.6538 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-15 18:20:31.7518 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (403) Forbidden.
 2016-09-16 00:02:03.2159 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
+2016-09-16 16:55:33.9117 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
+   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\HADI\WORK\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
