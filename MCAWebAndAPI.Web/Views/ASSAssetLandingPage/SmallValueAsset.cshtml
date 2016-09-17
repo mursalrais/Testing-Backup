@@ -1,5 +1,5 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
-@model AssetLandingPageSmallValueAssetVM
+@model IEnumerable<AssetLandingPageFixedAssetVM>
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,63 +10,29 @@
     <fieldset>
         <legend>Small Value Asset</legend>
         <div class="row">
-            <div class="col-sm-4">
-                <table class="table table-bordered">
-                    <thead>
-                    <td colspan="3" align="center" bgcolor="#f37370">PC-FF</td>
-                    <tr align="center">
-                        <td>Total Asset</td>
-                        <td>Value (IDR)</td>
-                        <td>Value (USD)</td>
-                    </tr>
-                    </thead>
-                    <tbody>
+            @foreach (var item in Model)
+            {
+
+                <div class="col-sm-4">
+                    <table class="table table-bordered">
+                        <thead>
+                        <td colspan="3" align="center" bgcolor="blue">@item.A</td>
                         <tr align="center">
-                            <td> @Html.DisplayTextFor(m => m.totalAsset_PCFF) </td>
-                            <td> @Html.DisplayTextFor(m => m.valueIDR_PCFF) </td>
-                            <td> @Html.DisplayTextFor(m => m.valueUSD_PCFF) </td>
+                            <td>Total Asset</td>
+                            <td>Value (IDR)</td>
+                            <td>Value (USD)</td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-sm-4">
-                <table class="table table-bordered">
-                    <thead>
-                    <td colspan="3" align="center" bgcolor="#f4ed3d">PC-OE</td>
-                    <tr align="center">
-                        <td>Total Asset</td>
-                        <td>Value (IDR)</td>
-                        <td>Value (USD)</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr align="center">
-                            <td>@Html.DisplayTextFor(m => m.totalAsset_PCOE)</td>
-                            <td>@Html.DisplayTextFor(m => m.valueIDR_PCOE)</td>
-                            <td>@Html.DisplayTextFor(m => m.valueUSD_PCOE)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-sm-4">
-                <table class="table table-bordered">
-                    <thead>
-                    <td colspan="3" align="center" bgcolor="#3df449">HN-OE</td>
-                    <tr align="center">
-                        <td>Total Asset</td>
-                        <td>Value (IDR)</td>
-                        <td>Value (USD)</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr align="center">
-                            <td>@Html.DisplayTextFor(m => m.totalAsset_HNOE) </td>
-                            <td>@Html.DisplayTextFor(m => m.valueIDR_HNOE)</td>
-                            <td>@Html.DisplayTextFor(m => m.valueUSD_HNOE)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            <tr align="center">
+                                <td> @item.B </td>
+                                <td> @item.C </td>
+                                <td> @item.D </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </fieldset>
 </form>

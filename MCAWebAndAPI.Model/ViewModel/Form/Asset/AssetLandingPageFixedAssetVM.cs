@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
-    public class AssetLandingPageFixedAssetVM
+    public class AssetLandingPageFixedAssetVM : Item
     {
+        public IEnumerable<string> list_fxa { get; set; }
+        public string A { get; set; }
+        public int? B { get; set; }
+        public string C { get; set; }
+        public string D { get; set; }
 
         public int? totalAsset_PCFF { get; set; }
         public string valueIDR_PCFF { get; set; }

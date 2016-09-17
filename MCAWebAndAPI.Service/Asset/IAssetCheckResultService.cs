@@ -11,6 +11,8 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
 
+        bool IsAprover(string emailUser, int? cekResultID);
+
         void UpdatePosition();
 
         int GetMinIDProfesional();

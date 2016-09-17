@@ -7,6 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Asset;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using System.Globalization;
+using System.Collections;
 
 namespace MCAWebAndAPI.Service.Asset
 {
@@ -25,189 +26,107 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetLandingPageVM();
             var listItem = SPConnector.GetListItem(SP_ASSACQDetails_LIST_NAME, ID, _siteUrl);
-
+            var modelDetail = new List<AssetLandingPageFixedAssetVM>();
             //Fixed Asset
             // PC-FF
-            var caml1 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-PC-FF</Value></Contains></Where></Query></View>";
-            var dataFXAPCFF = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml1);
-            model.FixedAsset.totalAsset_PCFF = dataFXAPCFF.Count();
+            var camlfx1 = @"<View><Query><Where><And><IsNotNull><FieldRef Name='assetsubasset' /></IsNotNull><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA</Value></Contains></And></Where></Query></View>";
+            var getcamlfx1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlfx1);
+            List<string> fx = new List<string>();
 
-            if (dataFXAPCFF.Count() > 0)
+            foreach (var item1 in getcamlfx1)
             {
+                var sa_id = (item1["assetsubasset"] as FieldLookupValue).LookupId;
+                var getidam = SPConnector.GetListItem("Asset Master", sa_id, _siteUrl);
+                var pro_u = getidam["ProjectUnit"];
+                var ass_t = getidam["AssetType"];
+                var camlfx2 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-" + pro_u + "-" + ass_t + @"</Value></Contains></Where></Query></View>";
+                var datafx1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlfx2);
+                if (datafx1.Count() != 0)
+                {
+                    fx.Add(pro_u + "-" + ass_t);
+                }
+            }
+            IEnumerable<string> fx_distinct = fx.Distinct<string>();
+
+            foreach (var item2 in fx_distinct)
+            {
+                var camlfx3 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-" + item2 + @"</Value></Contains></Where></Query></View>";
+                var datafx2 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlfx3);
+                var dataad1 = SPConnector.GetList("Asset Disposal Detail", _siteUrl, camlfx3);
+                var modelDetailItem = new AssetLandingPageFixedAssetVM();
+                modelDetailItem.A = item2;
+                modelDetailItem.B = datafx2.Count() - dataad1.Count();
+
                 int totalCostIdr = 0;
                 int totalCostUsd = 0;
 
                 //Total Cost IDR
-                foreach (var item in dataFXAPCFF)
+                foreach (var item in datafx2)
                 {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
+                    totalCostIdr += Convert.ToInt32(item["costidr"]);
                 }
-                model.FixedAsset.valueIDR_PCFF = String.Format("{0:#,#.}", totalCostIdr);
-
+                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr);
                 //Total Cost USD
-                foreach (var item in dataFXAPCFF)
+                foreach (var item in datafx2)
                 {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
+                    totalCostUsd += Convert.ToInt32(item["costusd"]);
                 }
-                model.FixedAsset.valueUSD_PCFF = String.Format("{0:#,#.}", totalCostUsd);
+                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd);
 
+                modelDetail.Add(modelDetailItem);
             }
-            else
-            {
-                model.FixedAsset.valueIDR_PCFF = "0";
-                model.FixedAsset.valueUSD_PCFF = "0";
-            }
+            model.Details = modelDetail;
 
-            //PC-OE
-            var caml2 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-PC-OE</Value></Contains></Where></Query></View>";
-            var dataFXAPCOE = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml2);
-            model.FixedAsset.totalAsset_PCOE = dataFXAPCOE.Count();
 
-            if (dataFXAPCOE.Count() > 0)
-            {
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
-
-                // Total Cost IDR
-                foreach (var item in dataFXAPCOE)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
-                }
-                model.FixedAsset.valueIDR_PCOE = String.Format("{0:#,#.}", totalCostIdr);
-
-                //Total Cost USD
-                foreach (var item in dataFXAPCOE)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
-                }
-                model.FixedAsset.valueUSD_PCOE = String.Format("{0:#,#.}", totalCostUsd);
-            }
-            else
-            {
-                model.FixedAsset.valueIDR_PCOE = "0";
-                model.FixedAsset.valueUSD_PCOE = "0";
-            }
-
-            //GP-OE
-            var caml3 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-GP-OE</Value></Contains></Where></Query></View>";
-            var dataFXAGPOE = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml3);
-            model.FixedAsset.totalAsset_GPOE = dataFXAGPOE.Count();
-
-            if (dataFXAGPOE.Count() > 0)
-            {
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
-
-                // Total Cost IDR
-                foreach (var item in dataFXAGPOE)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
-                }
-                model.FixedAsset.valueIDR_GPOE = String.Format("{0:#,#.}", totalCostIdr);
-
-                //Total Cost USD
-                foreach (var item in dataFXAGPOE)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
-                }
-                model.FixedAsset.valueUSD_GPOE = String.Format("{0:#,#.}", totalCostUsd);
-            }
-            else
-            {
-                model.FixedAsset.valueIDR_GPOE = "0";
-                model.FixedAsset.valueUSD_GPOE = "0";
-            }
 
             //Small Value Asset
             // PC-FF
-            var caml4 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-PC-FF</Value></Contains></Where></Query></View>";
-            var dataSVAPCFF = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml4);
-            model.SmallValueAsset.totalAsset_PCFF = dataSVAPCFF.Count();
+            var camlsv1 = @"<View><Query><Where><And><IsNotNull><FieldRef Name='assetsubasset' /></IsNotNull><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA</Value></Contains></And></Where></Query></View>";
+            var getcamlsv1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlsv1);
+            List<string> sv = new List<string>();
 
-            if (dataSVAPCFF.Count() > 0)
+            foreach (var item3 in getcamlsv1)
             {
+                var sa_id = (item3["assetsubasset"] as FieldLookupValue).LookupId;
+                var getidam = SPConnector.GetListItem("Asset Master", sa_id, _siteUrl);
+                var pro_u = getidam["ProjectUnit"];
+                var ass_t = getidam["AssetType"];
+                var caml2 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-" + pro_u + "-" + ass_t + @"</Value></Contains></Where></Query></View>";
+                var datasv1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml2);
+                if (datasv1.Count() != 0)
+                {
+                    sv.Add(pro_u + "-" + ass_t);
+                }
+            }
+            IEnumerable<string> sv_distinct = sv.Distinct<string>();
+            modelDetail = new List<AssetLandingPageFixedAssetVM>();
+            foreach (var item4 in sv_distinct)
+            {
+                var caml1 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-" + item4 + @"</Value></Contains></Where></Query></View>";
+                var datasv2 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml1);
+                var dataad2 = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml1);
+                var modelDetailItem = new AssetLandingPageFixedAssetVM();
+                modelDetailItem.A = item4;
+                modelDetailItem.B = datasv2.Count() - dataad2.Count();
+
                 int totalCostIdr = 0;
                 int totalCostUsd = 0;
 
-                // Total Cost IDR
-                foreach (var item in dataSVAPCFF)
+                //Total Cost IDR
+                foreach (var item in datasv2)
                 {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
+                    totalCostIdr += Convert.ToInt32(item["costidr"]);
                 }
-                model.SmallValueAsset.valueIDR_PCFF = String.Format("{0:#,#.}", totalCostIdr);
-
+                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr);
                 //Total Cost USD
-                foreach (var item in dataSVAPCFF)
+                foreach (var item in datasv2)
                 {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
+                    totalCostUsd += Convert.ToInt32(item["costusd"]);
                 }
-                model.SmallValueAsset.valueUSD_PCFF = String.Format("{0:#,#.}", totalCostUsd);
+                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd);
+                modelDetail.Add(modelDetailItem);
             }
-            else
-            {
-                model.SmallValueAsset.valueIDR_PCFF = "0";
-                model.SmallValueAsset.valueUSD_PCFF = "0";
-            }
-
-            //PC-OE
-            var caml5 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-PC-OE</Value></Contains></Where></Query></View>";
-            var dataSVAPCOE = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml5);
-            model.SmallValueAsset.totalAsset_PCOE = dataSVAPCOE.Count();
-
-            if (dataSVAPCOE.Count() > 0)
-            {
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
-
-                // Total Cost IDR
-                foreach (var item in dataSVAPCOE)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
-                }
-                model.SmallValueAsset.valueIDR_PCOE = String.Format("{0:#,#.}", totalCostIdr);
-
-                //Total Cost USD
-                foreach (var item in dataSVAPCOE)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
-                }
-                model.SmallValueAsset.valueUSD_PCOE = String.Format("{0:#,#.}", totalCostUsd);
-            }
-            else
-            {
-                model.SmallValueAsset.valueIDR_PCOE = "0";
-                model.SmallValueAsset.valueUSD_PCOE = "0";
-            }
-
-            //HN-OE
-            var caml6 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-HN-OE</Value></Contains></Where></Query></View>";
-            var dataSVAHNOE = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml6);
-            model.SmallValueAsset.totalAsset_HNOE = dataSVAHNOE.Count();
-
-            if (dataSVAHNOE.Count() > 0)
-            {
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
-
-                // Total Cost IDR
-                foreach (var item in dataSVAHNOE)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"].ToString());
-                }
-                model.SmallValueAsset.valueIDR_HNOE = String.Format("{0:#,#.}", totalCostIdr);
-
-                //Total Cost USD
-                foreach (var item in dataSVAHNOE)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"].ToString());
-                }
-                model.SmallValueAsset.valueUSD_HNOE = String.Format("{0:#,#.}", totalCostUsd);
-            }
-            else
-            {
-                model.SmallValueAsset.valueIDR_HNOE = "0";
-                model.SmallValueAsset.valueUSD_HNOE = "0";
-            }
+            model.Detailss = modelDetail;
 
             return model;
         }

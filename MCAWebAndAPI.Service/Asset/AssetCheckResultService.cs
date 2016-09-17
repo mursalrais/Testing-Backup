@@ -22,6 +22,22 @@ namespace MCAWebAndAPI.Service.Asset
             _siteUrl = siteUrl;
         }
 
+        public bool IsAprover(string emailUser, int? cekResultID)
+        {
+            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>Deputy Executive Director</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>"+emailUser+"</Value></Eq></And></Where></Query></View>";
+            var profesionalMaster = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach(var item in profesionalMaster)
+            {
+                var dataResult = SPConnector.GetListItem("Asset Check Result", cekResultID, _siteUrl);
+                if (Convert.ToInt32(item["ID"]) == (dataResult["approvalname"] as FieldLookupValue).LookupId)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void UpdatePosition()
         {
             var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where><OrderBy><FieldRef Name='Title' Ascending='True' /></OrderBy></Query></View>";
