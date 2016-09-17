@@ -25,7 +25,7 @@ namespace MCAWebAndAPI.Service.Asset
         public bool IsAprover(string emailUser, int? cekResultID)
         {
             var caml = @"<View><Query><Where><And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>Deputy Executive Director</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>"+emailUser+"</Value></Eq></And></Where></Query></View>";
-            var profesionalMaster = SPConnector.GetList("Profesional Master", _siteUrl, caml);
+            var profesionalMaster = SPConnector.GetList("Professional Master", _siteUrl, caml);
 
             foreach(var item in profesionalMaster)
             {
