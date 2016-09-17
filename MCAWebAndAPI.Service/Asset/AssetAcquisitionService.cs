@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.Asset
         const string SP_ASSACQ_LIST_NAME = "Asset Acquisition";
         const string SP_ASSACQDetails_LIST_NAME = "Asset Acquisition Details";
         const string SP_ACC_MEMO_LIST_NAME = "Acceptance Memo";
-        const string SP_WBSMaster_LIST_NAME = "WBS Master";
+        const string SP_WBSMaster_LIST_NAME = "WBS Mapping";
 
         public void SetSiteUrl(string siteUrl)
         {
@@ -269,7 +269,7 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
-            var ListWBS = SPConnector.GetListItem("WBS Master", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
+            var ListWBS = SPConnector.GetListItem("WBS Mapping", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _wbs = new AjaxComboBoxVM();
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
             _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);

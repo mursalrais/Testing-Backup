@@ -103,19 +103,6 @@
         $("#AssetHolder_Value").data("kendoDropDownList").value("");
         $("#AssetHolderTo_Value").data("kendoDropDownList").value("");
         //alert($("#Province").data("kendoDropDownList").text());
-        $.validator.methods.date = function (value, element) {
-        	if ($.browser.webkit) {
-
-        		//ES - Chrome does not use the locale when new Date objects instantiated:
-        		var d = new Date();
-
-        		return this.optional(element) || !/Invalid|NaN/.test(new Date(d.toLocaleDateString(value)));
-        	}
-        	else {
-
-        		return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
-        	}
-        };
     })
 
     function saveAssignment() {
@@ -135,21 +122,22 @@
                 }
             }
         }
-
+        //alert($('#CompletionStatus_Value').val());
+        //alert($('#attach').val());
+        var filename = '@Model.filename';
         if ($('#CompletionStatus_Value').val() == "Complete") {
-            if ($('#attach').val() == "" || $('#attach').val() == null) {
+            if ($('#attach').val() == "") {
                 alert("Have To Attach File to Change Completion Status into Complete");
                 return false;
             }
-            //return false;
         }
-
-        if ($('#CompletionStatus_Value').val() == "In Progress") {
-            if ($('#attach').val() != "" || $('#attach').val() != null) {
+        else
+        {
+            //alert(attach.value);
+            if ($('#attach').val() != "") {
                 alert("Have To Change Completion Status into Complete");
                 return false;
             }
-            //return false;
         }
 
         var deleteRow = 0;
