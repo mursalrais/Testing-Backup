@@ -310,8 +310,10 @@
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
+    <Compile Include="ViewModel\Form\Shared\PlaceVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AllowableRateMasterVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvRequestVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInCountryVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInternationalVM.cs" />
