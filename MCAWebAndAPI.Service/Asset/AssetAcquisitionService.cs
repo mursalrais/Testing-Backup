@@ -199,8 +199,8 @@ namespace MCAWebAndAPI.Service.Asset
             var viewModel = new WBSMaterVM();
 
             viewModel.ID = Convert.ToInt32(item["ID"]);
-            viewModel.WBSID.Value = Convert.ToString(item["Title"]);
-            viewModel.WBSDesc = Convert.ToString(item["WBSDesc"]);
+            viewModel.WBSID.Value = Convert.ToString(item["WBS_x0020_ID"]);
+            viewModel.WBSDesc = Convert.ToString(item["WBS_x0020_Description"]);
             return viewModel;
         }
 
@@ -271,8 +271,10 @@ namespace MCAWebAndAPI.Service.Asset
 
             var ListWBS = SPConnector.GetListItem("WBS Mapping", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _wbs = new AjaxComboBoxVM();
+            //WBS_x0020_ID
+            //WBS_x0020_ID
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
-            _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);
+            _wbs.Text = Convert.ToString(ListWBS["WBS_x0020_ID"]) + " - " + Convert.ToString(ListWBS["WBS_x0020_ID"]);
 
             return new AssetAcquisitionItemVM
             {
