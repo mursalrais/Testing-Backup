@@ -811,6 +811,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.nameOnly = nm[0];
             viewModel.position = nm[1];
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             var fileName = nm[0] + "_AssignmentOfAsset.pdf";
             byte[] pdfBuf = null;
             string content;

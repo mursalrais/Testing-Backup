@@ -892,6 +892,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.positionFrom = nm[1];
             viewModel.nameOnlyTo = nm1[0];
             viewModel.positionTo = nm1[1];
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
             var fileName = nm[0] + "_AssetTransfer.pdf";
             byte[] pdfBuf = null;

@@ -137,12 +137,19 @@
             //return false;
         }
 
-        if ($('#CompletionStatus_Value').val() == "In Progress") {
-            if ($('#attach').val() != "" || $('#attach').val() != null) {
+        var filename = '@Model.filename';
+        if ($('#CompletionStatus_Value').val() == "Complete") {
+            if ($('#attach').val() == "") {
+                alert("Have To Attach File to Change Completion Status into Complete");
+                return false;
+            }
+        }
+        else {
+            //alert(attach.value);
+            if ($('#attach').val() != "") {
                 alert("Have To Change Completion Status into Complete");
                 return false;
             }
-            //return false;
         }
 
      
