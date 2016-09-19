@@ -42,7 +42,7 @@ new
                  );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
-        "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffBalanceDetails(data)#].EditMode' value='#= EditMode #' />"
+        "<input type='hidden' name='DayOffBalanceDetails[#= getDayOffRequestDetails(data)#].EditMode' value='#= EditMode #' />"
         );
 
 
