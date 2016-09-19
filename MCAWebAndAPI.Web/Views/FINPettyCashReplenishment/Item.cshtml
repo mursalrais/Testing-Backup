@@ -9,12 +9,12 @@
 }
 
 @using (Html.BeginForm("Save", "FINPettyCashReplenishment",
-                            FormMethod.Post,
-                            new
-                            {
-                                @class = "form-horizontal",
-                                enctype = "multipart/form-data"
-                            }))
+                FormMethod.Post,
+                new
+                {
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
     <fieldset>
         <legend>Petty Cash Replenishment</legend>

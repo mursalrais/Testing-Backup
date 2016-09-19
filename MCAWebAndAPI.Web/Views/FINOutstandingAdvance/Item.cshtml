@@ -10,13 +10,13 @@
 }
 
 @using (Html.BeginForm("Save", "FINOutstandingAdvance",
-                            FormMethod.Post,
-                            new
-                            {
-                                @id = "formOA",
-                                @class = "form-horizontal",
-                                enctype = "multipart/form-data"
-                            }))
+                FormMethod.Post,
+                new
+                {
+                    @id = "formOA",
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
     <fieldset>
         <legend>Outstanding Advance</legend>

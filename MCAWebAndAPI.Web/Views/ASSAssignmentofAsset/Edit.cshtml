@@ -88,7 +88,7 @@
         $("#attach").change(function () {
             var filename = '@Model.filename';
             //alert(filename);
-            if(filename != null || filename != "")
+            if (filename != "" || document.getElementById("oldFile").style.display != "")
             {
                 alert('Old Attachment will be Changed!');
                 document.getElementById("oldFile").style.textDecoration = "line-through";
@@ -111,6 +111,22 @@
                     alert("Asset Sub Asset / Province cannot be null!");
                     return false;
                 }
+            }
+        }
+
+        var filename = '@Model.filename';
+        //alert(filename);
+        if ($('#CompletionStatus_Value').val() == "Complete") {
+            if ($('#attach').val() == "" && filename == "") {
+                alert("Have To Attach File to Change Completion Status into Complete");
+                return false;
+            }
+        }
+        else {
+            //alert(attach.value);
+            if ($('#attach').val() != "" || filename != "") {
+                alert("Have To Change Completion Status into Complete");
+                return false;
             }
         }
 

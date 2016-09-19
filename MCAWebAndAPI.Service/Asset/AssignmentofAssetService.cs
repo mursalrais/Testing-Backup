@@ -687,7 +687,7 @@ namespace MCAWebAndAPI.Service.Asset
                                 <And>
                                    <Eq>
                                       <FieldRef Name='Title' />
-                                      <Value Type='Text'>"+Convert.ToString(item["office"])+@"</Value>
+                                      <Value Type='Text'>"+Convert.ToString((item["office"] as FieldLookupValue).LookupValue)+@"</Value>
                                    </Eq>
                                    <And>
                                       <Eq>
@@ -717,7 +717,7 @@ namespace MCAWebAndAPI.Service.Asset
             AjaxComboBoxVM _province = new AjaxComboBoxVM();
             foreach (var x in ListProvince)
             {
-                if(Convert.ToString(x["Title"]) == Convert.ToString(item["office"]) && Convert.ToString(x["Floor"]) == Convert.ToString(item["floor"]) && Convert.ToString(x["Room"]) == Convert.ToString(item["room"]))
+                if(Convert.ToString(x["Title"]) == Convert.ToString((item["office"] as FieldLookupValue).LookupValue) && Convert.ToString(x["Floor"]) == Convert.ToString(item["floor"]) && Convert.ToString(x["Room"]) == Convert.ToString(item["room"]))
                 {
                     _province.Value = (item["province"] as FieldLookupValue).LookupId;
                     _province.Text = Convert.ToString(x["city"])+","+(x["Province"] as FieldLookupValue).LookupValue + "-" + x["Title"] + "-" + x["Floor"] + "-" + x["Room"];
@@ -804,7 +804,7 @@ namespace MCAWebAndAPI.Service.Asset
                                          <And>
                                             <Eq>
                                                <FieldRef Name='Title' />
-                                               <Value Type='Text'>" + d["office"] + @"</Value>
+                                               <Value Type='Text'>" + (d["office"] as FieldLookupValue).LookupValue + @"</Value>
                                             </Eq>
                                             <And>
                                                <Eq>
@@ -868,7 +868,7 @@ namespace MCAWebAndAPI.Service.Asset
                         updatedValues.Add("province", (provinceinfo["Province"] as FieldLookupValue).LookupId);
                     }
                     updatedValues.Add("city", provinceinfo["city"]);
-                    updatedValues.Add("office", provinceinfo["Title"]);
+                    updatedValues.Add("office", provinceinfo["ID"]);
                     updatedValues.Add("floor", provinceinfo["Floor"]);
                     updatedValues.Add("room", provinceinfo["Room"]);
                 }
@@ -1155,7 +1155,7 @@ namespace MCAWebAndAPI.Service.Asset
             }
             //updatedValues.Add("assetsubasset", getAssetID["AssetID"]);
             //updatedValues.Add("province", getProvince["Title"]);
-            updatedValues.Add("office", provinceinfo["Title"]);
+            updatedValues.Add("office", provinceinfo["ID"]);
             updatedValues.Add("floor", provinceinfo["Floor"]);
             updatedValues.Add("city", provinceinfo["city"]);
             updatedValues.Add("room", provinceinfo["Room"]);

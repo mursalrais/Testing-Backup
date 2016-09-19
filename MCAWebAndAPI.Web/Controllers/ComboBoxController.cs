@@ -8,6 +8,7 @@ using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Shared;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -128,5 +129,22 @@ namespace MCAWebAndAPI.Web.Controllers
                 Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : string.Format("{0} - {1}",e.Title, e.GLDescription)
             }), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetPlaces()
+        {
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
+            var placeService = new PlaceService();
+
+            var list = placeService.GetAllListItems(siteUrl);
+
+            return Json(list.Select(e => new
+            {
+                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                Text = string.IsNullOrWhiteSpace(e.Name) ? string.Empty : e.Name
+            }), JsonRequestBehavior.AllowGet);
+
+        }
+
     }
 }

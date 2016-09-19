@@ -30,8 +30,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Index(string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetTransfer;
 
@@ -892,6 +893,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.positionFrom = nm[1];
             viewModel.nameOnlyTo = nm1[0];
             viewModel.positionTo = nm1[1];
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
             var fileName = nm[0] + "_AssetTransfer.pdf";
             byte[] pdfBuf = null;

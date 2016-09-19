@@ -1,9 +1,7 @@
 ﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
 @using MCAWebAndAPI.Web.Helpers
 
-
 @model ProfessionalPerformanceEvaluationVM
-
 @if (Model.StatusForm != "Approved")
 {
     using (Ajax.BeginForm((string)ViewBag.Action, "HRProfessionalPerformanceEvaluation", FormMethod.Post,
@@ -19,6 +17,16 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
+         @Html.HiddenFor(m => m.ID)
+         @Html.HiddenFor(m => m.ProfessionalID)
+         @Html.HiddenFor(m => m.Requestor)
+         @Html.HiddenFor(m => m.NameID)
+         @Html.HiddenFor(m => m.PositionAndDepartementID)
+         @Html.HiddenFor(m => m.PerformancePeriodID)
+         @Html.HiddenFor(m => m.StatusForm)
+         @Html.HiddenFor(m => m.TypeForm)
+         @Html.HiddenFor(m => m.ApproverCount)
+
         <div class="col-xs-12">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Name).Class("col-xs-4 control-label")
@@ -43,129 +51,127 @@
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
-        <div class="col-xs-12">
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.ID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.ProfessionalID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.Requestor)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.NameID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.PositionAndDepartementID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.PerformancePeriodID)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.StatusForm)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.TypeForm)
-                </div>
-            </div>
-        </div>
-        @if (Model.TypeForm == "Professional")
-        {
-            <legend>Approval Path</legend>
-                <div class="row">
-                    @Html.Partial("_WorkflowPathDetails", Model)
-                </div>
-        }
     </fieldset>
     }
 
-if (Model.ID == null)
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-xs-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
+    if (Model.ID == null)
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-if (Model.TypeForm == "Professional" && Model.StatusForm == "Initiated")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-xs-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
+    if (Model.TypeForm == "Professional" && Model.StatusForm == "Initiated")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-initiate-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-if (Model.TypeForm == "Professional" && Model.StatusForm == "Draft")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-xs-12">
-                <button id="submit-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Submit For Approval
-                </button>
-                <button id="submit-draft-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Save As Draft
-                </button>
+    if (Model.TypeForm == "Professional" && Model.StatusForm == "Draft")
+    {
+        <div class="form-actions">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button id="submit-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Submit For Approval
+                    </button>
+                    <button id="submit-draft-button" class="btn btn-primary" type="submit">
+                        <i class="fa fa-save"></i>
+                        Save As Draft
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
 
-if (Model.TypeForm == "Approver1" && Model.StatusForm == "Pending Approval 1 of 2")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-xs-12">
-                <button id="approver1-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
-            </div>
-        </div>
-    </div>
-}
+    if (Model.TypeForm == "Approver1")
+    {
+        if (Model.StatusForm == "Pending Approval 1 of 1" || Model.StatusForm == "Pending Approval 1 of 2" || Model.StatusForm == "Pending Approval 1 of 3")
+        {
+            {
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="submit-button" class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i>
+                                Approve
+                            </button>
+                            <button id="reject1-button" class="btn btn-primary" type="submit">
+                                <i class="fa fa-save"></i>
+                                Reject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
 
-if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 2")
-{
-    <div class="form-actions">
-        <div class="row">
-            <div class="col-xs-12">
-                <button id="approver2-button" class="btn btn-primary" type="submit">
-                    <i class="fa fa-save"></i>
-                    Approve
-                </button>
+    if (Model.TypeForm == "Approver2")
+    {
+        if (Model.StatusForm == "Pending Approval 2 of 2" || Model.StatusForm == "Pending Approval 2 of 3")
+        {
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Approve
+                        </button>
+                        <button id="reject2-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Reject
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-}
+        }
+    }
+
+    if (Model.TypeForm == "Approver3")
+    {
+        if (Model.StatusForm == "Pending Approval 3 of 3")
+        {
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="submit-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Approve
+                        </button>
+                        <button id="reject3-button" class="btn btn-primary" type="submit">
+                            <i class="fa fa-save"></i>
+                            Reject
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 }
 @if (Model.StatusForm == "Approved")
 {
@@ -180,7 +186,15 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         <legend>Form Professional Performance Evaluation</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.ProfessionalID)
+        @Html.HiddenFor(m => m.Requestor)
+        @Html.HiddenFor(m => m.NameID)
+        @Html.HiddenFor(m => m.PositionAndDepartementID)
+        @Html.HiddenFor(m => m.PerformancePeriodID)
+        @Html.HiddenFor(m => m.StatusForm)
+        @Html.HiddenFor(m => m.TypeForm)
+        @Html.HiddenFor(m => m.ApproverCount)
         <div class="col-xs-12">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Name).Class("col-xs-4 control-label")
@@ -205,45 +219,6 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
-        <div class="col-xs-12">
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.ID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.ProfessionalID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.Requestor)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.NameID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.PositionAndDepartementID)
-                </div>
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.PerformancePeriodID)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.StatusForm)
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-8">
-                    @Html.HiddenFor(m => m.TypeForm)
-                </div>
-            </div>
-        </div>
-        @if (Model.TypeForm == "Professional")
-        {
-            <legend>Approval Path</legend>
-                <div class="row">
-                    @Html.Partial("_WorkflowPathDetails", Model)
-                </div>
-        }
     </fieldset>
     }
 
@@ -260,7 +235,6 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
         </div>
     }
 }
-
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
@@ -287,18 +261,6 @@ if (Model.TypeForm == "Approver2" && Model.StatusForm == "Pending Approval 2 of 
             $('#print-button').click(function (e) {
                 var url = "/HRProfessionalPerformanceEvaluation/PrintProfessionalPerformanceEvaluation";
                 submitFormToPrint(url);
-            });
-        });
-
-        $(document).ready(function () {
-            $("#approver1-button").click(function () {
-                $("form").submit();
-            });
-        });
-
-        $(document).ready(function () {
-            $("#approver2-button").click(function () {
-                $("form").submit();
             });
         });
     </script>

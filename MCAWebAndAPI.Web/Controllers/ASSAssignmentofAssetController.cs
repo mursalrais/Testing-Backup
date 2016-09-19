@@ -67,8 +67,9 @@ namespace MCAWebAndAPI.Web.Controllers
         // GET: ASSAssetCheckForm
         public ActionResult Index(string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetAssignment;
 
@@ -811,6 +812,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.nameOnly = nm[0];
             viewModel.position = nm[1];
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             var fileName = nm[0] + "_AssignmentOfAsset.pdf";
             byte[] pdfBuf = null;
             string content;
