@@ -207,7 +207,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     string linkmail = string.Format(UrlResource.ShortlistInterviewPanel, siteUrl, viewModel.Position);
 
-                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, linkmail, viewModel.PositionName);
+                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, linkmail, viewModel.PositionName, viewModel.EmailMessage);
 
                     if (mail != "")
                     {
