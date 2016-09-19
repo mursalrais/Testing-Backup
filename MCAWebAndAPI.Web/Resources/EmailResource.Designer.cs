@@ -198,6 +198,8 @@ namespace MCAWebAndAPI.Web.Resources {
         ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
         ///This list requires your action to review as well as to prepare the Interview process for further action. 
         ///
+        ///{2}
+        ///
         ///To view the detail, please click following link: 
         ///
         ///

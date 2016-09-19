@@ -796,3 +796,6 @@ Please try again.
    at System.Net.Mail.SmtpClient.Send(MailMessage message)
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 41
 2016-09-19 15:35:13.6643 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Data successfully saved, but email is fail to send because this following error: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+2016-09-19 19:03:23.4657 MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService System.Exception: Failed to send email. Please contact your IT Administrator.
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 45
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService.CreatePerformanceEvaluationDetails(Nullable`1 headerID, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceEvaluationService.cs:line 142

@@ -80,8 +80,13 @@ namespace MCAWebAndAPI.Service.Asset
                         var datacost = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
                         foreach (var item in datacost)
                         {
-                            totalCostIdr_ad += Convert.ToInt32(item["costidr"]);
-                            totalCostUsd_ad += Convert.ToInt32(item["costusd"]);
+                            var datacost_split = (item["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                            if (datacost_split.Length <= 4)
+                            {
+                                totalCostIdr_ad += Convert.ToInt32(item["costidr"]);
+                                totalCostUsd_ad += Convert.ToInt32(item["costusd"]);
+                                break;
+                            }
                         }
                     }
                 }
@@ -160,8 +165,13 @@ namespace MCAWebAndAPI.Service.Asset
                         var datacost = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
                         foreach (var item in datacost)
                         {
-                            totalCostIdr_ad2 += Convert.ToInt32(item["costidr"]);
-                            totalCostUsd_ad2 += Convert.ToInt32(item["costusd"]);
+                            var datacost_split = (item["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                            if (datacost_split.Length <= 4)
+                            {
+                                totalCostIdr_ad2 += Convert.ToInt32(item["costidr"]);
+                                totalCostUsd_ad2 += Convert.ToInt32(item["costusd"]);
+                                break;
+                            }
                         }
                     }
                 }
