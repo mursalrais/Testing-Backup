@@ -769,5 +769,17 @@ Please try again.
 2016-09-15 18:15:12.6538 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-15 18:20:31.7518 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (403) Forbidden.
 2016-09-16 00:02:03.2159 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
-2016-09-16 16:55:33.9117 MCAWebAndAPI.Service.Converter.CSVConverter System.IndexOutOfRangeException: Index was outside the bounds of the array.
-   at MCAWebAndAPI.Service.Converter.CSVConverter.ToDataTable(StreamReader fileReader) in D:\HADI\WORK\IMS-Web-and-API\MCAWebAndAPI.Service\Converter\CSVConverter.cs:line 64
+2016-09-16 03:40:16.2471 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
+2016-09-16 07:45:03.6554 MCAWebAndAPI.Service.Asset.AssignmentOfAssetService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssignmentOfAssetService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssignmentOfAssetService.cs:line 548
+2016-09-16 08:11:38.6270 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 594
+2016-09-16 09:10:35.4783 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 594
+2016-09-16 09:30:13.2449 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
+2016-09-16 09:33:17.7204 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
+2016-09-16 09:37:28.7377 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
+2016-09-17 07:59:00.4768 MCAWebAndAPI.Service.Asset.AssetTransferService Object reference not set to an instance of an object.

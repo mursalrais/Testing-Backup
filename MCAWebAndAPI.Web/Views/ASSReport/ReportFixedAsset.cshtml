@@ -45,9 +45,7 @@
     {
         if (exportFlag) {
             //e.sender.showColumn("ID");
-            e.preventDefault();
-            exportFlag = false;
-            e.sender.showColumn("Specification");
+             e.sender.showColumn("Specification");
             e.sender.showColumn("SerialNumber");
             e.sender.showColumn("WarrantyExpires");
             e.sender.showColumn("Condition");
@@ -59,6 +57,8 @@
             e.sender.showColumn("AssetHolder");
             e.sender.showColumn("Province");
             e.sender.showColumn("Location");
+            e.preventDefault();
+            exportFlag = false;
             e.sender.saveAsExcel();
         } else {
             e.sender.hideColumn("ID");

@@ -10,6 +10,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
     public class AssetTransferVM : Item
     {
         public string CancelURL { get; set; }
+        public string UrlImage { get; set; }
 
         public HttpPostedFileBase attach { get; set; }
         public string filename { get; set; }

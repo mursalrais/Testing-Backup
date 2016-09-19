@@ -108,7 +108,7 @@ namespace MCAWebAndAPI.Service.Asset
                 var modelDetailItem = new AssetLandingPageFixedAssetVM();
                 modelDetailItem.A = item4;
                 modelDetailItem.B = datasv2.Count() - dataad2.Count();
-                
+
                 int totalCostIdr = 0;
                 int totalCostUsd = 0;
 

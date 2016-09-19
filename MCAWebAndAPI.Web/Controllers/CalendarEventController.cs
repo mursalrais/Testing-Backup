@@ -25,8 +25,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
 
         public ActionResult CreateCalendarEvent(string siteUrl = null)
-
-
         {
 
             if (System.Web.HttpContext.Current.Session.Keys.Count > 0)

@@ -1,1 +1,124 @@
-﻿
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Travel
+@using MCAWebAndAPI.Model.ViewModel.Control
+
+@model IEnumerable<AuthAdvReq_FlightInCountryVM>
+
+@*
+    Wireframe TRA03: Travel Authorization and Advance Request
+
+*@
+
+<div class="col-xs-12">
+    @(Html.Kendo().Grid(Model)
+    .Name("ItemDetails")
+    .Editable(editable => editable.Mode(GridEditMode.InCell)
+    .CreateAt(GridInsertRowPosition.Top))
+    .ToolBar(tools => tools.Create().Text("Add New Item"))
+    .Scrollable()
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.DateOfDeparture).ClientTemplate("#= kendo.toString(DateOfDeparture, 'dd-MMM-yyyy') #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].DateOfDeparture' value='#= DateOfDeparture #' />").Width(150);
+
+        columns.Bound(p => p.TimeOfDeparture).ClientTemplate("#= kendo.toString(TimeOfDeparture, 'HH:mm') #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].TimeOfDeparture' value='#= kendo.toString(TimeOfDeparture, 'HH:mm') #' />").Width(150);
+
+        columns.Bound(p => p.PlaceOfDeparture).ClientTemplate("#= PlaceOfDeparture.Text #" +
+                 "<input type='hidden' name='ItemDetails[#= getItem(data)#].PlaceOfDeparture.Value' value='#= PlaceOfDeparture.Value #' />"
+               )
+               .EditorViewData(new
+               {
+                   DataTextField = "Text",
+                   DataValueField = "Value",
+                   ControllerName = "ComboBox",
+                   ActionName = "GetPlaces",
+
+               }).Width(150);
+
+        columns.Bound(p => p.DateOfArrival).ClientTemplate("#= kendo.toString(DateOfArrival, 'dd-MMM-yyyy') #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].DateOfArrival' value='#= DateOfArrival #' />").Width(150);
+
+        columns.Bound(p => p.TimeOfArrival).ClientTemplate("#= kendo.toString(TimeOfArrival, 'HH:mm') #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].TimeOfArrival' value='#= kendo.toString(TimeOfArrival, 'HH:mm') #' />").Width(150);
+
+        columns.Bound(p => p.PlaceOfArrival).ClientTemplate("#= PlaceOfArrival.Text #" +
+         "<input type='hidden' name='ItemDetails[#= getItem(data)#].PlaceOfArrival.Value' value='#= PlaceOfArrival.Value #' />"
+       )
+       .EditorViewData(new
+       {
+           DataTextField = "Text",
+           DataValueField = "Value",
+           ControllerName = "ComboBox",
+           ActionName = "GetPlaces",
+
+       }).Width(150).ClientFooterTemplate("#= 'Sub Total: '#");
+
+        columns.Bound(p => p.Amount).ClientTemplate("#= Amount #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Amount' value='#= calculateField(data).Amount #' />").Width(150)
+            .ClientFooterTemplate("#= calculateTotal() #").FooterHtmlAttributes(new { @id = "subTotal" });
+
+        columns.Bound(p => p.Remarks).ClientTemplate("#= Remarks #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].Remarks' value='#= Remarks #' />").Width(300);
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].ID' value='#= ID #' />"
+            );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                     "<input type='hidden' name='ItemDetails[#= getItem(data)#].EditMode' value='#= EditMode #' />");
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+            .Click("onDeleteKendoDetail")).Width(100);
+
+    })
+     .Events(e =>
+     {
+         e.DataBound("onDataBoundItemDetails");
+     })
+
+    .DataSource(dataSource => dataSource.Ajax()
+                   .Model(model =>
+                   {
+                       model.Id(p => p.ID);
+                       model.Field(m => m.PlaceOfDeparture).DefaultValue(AuthAdvReq_FlightInCountryVM.GetPlaceOfDepartureDefaultValue());
+                       model.Field(m => m.PlaceOfArrival).DefaultValue(AuthAdvReq_FlightInCountryVM.GetPlaceOfDepartureDefaultValue());
+                   })
+                   .ServerOperation(false)
+     )
+    )
+</div>
+<script>
+
+        function getItem(dataItem) {
+            var data = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
+        function onDataBoundItemDetails(e) {
+            var grid = $("#ItemDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
+            var total = 0;
+
+            for (var i = 0; i < datasource.length; i++) {
+                if (datasource[i].EditMode >= 0) {
+                    total = total + datasource[i].Amount;
+                }
+            }
+
+            return total;
+        }
+
+        function calculateField(data) {
+            $('#subTotal').text(calculateTotal());
+            return data;
+        }
+
+        $(".k-grid-Delete").click(function (e) {
+            calculateTotal();
+        });
+</script>

@@ -18,6 +18,10 @@ using MCAWebAndAPI.Model.HR.DataMaster;
 using Newtonsoft.Json;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
+using MCAWebAndAPI.Service.Utils;
+using System.Security.Claims;
+using System.Web.Mvc.Filters;
+using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -41,6 +45,30 @@ namespace MCAWebAndAPI.Web.Controllers
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
 
             return Content("<script>window.top.location.href = '" + url+"';</script>");     
+        }
+
+        public ActionResult Listapproval(string siteUrl, int? ID)
+        {
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where></Query></View>";
+            var dataCekResult = SPConnector.GetList("Asset Check Result", siteUrl, caml);
+            List<AssetCheckResultApproval> data = new List<AssetCheckResultApproval>();
+            foreach (var item in dataCekResult)
+            {
+                AssetCheckResultApproval dataDetail = new AssetCheckResultApproval();
+                dataDetail.ID = Convert.ToInt32(item["ID"].ToString());
+                dataDetail.FormID = item["assetcheckformid"].ToString();
+                dataDetail.CountDate = item["assetcheckcountdate"].ToString();
+                dataDetail.ApprovalName =  (item["approvalname"] as FieldLookupValue).LookupValue;
+                dataDetail.ApprovalPosition = (item["approvalposision"] as FieldLookupValue).LookupValue;
+                dataDetail.CountedBy1 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+                dataDetail.CountedBy2 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+                dataDetail.CountedBy3 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+                data.Add(dataDetail);
+            }
+
+            return View(data);
         }
 
         public int PositionID(int? ID, string siteUrl)
@@ -192,7 +220,9 @@ namespace MCAWebAndAPI.Web.Controllers
             if (!string.IsNullOrEmpty(SubmitForApproval))
             {
                 var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true, ID);
+                
                 return RedirectToAction("Index");
+                //return RedirectToAction("Toapproval", new { ID = ID });
             }
 
             if (!string.IsNullOrEmpty(SaveAsDraft))
@@ -290,7 +320,8 @@ namespace MCAWebAndAPI.Web.Controllers
             AssetCheckResultHeaderVM data,
             int? ID,
             string Print,
-            Boolean RequestApproval = false
+            Boolean RequestApproval = false,
+            string requestor = null
         )
         {
             if (RequestApproval && ID != null)
@@ -300,7 +331,15 @@ namespace MCAWebAndAPI.Web.Controllers
 
             assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-
+            //String s = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            //var A = SPConnector.GetCurrentUser(s);
+            if(requestor != null)
+            {
+                if(assetCheckResultService.IsAprover(requestor,ID))
+                {
+                    return RedirectToAction("Approve", new { ID = ID });
+                }
+            }
             if (data.ID != null)
             {
                 ID = data.ID;
@@ -377,23 +416,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
             return View(viewModel);
         }
-
-
-        //public ActionResult GetCheckInfo(int IDAssetCheck)
-        //{
-        //    var siteUrl = SessionManager.Get<string>("SiteUrl");
-        //    int? IDcheck = IDAssetCheck;
-        //    var CheckInfo = assetCheckResultService.GetCheckInfo(IDcheck, siteUrl);
-
-        //    //var professionals = GetFromExistingSession();
-        //    return Json(
-        //        new
-        //        {
-        //            CheckInfo.ID,
-        //            CheckInfo.CompletionStatus
-
-        //        }, JsonRequestBehavior.AllowGet);
-        //}
+        
 
         public ActionResult Search()
         {
@@ -426,6 +449,12 @@ namespace MCAWebAndAPI.Web.Controllers
             var viewModel = new AssetCheckResultVM();
 
             return View(viewModel);
+        }
+
+        public ActionResult Toapproval(int? ID)
+        {
+            ViewBag.ID = ID;
+            return View();
         }
     }
 }

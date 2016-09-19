@@ -67,7 +67,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                 new
                 {
-                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.DocumentNo),
+                    successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.LetterNo),
                     previousUrl = string.Format(FirstPage, siteUrl)
                 });
         }

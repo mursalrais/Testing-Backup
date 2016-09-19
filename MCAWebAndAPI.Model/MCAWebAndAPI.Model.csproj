@@ -123,6 +123,7 @@
     <Compile Include="ViewModel\Control\MultiSelectVM.cs" />
     <Compile Include="ViewModel\Control\TransactionStatusComboBoxVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetAcquisitionVM.cs" />
+    <Compile Include="ViewModel\Form\Asset\AssetCheckResultApproval.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalDetailVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetDisposalVM.cs" />
     <Compile Include="ViewModel\Form\Asset\AssetLandingPageFixedAssetVM.cs" />
@@ -309,8 +310,10 @@
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderHeaderVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\PurchaseOrderItemVM.cs" />
     <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
+    <Compile Include="ViewModel\Form\Shared\PlaceVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
+    <Compile Include="ViewModel\Form\Travel\AllowableRateMasterVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvRequestVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInCountryVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_FlightInternationalVM.cs" />

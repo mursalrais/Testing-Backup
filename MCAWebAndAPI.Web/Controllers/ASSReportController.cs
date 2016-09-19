@@ -27,12 +27,12 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //var model = _service.GetReport(SiteUrl, "Fixed Asset");
-            var emptyTable = _service.getTable("Fixed Asset");
+            var emptyTable = _service.getTable("Fixed Asset", "empty");
             SessionManager.Set("CSVDataTable", emptyTable);
 
             var viewModel = new AssetReportVM();
             viewModel.dtDetails = emptyTable;
-            return View(viewModel);
+            return View("ReportFixedAsset");
         }
 
         public ActionResult ReportSmallValueAsset(string SiteUrl)
@@ -40,7 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //var model = _service.GetReport(SiteUrl, "Small Value Asset");
-            var emptyTable = _service.getTable("Small Value Asset");
+            var emptyTable = _service.getTable("Small Value Asset", "empty");
             SessionManager.Set("CSVDataTable", emptyTable);
 
             var viewModel = new AssetReportVM();
@@ -66,6 +66,19 @@ namespace MCAWebAndAPI.Web.Controllers
             var json = Json(result, JsonRequestBehavior.AllowGet);
             json.MaxJsonLength = int.MaxValue;
             return json;
+        }
+
+        [HttpPost]
+        public ActionResult ReportFixedAsset(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            fileName = string.Format("ReportFixedAsset.xlsx");
+
+            // Store the file on the session variable
+            var fileContent = fileContents;
+
+            return File(fileContents, contentType, fileName);
         }
 
         public JsonResult Grid_ReadSVA([DataSourceRequest] DataSourceRequest request)
