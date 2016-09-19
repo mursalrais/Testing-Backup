@@ -30,14 +30,14 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Index(string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetTransfer;
 
             return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
-
         public ActionResult Create(string SiteUrl)
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -114,6 +114,17 @@ namespace MCAWebAndAPI.Web.Controllers
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
                 }
             }
+
+            if (_data.CompletionStatus.Value != "Complete")
+            {
+                if (_data.filename != null || _data.attach != null)
+                {
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.TrySkipIisCustomErrors = true;
+                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete");
+                }
+            }
             //return View(new AssetMasterVM());
             int? headerID = null;
             try
@@ -178,11 +189,11 @@ namespace MCAWebAndAPI.Web.Controllers
 				}
 			}
 
-			if (_data.CompletionStatus.Value != "Complete")
-			{
-				if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
-				{
-					Response.TrySkipIisCustomErrors = true;
+            if (_data.CompletionStatus.Value != "Complete")
+            {
+                if (_data.filename != null || _data.attach != null)
+                {
+                    Response.TrySkipIisCustomErrors = true;
 					Response.TrySkipIisCustomErrors = true;
 					Response.StatusCode = (int)HttpStatusCode.BadRequest;
 					return JsonHelper.GenerateJsonErrorResponse("Have To Change Completion Status into Complete");
@@ -882,6 +893,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.positionFrom = nm[1];
             viewModel.nameOnlyTo = nm1[0];
             viewModel.positionTo = nm1[1];
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
             var fileName = nm[0] + "_AssetTransfer.pdf";
             byte[] pdfBuf = null;

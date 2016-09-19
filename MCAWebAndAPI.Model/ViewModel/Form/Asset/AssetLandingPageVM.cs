@@ -9,6 +9,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 {
     public class AssetLandingPageVM
     {
+        public IEnumerable<AssetLandingPageFixedAssetVM> Details { get; set; } = new List<AssetLandingPageFixedAssetVM>();
+        public IEnumerable<AssetLandingPageFixedAssetVM> Detailss { get; set; } = new List<AssetLandingPageFixedAssetVM>();
         private AssetLandingPageFixedAssetVM _fixedAsset;
         private AssetLandingPageSmallValueAssetVM _smallValueAsset;
 

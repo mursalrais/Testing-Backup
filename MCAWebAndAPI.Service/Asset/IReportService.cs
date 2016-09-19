@@ -12,6 +12,6 @@ namespace MCAWebAndAPI.Service.Asset
     {
         void SetSiteUrl(string siteUrl);
         IEnumerable<AssetReportVM> GetReport(string SiteUrl, string mode);
-        DataTable getTable(string mode);
+        DataTable getTable(string mode, string isempty = null);
     }
 }

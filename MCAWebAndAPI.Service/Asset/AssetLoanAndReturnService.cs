@@ -196,7 +196,15 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
                 updatedValues.Add("estreturndate", item.EstReturnDate);
                 updatedValues.Add("returndate", item.ReturnDate);
-                updatedValues.Add("status", "LOAN");
+
+                if (item.ReturnDate != null)
+                {
+                    updatedValues.Add("status", "RUNNING");
+                }else
+                {
+                    updatedValues.Add("status", "ON LOAN");
+                }
+
                 try
                 {
                     SPConnector.AddListItem(SP_ASSLNRDetails_LIST_NAME, updatedValues, _siteUrl);
@@ -254,7 +262,43 @@ namespace MCAWebAndAPI.Service.Asset
 
         public void UpdateDetails(int? headerID, IEnumerable<AssetLoanAndReturnItemVM> items)
         {
-            throw new NotImplementedException();
+            foreach (var item in items)
+            {
+                if (Item.CheckIfSkipped(item)) continue;
+
+                if (Item.CheckIfDeleted(item))
+                {
+                    try
+                    {
+                        SPConnector.DeleteListItem("Asset Loan Return Detail", item.ID, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e);
+                        throw e;
+                    }
+                    continue;
+                }
+       
+                var updatedValues = new Dictionary<string, object>();
+                updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+                updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
+                updatedValues.Add("estreturndate", item.EstReturnDate);
+                updatedValues.Add("returndate", item.ReturnDate);
+                updatedValues.Add("status", "LOAN");
+                try
+                {
+                    if (Item.CheckIfUpdated(item))
+                        SPConnector.UpdateListItem("Asset Loan Return Detail", item.ID, updatedValues, _siteUrl);
+                    else
+                        SPConnector.AddListItem("Asset Loan Return Detail", updatedValues, _siteUrl);
+                }
+                catch (Exception e)
+                {
+                    logger.Error(e);
+                    throw new Exception(ErrorResource.SPUpdateError);
+                }
+            }
         }
 
 

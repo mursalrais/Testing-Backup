@@ -88,7 +88,6 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime PaymentReceivedDate { get; set; } = DateTime.Now;
 
-        [Required]
         [DisplayName("Document No.")]
         public string DocumentNo { get; set; }
 

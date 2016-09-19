@@ -7,11 +7,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
     {
         public string Type { get; set; }
 
+       // public string TypeCompen { get; set; }
+
         public string SubType { get; set; }
 
         public DateTime? Date { get; set; } = DateTime.Now;
 
         public double FullHalf { get; set; } = 1d;
+
+      //  public double FullHalfCompen { get; set; } = 1d;
+
 
         //public string Status { get; set; }
 

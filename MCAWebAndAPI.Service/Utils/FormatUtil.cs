@@ -127,8 +127,8 @@ namespace MCAWebAndAPI.Service.Utils
             // format: dd/mm/yyyy
             var dateElements = Convert.ToString(item[columnName]).Split('/');
             return new DateTime(year: Convert.ToInt32(dateElements[2]),
-                month: Convert.ToInt32(dateElements[1]),
-                day: Convert.ToInt32(dateElements[0]));
+                month: Convert.ToInt32(dateElements[0]),
+                day: Convert.ToInt32(dateElements[1]));
         }
 
         public static AjaxComboBoxVM ConvertToInGridAjaxComboBox(ListItem item, string columnName)

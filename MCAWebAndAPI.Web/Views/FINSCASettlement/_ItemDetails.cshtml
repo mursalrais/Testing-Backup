@@ -111,9 +111,10 @@
                
             }
 
-            $("#TotalExpense").val(totalAll);
-            totalSpecialCashAdvanceAmount = $("#SpecialCashAdvanceAmount").val();
+            var totalCtrl = $('#TotalExpense').data("kendoNumericTextBox");
+            totalCtrl.value(totalAll);
 
+            totalSpecialCashAdvanceAmount = $("#SpecialCashAdvanceAmount").val();
            
 
             var url = '@Url.Action("GetReceiveFromTo", "FINSCASettlement")';
@@ -128,9 +129,7 @@
                       },
                 success: function (response) {
                
-
-                    $("#ReceivedFromTo").val(response.receiveAmount);
-                   
+                    $('#ReceivedFromTo').data("kendoNumericTextBox").value(response.receiveAmount);
                 },
                 error: function (response) {
 

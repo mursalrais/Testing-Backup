@@ -42,7 +42,7 @@
                     <td>@item.Fund</td>
                     <td>@item.WBS</td>
                     <td>@item.GL</td>
-                    <td>@item.Amount</td>
+                    <td>@item.Amount.ToString("N2")</td>
                 </tr>
                 }
             </tbody>
@@ -53,27 +53,27 @@
                 <tr>
                     <td width="250">Total amount to be replenished</td>
                     <td width="20">:</td>
-                    <td>@Model.TotalAmount</td>
+                    <td>@Model.TotalAmount.ToString("N2")</td>
                 </tr>
                 <tr>
                     <td>Advances for operational car 1</td>
                     <td>:</td>
-                    <td>@Model.AdvancesForOperationalCar1</td>
+                    <td>@Model.Advances1.ToString("N2")</td>
                 </tr>
                 <tr>
                     <td>Advances for operational car 2</td>
                     <td>:</td>
-                    <td>@Model.AdvancesForOperationalCar2</td>
+                    <td>@Model.Advances2.ToString("N2")</td>
                 </tr>
                 <tr>
                     <td>Advances for operational car 3</td>
                     <td>:</td>
-                    <td>@Model.AdvancesForOperationalCar3</td>
+                    <td>@Model.Advances3.ToString("N2")</td>
                 </tr>
                 <tr>
                     <td>Cash on hand</td>
                     <td>:</td>
-                    <td>@Model.CashOnhand</td>
+                    <td>@Model.CashOnHand.ToString("N2")</td>
                 </tr>
                 <tr>
                     <td>Total petty cash fund </td>

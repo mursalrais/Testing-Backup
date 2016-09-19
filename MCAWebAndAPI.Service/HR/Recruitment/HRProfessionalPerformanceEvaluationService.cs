@@ -123,13 +123,26 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 if (count != 0)
                 {
                     level = Convert.ToInt32(item["approverlevel"]);
-                    if (viewModel.StatusForm == "Pending Approval 1 of 2" && level == 1)
+                    if (level == 1)
                     {
-                        viewModel.TypeForm = "Approver1";
+                        if (viewModel.StatusForm == "Pending Approval 1 of 2" || viewModel.StatusForm == "Pending Approval 1 of 1" || viewModel.StatusForm == "Pending Approval 1 of 3")
+                        {
+                            viewModel.TypeForm = "Approver1";
+                        }
                     }
-                    if (viewModel.StatusForm == "Pending Approval 2 of 2" && level == 2)
+                    if (level == 2)
                     {
-                        viewModel.TypeForm = "Approver2";
+                        if (viewModel.StatusForm == "Pending Approval 2 of 2" || viewModel.StatusForm == "Pending Approval 2 of 3")
+                        {
+                            viewModel.TypeForm = "Approver2";
+                        }
+                    }
+                    if (level == 3)
+                    {
+                        if (viewModel.StatusForm == "Pending Approval 3 of 3")
+                        {
+                            viewModel.TypeForm = "Approver3";
+                        }
                     }
                     if (viewModel.TypeForm == "Professional" && viewModel.StatusForm != "Draft")
                     {
@@ -153,6 +166,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             {
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
             }
+
+            viewModel.ApproverCount = viewModel.WorkflowItems.Count();
 
             foreach (var item in viewModel.WorkflowItems)
             {
@@ -260,17 +275,39 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalEmail = null;
             var columnValues = new Dictionary<string, object>();
 
-            if (header.StatusForm == "Initiated" || header.StatusForm == null)
+            if (header.ApproverCount == 1)
             {
-                foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                if (header.TypeForm == "Approver1")
                 {
-                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
-
-                    EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
-
-                    if (header.StatusForm == "Initiated" || header.StatusForm == null)
+                    if (header.StatusForm == "Pending Approval 1 of 1")
                     {
-                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
+                        foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
+                        {
+                            professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                           Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                            try
+                            {
+                                EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e.Message);
+                                throw e;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (header.ApproverCount == 2)
+            {
+                if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
+                {
+                    foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                    {
+                        emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
+
+                        columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
                         try
                         {
                             SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
@@ -278,65 +315,169 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
+                        }
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                    }
+
+                    foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
+                    {
+                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+                    }
+                }
+
+                if (header.TypeForm == "Approver2")
+                {
+                    if (header.StatusForm == "Pending Approval 2 of 2")
+                    {
+                        foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
+                        {
+                            professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                           Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                            try
+                            {
+                                EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e.Message);
+                                throw e;
+                            }
                         }
                     }
                 }
             }
-            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
+
+            if (header.ApproverCount == 3)
             {
-                foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 3")
                 {
-                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
+                    foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                    {
+                        emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
-                    try
-                    {
-                        SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
+                        columnValues.Add("visibletoapprover2", SPConnector.GetUser(emails, _siteUrl));
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
 
-                    try
+                    foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
                     {
-                        EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
+                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                 }
 
-                foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
+                if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 3")
                 {
-                    professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
-                    Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                    foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                    {
+                        emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    try
-                    {
-                        EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
+                        columnValues.Add("visibletoapprover3", SPConnector.GetUser(emails, _siteUrl));
+                        try
+                        {
+                            SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Request for Approval of Performance Plan Form", messageForApprover);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
-                    catch (Exception e)
+
+                    foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
                     {
-                        logger.Error(e.Message);
+                        professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                        Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+
+                        try
+                        {
+                            EmailUtil.Send(emails, "Approval of Performance Plan Form", messageForRequestor);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e.Message);
+                            throw e;
+                        }
                     }
                 }
-            }
-            if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
-            {
-                foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
-                {
-                    professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
-                    Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
 
-                    try
+                if (header.TypeForm == "Approver3")
+                {
+                    if (header.StatusForm == "Pending Approval 3 of 3")
                     {
-                        EmailUtil.Send(professionalEmail, "Approval of Performance Evaluation Form", messageForRequestor);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message);
+                        foreach (var item in SPConnector.GetList(SP_PPE_LIST_NAME, _siteUrl, camlprof))
+                        {
+                            professionalEmail = (item["professional_x003a_Office_x0020_"] == null ? "" :
+                           Convert.ToString((item["professional_x003a_Office_x0020_"] as FieldLookupValue).LookupValue));
+                            try
+                            {
+                                EmailUtil.Send(professionalEmail, "Approval of Performance Plan Form", messageForRequestor);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.Error(e.Message);
+                                throw e;
+                            }
+                        }
                     }
                 }
             }
@@ -351,29 +492,62 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         {
             var columnValues = new Dictionary<string, object>();
             int? ID = header.ID;
-            if (header.StatusForm == "Initiated")
+            if (header.ApproverCount == 1)
             {
-                columnValues.Add("ppestatus", "Pending Approval 1 of 2");
+                if (header.StatusForm == "Initiated")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 1");
+                }
+                if (header.StatusForm == "Draft")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 1");
+                }
+                if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 1")
+                {
+                    columnValues.Add("ppestatus", "Approved");
+                }
             }
-            if (header.StatusForm == "Draft")
+            if (header.ApproverCount == 2)
             {
-                columnValues.Add("ppestatus", "Pending Approval 1 of 2");
+                if (header.StatusForm == "Initiated")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 2");
+                }
+                if (header.StatusForm == "Draft")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 2");
+                }
+                if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 2 of 2");
+                }
+                if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
+                {
+                    columnValues.Add("ppestatus", "Approved");
+                }
             }
-            if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 2")
+            if (header.ApproverCount == 3)
             {
-                columnValues.Add("ppestatus", "Pending Approval 2 of 2");
-            }
-            if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 2")
-            {
-                columnValues.Add("ppestatus", "Approved");
-            }
-            if (header.StatusForm == "DraftInitiated" || header.StatusForm == "DraftDraft")
-            {
-                columnValues.Add("ppestatus", "Draft");
-            }
-            if (header.StatusForm == "Reject1" || header.StatusForm == "Reject2")
-            {
-                columnValues.Add("ppestatus", "Rejected");
+                if (header.StatusForm == "Initiated")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 3");
+                }
+                if (header.StatusForm == "Draft")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 1 of 3");
+                }
+                if (header.TypeForm == "Approver1" && header.StatusForm == "Pending Approval 1 of 3")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 2 of 3");
+                }
+                if (header.TypeForm == "Approver2" && header.StatusForm == "Pending Approval 2 of 3")
+                {
+                    columnValues.Add("ppestatus", "Pending Approval 3 of 3");
+                }
+                if (header.TypeForm == "Approver3" && header.StatusForm == "Pending Approval 3 of 3")
+                {
+                    columnValues.Add("ppestatus", "Approved");
+                }
             }
             columnValues.Add("overalltotalscore", header.OverallTotalScore);
             try

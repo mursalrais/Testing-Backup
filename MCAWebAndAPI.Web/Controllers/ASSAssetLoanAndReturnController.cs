@@ -29,9 +29,16 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET: ASSAssetLoanAndReturn
-        public ActionResult Index()
+        // GET: ASSAssetCheckForm
+        public ActionResult Index(string siteUrl)
         {
-            return View();
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+           // SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetLoanAndReturn;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
 
         public ActionResult Create(string siteUrl)
@@ -138,7 +145,8 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 // assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
-                _data.AssetLoanAndReturnItem = BindMonthlyFeeDetailDetails(form, _data.AssetLoanAndReturnItem);
+                _data.AssetLoanAndReturnItem = BindMonthlyFeeDetailEstReturnDateDetails(form, _data.AssetLoanAndReturnItem);
+                _data.AssetLoanAndReturnItem = BindMonthlyFeeDetailReturnDateDetails(form, _data.AssetLoanAndReturnItem);
                 assetLoanAndReturnService.CreateDetails(headerID, _data.AssetLoanAndReturnItem);
             }
             catch (Exception e)
@@ -147,27 +155,35 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-           
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            return RedirectToAction("Index");
         }
 
-        private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
+        private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailEstReturnDateDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
         {
             var array = monthlyFeeDetails.ToArray();
 
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].EstReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
+                    i, "EstReturnDate", form);
+            }
+            return array;
+        }
+
+        private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailReturnDateDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
+        {
+            var array = monthlyFeeDetails.ToArray();
 
             for (int i = 0; i < array.Length; i++)
             {
-
-
-                array[i].EstReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
-                    i, "EstReturnDate", form);
-                if (array[i].ReturnDate != null)
-                {
+                //if (array[i].ReturnDate != null)
+                //{
                     array[i].ReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
                         i, "ReturnDate", form);
-
-                }
+                //}
+                
             }
             return array;
         }
@@ -206,8 +222,12 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                viewModel.AssetLoanAndReturnItem = BindMonthlyFeeDetailDetails(form, viewModel.AssetLoanAndReturnItem);
-                assetLoanAndReturnService.CreateDetails(viewModel.ID, viewModel.AssetLoanAndReturnItem);
+                viewModel.AssetLoanAndReturnItem = BindMonthlyFeeDetailEstReturnDateDetails(form, viewModel.AssetLoanAndReturnItem);
+                viewModel.AssetLoanAndReturnItem = BindMonthlyFeeDetailReturnDateDetails(form, viewModel.AssetLoanAndReturnItem);
+                //viewModel.AssetLoanAndReturnItem = BindMonthlyFeeDetailDetails(form, viewModel.AssetLoanAndReturnItem);
+                //assetLoanAndReturnService.CreateDetails(viewModel.ID, viewModel.AssetLoanAndReturnItem);
+
+                assetLoanAndReturnService.UpdateDetails(viewModel.ID, viewModel.AssetLoanAndReturnItem);
             }
             catch (Exception e)
             {
@@ -215,7 +235,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)

@@ -10,6 +10,7 @@
     FormMethod.Post,
     new
     {
+        @id="formSCAR",
         @class = "form-horizontal",
         enctype = "multipart/form-data"
     }))
@@ -30,6 +31,7 @@
                     @Html.Bootstrap().LabelFor(m => m.EventBudget).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.EventBudget)
+                        <span id="txtEBError" style="color:#b94a48; font-size:85%; margin-top:10px; display:block;"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -110,10 +112,15 @@
 
             });
 
+
+            var totaTxt = $("#Amount").data("kendoNumericTextBox");
+            totaTxt.readonly();
         });
 
         function onSelectEventBudgetNo(e)
         {
+            $('#txtEBError').text('');
+
             var data = this.dataItem(e.item);
 
             var url = '@Url.Action("GetEventBudgetByID", "FINSCAReimbursement")';
@@ -131,6 +138,21 @@
                 }
             });
         }
+
+        $("#formSCAR").on('submit', function () {
+            // do validation here
+            var voucherNo = $('#EventBudget_Value').val();
+            if (voucherNo === '0') {
+                $('#txtEBError').text('Event Budget No is required.');
+
+
+                return false;
+            }
+            else {
+                $('#txtEBError').text('');
+                return true;
+            }
+        });
     </script>
 }
 

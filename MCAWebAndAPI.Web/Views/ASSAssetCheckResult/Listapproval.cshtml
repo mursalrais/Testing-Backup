@@ -1,0 +1,78 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model IEnumerable<AssetCheckResultApproval>
+
+<div class="col-sm-12"> 
+
+    @(Html.Kendo().Grid(Model)
+        .Name("Details")
+        .Editable(editable => editable.Mode(GridEditMode.InCell))
+        .Columns(columns =>
+        {
+
+            columns.Bound(p => p.FormID).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.CountDate).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.ApprovalName).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.ApprovalPosition).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.CountedBy1).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.CountedBy2).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+            columns.Bound(p => p.CountedBy3).ClientTemplate("#= AssetSubAsset #" +
+                "<input type='hidden' name='Details[#= index(data)#].AssetSubAsset' value='#= AssetSubAsset #' />"
+            );
+        })
+        .DataSource(dataSource => dataSource.Ajax()
+        .Model(model =>
+        {
+            model.Id(p => p.ID);
+            model.Field(p => p.FormID).Editable(false);
+            model.Field(p => p.CountDate).Editable(false);
+            model.Field(p => p.ApprovalName).Editable(false);
+            model.Field(p => p.ApprovalPosition).Editable(false);
+            model.Field(p => p.CountedBy1).Editable(false);
+            model.Field(p => p.CountedBy2).Editable(false);
+            model.Field(p => p.CountedBy3).Editable(false);
+        })
+        .ServerOperation(false)
+        )
+    )
+</div>
+<script>
+    function index(dataItem) {
+        var data = $("#Details").data("kendoGrid").dataSource.data();
+
+        return data.indexOf(dataItem);
+    }
+</script>
+<style>
+    .k-grid .k-grid-header .k-header .k-link {
+        height: auto;
+    }
+
+    .k-grid .k-grid-header .k-header {
+        white-space: normal;
+    }
+
+    .k-virtual-scrollable-wrap tr {
+        height: 3em;
+    }
+
+    .k-grid td {
+        padding: 5px;
+    }
+
+    .k-grid img {
+        vertical-align: top;
+    }
+</style>

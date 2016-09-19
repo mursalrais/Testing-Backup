@@ -38,8 +38,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Index(string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetDisposal;
 
@@ -118,6 +119,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    //var mesej = "Have To Attach File to Change Completion Status into Complete";
+                    //return Json(mesej, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception e)
