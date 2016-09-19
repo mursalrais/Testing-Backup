@@ -15,25 +15,25 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CountDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Model.CountDate
+                    @Html.EditorFor(m => m.CountDate, new { disabled = "disabled" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CountedBy1).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Model.CountedBy1.Text
+                    @Html.EditorFor(m => m.CountedBy1, new { disabled = "disabled" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CountedBy2).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Model.CountedBy2.Text
+                    @Html.EditorFor(m => m.CountedBy2, new { disabled = "disabled" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.CountedBy3).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Model.CountedBy3.Text
+                    @Html.EditorFor(m => m.CountedBy3, new { disabled = "disabled" })
                 </div>
             </div>
             <div class="form-group">
@@ -127,4 +127,10 @@
     function onSelectedLocation(e) {
     }
 
+    $(document).ready(function () {
+        $('#CountDate').attr('disabled', 'disabled');
+        $('#CountedBy1_Value').data("kendoDropDownList").enable(false);
+        $('#CountedBy2_Value').data("kendoDropDownList").enable(false);
+        $('#CountedBy3_Value').data("kendoDropDownList").enable(false);
+    });
 </script>

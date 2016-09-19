@@ -23,9 +23,15 @@ namespace MCAWebAndAPI.Web.Controllers
             _service = new AssetReplacementService();
         }
         // GET: ASSAssetReplacement
-        public ActionResult Index()
+        public ActionResult Index(string siteUrl)
         {
-            return View();
+            siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetTransfer;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
 
         public ActionResult Create(string siteUrl, int? id)
@@ -81,7 +87,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail..");
             }
-            return JsonHelper.GenerateJsonSuccessResponse(SiteUrl + UrlResource.AssetReplacement);
+            //return JsonHelper.GenerateJsonSuccessResponse(SiteUrl + UrlResource.AssetReplacement);
+            return RedirectToAction("Index");
             //return Redirect(string.Format("{0}/{1}", siteUrl ?? ConfigResource.DefaultBOSiteUrl, UrlResource.AssetAcquisition));
         }
 
@@ -191,7 +198,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetReplacement);
+            return RedirectToAction("Index");
         }
 
         public JsonResult GetAssetSubSAssetGrid()

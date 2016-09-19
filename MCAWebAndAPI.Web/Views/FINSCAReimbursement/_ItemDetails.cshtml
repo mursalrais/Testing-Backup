@@ -104,7 +104,8 @@
             }
         }
 
-        $("#Amount").val(totalAll);
+        var totalCtrl = $('#Amount').data("kendoNumericTextBox");
+        totalCtrl.value(totalAll);
     }
 
     function calculateField(data) {
