@@ -15,15 +15,15 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public Operations Operation { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayName("Date (from)")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy HH:mm}")]
         public DateTime DateFrom { get; set; } = DateTime.Today.AddDays(-14);
 
         [Required]
-        [DataType(DataType.Date)]
+        [DataType(DataType.DateTime)]
         [DisplayName("Date (to)")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy HH:mm}")]
         public DateTime DateTo { get; set; } = DateTime.Today;
         
         [DisplayName("Total amount to be replenished")]
