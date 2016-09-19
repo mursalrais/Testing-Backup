@@ -9,19 +9,13 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Web.Helpers;
-using Microsoft.SharePoint.Client;
 using System.IO;
 using Elmah;
 using MCAWebAndAPI.Service.Converter;
 using System.Web.Script.Serialization;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using Newtonsoft.Json;
 using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
-using MCAWebAndAPI.Service.Utils;
-using System.Security.Claims;
-using System.Web.Mvc.Filters;
-using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -47,29 +41,29 @@ namespace MCAWebAndAPI.Web.Controllers
             return Content("<script>window.top.location.href = '" + url+"';</script>");     
         }
 
-        public ActionResult Listapproval(string siteUrl, int? ID)
-        {
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where></Query></View>";
-            var dataCekResult = SPConnector.GetList("Asset Check Result", siteUrl, caml);
-            List<AssetCheckResultApproval> data = new List<AssetCheckResultApproval>();
-            foreach (var item in dataCekResult)
-            {
-                AssetCheckResultApproval dataDetail = new AssetCheckResultApproval();
-                dataDetail.ID = Convert.ToInt32(item["ID"].ToString());
-                dataDetail.FormID = item["assetcheckformid"].ToString();
-                dataDetail.CountDate = item["assetcheckcountdate"].ToString();
-                dataDetail.ApprovalName =  (item["approvalname"] as FieldLookupValue).LookupValue;
-                dataDetail.ApprovalPosition = (item["approvalposision"] as FieldLookupValue).LookupValue;
-                dataDetail.CountedBy1 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
-                dataDetail.CountedBy2 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
-                dataDetail.CountedBy3 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
-                data.Add(dataDetail);
-            }
+        //public ActionResult Listapproval(string siteUrl, int? ID)
+        //{
+        //    assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+        //    SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+        //    var caml = @"<View><Query><Where><Neq><FieldRef Name='ID' /><Value Type='Counter'>0</Value></Neq></Where></Query></View>";
+        //    var dataCekResult = SPConnector.GetList("Asset Check Result", siteUrl, caml);
+        //    List<AssetCheckResultApproval> data = new List<AssetCheckResultApproval>();
+        //    foreach (var item in dataCekResult)
+        //    {
+        //        AssetCheckResultApproval dataDetail = new AssetCheckResultApproval();
+        //        dataDetail.ID = Convert.ToInt32(item["ID"].ToString());
+        //        dataDetail.FormID = item["assetcheckformid"].ToString();
+        //        dataDetail.CountDate = item["assetcheckcountdate"].ToString();
+        //        dataDetail.ApprovalName =  (item["approvalname"] as FieldLookupValue).LookupValue;
+        //        dataDetail.ApprovalPosition = (item["approvalposision"] as FieldLookupValue).LookupValue;
+        //        dataDetail.CountedBy1 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+        //        dataDetail.CountedBy2 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+        //        dataDetail.CountedBy3 = (item["assetcheckcountedby1"] as FieldLookupValue).LookupValue;
+        //        data.Add(dataDetail);
+        //    }
 
-            return View(data);
-        }
+        //    return View(data);
+        //}
 
         public int PositionID(int? ID, string siteUrl)
         {
@@ -237,9 +231,75 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value);
-            if(!string.IsNullOrEmpty(viewModel.filename))
+            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejected")
+            {
+                return RedirectToAction("Editgray", new { ID = ID });
+            }
+            if (!string.IsNullOrEmpty(viewModel.filename))
             {
                 viewModel.filenameUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/"+ viewModel.filename);
+            }
+            return View(viewModel);
+        }
+
+        public ActionResult Editgray(string siteUrl,
+            AssetCheckResultHeaderVM data,
+            int? ID,
+            string Calculate,
+            string SubmitForApproval,
+            string SaveAsDraft,
+            string Cancel,
+            HttpPostedFileBase file
+        )
+        {
+
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var fileName = "";
+            if (file != null && file.ContentLength > 0)
+            {
+                fileName = Path.GetFileName(file.FileName);
+                fileName = "Asset-Check-" + fileName;
+                data.filename = fileName;
+                var path = Path.Combine(Server.MapPath("~/img"), fileName);
+                file.SaveAs(path);
+            }
+
+            if (data.ID != null)
+            {
+                ID = data.ID;
+            }
+
+            if (!string.IsNullOrEmpty(Calculate))
+            {
+                var viewModelCalculate = assetCheckResultService.GetPopulatedModelCalculate(data, ID);
+                return View(viewModelCalculate);
+            }
+
+            if (!string.IsNullOrEmpty(SubmitForApproval))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, true, ID);
+
+                return RedirectToAction("Index");
+                //return RedirectToAction("Toapproval", new { ID = ID });
+            }
+
+            if (!string.IsNullOrEmpty(SaveAsDraft))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.GetPopulatedModelSave(data, false, ID);
+                return RedirectToAction("Index");
+            }
+
+            if (!string.IsNullOrEmpty(Cancel))
+            {
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value);
+            if (!string.IsNullOrEmpty(viewModel.filename))
+            {
+                viewModel.filenameUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/" + viewModel.filename);
             }
             return View(viewModel);
         }
@@ -414,9 +474,39 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
+            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejectd")
+            {
+                return RedirectToAction("Approve", new { ID = ID });
+            }
             return View(viewModel);
         }
-        
+
+        public ActionResult Approvegray(string siteUrl,
+            AssetCheckResultHeaderVM data,
+            int? ID,
+            string Approve,
+            string Reject
+        )
+        {
+
+            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            if (!string.IsNullOrEmpty(Approve))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.Approve(ID);
+                return RedirectToAction("Index");
+            }
+
+            if (!string.IsNullOrEmpty(Reject))
+            {
+                var viewModelSaveAsDraft = assetCheckResultService.Reject(ID);
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
+            return View(viewModel);
+        }
 
         public ActionResult Search()
         {

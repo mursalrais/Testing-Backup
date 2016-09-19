@@ -1,0 +1,130 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckResultHeaderVM
+
+<form onsubmit="return ValidationEvent()" enctype="multipart/form-data" class="form-horizontal" method="post" action="/ASSAssetCheckResult/Edit" id="create-asset-check-result">
+    <fieldset>
+        <legend>Form Asset Check Result</legend>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.FormID).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.FormID.Text
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountDate).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.CountDate
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy1).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.CountedBy1.Text
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy2).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.CountedBy2.Text
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CountedBy3).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.CountedBy3.Text
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Attachment).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    <input type="file" name="file" disabled="disabled"/>
+                    @if (Model.filename != null)
+                    {
+                        @Html.ActionLink(@Model.filename,"Download", new { filename = @Model.filename })
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.CompletionStatus).Class("col-md-4 control-label")
+                <div class="col-md-8">
+                    @Model.CompletionStatus.Text
+                </div>
+            </div>
+        </div>
+        <div>
+            <center>
+                @*<input class="k-button k-button-icontext k-grid-add" type="submit" name="GetData" value="Get Data" />*@
+            </center>
+        </div>
+
+                @Html.HiddenFor(m => m.AssetCheckResultID, new { Value = Model.AssetCheckResultID })
+
+                @Html.HiddenFor(m => m.filename, new { Value = Model.filename })
+
+                @Html.HiddenFor(m => m.ID, new { Value = Model.ID })
+
+                @Html.HiddenFor(m => m.hFormID, new { Value = Model.FormID.Text })
+
+        <div class="row">
+            <div>
+                @Html.Partial("_Detailsgray", Model.Details)
+            </div>
+            <div class="col-md-12" style="text-align: right;">
+                <input class="btn btn-default" type="submit" name="Calculate" value="Calculate" disabled="disabled" />
+            </div>
+        </div>
+        <legend>Approval Path</legend>
+        <div class="row">
+            <div style="width: 50%;">
+                @Html.Partial("_approval_Pathgray", Model)
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <center>
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SubmitForApproval" value="Submit for approval" disabled="disabled" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" name="SaveAsDraft" value="Save as draft" disabled="disabled" />
+                <a href="@Url.Action("Index", "ASSAssetCheckResult")" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+                </a>
+            </center>
+        </div>
+    </fieldset>
+
+    <input type="hidden" id="hStatusApproval" value="@Model.ApprovalStatus" />
+
+    <input type="hidden" id="hIsApprovalChange" value="0" />
+</form>
+
+<script type="text/javascript">
+    function ValidationEvent() {
+        var a = $("#hStatusApproval").val();
+        var b = $("#hIsApprovalChange").val();
+        if(a == "Approved")
+        {
+            alert("you can not edit he data since it has been approved");
+            return false;
+        }
+        if(a == "Rejected")
+        {
+            alert("you can not edit he data since it has been rejected");
+            return false;
+        }
+        if (a == "Pending approval" && b == "1") {
+            alert("you can not change the approver's name since it is already submitted for approval");
+            return false;
+        }
+        if (a == "Approved" && b == "1") {
+            alert("you can not delete the data since it has been submitted for approval.  need to unapprove the result and re-submit the approval");
+            return false;
+        }
+        return true;
+    }
+
+    function onSelectedLocation(e) {
+    }
+
+</script>

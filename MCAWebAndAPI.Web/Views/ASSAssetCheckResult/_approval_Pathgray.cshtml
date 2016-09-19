@@ -1,0 +1,57 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckResultHeaderVM
+
+<form>
+    <fieldset>  
+        <table>
+            <tr>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+                        @Model.Position.Text
+                    </div>
+                </td>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
+                        @Model.Name.Text
+                    </div>
+                </td>
+            </tr>
+        </table>          
+        
+        
+    </fieldset>
+
+</form>
+
+<script>
+    //$(document).ready(function () {
+    //    var idNama = $('#Name_Value').val();
+
+    //    var url = "/ASSAssetCheckResult/PositionID/" + idNama;
+
+    //    $.post(url, function (data) {
+    //        var dropdownlist = $("#Position_Value").data("kendoDropDownList");
+    //        dropdownlist.bind("dataBound", function (e) {
+    //            dropdownlist.select(parseInt(data));
+    //        });
+
+    //    });
+
+    //    $("#Name_Value").data("kendoDropDownList")
+    //    .bind("change", function (e) {
+    //        $("#hIsApprovalChange").val("1");
+    //        idNama = $('#Name_Value').val();
+
+    //        url = "/ASSAssetCheckResult/PositionID/" + idNama;
+
+    //        $.post(url, function (data) {
+    //            var dropdownlist = $("#Position_Value").data("kendoDropDownList");
+    //            dropdownlist.select(parseInt(data));
+    //        });
+    //    });
+
+    //});
+</script>

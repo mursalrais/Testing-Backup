@@ -201,7 +201,7 @@ namespace MCAWebAndAPI.Service.Asset
                         modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
                         modelDetailItem.province = ((item["province"] as FieldLookupValue).LookupValue == null ? "" : (item["province"] as FieldLookupValue).LookupValue);
                         modelDetailItem.location =
-                            (item["office"] == null ? "" : item["office"].ToString())
+                            (item["office"] == null ? "" : (item["office"] as FieldLookupValue).LookupValue)
                             + "/" + (item["floor"] == null ? "" : item["floor"].ToString())
                             + "/" + (item["room"] == null ? "" : item["room"].ToString());
 
