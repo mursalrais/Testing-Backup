@@ -145,19 +145,19 @@ namespace MCAWebAndAPI.Service.Finance
             var pettyCashTransactions = new List<PettyCashTransactionItem>();
             var viewModel = new PettyCashPaymentVoucherVM();
 
-            var from = String.Format("{0}-{1}-{2}", dateFrom.Year, dateFrom.Month, dateFrom.Day);
-            var to = String.Format("{0}-{1}-{2}", dateTo.Year, dateTo.Month, dateTo.Day);
+            var from = String.Format("{0}-{1}-{2}T{3}:{4}:00Z", dateFrom.Year, dateFrom.Month, dateFrom.Day, dateFrom.Hour, dateTo.Minute);
+            var to = String.Format("{0}-{1}-{2}T{3}:{4}:00Z", dateTo.Year, dateTo.Month, dateTo.Day, dateTo.Hour, dateTo.Minute);
 
             string caml = @"<View><Query>
                                       <Where>
                                         <And>
                                           <Geq>
                                             <FieldRef Name='{0}' />
-                                              <Value Type='DateTime'>{1}</Value>
+                                              <Value Type='DateTime' IncludeTimeValue='TRUE'>{1}</Value>
                                           </Geq>
                                           <Leq>
                                             <FieldRef Name='{0}' />
-                                            <Value Type='DateTime'>{2}</Value>
+                                            <Value Type='DateTime' IncludeTimeValue='TRUE'>{2}</Value>
                                           </Leq>
                                         </And>
                                       </Where>

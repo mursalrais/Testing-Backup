@@ -74,19 +74,19 @@
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.SpecialCashAdvanceAmount).Class("col-sm-3 control-label")
                     <div class="col-sm-7">
-                        @Html.TextBoxFor(m => m.SpecialCashAdvanceAmount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.SpecialCashAdvanceAmount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TotalExpense).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.TextBoxFor(m => m.TotalExpense, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.TotalExpense, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.ReceivedFromTo).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
-                        @Html.TextBoxFor(m => m.ReceivedFromTo, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
+                        @Html.EditorFor(m => m.ReceivedFromTo, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
             </div>
@@ -126,7 +126,10 @@
 @section scripts{
     <script type="text/javascript">
         $(document).ready(function () {
-
+            $("#SpecialCashAdvanceAmount").data("kendoNumericTextBox").readonly();
+            $("#TotalExpense").data("kendoNumericTextBox").readonly();
+            $("#ReceivedFromTo").data("kendoNumericTextBox").readonly();
+            
             $('#print-button').click(function (e) {
                 if (!$('form').valid()) {
                     alert('Please make sure that all required fields are filled');
@@ -157,9 +160,9 @@
                     success: function (response) {
                         $('#Description').val(response.Purpose);
                         $('#Fund').val(response.Fund);
-                        $('#SpecialCashAdvanceAmount').val(response.TotalAmount);
+                        $('#SpecialCashAdvanceAmount').data("kendoNumericTextBox").value(response.TotalAmount);
                         $('#Currency_Value').val(response.Currency);
-
+                        
                         calculateTotal();
                     },
                     error: function (response) {
