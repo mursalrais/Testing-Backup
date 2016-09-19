@@ -38,7 +38,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
         public void SendEmailEveryMonth()
         {
             if (DateTime.Now.ToLocalTime().ToString("dd") != "19") return;
-            var professionalData = _dataService.GetProfessionals();
+            var professionalData = _dataService.GetProfessionalsActive();
 
             List<string> lstEmail = (from item in professionalData
                                      where !string.IsNullOrEmpty(item.OfficeEmail)

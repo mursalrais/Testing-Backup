@@ -292,6 +292,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             catch (Exception e)
                             {
                                 logger.Error(e.Message);
+                                throw e;
                             }
                         }
                     }
@@ -314,6 +315,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
 
                         try
@@ -323,6 +325,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
 
@@ -338,6 +341,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
                 }
@@ -357,6 +361,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             catch (Exception e)
                             {
                                 logger.Error(e.Message);
+                                throw e;
                             }
                         }
                     }
@@ -379,6 +384,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
 
                         try
@@ -388,6 +394,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
 
@@ -403,6 +410,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
                 }
@@ -421,6 +429,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
 
                         try
@@ -430,6 +439,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
 
@@ -445,6 +455,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                         catch (Exception e)
                         {
                             logger.Error(e.Message);
+                            throw e;
                         }
                     }
                 }
@@ -464,6 +475,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             catch (Exception e)
                             {
                                 logger.Error(e.Message);
+                                throw e;
                             }
                         }
                     }
