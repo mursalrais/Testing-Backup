@@ -38,8 +38,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Index(string siteUrl)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             assetDisposalService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
             String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetDisposal;
 

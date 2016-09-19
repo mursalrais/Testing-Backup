@@ -79,4 +79,11 @@
     //        $('#CompletionStatus').prop('value', data.CompletionStatus);
     //    });
     //}
+
+    $(document).ready(function () {
+        $('#CountDate').attr('disabled', 'disabled');
+        $('#CountedBy1_Value').data("kendoDropDownList").enable(false);
+        $('#CountedBy2_Value').data("kendoDropDownList").enable(false);
+        $('#CountedBy3_Value').data("kendoDropDownList").enable(false);
+    });
 </script>
