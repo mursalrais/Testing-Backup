@@ -41,11 +41,14 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             foreach (var cekadjust in header.AdjustmentDetails)
             {
-                foreach (var getadjust in adjustmentlist)
+                if (cekadjust.EditMode != 0)
                 {
-                    if (cekadjust.ddlProfessional.Value == getadjust.ddlProfessional.Value && cekadjust.ajusmentType.Text == getadjust.ajusmentType.Text)
+                    foreach (var getadjust in adjustmentlist)
                     {
-                        return true;
+                        if (cekadjust.ddlProfessional.Value == getadjust.ddlProfessional.Value && cekadjust.ajusmentType.Text == getadjust.ajusmentType.Text)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
