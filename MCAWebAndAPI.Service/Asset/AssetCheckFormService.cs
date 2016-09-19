@@ -128,12 +128,12 @@ namespace MCAWebAndAPI.Service.Asset
             string camlOfiice = "";
             if (office == null || office == "All")
             {
-                camlOfiice = @"<Neq><FieldRef Name='office' /><Value Type='Text'>All</Value></Neq>";
+                camlOfiice = @"<Neq><FieldRef Name='office' /><Value Type='Lookup'>All</Value></Neq>";
             }
             else
             {
                 isNew = false;
-                camlOfiice = @"<Eq><FieldRef Name='office' /><Value Type='Text'>" + office + "</Value></Eq>";
+                camlOfiice = @"<Eq><FieldRef Name='office' /><Value Type='Lookup'>" + office + "</Value></Eq>";
             }
             string camlFloor = "";
             if (floor == null || floor == "All")
@@ -201,7 +201,7 @@ namespace MCAWebAndAPI.Service.Asset
                         modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
                         modelDetailItem.province = ((item["province"] as FieldLookupValue).LookupValue == null ? "" : (item["province"] as FieldLookupValue).LookupValue);
                         modelDetailItem.location =
-                            (item["office"] == null ? "" : item["office"].ToString())
+                            (item["office"] == null ? "" : (item["office"] as FieldLookupValue).LookupValue)
                             + "/" + (item["floor"] == null ? "" : item["floor"].ToString())
                             + "/" + (item["room"] == null ? "" : item["room"].ToString());
 

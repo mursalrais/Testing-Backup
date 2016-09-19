@@ -40,12 +40,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssetTransferVM GetHeader(int? ID, string SiteUrl)
         {
+            var filename = SPConnector.GetAttachFileName("Asset Transfer", ID, _siteUrl);
             var listItem = SPConnector.GetListItem("Asset Transfer", ID, SiteUrl);
-            var filename = "";
-            if (Convert.ToBoolean(listItem["Attachments"]) != false)
-            {
-                filename = SPConnector.GetAttachFileName("Asset Transfer", ID, _siteUrl);
-            }
             var viewModel = new AssetTransferVM();
             viewModel.filename = filename;
             viewModel.positionFrom = listItem["positionfrom"].ToString();
@@ -582,12 +578,12 @@ namespace MCAWebAndAPI.Service.Asset
                     updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
                 }
                 updatedValues.Add("cityfrom", provinceinfo["city"]);
-                updatedValues.Add("officefrom", provinceinfo["ID"]);
+                updatedValues.Add("officefrom", provinceinfo["Title"]);
                 updatedValues.Add("floorfrom", provinceinfo["Floor"]);
                 updatedValues.Add("roomfrom", provinceinfo["Room"]);
 
                 updatedValues.Add("cityto", provinceinfo1["city"]);
-                updatedValues.Add("officeto", provinceinfo1["ID"]);
+                updatedValues.Add("officeto", provinceinfo1["Title"]);
                 updatedValues.Add("floorto", provinceinfo1["Floor"]);
                 updatedValues.Add("roomto", provinceinfo1["Room"]);
 
@@ -749,7 +745,7 @@ namespace MCAWebAndAPI.Service.Asset
                                         <And>
                                            <Eq>
                                               <FieldRef Name='Title' />
-                                              <Value Type='Text'>" + (infoitem["officefrom"] as FieldLookupValue).LookupValue + @"</Value>
+                                              <Value Type='Text'>" + infoitem["officefrom"] + @"</Value>
                                            </Eq>
                                            <And>
                                               <Eq>
@@ -789,7 +785,7 @@ namespace MCAWebAndAPI.Service.Asset
                                     <And>
                                        <Eq>
                                           <FieldRef Name='Title' />
-                                          <Value Type='Text'>" + (infoitem["officeto"] as FieldLookupValue).LookupValue + @"</Value>
+                                          <Value Type='Text'>" + infoitem["officeto"] + @"</Value>
                                        </Eq>
                                        <And>
                                           <Eq>
@@ -819,7 +815,7 @@ namespace MCAWebAndAPI.Service.Asset
             AjaxComboBoxVM _province = new AjaxComboBoxVM();
             for (int j = 0; j < ListProvince.Count; j++)
             {
-                if (Convert.ToString(ListProvince[j]["Title"]) == Convert.ToString((item["officefrom"] as FieldLookupValue).LookupValue) && Convert.ToString(ListProvince[j]["Floor"]) == Convert.ToString(item["floorfrom"]) && Convert.ToString(ListProvince[j]["Room"]) == Convert.ToString(item["roomfrom"]))
+                if (Convert.ToString(ListProvince[j]["Title"]) == Convert.ToString(item["officefrom"]) && Convert.ToString(ListProvince[j]["Floor"]) == Convert.ToString(item["floorfrom"]) && Convert.ToString(ListProvince[j]["Room"]) == Convert.ToString(item["roomfrom"]))
                 {
                     _provincefrom.Value = (item["provincefrom"] as FieldLookupValue).LookupId;
                     _provincefrom.Text = Convert.ToString(ListProvince[j]["city"]) + "," + (ListProvince[j]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince[j]["Title"] + "-" + ListProvince[j]["Floor"] + "-" + ListProvince[j]["Room"];
@@ -828,7 +824,7 @@ namespace MCAWebAndAPI.Service.Asset
                     _roomfrom = Convert.ToString(ListProvince[j]["Room"]);
                 }
 
-                if (Convert.ToString(ListProvince1[j]["Title"]) == Convert.ToString((item["officeto"] as FieldLookupValue).LookupValue) && Convert.ToString(ListProvince1[j]["Floor"]) == Convert.ToString(item["floorto"]) && Convert.ToString(ListProvince1[j]["Room"]) == Convert.ToString(item["roomto"]))
+                if (Convert.ToString(ListProvince1[j]["Title"]) == Convert.ToString(item["officeto"]) && Convert.ToString(ListProvince1[j]["Floor"]) == Convert.ToString(item["floorto"]) && Convert.ToString(ListProvince1[j]["Room"]) == Convert.ToString(item["roomto"]))
                 {
                     _provinceto.Value = (item["provinceto"] as FieldLookupValue).LookupId;
                     _provinceto.Text = Convert.ToString(ListProvince1[j]["city"]) + "," + (ListProvince1[j]["Province"] as FieldLookupValue).LookupValue + "-" + ListProvince1[j]["Title"] + "-" + ListProvince1[j]["Floor"] + "-" + ListProvince1[j]["Room"];
@@ -896,7 +892,7 @@ namespace MCAWebAndAPI.Service.Asset
                                         <And>
                                            <Eq>
                                               <FieldRef Name='Title' />
-                                              <Value Type='Text'>" + (infoitem["officefrom"] as FieldLookupValue).LookupValue + @"</Value>
+                                              <Value Type='Text'>" + infoitem["officefrom"] + @"</Value>
                                            </Eq>
                                            <And>
                                               <Eq>
@@ -936,7 +932,7 @@ namespace MCAWebAndAPI.Service.Asset
                                     <And>
                                        <Eq>
                                           <FieldRef Name='Title' />
-                                          <Value Type='Text'>" + (infoitem["officeto"] as FieldLookupValue).LookupValue + @"</Value>
+                                          <Value Type='Text'>" + infoitem["officeto"] + @"</Value>
                                        </Eq>
                                        <And>
                                           <Eq>
@@ -1015,13 +1011,13 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     updatedValues.Add("provincefrom", (provinceinfo[i]["Province"] as FieldLookupValue).LookupId);
                     updatedValues.Add("cityfrom", provinceinfo[i]["city"]);
-                    updatedValues.Add("officefrom", provinceinfo[i]["ID"]);
+                    updatedValues.Add("officefrom", provinceinfo[i]["Title"]);
                     updatedValues.Add("floorfrom", provinceinfo[i]["Floor"]);
                     updatedValues.Add("roomfrom", provinceinfo[i]["Room"]);
 
                     updatedValues.Add("provinceto", (provinceinfo1[i]["Province"] as FieldLookupValue).LookupId);
                     updatedValues.Add("cityto", provinceinfo1[i]["city"]);
-                    updatedValues.Add("officeto", provinceinfo1[i]["ID"]);
+                    updatedValues.Add("officeto", provinceinfo1[i]["Title"]);
                     updatedValues.Add("floorto", provinceinfo1[i]["Floor"]);
                     updatedValues.Add("roomto", provinceinfo1[i]["Room"]);
                 }
@@ -1351,12 +1347,12 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("provinceto", (provinceinfo1[i]["Province"] as FieldLookupValue).LookupId);
 
                 updatedValues.Add("cityfrom", provinceinfo[i]["city"]);
-                updatedValues.Add("officefrom", provinceinfo[i]["ID"]);
+                updatedValues.Add("officefrom", provinceinfo[i]["Title"]);
                 updatedValues.Add("floorfrom", provinceinfo[i]["Floor"]);
                 updatedValues.Add("roomfrom", provinceinfo[i]["Room"]);
 
                 updatedValues.Add("cityto", provinceinfo1[i]["city"]);
-                updatedValues.Add("officeto", provinceinfo1[i]["ID"]);
+                updatedValues.Add("officeto", provinceinfo1[i]["Title"]);
                 updatedValues.Add("floorto", provinceinfo1[i]["Floor"]);
                 updatedValues.Add("roomto", provinceinfo1[i]["Room"]);
             }

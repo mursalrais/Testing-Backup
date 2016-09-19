@@ -46,12 +46,12 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_Name = "Title";
         private const string FieldName_OfficeEmail = "officeemail";
 
-        private const string Position_DED = "Deputy ED";
+        private const string Position_DED = "Deputy Executive Director";
         private const string Position_GrantManager = "Grant Manager";
         private const string Position_Director = "Director";
 
         private const string ProjectUnit_GreenProsperity = "Green Prosperity Project";
-        private const string ProjectUnit_ProgramDiv = "Program Div.";
+        private const string ProjectUnit_ProgramDiv = "Executive Office";
 
         private const string FieldName_VendorID = "Title";
         private const string FieldName_Email = "Email";

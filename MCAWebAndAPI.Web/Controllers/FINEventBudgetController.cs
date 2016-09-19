@@ -179,7 +179,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
-        public ActionResult Print(FormCollection form, EventBudgetVM viewModel)
+        public ActionResult Print(FormCollection form, EventBudgetVM viewModel, string userEmail = "")
         {
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection,Request.Url.Authority);
@@ -197,7 +197,11 @@ namespace MCAWebAndAPI.Web.Controllers
             string footer = string.Empty;
 
             //TODO: Resolve user name
+            var allProfs = COMProfessionalController.GetAll();
+            Model.HR.DataMaster.ProfessionalMaster user = allProfs.FirstOrDefault(x => x.OfficeEmail == userEmail);
             string userName = "xxxx";
+            if (user != null)
+                userName = user.Name;
 
             DateTime dt = DateTime.Now;
             footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);

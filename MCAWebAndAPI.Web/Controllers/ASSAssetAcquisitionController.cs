@@ -244,11 +244,11 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<WBSMaterVM> GetFromWBSExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["WBS%20Mapping"] as IEnumerable<WBSMaterVM>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMaster"] as IEnumerable<WBSMaterVM>;
             var positions = sessionVariable ?? _assetAcquisitionService.GetWBS();
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["WBS%20Mapping"] = positions;
+                System.Web.HttpContext.Current.Session["WBSMaster"] = positions;
             return positions;
         }
 
@@ -438,7 +438,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var listNameHeaderMemo = "Acceptance Memo";
             var listNameDetail = "Asset Acquisition Details";
             var listAssetMaster = "Asset Master";
-            var listWBSMaster = "WBS Mapping";
+            var listWBSMaster = "WBS Master";
             foreach (DataRow d in SessionManager.Get<DataTable>("CSVDataTable").Rows)
             {
                 if (d.ItemArray[0].ToString() == "Asset Acquisition")
@@ -575,7 +575,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     try
                     {
                         int? idAssetIDExist = _assetAcquisitionService.getIdOfColumn("Asset Master", siteUrl, camlAssetID);
-                        int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Mapping", siteUrl, camlWBS);
+                        int? idWBSExist = _assetAcquisitionService.getIdOfColumn("WBS Master", siteUrl, camlWBS);
                         if (idAssetIDExist != 0 && idAssetIDExist != 0)
                         {
                             row["assetsubasset"] = idAssetIDExist;

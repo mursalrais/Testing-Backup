@@ -1,0 +1,62 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.Asset
+
+@model AssetCheckResultHeaderVM
+
+<form>
+    <fieldset>  
+        <table>
+            <tr>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
+                        @Html.EditorFor(m => m.Position, new { disabled = "disabled" })
+                    </div>
+                </td>
+                <td style="padding: 10px;">
+                    <div>
+                        @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
+                        @Html.EditorFor(m => m.Name, new { disabled = "disabled" })
+                    </div>
+                </td>
+            </tr>
+        </table>          
+        
+        
+    </fieldset>
+
+</form>
+
+<script>
+    //$(document).ready(function () {
+    //    var idNama = $('#Name_Value').val();
+
+    //    var url = "/ASSAssetCheckResult/PositionID/" + idNama;
+
+    //    $.post(url, function (data) {
+    //        var dropdownlist = $("#Position_Value").data("kendoDropDownList");
+    //        dropdownlist.bind("dataBound", function (e) {
+    //            dropdownlist.select(parseInt(data));
+    //        });
+
+    //    });
+
+    //    $("#Name_Value").data("kendoDropDownList")
+    //    .bind("change", function (e) {
+    //        $("#hIsApprovalChange").val("1");
+    //        idNama = $('#Name_Value').val();
+
+    //        url = "/ASSAssetCheckResult/PositionID/" + idNama;
+
+    //        $.post(url, function (data) {
+    //            var dropdownlist = $("#Position_Value").data("kendoDropDownList");
+    //            dropdownlist.select(parseInt(data));
+    //        });
+    //    });
+
+    //});
+
+    $(document).ready(function () {
+        $('#Name_Value').data("kendoDropDownList").enable(false);
+        $('#Position_Value').data("kendoDropDownList").enable(false);
+    });
+</script>
