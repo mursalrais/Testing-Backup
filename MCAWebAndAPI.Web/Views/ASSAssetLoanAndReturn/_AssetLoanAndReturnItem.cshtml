@@ -55,8 +55,8 @@
         {
         model.Id(p => p.ID);
         model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
-        model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); ;
-        model.Field(p => p.ReturnDate) ;
+        model.Field(p => p.EstReturnDate).DefaultValue(DateTime.UtcNow); 
+        model.Field(p => p.ReturnDate).DefaultValue(DateTime.UtcNow); 
         model.Field(p => p.Status).Editable(false);
         //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
         })

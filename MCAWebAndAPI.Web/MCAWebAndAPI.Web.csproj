@@ -1215,6 +1215,10 @@
     <Content Include="Views\ASSAssetDisposal\_AssetDisposalDetailView.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Toapproval.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Listapproval.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Editgray.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_Detailsgray.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\_approval_Pathgray.cshtml" />
+    <Content Include="Views\ASSAssetCheckResult\Approvegray.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
