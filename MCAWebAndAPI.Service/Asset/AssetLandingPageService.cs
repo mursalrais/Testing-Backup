@@ -52,26 +52,55 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 var camlfx3 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-" + item2 + @"</Value></Contains></Where></Query></View>";
                 var datafx2 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlfx3);
+                var fx1_count = 0;
+
+                int totalCostIdr_fx = 0;
+                int totalCostUsd_fx = 0;
+                foreach (var items in datafx2)
+                {
+                    var data_split = (items["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                    if (data_split.Length <= 4)
+                    {
+                        fx1_count++;
+                        totalCostIdr_fx += Convert.ToInt32(items["costidr"]);
+                        totalCostUsd_fx += Convert.ToInt32(items["costusd"]);
+                    }
+                }
                 var dataad1 = SPConnector.GetList("Asset Disposal Detail", _siteUrl, camlfx3);
+                var ad1_count = 0;
+                int totalCostIdr_ad = 0;
+                int totalCostUsd_ad = 0;
+                foreach (var items in dataad1)
+                {
+                    var data_split = (items["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                    if (data_split.Length <= 4)
+                    {
+                        ad1_count++;
+                        var caml = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (items["assetsubasset"] as FieldLookupValue).LookupValue + @"</Value></Contains></Where></Query></View>";
+                        var datacost = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+                        foreach (var item in datacost)
+                        {
+                            totalCostIdr_ad += Convert.ToInt32(item["costidr"]);
+                            totalCostUsd_ad += Convert.ToInt32(item["costusd"]);
+                        }
+                    }
+                }
                 var modelDetailItem = new AssetLandingPageFixedAssetVM();
                 modelDetailItem.A = item2;
-                modelDetailItem.B = datafx2.Count() - dataad1.Count();
-
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
+                modelDetailItem.B = fx1_count - ad1_count;
 
                 //Total Cost IDR
-                foreach (var item in datafx2)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"]);
-                }
-                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr);
+                //foreach (var item in datafx2)
+                //{
+                //    totalCostIdr += Convert.ToInt32(item["costidr"]);
+                //}
+                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr_fx - totalCostIdr_ad);
                 //Total Cost USD
-                foreach (var item in datafx2)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"]);
-                }
-                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd);
+                //foreach (var item in datafx2)
+                //{
+                //    totalCostUsd += Convert.ToInt32(item["costusd"]);
+                //}
+                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd_fx - totalCostUsd_ad);
 
                 modelDetail.Add(modelDetailItem);
             }
@@ -104,26 +133,54 @@ namespace MCAWebAndAPI.Service.Asset
             {
                 var caml1 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-" + item4 + @"</Value></Contains></Where></Query></View>";
                 var datasv2 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml1);
+                var sv2_count = 0;
+                int totalCostIdr_sv = 0;
+                int totalCostUsd_sv = 0;
+                foreach (var items in datasv2)
+                {
+                    var data_split = (items["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                    if (data_split.Length <= 4)
+                    {
+                        sv2_count++;
+                        totalCostIdr_sv += Convert.ToInt32(items["costidr"]);
+                        totalCostUsd_sv += Convert.ToInt32(items["costusd"]);
+                    }
+                }
                 var dataad2 = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml1);
+                var ad2_count = 0;
+                int totalCostIdr_ad2 = 0;
+                int totalCostUsd_ad2 = 0;
+                foreach (var items in dataad2)
+                {
+                    var data_split = (items["assetsubasset"] as FieldLookupValue).LookupValue.Split('-');
+                    if (data_split.Length <= 4)
+                    {
+                        ad2_count++;
+                        var caml = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (items["assetsubasset"] as FieldLookupValue).LookupValue + @"</Value></Contains></Where></Query></View>";
+                        var datacost = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+                        foreach (var item in datacost)
+                        {
+                            totalCostIdr_ad2 += Convert.ToInt32(item["costidr"]);
+                            totalCostUsd_ad2 += Convert.ToInt32(item["costusd"]);
+                        }
+                    }
+                }
                 var modelDetailItem = new AssetLandingPageFixedAssetVM();
                 modelDetailItem.A = item4;
-                modelDetailItem.B = datasv2.Count() - dataad2.Count();
-
-                int totalCostIdr = 0;
-                int totalCostUsd = 0;
+                modelDetailItem.B = sv2_count - ad2_count;
 
                 //Total Cost IDR
-                foreach (var item in datasv2)
-                {
-                    totalCostIdr += Convert.ToInt32(item["costidr"]);
-                }
-                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr);
+                //foreach (var item in datasv2)
+                //{
+                //    totalCostIdr += Convert.ToInt32(item["costidr"]);
+                //}
+                modelDetailItem.C = String.Format("{0:#,#.}", totalCostIdr_sv - totalCostIdr_ad2);
                 //Total Cost USD
-                foreach (var item in datasv2)
-                {
-                    totalCostUsd += Convert.ToInt32(item["costusd"]);
-                }
-                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd);
+                //foreach (var item in datasv2)
+                //{
+                //    totalCostUsd += Convert.ToInt32(item["costusd"]);
+                //}
+                modelDetailItem.D = String.Format("{0:#,#.}", totalCostUsd_sv - totalCostUsd_ad2);
                 modelDetail.Add(modelDetailItem);
             }
             model.Detailss = modelDetail;
