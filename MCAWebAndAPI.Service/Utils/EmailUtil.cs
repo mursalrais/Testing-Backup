@@ -40,9 +40,9 @@ namespace MCAWebAndAPI.Service.Utils
             {
                 smtp.Send(mail);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
         }
 
