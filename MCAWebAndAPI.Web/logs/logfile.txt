@@ -768,3 +768,7 @@ Please try again.
    at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 139
 2016-09-15 18:15:12.6538 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-15 18:20:31.7518 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (403) Forbidden.
+2016-09-16 14:29:21.8432 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
+2016-09-16 14:35:18.8004 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
+2016-09-16 14:35:48.6243 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
+2016-09-16 14:37:20.1240 MCAWebAndAPI.Service.HR.Common.ProfessionalService Year, Month, and Day parameters describe an un-representable DateTime.
