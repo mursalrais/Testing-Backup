@@ -9,13 +9,13 @@
                 <td style="padding: 10px;">
                     <div>
                         @Html.Bootstrap().LabelFor(m => m.Position).Class("col-md-4 control-label")
-                        @Model.Position.Text
+                        @Html.EditorFor(m => m.Position, new { disabled = "disabled" })
                     </div>
                 </td>
                 <td style="padding: 10px;">
                     <div>
                         @Html.Bootstrap().LabelFor(m => m.Name).Class("col-md-4 control-label")
-                        @Model.Name.Text
+                        @Html.EditorFor(m => m.Name, new { disabled = "disabled" })
                     </div>
                 </td>
             </tr>
@@ -54,4 +54,9 @@
     //    });
 
     //});
+
+    $(document).ready(function () {
+        $('#Name_Value').data("kendoDropDownList").enable(false);
+        $('#Position_Value').data("kendoDropDownList").enable(false);
+    });
 </script>
