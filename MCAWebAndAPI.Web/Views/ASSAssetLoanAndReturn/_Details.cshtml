@@ -13,14 +13,16 @@
         .CreateAt(GridInsertRowPosition.Bottom))
         .Columns(columns =>
         {
-            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Value #" +
-                          "<input class='asset' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
+            columns.Bound(p => p.AssetSubAsset).ClientTemplate("#= AssetSubAsset.Text #" +
+                          "<input type='hidden' class='asset' name='AssetLoanAndReturnItem[#= getWorkingRelationshipDetails(data)#].AssetSubAsset.Value' value='#= AssetSubAsset.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
                             DataValueField = "Value",
                             ControllerName = "ASSAssetLoanAndReturn",
                             ActionName = "GetAssetSubSAssetGrid"
+
+                      
                         });
 
 

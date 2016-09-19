@@ -63,7 +63,7 @@ new
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TotalAmount).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.DisplayFor(m => m.TotalAmount)
+                        @Html.EditorFor(m => m.TotalAmount)
                     </div>
                 </div>
 
@@ -91,14 +91,14 @@ new
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.CashOnHand).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.DisplayFor(m => m.CashOnHand)
+                        @Html.EditorFor(m => m.CashOnHand)
                     </div>
                 </div>
 
                 <div class="form-group">
                     @Html.Bootstrap().LabelFor(m => m.TotalPettyCashFund).Class("col-xs-9 control-label")
                     <div class="col-xs-3">
-                        @Html.DisplayFor(m => m.TotalPettyCashFund)
+                        @Html.EditorFor(m => m.TotalPettyCashFund)
                     </div>
                 </div>
             </div>
@@ -129,6 +129,10 @@ new
 <script>
 
     $(document).ready(function () {
+        $(".k-numerictextbox").css("width", "100%");
+        $("#TotalAmount").data("kendoNumericTextBox").readonly();
+        $("#TotalPettyCashFund").data("kendoNumericTextBox").readonly();
+        $("#CashOnHand").data("kendoNumericTextBox").readonly();
 
         $("#view-button").on('click', function () {
             if ($("#DateFrom").val() > $("#DateTo").val()) {
@@ -201,9 +205,6 @@ new
 </script>
 
 <style>
-    #Fund,#AmountReimbursed,#TotalAmount,#TotalPettyCashFund,#CashOnhand{
-        background-color: #dedede;
-    }
     .field-validation-error {
         margin-top:7px !important;
     }

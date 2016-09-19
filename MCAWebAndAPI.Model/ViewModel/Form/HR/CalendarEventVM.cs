@@ -21,6 +21,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// <summary>
         /// CalendarEventDate
         /// </summary>
+        //string format = @"{0:dd/MM/yyyy HH\:mm}";
         DateTime? calendarEventDate = DateTime.Now;
 
         /// <summary>

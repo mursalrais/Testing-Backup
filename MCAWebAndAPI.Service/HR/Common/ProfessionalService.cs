@@ -337,8 +337,13 @@ namespace MCAWebAndAPI.Service.HR.Common
         private IEnumerable<EducationDetailVM> GetEducationDetails(int? iD)
         {
             var caml = @"<View>  
-            <Query> 
-               <Where><Eq><FieldRef Name='professional' LookupId='True' /><Value Type='Lookup'>" + iD + @"</Value></Eq></Where> 
+            <Query>
+               <Where>
+                  <Eq>
+                     <FieldRef Name='professional_x003a_ID' />
+                     <Value Type='Lookup'>"+iD+@"</Value>
+                  </Eq>
+               </Where>
             </Query> 
              <ViewFields>
                 <FieldRef Name='professional' />

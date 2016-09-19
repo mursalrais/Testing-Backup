@@ -17,6 +17,13 @@
                             }
                         </small>
                     </p>
+
+                    @if (ViewBag.ErrorMessageDetail != null)
+                    {
+                        <p class="bg-danger">
+                            Error detail: @ViewBag.ErrorMessageDetail
+                        </p>
+                    }
                 </div>
             </div>
         </div>

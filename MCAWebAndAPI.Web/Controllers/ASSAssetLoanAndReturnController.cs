@@ -29,9 +29,15 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         // GET: ASSAssetLoanAndReturn
-        public ActionResult Index()
+        // GET: ASSAssetCheckForm
+        public ActionResult Index(string siteUrl)
         {
-            return View();
+            assetLoanAndReturnService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetLoanAndReturn;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
 
         public ActionResult Create(string siteUrl)
@@ -147,8 +153,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-           
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            return RedirectToAction("Index");
         }
 
         private IEnumerable<AssetLoanAndReturnItemVM> BindMonthlyFeeDetailDetails(FormCollection form, IEnumerable<AssetLoanAndReturnItemVM> monthlyFeeDetails)
@@ -215,7 +222,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse(e);
             }
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetLoanAndReturn);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)

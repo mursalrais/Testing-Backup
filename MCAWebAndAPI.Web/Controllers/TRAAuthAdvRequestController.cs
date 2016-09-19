@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.ViewModel.Form.Travel;
+using MCAWebAndAPI.Web.Resources;
+using MCAWebAndAPI.Web.Helpers;
+using MCAWebAndAPI.Service.Travel;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -17,14 +20,31 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatCreated = "xxxxxxxxxxxxxxxx has been successfully created.";
         private const string SuccessMsgFormatUpdated = "xxxxxxxxxxxxxxxx has been successfully updated.";
-        private const string FirstPage = "{0}/Lists/xxxxxxxxxx/AllItems.aspx";
+        private const string FirstPageUrl = "{0}/Lists/xxxxxxxxxx/AllItems.aspx";
+
+        private IAuthAdvRequestService service = null;
 
         private string siteUrl = string.Empty;
 
-        public ActionResult Item()
+        public ActionResult Item(string siteUrl = null, int? id = null)
         {
-            var viewModel = new AuthAdvRequestVM();
+            siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
+            SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
+            service = new AuthAdvRequestService();
+
+            AuthAdvRequestVM viewModel = null;
+            if (id.HasValue)
+            {
+                viewModel = service.Get(id);
+            }
+            else
+            {
+                viewModel = new AuthAdvRequestVM();
+            }
+            
+
+            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             return View(viewModel);
         }
 
@@ -36,7 +56,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatCreated, viewModel.ID),
-                    previousUrl = string.Format(FirstPage, siteUrl)
+                    previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }
     }

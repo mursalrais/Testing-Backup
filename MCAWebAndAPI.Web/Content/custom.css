@@ -178,6 +178,14 @@ span.k-filename {
         max-width: 30.667em !important;
 }
 
-#Fund,#AmountReimbursed,#TotalAmount,#TotalPettyCashFund,#CashOnhand{
+#Fund{
     background-color: #dedede;
+}
+.k-input[readonly] {
+    background-color: #e2dcdc!important;
+    color: #333;
+}
+.k-numeric-wrap.k-expand-padding .k-input {
+    border-radius: 0;
+    background-color: #e2dcdc!important;
 }

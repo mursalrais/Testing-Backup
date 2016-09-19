@@ -3,10 +3,10 @@
 
 
 @model AssignmentOfAssetVM
-{
+
 <fieldset>
     <center>
-        <br /><br /><br /><br /><br />
+        <br /><br /><br />
         <h2>MEMO FOR  ASSIGNMENT OF ASSET</h2>
         <h4>@Model.AssetIDs</h4>
     </center>
@@ -38,10 +38,10 @@
             </p>
         </justify>
     </div>
-    <br /><br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /> <br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br /><br /><br />
     <div class="col-md-6">
         I, @Model.nameOnly acknowledge the foregoing terms of the assignment of asset and agree to abide by its term.
-        <br /><br /><br /><br /><br /> <br /><br /><br /><br /><br /><br /><br />
+        <br /><br /><br /><br /><br /> <br /><br /><br />
         <table border="0" width="100%">
             <tr>
                 <td><hr style="border:1px solid;width:200px"></td>
@@ -91,4 +91,3 @@
 @Html.HiddenFor(m => m.ID)
 @Html.HiddenFor(m => m.AssetIDs)
 @Html.HiddenFor(m => m.nameOnly)
-    }

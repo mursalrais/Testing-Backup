@@ -77,14 +77,22 @@
         });
 
         function importCSV(e) {
+            showLoading();
             var url = "/ASSAssetAcquisition/SubmitUpload?listName=" + "@Model.ListName";
             $.getJSON(url, function (data) {
-                var query = window.location.search;
-                //alert(query);
-                query = query.split('=');
-                query = query[1].split('&');
-                alert("Redirecting....");
-                window.top.location.href = query[0] + "/Lists/Asset%20Acquisition/AllItems.aspx";
+                if (data == "Invalid Data")
+                {
+                    alert(data);
+                }
+                else
+                {
+                    var query = window.location.search;
+                    //alert(query);
+                    query = query.split('=');
+                    query = query[1].split('&');
+                    alert("Redirecting....");
+                    window.top.location.href = query[0] + "/Lists/Asset%20Acquisition/AllItems.aspx";
+                }
             });
           
         }

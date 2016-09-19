@@ -44,14 +44,22 @@
     function GetDateParameter() {
         return { dateFrom: $("#DateFrom").val(), dateTo: $("#DateTo").val(), itemEdited: $("#ItemEdited").val() };
     }
+
     function onDataBound(arg) {
+        $("#TotalAmount").kendoNumericTextBox({ spinners: false });
+        $("#CashOnHand").kendoNumericTextBox({ spinners: false });
+        $("#TotalPettyCashFund").kendoNumericTextBox({ spinners: false });
+        $(".k-numerictextbox").css("width", "100%");
+        
         var grid = $("#ItemDetails").data("kendoGrid");
         var data = grid.dataSource.view();
+        var totalPettyCashFund = $("#TotalPettyCashFund").val();
         var sum = 0;
         for (var i = 0; i <= (data.length - 1) ; i++) {
             sum = sum + data[i].Amount;
         }
-        $("#TotalAmount").val(sum);
-        $("#CashOnhand").val($("#TotalPettyCashFund").val() - sum);
+        
+        $("#TotalAmount").data("kendoNumericTextBox").value(sum);
+        $("#CashOnHand").data("kendoNumericTextBox").value(totalPettyCashFund - sum);
     }
 </script>

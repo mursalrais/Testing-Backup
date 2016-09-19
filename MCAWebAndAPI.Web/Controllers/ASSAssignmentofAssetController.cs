@@ -64,6 +64,17 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        // GET: ASSAssetCheckForm
+        public ActionResult Index(string siteUrl)
+        {
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetAssignment;
+
+            return Content("<script>window.top.location.href = '" + url + "';</script>");
+        }
+
         public ActionResult View(int ID, string SiteUrl)
         {
             _service.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
@@ -100,16 +111,19 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 if ((_data.attach == null && _data.filename == null) || (_data.attach == null && _data.filename == ""))
                 {
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.TrySkipIisCustomErrors = true;
-                    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    //Response.TrySkipIisCustomErrors = true;
+                    //Response.TrySkipIisCustomErrors = true;
+                    //Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    //return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+
+                    var mesej = "Have To Attach File to Change Completion Status into Complete";
+                    return Json(mesej, JsonRequestBehavior.AllowGet);
                 }
             }
 
             if (_data.CompletionStatus.Value != "Complete")
             {
-                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
+                if (_data.filename != null || _data.attach != null)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
@@ -161,7 +175,8 @@ namespace MCAWebAndAPI.Web.Controllers
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Save Detail");
             }
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
-            return Redirect(siteUrl + UrlResource.AssetAssignment);
+            //return Redirect(siteUrl + UrlResource.AssetAssignment);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -177,13 +192,15 @@ namespace MCAWebAndAPI.Web.Controllers
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
                     Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    // return JsonHelper.GenerateJsonErrorResponse("Have To Attach File to Change Completion Status into Complete");
+                    var mesej = "Have To Attach File to Change Completion Status into Complete";
+                    return Json(mesej, JsonRequestBehavior.AllowGet);
                 }
             }
 
             if (_data.CompletionStatus.Value != "Complete")
             {
-                if (_data.filename != "" || _data.attach.FileName != "" || _data.attach.FileName != null)
+                if (_data.filename != null || _data.attach != null)
                 {
                     Response.TrySkipIisCustomErrors = true;
                     Response.TrySkipIisCustomErrors = true;
@@ -225,7 +242,8 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AssetAssignment);
-            return Redirect(siteUrl + UrlResource.AssetAssignment);
+            //return Redirect(siteUrl + UrlResource.AssetAssignment);
+            return RedirectToAction("Index");
         }
 
         public ActionResult GetProfMasterInfo(string fullname, string position)
@@ -793,6 +811,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.nameOnly = nm[0];
             viewModel.position = nm[1];
             viewModel.Details = _service.GetDetailsPrint(viewModel.ID);
+            viewModel.UrlImage = Request.Url.Scheme + "://" + Request.Url.Authority + Url.Content("~/img/logomca.png");
             var fileName = nm[0] + "_AssignmentOfAsset.pdf";
             byte[] pdfBuf = null;
             string content;

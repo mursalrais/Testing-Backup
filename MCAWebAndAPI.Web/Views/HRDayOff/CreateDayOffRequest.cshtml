@@ -1053,7 +1053,8 @@
 
             if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null) && (dayOffRequestRemarks != null))
             {
-                var returnToWork = GetReturnToWork(dayOffRequestStarDate, dayOffRequestEndDate);
+                //var returnToWork = GetReturnToWork(dayOffRequestStarDate, dayOffRequestEndDate);
+                var returnToWork = GetReturnToWork();
 
                 //returnToWork.forEach(function (cekReturnToWork) {
                 //    console.log(cekReturnToWork);
@@ -1069,22 +1070,30 @@
         
         }
 
-        function GetReturnToWork(dayOffRequestStarDate, dayOffRequestEndDate)
+        function GetReturnToWork()
         {
-            var lenStartDate = dayOffRequestStarDate.length;
-            var lenEndDate = dayOffRequestEndDate.length;
+            //var rowgridi = $("#DayOffRequestDetails").data("kendoGrid").tbody.find("tr");
+            var rowgrid = $("#DayOffRequestDetails").data("kendoGrid").tbody.find("tr");
+            var i = -1;
 
             var dayOffReturnToWork = [];
+            var strDatesToBackWork
 
-            for(var i = 0; i < lenEndDate; i++)
+            rowgrid.each(function (e)
             {
-                var endDate = new Date(dayOffRequestEndDate[i]);
-                var returnToWork = endDate.setDate(endDate.getDate() + 1);
+                i++;
+                var requestEndDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].RequestEndDate;
+                console.log("requestEndDate: " + requestEndDate);
+
+
+                var requestEndDates = new Date(requestEndDate);
+                var returnToWork = requestEndDates.setDate(requestEndDates.getDate() + 1);
                 var datesReturnToWork = new Date(returnToWork);
                 var dayReturnToWork = datesReturnToWork.getDay();
 
+                var returnToWorkDate;
+
                 var nameOfDayReturnToWork = checkWeekend(dayReturnToWork);
-                //var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
 
                 if (nameOfDayReturnToWork == "Saturday")
                 {
@@ -1096,8 +1105,7 @@
                     var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
 
                     var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
-                    if (numberOfPublicHoliday > 0)
-                    {
+                    if (numberOfPublicHoliday > 0) {
                         var AddOneDays = dateAddTwoDays.setDate(dateAddTwoDays.getDate() + 1);
                         var dateAddOneDays = new Date(AddOneDays);
                         var datesDateAddOneDays = dateAddOneDays.getDate();
@@ -1105,12 +1113,17 @@
                         var yearDateAddOneDays = dateAddOneDays.getFullYear();
                         var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
 
-                        dayOffReturnToWork.push(strDateAddAddOneDays);
+                        returnToWorkDate = strDateAddAddOneDays;
+
+                        //dayOffReturnToWork.push(strDateAddAddOneDays);
+                    }
+                    else
+                    {
+                        returnToWorkDate = strDateAddTwoDays;
                     }
 
                 }
-                else if (nameOfDayReturnToWork == "Sunday")
-                {
+                else if (nameOfDayReturnToWork == "Sunday") {
                     var AddOneDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 1);
                     var dateAddOneDays = new Date(AddOneDays);
                     var datesDateAddOneDays = dateAddOneDays.getDate();
@@ -1128,23 +1141,160 @@
                         var yearDateAddOneDays = dateAddOneDays.getFullYear();
                         var strDateAddAddOneDays = monthDateAddOneDays + '/' + monthDateAddOneDays + '/' + monthDateAddOneDays;
 
-                        dayOffReturnToWork.push(strDateAddAddOneDays);
+                        returnToWorkDate = strDateAddAddOneDays;
+
+                        //dayOffReturnToWork.push(strDateAddAddOneDays);
+                    }
+                    else
+                    {
+                        returnToWorkDate = strDateAddAddOneDays;
                     }
 
-                    dayOffReturnToWork.push(strDateAddAddOneDays);
+                    //dayOffReturnToWork.push(strDateAddAddOneDays);
                 }
-                else
-                {
+                else {
                     var dateReturnToWork = datesReturnToWork.getDate();
                     var monthReturnToWork = datesReturnToWork.getMonth() + 1;
                     var yearReturnToWork = datesReturnToWork.getFullYear();
                     var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
 
+                    var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+                    if (numberOfPublicHoliday > 0) {
+                        var AddOneDaysAgain = dateAddOneDays.setDate(dateAddOneDays.getDate() + 1);
+                        var dateAddOneDaysAgain = new Date(AddOneDaysAgain);
+                        var datesDateAddOneDays = dateAddOneDays.getDate();
+                        var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                        var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + monthDateAddOneDays + '/' + monthDateAddOneDays;
+
+                        returnToWorkDate = strDateAddAddOneDays;
+
+                        //dayOffReturnToWork.push(strReturnToWork);
+
+                        //dayOffReturnToWork.push(strDateAddAddOneDays);
+                    }
+                    else
+                    {
+                        returnToWorkDate = strReturnToWork;
+                    }
+
+                }
+
+                var j = -1;
+                rowgrid.each(function (e) {
+                    j++;
+
+                    if (i != j)
+                    {
+                        var requestStartDate = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[j].RequestStartDate;
+                        var requestStartDates = new Date(requestStartDate);
+                        var dateRequestStartDates = requestStartDates.getDate();
+                        var monthRequestStartDates = requestStartDates.getMonth() + 1;
+                        var yearRequestStartDates = requestStartDates.getFullYear();
+                        var strRequestStartDates = monthRequestStartDates + '/' + dateRequestStartDates + '/' + yearRequestStartDates;
+
+                        if (returnToWorkDate == strRequestStartDates) {
+                            var returnToWorkDates = new Date(returnToWorkDate);
+                            var datesReturnToWorkDates = returnToWorkDates.setDate(returnToWorkDates.getDate() + 1);
+
+                            var datesToBackWork = new Date(datesReturnToWorkDates);
+                            var dateDatesToBackWork = datesToBackWork.getDate();
+                            var monthDatesToBackWork = datesToBackWork.getMonth() + 1;
+                            var yearDatesToBackWork = datesToBackWork.getFullYear();
+                            strDatesToBackWork = monthDatesToBackWork + '/' + dateDatesToBackWork + '/' + yearDatesToBackWork;
+
+                            console.log("strDatesToBackWork: " + strDatesToBackWork);
+
+                            dayOffReturnToWork.push(strDatesToBackWork);
+                        }
+                        else {
+                            console.log("returnToWorkDates: " + returnToWorkDates);
+
+                            dayOffReturnToWork.push(returnToWorkDates);
+                        }
+                    }
+                    
+                    //j++;
+                });
+                //i++;
+            });
+
+
+            //var lenStartDate = dayOffRequestStarDate.length;
+            //var lenEndDate = dayOffRequestEndDate.length;
+
+            
+
+            //for(var i = 0; i < lenEndDate; i++)
+            //{
+            //    var endDate = new Date(dayOffRequestEndDate[i]);
+            //    var returnToWork = endDate.setDate(endDate.getDate() + 1);
+            //    var datesReturnToWork = new Date(returnToWork);
+            //    var dayReturnToWork = datesReturnToWork.getDay();
+
+            //    var nameOfDayReturnToWork = checkWeekend(dayReturnToWork);
+            //    //var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+            //    if (nameOfDayReturnToWork == "Saturday")
+            //    {
+            //        var AddTwoDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 2);
+            //        var dateAddTwoDays = new Date(AddTwoDays);
+            //        var datesDateAddTwoDays = dateAddTwoDays.getDate();
+            //        var monthDateAddTwoDays = dateAddTwoDays.getMonth() + 1;
+            //        var yearDateAddTwoDays = dateAddTwoDays.getFullYear();
+            //        var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
+
+            //        var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
+            //        if (numberOfPublicHoliday > 0)
+            //        {
+            //            var AddOneDays = dateAddTwoDays.setDate(dateAddTwoDays.getDate() + 1);
+            //            var dateAddOneDays = new Date(AddOneDays);
+            //            var datesDateAddOneDays = dateAddOneDays.getDate();
+            //            var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+            //            var yearDateAddOneDays = dateAddOneDays.getFullYear();
+            //            var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+            //            dayOffReturnToWork.push(strDateAddAddOneDays);
+            //        }
+
+            //    }
+            //    else if (nameOfDayReturnToWork == "Sunday")
+            //    {
+            //        var AddOneDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 1);
+            //        var dateAddOneDays = new Date(AddOneDays);
+            //        var datesDateAddOneDays = dateAddOneDays.getDate();
+            //        var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+            //        var yearDateAddOneDays = dateAddOneDays.getFullYear();
+            //        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+            //        var numberOfPublicHoliday = checkPublicHoliday(strDateAddAddOneDays);
+
+            //        if (numberOfPublicHoliday > 0) {
+            //            var AddOneDaysAgain = dateAddOneDays.setDate(dateAddOneDays.getDate() + 1);
+            //            var dateAddOneDaysAgain = new Date(AddOneDaysAgain);
+            //            var datesDateAddOneDays = dateAddOneDays.getDate();
+            //            var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+            //            var yearDateAddOneDays = dateAddOneDays.getFullYear();
+            //            var strDateAddAddOneDays = monthDateAddOneDays + '/' + monthDateAddOneDays + '/' + monthDateAddOneDays;
+
+            //            dayOffReturnToWork.push(strDateAddAddOneDays);
+            //        }
+
+            //        dayOffReturnToWork.push(strDateAddAddOneDays);
+            //    }
+            //    else
+            //    {
+            //        var dateReturnToWork = datesReturnToWork.getDate();
+            //        var monthReturnToWork = datesReturnToWork.getMonth() + 1;
+            //        var yearReturnToWork = datesReturnToWork.getFullYear();
+            //        var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
+
                     
 
-                    dayOffReturnToWork.push(strReturnToWork);
-                }
-            }
+            //        dayOffReturnToWork.push(strReturnToWork);
+            //    }
+            //}
 
             return dayOffReturnToWork;
             
