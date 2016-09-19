@@ -60,7 +60,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.AssetSubAsset).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                        model.Field(p => p.EstReturnDate).DefaultValue(null);
-                       model.Field(p => p.ReturnDate);//.DefaultValue(null);
+                       model.Field(p => p.ReturnDate).DefaultValue(null);
                        model.Field(p => p.Status).Editable(false);
                        //model.Field(m => m.Status).DefaultValue(AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue());
                    })
