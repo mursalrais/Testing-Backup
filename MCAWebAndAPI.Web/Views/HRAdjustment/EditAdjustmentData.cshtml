@@ -41,12 +41,16 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+            showLoading();
+
             var period = $("#periodDate").val();
             var getperiod = period.replace(" ", "-");
             var url = "/HRAdjustment/GetAdjustmentDetails?period=" + getperiod + "";
 
             $('#adjustmentlist').load(url, function (response, status, xhr) {
                 if (status == "success") {
+                    hideLoading();
+
                 }
             });
 
@@ -69,38 +73,46 @@
                 rowgrid.each(function (e) {
                     i++;
                     var xprof = $("#Profid" + i).val();
+                    var xadjus = $("#ajusmentType" + i).val();
                     var xEdit = $("#Editid" + i).val();
                     var j = -1;
                     rowgrid.each(function (e) {
-                        i++;
-                        var xprof = $("#Profid" + i).val();
-                        var xadjus = $("#ajusmentType" + i).val();
-                        var xEdit = $("#Editid" + i).val();
-                        var j = -1;
-                        rowgrid.each(function (e) {
-                            j++;
-                            var yprof = $("#Profid" + j).val();
-                            var yadjus = $("#ajusmentType" + j).val();
-                            var yEdit = $("#Editid" + j).val();
-                            if (i !== j) {
-                                if (xprof != "undifined" && yprof != "undifined") {
-                                    if (xEdit != -1) {
-                                        if (yEdit != -1) {
-                                            if (xprof == yprof) {
-                                                if (xadjus == yadjus) {
-                                                    valdate = false;
-                                                    return false;
-                                                }
+                        j++;
+                        var yprof = $("#Profid" + j).val();
+                        var yadjus = $("#ajusmentType" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xprof != "undifined" && yprof != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xprof == yprof) {
+                                            if (xadjus == yadjus) {
+                                                valdate = false;
+                                                return false;
                                             }
                                         }
                                     }
                                 }
                             }
-                        });
+                        }
                     });
                 });
 
-                if (valdate == false) {
+                var grid = $("#AdjustmentDetails").data("kendoGrid").dataSource.data();
+
+                var valdatermk = true;
+                for (var i = 0; i < grid.length; i++) {
+                    if (grid[i].EditMode == 0) {
+                        if (grid[i].remark == "") {
+                            valdatermk = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (valdatermk == false) {
+                    alert("remark must be inputed..!");
+                } else if (valdate == false) {
                     alert("professional with same adjustment type already add in same period..!!");
                 } else {
                     $("form").submit();
@@ -129,46 +141,15 @@
             };
         }
 
-        function getProjUnit(prof) {
-            if (prof != null) {
-                var proj_unit;
-                if (prof.Project_Unit == undefined)
-                {
-                    proj_unit = "";
-                } else {
-                    proj_unit = prof.Project_Unit;
-                }
-                return proj_unit;
-            };
-        }
-
-        function getprojUnitajax(proj) {
-            var proj_unit;
-
-            $.ajax({
-                type: "POST",
-                url: "/HRDataMaster/GetProfessional", // the URL of the controller action method
-                contentType: 'application/json;',
-                data: JSON.stringify({ id: proj }),
-                success: function (result) {
-                    if (result[0].Project_Unit != undefined) {
-                        proj_unit = result[0].Project_Unit;
-                    }
-                }
-            });
-            return proj_unit;
-        }
-
-        function getPosition(prof) {
-            if (prof != null) {
-                var postion;
-                if (prof.Position == undefined) {
-                    postion = "";
-                } else {
-                    postion = prof.Position;
-                }
-                return postion;
-            };
+        function onAdjustChange(e) {
+            if (e.action === "itemchange") {
+                var model = e.items[0];
+                var url = "/HRDataMaster/GetProfessionalActives/" + model.ddlProfessional.Value;
+                $.getJSON(url, function (result) {
+                    model.set('projUnit', (result[0].Project_Unit));
+                    model.set('position', (result[0].Position));
+                });
+            }
         }
 
         function GetDetailAdjustment(dataItem) {
