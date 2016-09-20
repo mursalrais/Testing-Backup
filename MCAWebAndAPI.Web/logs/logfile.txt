@@ -799,3 +799,35 @@ Please try again.
 2016-09-19 19:03:23.4657 MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService System.Exception: Failed to send email. Please contact your IT Administrator.
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 45
    at MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService.CreatePerformanceEvaluationDetails(Nullable`1 headerID, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceEvaluationService.cs:line 142
+2016-09-20 13:46:14.6141 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 13:47:47.7179 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 13:52:30.4747 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Value cannot be null.
+Parameter name: source
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 14:34:49.9860 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Cannot complete this action.
+
+Please try again.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 14:36:30.3571 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Cannot complete this action.
+
+Please try again.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 14:39:25.7025 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Cannot complete this action.
+
+Please try again.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
+2016-09-20 14:43:10.7521 MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService Microsoft.SharePoint.Client.ServerException: Cannot complete this action.
+
+Please try again.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetLoanAndReturnService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in D:\HADI\WORK1\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetLoanAndReturnService.cs:line 210
