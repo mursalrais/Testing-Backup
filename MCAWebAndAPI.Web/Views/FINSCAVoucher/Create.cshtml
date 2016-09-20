@@ -20,6 +20,9 @@
         </div>
 
         <legend>Item Detail</legend>
+
+        @Html.HiddenFor(s => s.UserEmail);
+
         <div class="row">
             @Html.Partial("_EventBudgetItems", Model.SCAVoucherItems)
         </div>
