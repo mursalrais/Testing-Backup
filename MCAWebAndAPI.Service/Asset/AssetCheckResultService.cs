@@ -465,7 +465,7 @@ namespace MCAWebAndAPI.Service.Asset
                         GetFullName(model.CountedBy2.Value),
                         GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, ID.ToString()));
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
                 else
                 {
@@ -614,7 +614,7 @@ namespace MCAWebAndAPI.Service.Asset
                         GetFullName(model.CountedBy2.Value),
                         GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, IDResult.ToString()));
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 return model;
@@ -651,7 +651,7 @@ namespace MCAWebAndAPI.Service.Asset
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
 
             return model;
         }
@@ -686,7 +686,7 @@ namespace MCAWebAndAPI.Service.Asset
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
 
 
             return model;

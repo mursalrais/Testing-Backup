@@ -35,17 +35,20 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrlSession = SessionManager.Get<string>("SiteUrl");
 
+            String url = "";
             if (siteUrlSession == null)
             {
+                url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
                 assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
                 SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             }
             else
             {
                 assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+                url = (siteUrlSession ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
             }
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
+            
 
             return Content("<script>window.top.location.href = '" + url+"';</script>");     
         }
@@ -380,7 +383,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            _dataMasterService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
             return Json(positions.Select(e =>
@@ -398,7 +403,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            _dataMasterService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
 
             var professionals = GetFromExistingSession();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
