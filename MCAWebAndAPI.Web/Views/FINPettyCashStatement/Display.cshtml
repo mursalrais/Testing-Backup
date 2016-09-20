@@ -9,16 +9,18 @@
     ViewBag.Title = "Petty Cash Statement";
 }
 
-@using (Html.BeginForm("Index", "FINPettyCashStatement",
-                                FormMethod.Post,
-                                new
-                                {
-                                    @class = "form-horizontal",
-                                    enctype = "multipart/form-data"
-                                }))
+@using (Html.BeginForm("Display", "FINPettyCashStatement",
+    FormMethod.Post,
+    new
+    {
+        @id = "formPCS",
+        @class = "form-horizontal",
+        enctype = "multipart/form-data"
+    }))
 {
     <fieldset>
         <legend>@ViewBag.Title</legend>
+
         <div class="row">
             <div class="col-xs-12">
                 @(Html.Kendo().Grid(Model)
@@ -43,11 +45,33 @@
 
         </div>
     </fieldset>
+
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="print-button" class="btn btn-default" type="button">
+                    Print
+                </button>
+
+                <a href="@ViewBag.ListUrl" target='_parent'>
+                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Close" />
+                </a>
+            </div>
+        </div>
+    </div>
 }
 
 <script>
-    function onDataBoundItemDetails(e) {
-        //TODO: do something   
-    }
+    $("#formPCS").on('submit', function () {
+        return true;
+    });
 
+    $('#print-button').click(function (e) {
+        var actionUrl = $('form').attr("action");
+        var newActionUrl = actionUrl.replace("Display", "Print");
+
+        $('form').prop('action', newActionUrl);
+        $('form').submit();
+
+    });
 </script>

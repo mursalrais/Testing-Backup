@@ -888,7 +888,7 @@ namespace MCAWebAndAPI.Service.Asset
         {
             var model = new AssetLoanAndReturnHeaderVM();
             model.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
-            model.Professional.Choices = GetFromListHR("Professional Master", "Title", "Position", SiteUrl);
+            model.Professional.Choices = GetFromListHR("Professional Master", "Title", "Position", _siteUrl);
             model.TransactionType = Convert.ToString("Asset Loan And Return");
             model.CancelURL = _siteUrl + UrlResource.AssetLoanAndReturn;
 

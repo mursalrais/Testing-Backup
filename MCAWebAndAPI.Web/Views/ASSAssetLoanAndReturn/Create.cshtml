@@ -102,7 +102,7 @@
                     //alert(displayedDataAsJSON);
 
                     for (var j = 0; j < grid.length; j++) {
-                        if (grid[j].EstReturnDate < loandate) {
+                        if (Date.parse(grid[j].EstReturnDate) < Date.parse(loandate)) {
                             var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
                             showModalWindow(data);
                             return false;

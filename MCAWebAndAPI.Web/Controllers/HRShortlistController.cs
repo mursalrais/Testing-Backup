@@ -207,11 +207,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 {
                     string linkmail = string.Format(UrlResource.ShortlistInterviewPanel, siteUrl, viewModel.Position);
 
-                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, linkmail, viewModel.PositionName);
+                    string bodymail = string.Format(EmailResource.EmailShortlistToInterviewPanel, linkmail, viewModel.EmailMessage);
 
                     if (mail != "")
                     {
-                        EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName + " (based on respective position)", bodymail);
+                        EmailUtil.Send(mail, "Interview Invitation for Position " + viewModel.PositionName , bodymail);
                     }
                 }
             }
