@@ -280,8 +280,12 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
             
             var viewModel = _service.GetApplication(null);
-            viewModel.Position = position;
+            //viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
+
+            string positionName = _service.GetPositionFromManpower(ID);
+            viewModel.Position = positionName;
+
 
             return View(viewModel);
         }

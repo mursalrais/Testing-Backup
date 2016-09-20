@@ -7,7 +7,7 @@ using MCAWebAndAPI.Model.ViewModel.Form.Shared;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
-namespace MCAWebAndAPI.Service.Shared
+namespace MCAWebAndAPI.Service.Common
 {
     public class VendorService
     {
@@ -24,21 +24,12 @@ namespace MCAWebAndAPI.Service.Shared
         private const string FieldName_Email = "Email";
         private const string FieldName_Group = "Group";
 
-        private string siteUrl;
-
-        public void SetSiteUrl(string siteUrl)
+        public static IEnumerable<VendorVM> GetAll(string siteUrl)
         {
-            this.siteUrl = siteUrl;
+            return GetAll(siteUrl, true);
         }
 
-        [Obsolete("Not used anymore. Use Service.Common.VendorService.GetAll instead.", true)]
-        public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl)
-        {
-            return GetVendorMaster(siteUrl, true);
-        }
-
-        [Obsolete("Not used anymore. Use Service.Common.VendorService.GetAll instead.", true)]
-        public static IEnumerable<VendorVM> GetVendorMaster(string siteUrl, bool appendEmpty)
+        public static IEnumerable<VendorVM> GetAll(string siteUrl, bool appendEmpty)
         {
             var vendors = new List<VendorVM>();
 
@@ -55,8 +46,7 @@ namespace MCAWebAndAPI.Service.Shared
             return vendors;
         }
 
-        [Obsolete("Not used anymore. Use Service.Common.VendorService.Get instead.", true)]
-        public VendorVM GetVendor(int ID)
+        public static VendorVM Get(string siteUrl, int ID)
         {
             var vendor = new VendorVM();
 
@@ -65,29 +55,40 @@ namespace MCAWebAndAPI.Service.Shared
             {
                 vendor = ConvertToVendorModel(listItem);
             }
- 
+
             return vendor;
         }
 
         private static VendorVM ConvertToVendorModel(ListItem item)
         {
-            return new VendorVM
+            VendorVM result;
+
+            try
             {
-                ID = Convert.ToInt32(item[FieldName_Id]),
-                Title = Convert.ToString(item[FieldName_VendorId]),
-                VendorId = Convert.ToString(item[FieldName_VendorId]),
-                Name = Convert.ToString(item[FieldName_Name]),
-                Street = Convert.ToString(item[FieldName_Street]),
-                PostalCode = Convert.ToString(item[FieldName_PostalCode]),
-                City = Convert.ToString(item[FieldName_City]),
-           
-                //TODO: Currency
+                result = new VendorVM
+                {
+                    ID = Convert.ToInt32(item[FieldName_Id]),
+                    Title = Convert.ToString(item[FieldName_VendorId]),
+                    VendorId = Convert.ToString(item[FieldName_VendorId]),
+                    Name = Convert.ToString(item[FieldName_Name]),
+                    Street = Convert.ToString(item[FieldName_Street]),
+                    PostalCode = Convert.ToString(item[FieldName_PostalCode]),
+                    City = Convert.ToString(item[FieldName_City]),
 
-                PhoneNumber = Convert.ToString(item[FieldName_PhoneNumber]),
-                Email = Convert.ToString(item[FieldName_Email]),
-                Group = Convert.ToString(item[FieldName_Group])
+                    //TODO: Currency
 
-            };
+                    PhoneNumber = Convert.ToString(item[FieldName_PhoneNumber]),
+                    Email = Convert.ToString(item[FieldName_Email]),
+                    Group = Convert.ToString(item[FieldName_Group])
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return result;
         }
 
 

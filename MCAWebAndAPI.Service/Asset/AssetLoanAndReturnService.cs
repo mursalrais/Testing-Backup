@@ -195,6 +195,11 @@ namespace MCAWebAndAPI.Service.Asset
                 }
                 updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = assetID });
                 updatedValues.Add("estreturndate", item.EstReturnDate);
+                var test = DateTime.MinValue;
+                if (item.ReturnDate == test)
+                {
+                    item.ReturnDate = null;
+                }
                 updatedValues.Add("returndate", item.ReturnDate);
 
                 if (item.ReturnDate != null)
@@ -202,7 +207,7 @@ namespace MCAWebAndAPI.Service.Asset
                     updatedValues.Add("status", "RUNNING");
                 }else
                 {
-                    updatedValues.Add("status", "ON LOAN");
+                    updatedValues.Add("status", "LOAN");
                 }
 
                 try
@@ -284,8 +289,21 @@ namespace MCAWebAndAPI.Service.Asset
                 updatedValues.Add("assetloanandreturn", new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValues.Add("assetsubasset", new FieldLookupValue { LookupId = Convert.ToInt32(item.AssetSubAsset.Value.Value) });
                 updatedValues.Add("estreturndate", item.EstReturnDate);
+                var test = DateTime.MinValue;
+                if (item.ReturnDate == test)
+                {
+                    item.ReturnDate = null;
+                }
                 updatedValues.Add("returndate", item.ReturnDate);
-                updatedValues.Add("status", "LOAN");
+
+                if (item.ReturnDate != null)
+                {
+                    updatedValues.Add("status", "RUNNING");
+                }
+                else
+                {
+                    updatedValues.Add("status", "LOAN");
+                }
                 try
                 {
                     if (Item.CheckIfUpdated(item))

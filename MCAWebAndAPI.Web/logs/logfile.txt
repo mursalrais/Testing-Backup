@@ -783,16 +783,3 @@ Please try again.
 2016-09-16 09:33:17.7204 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
 2016-09-16 09:37:28.7377 MCAWebAndAPI.Service.Asset.AssetDisposalService Object reference not set to an instance of an object.
 2016-09-17 07:59:00.4768 MCAWebAndAPI.Service.Asset.AssetTransferService Object reference not set to an instance of an object.
-2016-09-19 12:02:38.4014 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Item does not exist. It may have been deleted by another user.
-2016-09-19 12:40:30.8748 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The operation has timed out.
-2016-09-19 12:41:43.6747 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService The operation has timed out.
-2016-09-19 14:43:07.2503 MCAWebAndAPI.Service.HR.Recruitment.HRProfessionalPerformanceEvaluationService Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
-2016-09-19 15:08:23.1676 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
-2016-09-19 15:16:57.3766 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
-2016-09-19 15:24:23.7462 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Data successfully saved, but email is fail to send because this following error: System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
-   at System.Net.Mail.DataStopCommand.CheckResponse(SmtpStatusCode statusCode, String serverResponse)
-   at System.Net.Mail.DataStopCommand.Send(SmtpConnection conn)
-   at System.Net.ClosableStream.Close()
-   at System.Net.Mail.SmtpClient.Send(MailMessage message)
-   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 41
-2016-09-19 15:35:13.6643 MCAWebAndAPI.Service.HR.Recruitment.HRPerformancePlanService Data successfully saved, but email is fail to send because this following error: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner

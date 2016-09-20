@@ -107,7 +107,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl, false);
+            var vendors = Service.Common.VendorService.GetAll(siteUrl, false);
 
             return Json(vendors.Select(e => new
             {

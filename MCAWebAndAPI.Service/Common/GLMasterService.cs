@@ -26,6 +26,15 @@ namespace MCAWebAndAPI.Service.Common
             return items;
         }
 
+        public static GLMasterVM Get(string siteUrl, int id)
+        {
+            var items = new List<GLMasterVM>();
+
+            var item = SPConnector.GetListItem(ListName, id, siteUrl);
+
+            return ConvertToVM(item);
+        }
+
         private static GLMasterVM ConvertToVM(ListItem item)
         {
             return new GLMasterVM
