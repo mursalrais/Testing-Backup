@@ -653,6 +653,27 @@ namespace MCAWebAndAPI.Service.Asset
 
             EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
 
+            email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                (dataCekResult["assetcheckcountedby2"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                (dataCekResult["assetcheckcountedby3"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
             return model;
         }
 
@@ -679,8 +700,30 @@ namespace MCAWebAndAPI.Service.Asset
 
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
-            email = ApproveEmail(
+            email = RejectEmail(
                 (dataCekResult["assetcheckcountedby1"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = RejectEmail(
+                (dataCekResult["assetcheckcountedby2"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = RejectEmail(
+                (dataCekResult["assetcheckcountedby3"] as FieldLookupValue).LookupId,
                 (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
                 dataCekResult["assetcheckformid"].ToString(),
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
