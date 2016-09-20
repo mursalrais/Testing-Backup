@@ -544,9 +544,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
-            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejectd")
+            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejected")
             {
-                return RedirectToAction("Approve", new { ID = ID });
+                return RedirectToAction("Approvegray", new { ID = ID });
             }
             return View(viewModel);
         }
