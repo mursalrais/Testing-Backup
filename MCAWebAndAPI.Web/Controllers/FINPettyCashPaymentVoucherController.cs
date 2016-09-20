@@ -196,9 +196,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else if (viewModel.PaidTo.Text.Equals(PaidToVendor))
             {
-                VendorService vendorSvc = new VendorService();
-                vendorSvc.SetSiteUrl(siteUrl);
-                var vendor = vendorSvc.GetVendor(viewModel.Vendor.Value.Value);
+                var vendor = Service.Common.VendorService.Get(siteUrl, (int)viewModel.Vendor.Value);
                 viewModel.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name); 
             }
 
