@@ -274,7 +274,7 @@ namespace MCAWebAndAPI.Service.Asset
             //WBS_x0020_ID
             //WBS_x0020_ID
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
-            _wbs.Text = Convert.ToString(ListWBS["WBS_x0020_ID"]) + " - " + Convert.ToString(ListWBS["WBS_x0020_ID"]);
+            _wbs.Text = Convert.ToString(ListWBS["WBS_x0020_ID"]) + " - " + Convert.ToString(ListWBS["WBS_x0020_Description"]);
 
             return new AssetAcquisitionItemVM
             {

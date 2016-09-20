@@ -361,10 +361,10 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
-            var ListWBS = SPConnector.GetListItem("WBS Master", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
+            var ListWBS = SPConnector.GetListItem("WBS Mapping", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _wbs = new AjaxComboBoxVM();
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
-            _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);
+            _wbs.Text = Convert.ToString(ListWBS["WBS_x0020_ID"]) + " - " + Convert.ToString(ListWBS["WBS_x0020_Description"]);
 
             var model = new AssetReplacementItemVM();
             model.AssetSubAsset = AssetReplacementItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset);

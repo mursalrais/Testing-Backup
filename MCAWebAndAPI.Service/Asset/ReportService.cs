@@ -48,11 +48,6 @@ namespace MCAWebAndAPI.Service.Asset
                             </ViewFields>
                             <QueryOptions /></View>";
             var infoAssetMaster = SPConnector.GetList("Asset Master", SiteUrl, camlAssetMaster);
-            var infoAcquisitionDetail = SPConnector.GetList("Asset Acquisition Details", SiteUrl);
-            var infoAssetAcquisition = SPConnector.GetList("Asset Acquisition", SiteUrl);
-            var infoAssetReplacementDetail = SPConnector.GetList("Asset Replacement Detail", SiteUrl);
-            var infoAssetReplacement = SPConnector.GetList("Asset Replacement", SiteUrl);
-            var infoAssetDisposalDetail = SPConnector.GetList("Asset Disposal Detail", SiteUrl);
             var no = 1;
             foreach(var info1 in infoAssetMaster)
             {
