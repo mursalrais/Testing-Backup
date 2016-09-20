@@ -24,12 +24,12 @@
         columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProfId(ddlProfessional)#"
                        ).Width(150);
 
-        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProjUnit(ddlProfessional)#"
-                       ).Width(150);
+        columns.Bound(p => p.projUnit).ClientTemplate("#= projUnit #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].projUnit' value='#= projUnit #' />");
 
-        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getPosition(ddlProfessional)#"
-                     ).Width(150);
-
+        columns.Bound(p => p.position).ClientTemplate("#= position #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].position' value='#= position #' />");
+        
         columns.Bound(p => p.ajusmentType).ClientTemplate("#= ajusmentType.Text #" +
                         "<input type='hidden' id='ajusmentType#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ajusmentType.Text' value='#= ajusmentType.Text #' />"
                       )
@@ -56,7 +56,10 @@
         });
 
         columns.Bound(p => p.remark).ClientTemplate("#= remark #" +
-        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
+        "<input type='hidden' id='remark#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
+
+        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
+      .Click("onDeleteKendoDetail")).Width(100);
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
         "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ID' value='#= ID #' />"
@@ -67,12 +70,16 @@
          );
 
     })
+
     .Events(e =>
     {
         e.Edit("onEditKendoDetail");
         e.DataBound("onDataBoundAdjustmentDetails");
     })
-    .DataSource(dataSource => dataSource.Ajax()
+     .DataSource(dataSource => dataSource.Ajax().Events(events =>
+        {
+            events.Change("onAdjustChange");
+        })
 
     .Model(model =>
     {
@@ -92,10 +99,9 @@
     )
 </div>
 <script>
+   
     $(document).ready(function () {
         $("#AdjustmentDetails th[data-index=1]").html("ID");
-        $("#AdjustmentDetails th[data-index=2]").html("Project/Unit");
-        $("#AdjustmentDetails th[data-index=3]").html("Position");
     });
 </script>
 
