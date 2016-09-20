@@ -31,5 +31,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Shared
 
         public string Group { get; set; }
 
+        public string IdName
+        {
+            get { return string.Format("{0} - {1}", VendorId, Name); }
+        }
     }
 }

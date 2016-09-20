@@ -16,7 +16,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
-            var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl);
+            var vendors = Service.Common.VendorService.GetAll(siteUrl);
 
             return Json(vendors.Select(e => new
             {

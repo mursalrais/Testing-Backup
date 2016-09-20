@@ -21,10 +21,11 @@ namespace MCAWebAndAPI.Service.Finance
         ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
         ///         user has not asked for any petty cash advance.
         ///
-        ///         Through this feature, finance will create the reimbursement of petty cash which results in 
-        ///         user needs to receive the reimbursement. 
+        ///         Through this feature, finance will create the reimbursement of petty cash which results in
+        ///         user needs to receive the reimbursement.
         /// </summary>
         private const string FIELD_FORMAT_DOC = "RPC/{0}-{1}/";
+
         private const int DIGIT_DOCUMENTNO = 5;
         private const string PettyCashDocument_URL = "{0}/Petty%20Cash%20Reimbursement%20Documents/Forms/AllItems.aspx?FilterField1=Petty_x0020_Cash_x0020_Reimbursement&FilterValue1={1}";
 
@@ -39,61 +40,85 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldName_ProfessionalID = "ProfessionalID";
         private const string FieldName_ProfessionalName = "ProfessionalName";
         private const string FieldName_ProfessionalPosition = "ProfessionalPosition";
-        private const string FieldName_Vendor = "Vendor_x0020_ID";
-        private const string FieldName_Vendor_Name = "Vendor_x0020_ID_x003a_Vendor_x00";
+
+        private const string FieldName_Vendor_Id = "Vendor_x0020_ID";
+        private const string FieldName_Vendor_Code = "VendorCode";
+        private const string FieldName_Vendor_Name = "VendorName";
+
         private const string FieldName_Driver = "Driver";
 
         private const string FieldName_Currency = "Currency";
         private const string FieldName_AmountLiquidated = "Amount_x0020_Liquidated";
         private const string FieldName_AmountReimbursed = "Amount_x0020_Reimbursed";
+
         private const string FieldName_WBS = "WBSID";
         private const string FieldName_WBSID = "WBS_x0020_ID_x003a_WBS_x0020_ID";
         private const string FieldName_WBSDesc = "WBSName";
+
         private const string FieldName_GL = "GL_x0020_ID";
         private const string FieldName_GLNo = "GL_x0020_ID_x003a_GL_x0020_No";
         private const string FieldName_GLDesc = "GL_x0020_ID_x003a_GL_x0020_Descr";
+        private const string FieldName_GLNoDescription = "GLNoDescription";
+
         private const string FieldName_Remarks = "Remarks";
         private const string FieldName_Reason = "Reason_x0020_of_x0020_Payment";
         private const string FieldName_Fund = "Fund";
 
         private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public int? Save(ref PettyCashReimbursementVM viewModel, IEnumerable<ProfessionalMaster> professionals)
         {
             int? result = null;
 
-            string professionalName= string.Empty;
-            string professionalPosition= string.Empty;
+            string professionalName = string.Empty;
+            string professionalPosition = string.Empty;
 
             var professionalId = viewModel.Professional.Value == null ? 0 : viewModel.Professional.Value;
 
-            if (professionalId!=0)
+            if (professionalId != 0)
             {
                 professionalName = professionals.ToList().Find(p => p.ID == professionalId).Name;
                 professionalPosition = professionals.ToList().Find(p => p.ID == professionalId).Position;
             }
-            
 
-            var columnValues = new Dictionary<string, object>
+            var columnValues = new Dictionary<string, object>();
+            columnValues.Add(FieldName_Date, viewModel.Date);
+            columnValues.Add(FieldName_PaidTo, viewModel.PaidTo.Value);
+            columnValues.Add(FieldName_ProfessionalID, professionalId);
+            columnValues.Add(FieldName_ProfessionalName, professionalName);
+            columnValues.Add(FieldName_ProfessionalPosition, professionalPosition);
+
+            if (viewModel.Vendor.Value == null)
             {
-               {FieldName_Date, viewModel.Date},
-               {FieldName_PaidTo, viewModel.PaidTo.Value},
-               {FieldName_ProfessionalID, professionalId},
-               {FieldName_ProfessionalName,  professionalName},
-               {FieldName_ProfessionalPosition,  professionalPosition},
-               {FieldName_Vendor, viewModel.Vendor==null ? 0 : viewModel.Vendor.Value},
-               {FieldName_Driver, viewModel.Driver},
-               {FieldName_Currency, viewModel.Currency.Value},
-               {FieldName_Reason, viewModel.Reason},
-               {FieldName_Fund, viewModel.Fund},
-               {FieldName_WBS,  viewModel.WBS.Value},
-               {FieldName_WBSDesc,  viewModel.WBSDescription},
-               {FieldName_GL, viewModel.GL.Value},
-               {FieldName_AmountLiquidated, viewModel.Amount},
-               {FieldName_AmountReimbursed, viewModel.Amount},
-               {FieldName_Remarks, viewModel.Remarks}
-            };
+                columnValues.Add(FieldName_Vendor_Id, 0);
+                columnValues.Add(FieldName_Vendor_Code, null);
+                columnValues.Add(FieldName_Vendor_Name, null);
+            }
+            else
+            {
+                var vendor = Common.VendorService.Get(siteUrl, (int)viewModel.Vendor.Value);
+
+                columnValues.Add(FieldName_Vendor_Id, viewModel.Vendor.Value);
+                columnValues.Add(FieldName_Vendor_Code, vendor.VendorId);
+                columnValues.Add(FieldName_Vendor_Name, vendor.Name);
+            }
+            
+            columnValues.Add(FieldName_Driver, viewModel.Driver);
+            columnValues.Add(FieldName_Currency, viewModel.Currency.Value);
+            columnValues.Add(FieldName_Reason, viewModel.Reason);
+            columnValues.Add(FieldName_Fund, viewModel.Fund);
+            columnValues.Add(FieldName_WBS, viewModel.WBS.Value);
+            columnValues.Add(FieldName_WBSDesc, viewModel.WBSDescription);
+
+            GLMasterVM gl = Common.GLMasterService.Get(siteUrl, (int)viewModel.GL.Value);
+            columnValues.Add(FieldName_GL, viewModel.GL.Value);
+            columnValues.Add(FieldName_GLNoDescription, gl.GLNoDescription);
+
+            columnValues.Add(FieldName_AmountLiquidated, viewModel.Amount);
+            columnValues.Add(FieldName_AmountReimbursed, viewModel.Amount);
+            columnValues.Add(FieldName_Remarks, viewModel.Remarks);
+
 
             try
             {
@@ -111,8 +136,6 @@ namespace MCAWebAndAPI.Service.Finance
                     SPConnector.UpdateListItem(ListName, viewModel.ID, columnValues, siteUrl);
                     result = viewModel.ID;
                 }
-                
-
             }
             catch (Exception e)
             {
@@ -172,12 +195,13 @@ namespace MCAWebAndAPI.Service.Finance
             PettyCashReimbursementVM viewModel = new PettyCashReimbursementVM();
 
             int multiplier = sign == Post.DR ? 1 : -1;
-            string paidTo= Convert.ToString(listItem[FieldName_PaidTo]);
+            string paidTo = Convert.ToString(listItem[FieldName_PaidTo]);
             viewModel.ID = Convert.ToInt32(listItem[FieldName_Id]);
             viewModel.Date = Convert.ToDateTime(listItem[FieldName_Date]);
             viewModel.TransactionNo = Convert.ToString(listItem[FieldName_DocNo]);
             viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.WBSName = Convert.ToString(listItem[FieldName_WBSDesc]);
+
             viewModel.GLName = string.Format("{0} - {1}", Convert.ToString((listItem[FieldName_GLNo] as FieldLookupValue).LookupValue), Convert.ToString((listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue));
 
             if (paidTo.ToLower() == "professional")
@@ -202,17 +226,15 @@ namespace MCAWebAndAPI.Service.Finance
         {
             PettyCashReimbursementVM viewModel = new PettyCashReimbursementVM();
 
-
             viewModel.DocNo = Convert.ToString(listItem[FieldName_DocNo]);
             viewModel.PaidTo.Value = Convert.ToString(listItem[FieldName_PaidTo]);
 
-            //TODO: the following line causes error
-            //  but currently there is nothing you can do 
-            //  we are waiting for eCEOs to fix Professional Master table
             viewModel.Professional.Value = Convert.ToInt32(listItem[FieldName_ProfessionalID] == null ? 0 : (listItem[FieldName_ProfessionalID]));
             viewModel.Professional.Text = Convert.ToString(listItem[FieldName_ProfessionalName] == null ? string.Empty : (listItem[FieldName_ProfessionalName]));
-            viewModel.Vendor.Value = listItem[FieldName_Vendor] == null ? 0 : Convert.ToInt32((listItem[FieldName_Vendor] as FieldLookupValue).LookupId.ToString());
-            viewModel.VendorName = listItem[FieldName_Vendor_Name] == null ? "" : (listItem[FieldName_Vendor_Name] as FieldLookupValue).LookupValue.ToString();
+
+            viewModel.Vendor.Value = listItem[FieldName_Vendor_Id] == null ? 0 : Convert.ToInt32((listItem[FieldName_Vendor_Id] as FieldLookupValue).LookupId.ToString());
+            viewModel.VendorName = Convert.ToString(Common.VendorService.Get(siteUrl, (int)viewModel.Vendor.Value).Name);
+
             viewModel.Driver = Convert.ToString(listItem[FieldName_Driver]);
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Reason = Convert.ToString(listItem[FieldName_Reason]);
@@ -220,8 +242,11 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.AmountReimbursed = Convert.ToDecimal(listItem[FieldName_AmountReimbursed]);
             viewModel.WBS.Value = Convert.ToInt32(listItem[FieldName_WBS]);
             viewModel.WBSDescription = Convert.ToString(listItem[FieldName_WBSDesc]);
+
             viewModel.GL.Value = Convert.ToInt32((listItem[FieldName_GL] as FieldLookupValue).LookupId.ToString());
-            viewModel.GLDescription = string.Format("{0} - {1}", Convert.ToString((listItem[FieldName_GLNo] as FieldLookupValue).LookupValue), Convert.ToString((listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue));
+            var gl = Common.GLMasterService.Get(siteUrl, (int)viewModel.GL.Value);
+            viewModel.GLDescription = gl.GLNoDescription;
+
             viewModel.Remarks = Convert.ToString(listItem[FieldName_Remarks]);
 
             return viewModel;
