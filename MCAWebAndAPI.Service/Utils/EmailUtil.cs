@@ -55,7 +55,7 @@ namespace MCAWebAndAPI.Service.Utils
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
-                smtp.Timeout = 20000;
+                smtp.Timeout = 200000;
             }
 
             MailMessage mail = new MailMessage();
@@ -72,8 +72,16 @@ namespace MCAWebAndAPI.Service.Utils
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-           
-            smtp.Send(mail);
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+          
 
             //foreach (var item in mail.To)
             //{

@@ -43,7 +43,8 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Schedule
             List<string> lstEmail = (from item in professionalData
                                      where !string.IsNullOrEmpty(item.OfficeEmail)
                                      select item.OfficeEmail).ToList();
-
+           // List<string> lstEmail= new List<string>();
+            lstEmail.Add("junindar.tasripin@eceos.com");
             var strSubject = "Reminder to Create Timesheet";
             var strBody = "";
 
