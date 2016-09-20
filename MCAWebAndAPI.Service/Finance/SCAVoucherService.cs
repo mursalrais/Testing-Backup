@@ -109,26 +109,25 @@ namespace MCAWebAndAPI.Service.Finance
             string scaNo = DocumentNumbering.Create(siteUrl, string.Format("SCA/{0}-{1}/", DateTimeExtensions.GetMonthInRoman(today), today.ToString("yy")) + "{0}", 5);
             scaVoucher.SCAVoucherNo = scaNo;
 
-            var columnValues = new Dictionary<string, object>
-            {
-                { FIELD_NAME_SCA_NO,scaNo },
-                { FIELD_NAME_DATE,scaVoucher.SCAVoucherDate},
-                { FIELD_NAME_SDOID,scaVoucher.SDO.Value},
-                { FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition },
-                { FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) }},
-                { FIELD_NAME_CURRENCY,scaVoucher.Currency.Value},
-                { FIELD_NAME_TOTAL_AMOUNT,scaVoucher.TotalAmount},
-                { FIELD_NAME_TA_WORDS,scaVoucher.TotalAmountInWord},
-                { FIELD_NAME_PURPOSE,scaVoucher.Purpose},
-                { FIELD_NAME_PROJECT,scaVoucher.Project},
-                { FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) } },
-                { FIELD_NAME_SUB_ACTIVITY_ID,new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) }},
-                { FIELD_NAME_FUND,scaVoucher.Fund},
-                { FIELD_NAME_REFFERENCE_NO,scaVoucher.ReferenceNo},
-                { FIELD_NAME_REMARKS,scaVoucher.Remarks},
-                { FIELD_NAME_USER_EMAIL,scaVoucher.UserEmail},
-                { FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl) }
-            };
+            var columnValues = new Dictionary<string, object>();
+
+            columnValues.Add(FIELD_NAME_SCA_NO, scaNo);
+            columnValues.Add(FIELD_NAME_DATE, scaVoucher.SCAVoucherDate);
+            columnValues.Add(FIELD_NAME_SDOID, scaVoucher.SDO.Value);
+            columnValues.Add(FIELD_NAME_SDO_POSITION, scaVoucher.SDOPosition);
+            columnValues.Add(FIELD_NAME_EBUDGET_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.EventBudget.Value) });
+            columnValues.Add(FIELD_NAME_CURRENCY, scaVoucher.Currency.Value);
+            columnValues.Add(FIELD_NAME_TOTAL_AMOUNT, scaVoucher.TotalAmount);
+            columnValues.Add(FIELD_NAME_TA_WORDS, scaVoucher.TotalAmountInWord);
+            columnValues.Add(FIELD_NAME_PURPOSE, scaVoucher.Purpose);
+            columnValues.Add(FIELD_NAME_PROJECT, scaVoucher.Project);
+            columnValues.Add(FIELD_NAME_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.ActivityID) });
+            columnValues.Add(FIELD_NAME_SUB_ACTIVITY_ID, new FieldLookupValue { LookupId = Convert.ToInt32(scaVoucher.SubActivity.Value) });
+            columnValues.Add(FIELD_NAME_FUND, scaVoucher.Fund);
+            columnValues.Add(FIELD_NAME_REFFERENCE_NO, scaVoucher.ReferenceNo);
+            columnValues.Add(FIELD_NAME_REMARKS, scaVoucher.Remarks);
+            columnValues.Add(FIELD_NAME_USER_EMAIL, scaVoucher.UserEmail);
+            columnValues.Add(FieldName_VisibleTo, SPConnector.GetUser(scaVoucher.UserEmail, siteUrl));
 
             try
             {

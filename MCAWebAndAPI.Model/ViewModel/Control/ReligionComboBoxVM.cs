@@ -13,13 +13,13 @@ namespace MCAWebAndAPI.Model.ViewModel.Control
             Choices = new string[]
             {
                 "Islam",
-                "Protestantism",
-                "Catholicism",
-                "Hinduism",
-                "Buddhism",
-                "Not Stated"
+                "Christian",
+                "Catholic",
+                "Hindu",
+                "Buddha",
+                "Others"
             };
-            Value = "Not Stated";
+            Value = "Others";
         }
     }
 }

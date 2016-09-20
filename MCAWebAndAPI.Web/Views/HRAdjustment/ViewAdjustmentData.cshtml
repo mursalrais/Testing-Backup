@@ -32,10 +32,6 @@
         <legend>Adjustment & OT</legend>
         <div id="adjustmentlist" class="row"></div>
 
-        <button id="submit-button" class="btn btn-primary" type="button">
-            <i class="fa fa-save"></i>
-            Save
-        </button>
     </fieldset>
 }
 @section scripts{
@@ -45,7 +41,7 @@
 
             var period = $("#periodDate").val();
             var getperiod = period.replace(" ", "-");
-            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + getperiod + "";
+            var url = "/HRAdjustment/GetViewAdjustmentDetails?period=" + getperiod + "";
 
             $('#adjustmentlist').load(url, function (response, status, xhr) {
                 if (status == "success") {
@@ -126,7 +122,7 @@
             var period = $("#periodDate").val();
             var getperiod = period.replace(" ", "-");
 
-            var url = "/HRAdjustment/GetAdjustmentDetails?period=" + getperiod + "";
+            var url = "/HRAdjustment/GetViewAdjustmentDetails?period=" + getperiod + "";
 
             $('#adjustmentlist').load(url, function (response, status, xhr) {
                 if (status == "success") {
