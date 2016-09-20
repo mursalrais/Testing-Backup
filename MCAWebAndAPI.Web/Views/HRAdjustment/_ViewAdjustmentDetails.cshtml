@@ -1,0 +1,103 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model IEnumerable<AdjustmentDetailsVM>
+
+<div class="col-xs-12">
+
+    @(Html.Kendo().Grid(Model)
+    .Name("AdjustmentDetails")
+        .Editable(editable => editable.Mode(GridEditMode.InCell)
+        .CreateAt(GridInsertRowPosition.Top))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#= ddlProfessional.Text #" +
+                          "<input type='hidden' id='Profid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ddlProfessional.Value' value='#= ddlProfessional.Value #' />"
+                        )
+                        .EditorViewData(new
+                        {
+                            DataTextField = "FirstMiddleName",
+                            DataValueField = "Value",
+                            ControllerName = "HRDataMaster",
+                            ActionName = "GetProfessionalsAll"
+                        });
+
+        columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProfId(ddlProfessional)#"
+                       ).Width(150);
+
+        columns.Bound(p => p.projUnit).ClientTemplate("#= projUnit #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].projUnit' value='#= projUnit #' />");
+
+        columns.Bound(p => p.position).ClientTemplate("#= position #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].position' value='#= position #' />");
+        
+        columns.Bound(p => p.ajusmentType).ClientTemplate("#= ajusmentType.Text #" +
+                        "<input type='hidden' id='ajusmentType#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ajusmentType.Text' value='#= ajusmentType.Text #' />"
+                      )
+                      .EditorViewData(new
+                      {
+                          DataTextField = "Text",
+                          DataValueField = "Value",
+                          ControllerName = "HRAdjustment",
+                          ActionName = "GetAdjusmentGrid"
+                      });
+
+        columns.Bound(p => p.amount).ClientTemplate("#= amount #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].amount' value='#= amount #' />");
+
+        columns.Bound(p => p.payType).ClientTemplate("#= payType.Text #" +
+                  "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].payType.Text' value='#= payType.Text #' />"
+                )
+        .EditorViewData(new
+        {
+            DataTextField = "Text",
+            DataValueField = "Value",
+            ControllerName = "HRAdjustment",
+            ActionName = "GetPayMethodGrid"
+        });
+
+        columns.Bound(p => p.remark).ClientTemplate("#= remark #" +
+        "<input type='hidden' id='remark#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
+
+        columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+        "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ID' value='#= ID #' />"
+         );
+
+        columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+           "<input type='hidden' id='Editid#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].EditMode' value='#= EditMode #' />"
+         );
+
+    })
+
+    .Events(e =>
+    {
+        e.Edit("onEditKendoDetail");
+        e.DataBound("onDataBoundAdjustmentDetails");
+    })
+     .DataSource(dataSource => dataSource.Ajax().Events(events =>
+        {
+            events.Change("onAdjustChange");
+        })
+
+    .Model(model =>
+    {
+        model.Id(p => p.ID);
+
+        model.Field(m => m.ajusmentType).DefaultValue(AdjustmentDetailsVM.getAjusmentDefaultValue());
+
+        model.Field(m => m.currency).DefaultValue(AdjustmentDetailsVM.getCurrencyDefaultValue());
+
+        model.Field(m => m.payType).DefaultValue(AdjustmentDetailsVM.getpayTypeDefaultValue());
+
+        model.Field(m => m.ddlProfessional).DefaultValue(AdjustmentDetailsVM.getprofDefaultValue());
+
+    })
+    .ServerOperation(false)
+    )
+    )
+</div>
+<script>
+   
+    $(document).ready(function () {
+        $("#AdjustmentDetails th[data-index=1]").html("ID");
+    });
+</script>
+
