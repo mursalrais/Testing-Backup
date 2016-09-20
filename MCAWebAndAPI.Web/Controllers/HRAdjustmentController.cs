@@ -43,6 +43,18 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewmodel); 
         }
 
+        public ActionResult ViewAdjustmentData(string siteurl = null, int? ID = null)
+        {
+            var viewmodel = new AdjustmentDataVM();
+
+            //mandatory: set site url
+            _service.SetSiteUrl(siteurl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteurl ?? ConfigResource.DefaultHRSiteUrl);
+
+            viewmodel = _service.GetPeriod(ID);
+
+            return View(viewmodel);
+        }
         public ActionResult EditAdjustmentData(string siteurl = null, int? ID = null)
         {
             var viewmodel = new AdjustmentDataVM();
@@ -101,6 +113,21 @@ namespace MCAWebAndAPI.Web.Controllers
             viewmodel = _service.GetAjusmentData(period);
 
             return PartialView("_InputAdjustmentDetails", viewmodel.AdjustmentDetails);
+        }
+
+        public async Task<ActionResult> GetViewAdjustmentDetails(string period)
+        {
+            var viewmodel = new AdjustmentDataVM();
+
+            if (period == null)
+                return PartialView("_ViewAdjustmentDetails", viewmodel.AdjustmentDetails);
+
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            viewmodel = _service.GetAjusmentData(period);
+
+            return PartialView("_ViewAdjustmentDetails", viewmodel.AdjustmentDetails);
         }
 
         public JsonResult GetAdjusmentGrid()
