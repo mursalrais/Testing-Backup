@@ -277,23 +277,46 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                 row["DayName"] = GetDayofWeekShort(Convert.ToString(itm.DayOfWeek));
                 row["DateName"] = itm.Date.ToString("dd");
 
-                var timesheetDetail = viewModel.TimesheetDetails.FirstOrDefault(x => x.Date != null && 
-                Convert.ToDateTime(x.Date).ToString("yy-MM-dd")==itm.ToString("yy-MM-dd"));
-                if (timesheetDetail != null)
+                IEnumerable<TimesheetDetailVM> query = viewModel.TimesheetDetails.Where(x=> x.Date!= null &&
+                Convert.ToDateTime(x.Date).ToString("yy-MM-dd") == itm.ToString("yy-MM-dd"));
+
+
+                foreach (var item in query)
                 {
+                    if (item.Date == null ||
+                        Convert.ToDateTime(item.Date).ToString("yy-MM-dd") != itm.ToString("yy-MM-dd")) continue;
+                    row["HalfFullDay"] = item.FullHalf;
+                    if (!string.IsNullOrEmpty(item.Location)) row["Location"] = Convert.ToString(item.Location);
 
-                    row["HalfFullDay"] = timesheetDetail.FullHalf;
-                    if (!string.IsNullOrEmpty(timesheetDetail.Location)) row["Location"] = Convert.ToString(timesheetDetail.Location);
-
-                    if (!string.IsNullOrEmpty(timesheetDetail.Type))
+                    if (item.Type != "Day-Off")
                     {
-                        row["Type"] = Convert.ToString(timesheetDetail.Type);
+                        row["Type"] = Convert.ToString(item.Type);
+                        row["SubType"] = string.Empty;
                     }
-                    else if (!string.IsNullOrEmpty(timesheetDetail.SubType))
+                    else if (!string.IsNullOrEmpty(item.SubType))
                     {
-                        row["SubType"] = Convert.ToString(timesheetDetail.SubType);
+                        row["Type"] = Convert.ToString(item.Type);
+                        row["SubType"] = Convert.ToString(item.SubType);
                     }
                 }
+
+                //var timesheetDetail = viewModel.TimesheetDetails.(x => x.Date != null && 
+                //Convert.ToDateTime(x.Date).ToString("yy-MM-dd")==itm.ToString("yy-MM-dd"));
+                //if (timesheetDetail != null)
+                //{
+
+                //    row["HalfFullDay"] = timesheetDetail.FullHalf;
+                //    if (!string.IsNullOrEmpty(timesheetDetail.Location)) row["Location"] = Convert.ToString(timesheetDetail.Location);
+
+                //    if (timesheetDetail.Type!= "Day-Off")
+                //    {
+                //        row["Type"] = Convert.ToString(timesheetDetail.Type);
+                //    }
+                //    else if (!string.IsNullOrEmpty(timesheetDetail.SubType))
+                //    {
+                //        row["SubType"] = Convert.ToString(timesheetDetail.SubType);
+                //    }
+                //}
                 dt.Rows.Add(row);
 
                 i++;
@@ -455,14 +478,14 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Type = TYPE_PUB_HOLIDAY
                     });
                 }
-                else if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
+                 if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
                         FullHalf = 1,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDayOff(item, listDayOff))
+                 if (IsDayOff(item, listDayOff))
                 {
                     var arrKey = listDayOff[item].Split(Convert.ToChar(";"));
                     var typeDayoff = arrKey[0];
@@ -478,7 +501,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     timesheetDetails.Add(timesheetDetail);
 
                 }
-                else if (IsCompenTime(item, listCompen))
+               if (IsCompenTime(item, listCompen))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
@@ -488,6 +511,52 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     });
                 }
             }
+
+
+            //foreach (var item in dateRange)
+            //{
+            //    if (IsDate(item, listHoliday))
+            //    {
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = 1,
+            //            Type = TYPE_PUB_HOLIDAY
+            //        });
+            //    }
+            //    else if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = 1,
+            //            Type = TYPE_HOLIDAY
+            //        });
+            //    else if (IsDayOff(item, listDayOff))
+            //    {
+            //        var arrKey = listDayOff[item].Split(Convert.ToChar(";"));
+            //        var typeDayoff = arrKey[0];
+            //        var fullhalf = arrKey[1];
+            //        var otherCat = arrKey[2];
+            //        var timesheetDetail = new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            Type = TYPE_DAYOFF,
+            //            FullHalf = fullhalf == "Full Day" ? 1 : 0.5,
+            //            SubType = otherCat == "False" ? typeDayoff : "Others"
+            //        };
+            //        timesheetDetails.Add(timesheetDetail);
+
+            //    }
+            //    else if (IsCompenTime(item, listCompen))
+            //    {
+            //        timesheetDetails.Add(new TimesheetDetailVM
+            //        {
+            //            Date = item,
+            //            FullHalf = listCompen[item],
+            //            Type = TYPE_COMP_LEAVE
+            //        });
+            //    }
+            //}
 
 
             return timesheetDetails;
@@ -735,14 +804,14 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                         Type = TYPE_PUB_HOLIDAY
                     });
                 }
-                else if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
+                if (item.DayOfWeek == DayOfWeek.Saturday || item.DayOfWeek == DayOfWeek.Sunday)
                     timesheetDetails.Add(new TimesheetDetailVM
                     {
                         Date = item,
                         FullHalf = 1,
                         Type = TYPE_HOLIDAY
                     });
-                else if (IsDayOff(item, lstDayOff))
+                 if (IsDayOff(item, lstDayOff))
                 {
                     var arrKey = lstDayOff[item].Split(Convert.ToChar(";"));
                     var typeDayoff = arrKey[0];
@@ -758,7 +827,7 @@ namespace MCAWebAndAPI.Service.HR.Timesheet
                     timesheetDetails.Add(timesheetDetail);
 
                 }
-                else if (IsCompenTime(item, lstCompensatory))
+                 if (IsCompenTime(item, lstCompensatory))
                 {
                     timesheetDetails.Add(new TimesheetDetailVM
                     {

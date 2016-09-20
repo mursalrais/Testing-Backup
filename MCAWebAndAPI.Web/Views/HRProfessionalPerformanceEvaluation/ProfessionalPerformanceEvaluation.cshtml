@@ -51,6 +51,13 @@
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
+         @if (Model.TypeForm == "Professional")
+         {
+             <legend>Approval Path</legend>
+             <div class="row">
+                 @Html.Partial("_WorkflowPathDetails", Model)
+             </div>
+         }
     </fieldset>
     }
 
@@ -219,6 +226,13 @@
         <div class="row">
             @Html.Partial("_ProfessionalPerformanceEvaluationDetail", Model)
         </div>
+         @if (Model.TypeForm == "Professional")
+         {
+             <legend>Approval Path</legend>
+             <div class="row">
+                 @Html.Partial("_WorkflowPathDetails", Model)
+             </div>
+         }
     </fieldset>
     }
 

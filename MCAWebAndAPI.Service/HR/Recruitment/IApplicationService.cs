@@ -47,5 +47,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         string GetNationality(int nationalityID);
 
         string GetPositionName(int positionID);
+
+        string GetPositionFromManpower(int? ID);
     }
 }

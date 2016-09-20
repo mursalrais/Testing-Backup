@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
@@ -9,20 +10,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
     public class PettyCashStatementVM : PettyCashTransactionItem
     {
-        [UIHint("Date (from)")]
+
         [Required]
+        [DisplayName("Date (from)")]
+        [UIHint("Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateFrom { get; set; } = DateTime.Now;
 
-        [UIHint("Date (to)")]
+
         [Required]
+        [DisplayName("Date (to)")]
+        [UIHint("Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTo { get; set; } = DateTime.Now;
 
-        [UIHint("Date")]
         [Required]
+        [UIHint("Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateTransaction { get; set; } = DateTime.Now;
-        
+
     }
 }

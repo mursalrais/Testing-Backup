@@ -239,7 +239,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 viewModel.ProjectUnit = Convert.ToString(item["Project_x002f_Unit"]);
                 positionID = FormatUtil.ConvertLookupToID(item, "Position");
                 viewModel.ProfessionalID = Convert.ToInt32(item["ID"]);
-                viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
+                    
+                viewModel.ProfessionalJoinDate = GetJoinDate(viewModel.FullName, viewModel.Position, viewModel.ProjectUnit, "Active");
+
+                //viewModel.ProfessionalJoinDate = Convert.ToDateTime(item["Join_x0020_Date"]).ToLocalTime();
                 viewModel.RequestorMailAddress = Convert.ToString(item["officeemail"]);
                 viewModel.ProfessionalPersonalMail = Convert.ToString(item["personalemail"]);
 
@@ -282,6 +285,24 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             viewModel.ExitProcedureChecklist = exitProcedureCheckList;
 
             return viewModel;
+        }
+
+        private DateTime GetJoinDate (string professionalName, string position, string projectUnit, string psaStatus)
+        {
+            DateTime professionalJoinDate = DateTime.Now;
+
+            var camlPSAData = @"<View>  
+            <Query> 
+               <Where><And><And><And><Eq><FieldRef Name='ProjectOrUnit' /><Value Type='Choice'>" + projectUnit + @"</Value></Eq><Eq><FieldRef Name='position' /><Value Type='Lookup'>" + position + @"</Value></Eq></And><Eq><FieldRef Name='professionalfullname' /><Value Type='Text'>" + professionalName + @"</Value></Eq></And><Eq><FieldRef Name='psastatus' /><Value Type='Text'>" + psaStatus + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var psaData in SPConnector.GetList(SP_PSA_LIST_NAME, _siteUrl, camlPSAData))
+            {
+                professionalJoinDate = Convert.ToDateTime(psaData["joindate"]).ToLocalTime();
+            }
+
+            return professionalJoinDate;
         }
 
         private string GetPSANumber(string professionalName, string positionName, string projectUnit, string psaStatus)

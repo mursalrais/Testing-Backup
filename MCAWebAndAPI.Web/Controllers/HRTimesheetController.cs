@@ -484,7 +484,7 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get from existing session variable or create new if doesn't exist
             if (SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails") == null) return null;
             var items = SessionManager.Get<IEnumerable<TimesheetDetailVM>>("TimesheetDetails").Where(e => e.Type != null &&
-            e.Type == "Compensatory Time");
+            e.Type == "Compensatory Time Type");
 
             // Convert to Kendo DataSource
             DataSourceResult result = items.ToDataSourceResult(request);

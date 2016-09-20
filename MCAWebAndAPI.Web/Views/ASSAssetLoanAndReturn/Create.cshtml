@@ -92,10 +92,17 @@
                     var asset = document.getElementsByClassName("asset");
                     var estdate = document.getElementsByClassName("estdate");
                     var loandate = new Date($('#LoanDate').val());
+                    var estdate = new Date($('.estdate').val());
                     var grid = $('#AssetLoanAndReturnItem').data("kendoGrid").dataSource.data();
 
+                    var displayedData = $("#AssetLoanAndReturnItem").data().kendoGrid.dataSource.view();
+                    var displayedDataAsJSON = JSON.stringify(displayedData);
+
+                    
+                    //alert(displayedDataAsJSON);
+
                     for (var j = 0; j < grid.length; j++) {
-                        if (grid[j].EstReturnDate < loandate) {
+                        if (Date.parse(grid[j].EstReturnDate) < Date.parse(loandate)) {
                             var data = { errorMessage: "Est Return Date cannot be less than Loan Date", success: false };
                             showModalWindow(data);
                             return false;

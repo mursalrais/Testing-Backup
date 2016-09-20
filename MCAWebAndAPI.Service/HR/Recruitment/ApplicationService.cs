@@ -36,9 +36,16 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var updatedValue = new Dictionary<string, object>();
 
             updatedValue.Add("Title", viewModel.FirstMiddleName);
-            updatedValue.Add("vacantposition",
-                new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
+            //updatedValue.Add("vacantposition",
+            //    new FieldLookupValue() { LookupId = (int)GetVacantPosition(viewModel.Position).ID });
             updatedValue.Add("manpowerrequisition", new FieldLookupValue { LookupId = (int)viewModel.ManpowerRequisitionID });
+
+            string positionName = GetPositionFromManpower(Convert.ToInt32(viewModel.ManpowerRequisitionID));
+            string projectUnit = GetProjectUnitFromManpower(Convert.ToInt32(viewModel.ManpowerRequisitionID));
+
+            int positionID = GetPositionID(positionName, projectUnit);
+            updatedValue.Add("vacantposition", positionID);
+
             updatedValue.Add("lastname", viewModel.LastName);
             updatedValue.Add("placeofbirth", viewModel.PlaceOfBirth);
             updatedValue.Add("dateofbirth", viewModel.DateOfBirth);
@@ -89,6 +96,35 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             }
 
             return ID;
+        }
+
+        private string GetProjectUnitFromManpower(int? manpowerID)
+        {
+            string projectUnit = "";
+
+            var manpowerReqData = SPConnector.GetListItem(SP_MANPOW_LIST_NAME, manpowerID, _siteUrl);
+            projectUnit = Convert.ToString(manpowerReqData["projectunit"]);
+
+            return projectUnit;
+        }
+
+        private int GetPositionID(string positionName, string projectUnit)
+        {
+            int positionID = 0;
+
+            var camlPositionData = @"<View>  
+            <Query> 
+               <Where><And><Eq><FieldRef Name='Title' /><Value Type='Text'>" + positionName + @"</Value></Eq><Eq><FieldRef Name='projectunit' /><Value Type='Choice'>" + projectUnit + @"</Value></Eq></And></Where> 
+            </Query> 
+      </View>";
+
+            foreach(var positionData in SPConnector.GetList(SP_POSMAS_LIST_NAME, _siteUrl, camlPositionData))
+            {
+                positionID = Convert.ToInt32(positionData["ID"]);
+                break;
+            }
+
+            return positionID;
         }
 
         public void SendMail(string emailApplicant, string emailSubject, string emailContent)
@@ -634,6 +670,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var positionData = SPConnector.GetListItem(SP_POSMAS_LIST_NAME, positionID, _siteUrl);
 
             positionName = Convert.ToString(positionData["Title"]);
+
+            return positionName;
+        }
+
+        public string GetPositionFromManpower(int? ID)
+        {
+            string positionName = "";
+
+            var manpowerRequisitionData = SPConnector.GetListItem(SP_MANPOW_LIST_NAME, ID, _siteUrl);
+            positionName = FormatUtil.ConvertLookupToValue(manpowerRequisitionData, "positionrequested_x003a_Position");
+            //positionName = Convert.ToString(manpowerRequisitionData[""]);
 
             return positionName;
         }

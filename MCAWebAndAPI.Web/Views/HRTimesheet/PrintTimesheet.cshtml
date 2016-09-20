@@ -95,13 +95,14 @@
 
                         @for (int i = 1; i <= 15 - 1; i++)
                         {
-
+                            Model.dtDetails.DefaultView.RowFilter = string.Empty;
+                            var dTotal = 0.0;
                             <tr>
 
                                 @for (int x = 0; x <= Model.dtDetails.Rows.Count - 1; x++)
                                 {
                                     int result = lstWeekend.Find(item => item == x + 1);
-                                    if (Model.dtDetails.Rows[x]["Type"].ToString() == "Working Days" && i == 1)
+                                    if (Model.dtDetails.Rows[x]["Type"].ToString() != "Holiday" && i == 1)
                                     {
                                         if (result == 0)
                                         {
@@ -368,8 +369,8 @@
                                 {
                                     <td class="tdLeft">Unpaid Days Off</td>
                                     object sumObject = null;
-                                    Model.dtDetails.DefaultView.RowFilter = "Type='Unpaid Day-Off'";
-                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Unpaid Day-Off'");
+                                    Model.dtDetails.DefaultView.RowFilter = "SubType='Unpaid Day-Off'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "SubType='Unpaid Day-Off'");
                                     if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
                                             <td>@Convert.ToDouble(sumObject)</td>
@@ -392,31 +393,33 @@
                                         else
                                         {
                                             <td>0.0</td>
-                                        }
                                     }
-                                    else if (i == 13)
-                                    {
-                                        <td class="tdLeft">TOTAL</td>
-                                        object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "Type <> 'Compensatory Time' and Type<>'Holiday'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type <> 'Compensatory Time'  and Type<>'Holiday'");
+                                }
+                                else if (i == 13)
+                                {
+                                    <td class="tdLeft">TOTAL</td>
+                                    Model.dtDetails.DefaultView.RowFilter = string.Empty;
 
-                                        if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
-                                        {
-                                            <td> @Convert.ToDouble(sumObject)</td>
-                                        }
-                                        else
-                                        {
-                                            <td>0.0</td>
-                                        }
-                                    }
-                                    else if (i == 14)
+                                    object sumObject = null;
+
+                                    Model.dtDetails.DefaultView.RowFilter = "Type = 'Day-Off' or Type='Public Holiday' or Type='Working Days'";
+                                    sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type = 'Day-Off' or Type='Public Holiday' or Type='Working Days'");
+                                    if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                     {
+                                        <td> @Convert.ToDouble(sumObject)</td>
+                                    }
+                                    else
+                                    {
+                                        <td>0.0</td>
+                                    }
+                                }
+                                else if (i == 14)
+                                {
                                         <td class="tdLeft">Compensatory Time (C): Work or <br /> Travel on Saturday & Sunday</td>
 
                                         object sumObject = null;
-                                        Model.dtDetails.DefaultView.RowFilter = "Type='Compensatory Time'";
-                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Compensatory Time'");
+                                        Model.dtDetails.DefaultView.RowFilter = "Type='Compensatory Time Type'";
+                                        sumObject = Model.dtDetails.Compute("Sum(HalfFullDay)", "Type='Compensatory Time Type'");
                                         if (Model.dtDetails.DefaultView != null && Model.dtDetails.DefaultView.Count > 0)
                                         {
                                             <td>@Convert.ToDouble(sumObject)</td>

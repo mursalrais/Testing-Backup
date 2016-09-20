@@ -87,8 +87,11 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult DisplayExitChecklistForHR(string professionalMail, string siteUrl = null, bool isPartial = true)
         {
+            siteUrl = SessionManager.Get<string>("SiteUrl");
             exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            //exitProcedureService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
             ViewBag.ListName = "Exit Procedure";
 
