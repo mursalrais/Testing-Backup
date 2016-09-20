@@ -799,3 +799,14 @@ Please try again.
 2016-09-19 19:03:23.4657 MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService System.Exception: Failed to send email. Please contact your IT Administrator.
    at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 45
    at MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService.CreatePerformanceEvaluationDetails(Nullable`1 headerID, String emailMessage) in D:\Reza F. Fikri\GitHub\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceEvaluationService.cs:line 142
+2016-09-19 21:28:30.7382 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 594
+2016-09-19 21:40:43.2288 MCAWebAndAPI.Service.Asset.AssetTransferService Operation is not valid due to the current state of the object.
+2016-09-19 21:41:51.1022 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 594
+2016-09-19 21:57:04.5516 MCAWebAndAPI.Service.Asset.AssetTransferService Operation is not valid due to the current state of the object.
+2016-09-19 23:21:28.6486 MCAWebAndAPI.Service.Asset.AssetTransferService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
+   at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
+   at MCAWebAndAPI.Service.Asset.AssetTransferService.CreateDetails(Nullable`1 headerID, IEnumerable`1 items) in C:\Users\lenovo\Documents\GitHub\DAC\IMS-Web-and-API\MCAWebAndAPI.Service\Asset\AssetTransferService.cs:line 594
