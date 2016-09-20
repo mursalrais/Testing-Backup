@@ -27,10 +27,21 @@ namespace MCAWebAndAPI.Web.Controllers
         // GET: ASSAssetCheckForm
         public ActionResult Index(string siteUrl)
         {
-            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+            String url = "";
+            if (siteUrlSession == null)
+            {
+                assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+                url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+            }
+            else
+            {
+                assetCheckFormService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+                url = (siteUrlSession ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
+            }
 
             return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
@@ -48,8 +59,17 @@ namespace MCAWebAndAPI.Web.Controllers
             string save, 
             string cancel)
         {
-            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }else
+            {
+                assetCheckFormService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            
 
             
             if (!string.IsNullOrEmpty(save))
@@ -81,9 +101,18 @@ namespace MCAWebAndAPI.Web.Controllers
             string save,
             string cancel)
         {
-            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckFormService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
+
             if (!string.IsNullOrEmpty(save))
             {
                 int? formid = assetCheckFormService.EditSave(data);
@@ -107,9 +136,18 @@ namespace MCAWebAndAPI.Web.Controllers
             string print,
             string calculate)
         {
-            assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckFormService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
+
 
             if (!string.IsNullOrEmpty(print))
             {

@@ -39,12 +39,19 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         
         public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service = new SCAVoucherService(siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
+            model.UserEmail = userEmail;
+
             SetAdditionalSettingToVM(ref model);
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
@@ -53,6 +60,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public ActionResult Edit(string siteUrl = null, int? ID = null, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 

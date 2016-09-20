@@ -40,7 +40,20 @@ namespace MCAWebAndAPI.Service.Asset
 
         public AssetTransferVM GetHeader(int? ID, string SiteUrl)
         {
-            var filename = SPConnector.GetAttachFileName("Asset Transfer", ID, _siteUrl);
+            var caml10 = @"<View><Query><Where><Eq><FieldRef Name='ID' /><Value Type='Counter'>"+ID+@"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Attachments' /></ViewFields><QueryOptions /></View>";
+
+            var ff = SPConnector.GetListItem("Asset Transfer", ID, _siteUrl);
+
+            
+            var FV = Convert.ToString(ff["Attachments"]);
+            var filename ="";
+
+            if(FV == "true")
+            {
+                filename = SPConnector.GetAttachFileName("Asset Transfer", ID, _siteUrl);
+            }
+
+          
             var listItem = SPConnector.GetListItem("Asset Transfer", ID, SiteUrl);
             var viewModel = new AssetTransferVM();
             viewModel.filename = filename;

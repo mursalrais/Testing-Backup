@@ -139,6 +139,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         private AdjustmentDetailsVM ConvertToAdjusDetailVM(ListItem item)
         {
+            int? idprof = Convert.ToInt32(FormatUtil.ConvertLookupToID(item, "professional_x003a_ID") + string.Empty);
+            var proj_unit = "";
+            var position = "";
+            var models = GetProfessionalsActives(idprof);
+
+            foreach (var prof_item in models)
+            {
+               proj_unit = prof_item.Project_Unit;
+               position = prof_item.Position;
+            }
+
             return new AdjustmentDetailsVM
             {
                 ajusmentType = AdjustmentDetailsVM.getAjusmentDefaultValue(
@@ -154,6 +165,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     }),
 
                 ddlProfessional = AdjustmentDetailsVM.getprofDefaultValue(FormatUtil.ConvertToInGridAjaxComboBox(item, "professional")),
+                projUnit = proj_unit,
+                position = position,
                 period = Convert.ToDateTime(item["adjustmentperiod"]),
                 amount = Convert.ToString(item["adjustmentamount"]),
                 remark = Convert.ToString(item["remarks"]),
@@ -260,6 +273,34 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     continue;
                 }
             }
+        }
+
+        private IEnumerable<ProfessionalMaster> GetProfessionalsActives(int? id)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='ID' /><Value Type='Number'>" + id + @"</Value></Eq></Where> </Query></View>";
+
+            var models = new List<ProfessionalMaster>();
+            foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            {
+                models.Add(ConvertToProfessionalModel_Light(item));
+            }
+
+            return models;
+        }
+        private ProfessionalMaster ConvertToProfessionalModel_Light(ListItem item)
+        {
+            return new ProfessionalMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                Name = Convert.ToString(item["Title"]) + " " + Convert.ToString(item["lastname"]),
+                Position = item["Position"] == null ? string.Empty :
+                        Convert.ToString((item["Position"] as FieldLookupValue).LookupValue),
+                PositionId = item["Position"] == null ? 0 :
+                        Convert.ToInt32((item["Position"] as FieldLookupValue).LookupId),
+                Project_Unit = Convert.ToString(item["Project_x002f_Unit"]),
+                OfficeEmail = Convert.ToString(item["officeemail"]),
+
+            };
         }
     }
 }

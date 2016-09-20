@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Resources;
@@ -64,17 +65,21 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         private const string ACTIVTY_PROJECT_NAME = "Project";
         private const string ACTIVITYID_SUBACTIVITY = "Activity_x003a_ID";
         private const string WBS_SUBACTIVITY_ID = "Sub_x0020_Activity_x003a_ID";
+        private const string FieldName_TransactionStatus = "TransactionStatus";
 
-        #endregion 
+        private const string FieldNameItem_WBSID = "WBSID";
+        private const string FieldNameItem_WBSIdDescription = "WBSIdDescription";
 
-        string siteUrl = null;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        #endregion Constants
+
+        private string siteUrl = null;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public RequisitionNoteService(string siteUrl)
         {
             this.siteUrl = siteUrl;
         }
-        
+
         public async Task<RequisitionNoteVM> GetAsync(int? ID)
         {
             return Get(ID);
@@ -149,7 +154,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return wbsMasters;
         }
 
-
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -168,6 +172,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
+            updatedValue.Add(FieldName_TransactionStatus, TransactionStatusComboBoxVM.NotLocked);
 
             updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl));
 
@@ -195,6 +200,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             updatedValue.Add(FIELD_REQUISITION_CATEGORY, viewModel.Category.Value);
             updatedValue.Add(FIELD_REQUISITION_DATE, viewModel.Date);
+
             if (viewModel.EventBudgetNo.Value.HasValue)
             {
                 updatedValue.Add(FIELD_REQUISITION_EVENTBUDGETNO, viewModel.EventBudgetNo.Value);
@@ -205,6 +211,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             updatedValue.Add(FIELD_REQUISITION_CURRENCY, viewModel.Currency.Value);
             updatedValue.Add(FIELD_REQUISITION_TOTAL, viewModel.Total);
             updatedValue.Add(FIELD_USER_EMAIL, viewModel.UserEmail);
+            updatedValue.Add(FieldName_TransactionStatus, viewModel.TransactionStatus);
 
             updatedValue.Add(FieldName_VisibleTo, SPConnector.GetUser(viewModel.UserEmail, siteUrl));
 
@@ -232,7 +239,13 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                 updatedValue.Add(FIELD_TITLE, viewModel.Specification);
                 updatedValue.Add(FIELD_RN_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add(FIELD_RN_ACTIVITY, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Activity.Value) });
+
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+                var wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
+                updatedValue.Add(FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBS.Value));
+                updatedValue.Add(FieldNameItem_WBSIdDescription, wbs.WBSIDDescription);
+
                 updatedValue.Add(FIELD_RN_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FIELD_RN_QUANTITY, viewModel.Quantity);
                 updatedValue.Add(FIELD_RN_FREQUENCY, viewModel.Frequency);
@@ -283,7 +296,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                     try
                     {
                         SPConnector.DeleteListItem(ListName_RequisitionNoteItem, viewModel.ID, siteUrl);
-
                     }
                     catch (Exception e)
                     {
@@ -293,12 +305,17 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
                     continue;
                 }
 
-
                 var updatedValue = new Dictionary<string, object>();
                 updatedValue.Add(FIELD_TITLE, viewModel.Specification);
                 updatedValue.Add(FIELD_RN_HEADERID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
                 updatedValue.Add(FIELD_RN_ACTIVITY, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.Activity.Value) });
+
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
+
+                var wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
+                updatedValue.Add(FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBS.Value));
+                updatedValue.Add(FieldNameItem_WBSIdDescription, wbs.WBSIDDescription);
+
                 updatedValue.Add(FIELD_RN_GL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
                 updatedValue.Add(FIELD_RN_QUANTITY, viewModel.Quantity);
                 updatedValue.Add(FIELD_RN_FREQUENCY, viewModel.Frequency);
@@ -384,14 +401,12 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return new Tuple<int, string>(id, number);
         }
 
-
         private ActivityVM ConvertToActivityModel(ListItem item)
         {
             return new ActivityVM
             {
                 ID = Convert.ToInt32(item[FIELD_ID]),
                 Title = Convert.ToString(item[FIELD_TITLE])
-
             };
         }
 
@@ -441,6 +456,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
             viewModel.Editor = Convert.ToString((listItem[FIELD_RN_EDITOR] as FieldUserValue).LookupValue);
             viewModel.UserEmail = Convert.ToString(listItem[FIELD_USER_EMAIL]);
+            viewModel.TransactionStatus = Convert.ToString(listItem[FieldName_TransactionStatus]);
 
             viewModel.DocumentUrl = GetDocumentUrl(viewModel.ID);
             return viewModel;
@@ -475,8 +491,9 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;
             viewModel.Activity.Text = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupValue;
 
+            var wbs = WBSMasterService.Get(siteUrl, Convert.ToInt32((listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId));
             viewModel.WBS.Value = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId;
-            viewModel.WBS.Text = string.Format("{0}-{1}", (listItem[FIELD_RN_WBS_ID] as FieldLookupValue).LookupValue, (listItem[FIELD_RN_WBS_DESC] as FieldLookupValue).LookupValue);
+            viewModel.WBS.Text = wbs.WBSIDDescription;
 
             viewModel.GL.Value = (listItem[FIELD_RN_GL] as FieldLookupValue).LookupId;
             viewModel.GL.Text = string.Format("{0}-{1}", (listItem[FIELD_RN_GL_ID] as FieldLookupValue).LookupValue, (listItem[FIELD_RN_GL_DESC] as FieldLookupValue).LookupValue);
@@ -493,6 +510,5 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
         {
             return string.Format(UrlResource.RequisitionNoteDocumentByID, siteUrl, iD);
         }
-
     }
 }
