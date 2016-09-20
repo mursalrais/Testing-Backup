@@ -168,15 +168,8 @@ page in IMS (My Compensatory View). Thank you.
 Link : {0}/Lists/CompensatoryRequest/DispFormCompensatory.aspx?ID={1}</value>
   </data>
   <data name="EmailInterviewToInterviewCandidate" xml:space="preserve">
-    <value>Dear Interview Panel,
+    <value>{0}
 
-{0}
-
-This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-
-requires your action to review as well as to prepare the Interview process for further action.
-
-Kindly check the link as per below to go to direct page accordingly.  Thank you.
 
 Link : {1}</value>
   </data>
@@ -209,10 +202,7 @@ Thank you for your attention.
 </value>
   </data>
   <data name="EmailShortlistToInterviewPanel" xml:space="preserve">
-    <value>Dear Interviewer Panel,
-
-This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
-This list requires your action to review as well as to prepare the Interview process for further action. 
+    <value>{1}
 
 To view the detail, please click following link: 
 
