@@ -156,7 +156,7 @@ namespace MCAWebAndAPI.Web.Controllers
             try
             {
                 char[] delimiterChars = { ' ', ',', ';' };
-
+                 
                 string[] words = viewModel.InterviewerPanel.Split(delimiterChars);
 
                 foreach (string mail in words)
@@ -167,7 +167,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
                         string mailbody = string.Format(EmailResource.EmailInterviewToInterviewPanel, link, viewModel.PositionName);
 
-                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName + " (based on respective position)", mailbody);
+                        EmailUtil.Send(mail, "Next Process Interview for position " + viewModel.PositionName , mailbody);
                     }
                 }
 

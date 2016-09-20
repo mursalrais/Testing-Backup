@@ -128,15 +128,8 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interview Panel,
+        ///   Looks up a localized string similar to {0}
         ///
-        ///{0}
-        ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate. This list
-        ///
-        ///requires your action to review as well as to prepare the Interview process for further action.
-        ///
-        ///Kindly check the link as per below to go to direct page accordingly.  Thank you.
         ///
         ///Link : {1}.
         /// </summary>
@@ -193,12 +186,7 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Interviewer Panel,
-        ///
-        ///This email is sent to you to notify that here is the latest list of shortlisted candidate for position {1}
-        ///This list requires your action to review as well as to prepare the Interview process for further action. 
-        ///
-        ///{2}
+        ///   Looks up a localized string similar to {1}
         ///
         ///To view the detail, please click following link: 
         ///
