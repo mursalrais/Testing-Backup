@@ -578,12 +578,12 @@ namespace MCAWebAndAPI.Service.Asset
                     updatedValues.Add("provinceto", (provinceinfo1["Province"] as FieldLookupValue).LookupId);
                 }
                 updatedValues.Add("cityfrom", provinceinfo["city"]);
-                updatedValues.Add("officefrom", provinceinfo["Title"]);
+                updatedValues.Add("officefrom", provinceinfo["ID"]);
                 updatedValues.Add("floorfrom", provinceinfo["Floor"]);
                 updatedValues.Add("roomfrom", provinceinfo["Room"]);
 
                 updatedValues.Add("cityto", provinceinfo1["city"]);
-                updatedValues.Add("officeto", provinceinfo1["Title"]);
+                updatedValues.Add("officeto", provinceinfo1["ID"]);
                 updatedValues.Add("floorto", provinceinfo1["Floor"]);
                 updatedValues.Add("roomto", provinceinfo1["Room"]);
 
@@ -1011,13 +1011,13 @@ namespace MCAWebAndAPI.Service.Asset
                 {
                     updatedValues.Add("provincefrom", (provinceinfo[i]["Province"] as FieldLookupValue).LookupId);
                     updatedValues.Add("cityfrom", provinceinfo[i]["city"]);
-                    updatedValues.Add("officefrom", provinceinfo[i]["Title"]);
+                    updatedValues.Add("officefrom", provinceinfo[i]["ID"]);
                     updatedValues.Add("floorfrom", provinceinfo[i]["Floor"]);
                     updatedValues.Add("roomfrom", provinceinfo[i]["Room"]);
 
                     updatedValues.Add("provinceto", (provinceinfo1[i]["Province"] as FieldLookupValue).LookupId);
                     updatedValues.Add("cityto", provinceinfo1[i]["city"]);
-                    updatedValues.Add("officeto", provinceinfo1[i]["Title"]);
+                    updatedValues.Add("officeto", provinceinfo1[i]["ID"]);
                     updatedValues.Add("floorto", provinceinfo1[i]["Floor"]);
                     updatedValues.Add("roomto", provinceinfo1[i]["Room"]);
                 }
