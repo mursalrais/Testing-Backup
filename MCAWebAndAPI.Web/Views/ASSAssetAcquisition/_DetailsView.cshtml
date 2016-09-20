@@ -32,14 +32,16 @@
                         });
 
             columns.Bound(p => p.WBS).Width(500).ClientTemplate("#= WBS.Text #" +
-                          "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
+                          "<input type='hidden' class='wbs' name='Details[#= getWorkingRelationshipDetails(data)#].WBS.Value' value='#= WBS.Value #' />"
                         ).EditorViewData(new
                         {
                             DataTextField = "Text",
                             DataValueField = "Value",
                             ControllerName = "ASSAssetAcquisition",
                             ActionName = "GetWBSGrid"
-                        });
+                        }).Width(200);
+
+         
 
             columns.Bound(p => p.CostIDR).ClientTemplate("#= kendo.toString(CostIDR, 'n2') #" +
             "<input type='hidden' name='Details[#= getWorkingRelationshipDetails(data)#].CostIDR' value='#= CostIDR #' />"
