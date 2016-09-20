@@ -168,9 +168,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 else if (paymentVoucher.PaidTo.Text.Equals(PaidToVendor))
                 {
-                    VendorService vendorSvc = new VendorService();
-                    vendorSvc.SetSiteUrl(siteUrl);
-                    var vendor = vendorSvc.GetVendor(paymentVoucher.Vendor.Value.Value);
+                    var vendor = Service.Common.VendorService.Get(siteUrl, paymentVoucher.Vendor.Value.Value);
                     paymentVoucher.PaidTo.Text = string.Format("{0} - {1}", vendor.ID, vendor.Name);
                 }
             }

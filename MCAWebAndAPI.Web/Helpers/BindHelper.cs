@@ -13,12 +13,20 @@ namespace MCAWebAndAPI.Web.Helpers
         public static DateTime? BindDateInGrid(string prefix, int index, string postfix, FormCollection form)
         {
             var dateStrings = (form[string.Format("{0}[{1}].{2}", prefix, index, postfix)] + string.Empty).Split(' ');
-
+            var result = DateTime.MinValue;
             //"Mon Nov 21 2011 19:53:08 GMT+0700 (SE Asia Standard Time) -> Nov 21 2011"
-            var dateString = string.Format("{0} {1} {2}", dateStrings[1], dateStrings[2], dateStrings[3]);
+            if (dateStrings.Length == 1)
+            {
+                result = DateTime.MinValue;
+            }
+            else
+            {
+                var dateString = string.Format("{0} {1} {2}", dateStrings[1], dateStrings[2], dateStrings[3]);
 
-            var result = DateTime.ParseExact(dateString, "MMM dd yyyy",
-                                       System.Globalization.CultureInfo.InvariantCulture);
+                result = DateTime.ParseExact(dateString, "MMM dd yyyy",
+                                           System.Globalization.CultureInfo.InvariantCulture);
+                
+            }
             return result;
         }
         public static DateTime? BindDateInGridTest(string prefix, int index, string postfix, FormCollection form)

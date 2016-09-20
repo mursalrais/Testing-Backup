@@ -181,6 +181,7 @@
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
     <Compile Include="Common\ProfessionalService.cs" />
+    <Compile Include="Common\VendorService.cs" />
     <Compile Include="Common\WBSMasterService.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />

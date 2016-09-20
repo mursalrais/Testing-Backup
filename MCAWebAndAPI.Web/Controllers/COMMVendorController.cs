@@ -35,12 +35,12 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["Vendor"] as IEnumerable<VendorVM>;
-            var glMasters = sessionVariable ?? VendorService.GetVendorMaster(siteUrl);
+            var vendors = sessionVariable ?? Service.Common.VendorService.GetAll(siteUrl);
 
             if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["GLMaster"] = glMasters;
+                System.Web.HttpContext.Current.Session["Vendor"] = vendors;
 
-            return glMasters;
+            return vendors;
         }
     }
 }

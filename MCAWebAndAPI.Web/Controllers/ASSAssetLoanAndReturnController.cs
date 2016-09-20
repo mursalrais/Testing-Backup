@@ -178,15 +178,15 @@ namespace MCAWebAndAPI.Web.Controllers
 
             for (int i = 0; i < array.Length; i++)
             {
-                if (array[i].ReturnDate == null)
-                {
-                    array[i].ReturnDate = null;
-                }
-                else
-                {
+                //if (array[i].ReturnDate == null)
+                //{
+                //    array[i].ReturnDate = null;
+                //}
+                //else
+                //{
                     array[i].ReturnDate = BindHelper.BindDateInGrid("AssetLoanAndReturnItem",
                         i, "ReturnDate", form);
-                }
+                //}
 
             }
             return array;

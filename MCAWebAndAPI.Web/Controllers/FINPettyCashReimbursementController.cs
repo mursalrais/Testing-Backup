@@ -130,7 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                 new
                 {
-                    successMessage = string.Format(viewModel.Operation==Operations.c ? SuccessMsgFormatCreated : SuccessMsgFormatUpdated, viewModel.TransactionNo),
+                    successMessage = string.Format(viewModel.Operation==Operations.c ? SuccessMsgFormatCreated : SuccessMsgFormatUpdated, viewModel.DocNo),
                     previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }
@@ -140,7 +140,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl") ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
-            var vendors = Service.Shared.VendorService.GetVendorMaster(siteUrl);
+            var vendors = Service.Common.VendorService.GetAll(siteUrl);
 
             return Json(vendors.Select(e => new
             {
