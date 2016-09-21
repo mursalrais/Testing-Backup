@@ -64,8 +64,8 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("vendor", viewmodel.Vendor);
             columnValues.Add("pono", viewmodel.Pono);
             columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.purchasedatetext));
-            //Regex.Replace(Convert.ToString(listItem["purchasedescription"]), "<.*?>", string.Empty);
-            columnValues.Add("purchasedescription", viewmodel.purchaseDescription);
+            var purdesc = Regex.Replace(Convert.ToString(viewmodel.purchaseDescription), "<.*?>", string.Empty);
+            columnValues.Add("purchasedescription", purdesc);
 
             try
             {
@@ -93,7 +93,8 @@ namespace MCAWebAndAPI.Service.Asset
             columnValues.Add("vendor", viewmodel.Vendor);
             columnValues.Add("pono", viewmodel.Pono);
             columnValues.Add("purchasedate", Convert.ToDateTime(viewmodel.purchasedatetext));
-            columnValues.Add("purchasedescription", viewmodel.purchaseDescription);
+            var purdesc = Regex.Replace(Convert.ToString(viewmodel.purchaseDescription), "<.*?>", string.Empty);
+            columnValues.Add("purchasedescription", purdesc);
 
             try
             {
@@ -327,7 +328,10 @@ namespace MCAWebAndAPI.Service.Asset
             viewmodel.Pono = Convert.ToString(list["pono"]);
             viewmodel.purchasedatetext = Convert.ToDateTime(list["purchasedate"]).ToShortDateString();
             viewmodel.PurchaseDate = Convert.ToDateTime(viewmodel.purchasedatetext);
-            viewmodel.purchaseDescription = Regex.Replace(Convert.ToString(list["purchasedescription"]), "<.*?>", string.Empty);
+            //Regex.Replace(output, @"(\s|&amp;)", "");
+            var desc = Regex.Replace(Convert.ToString(list["purchasedescription"]), "<.*?>", string.Empty);
+            desc = Regex.Replace(desc, "amp;", " ");
+            viewmodel.purchaseDescription = desc;
 
             var caml = @"<View><Query><Where><Eq><FieldRef Name='assetacquisition' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
             var details = new List<AssetReplacementItemVM>();
@@ -361,10 +365,10 @@ namespace MCAWebAndAPI.Service.Asset
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
-            var ListWBS = SPConnector.GetListItem("WBS Master", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
+            var ListWBS = SPConnector.GetListItem("WBS Mapping", (item["wbs"] as FieldLookupValue).LookupId, _siteUrl);
             AjaxComboBoxVM _wbs = new AjaxComboBoxVM();
             _wbs.Value = (item["wbs"] as FieldLookupValue).LookupId;
-            _wbs.Text = Convert.ToString(ListWBS["Title"]) + " - " + Convert.ToString(ListWBS["WBSDesc"]);
+            _wbs.Text = Convert.ToString(ListWBS["WBS_x0020_ID"]) + " - " + Convert.ToString(ListWBS["WBS_x0020_Description"]);
 
             var model = new AssetReplacementItemVM();
             model.AssetSubAsset = AssetReplacementItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset);

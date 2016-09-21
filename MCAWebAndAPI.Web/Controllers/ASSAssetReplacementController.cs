@@ -29,7 +29,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
             //SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetTransfer;
+            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetReplacement;
 
             return Content("<script>window.top.location.href = '" + url + "';</script>");
         }
@@ -195,6 +195,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             catch (Exception e)
             {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return JsonHelper.GenerateJsonErrorResponse("Failed To Update Detail");
             }
 

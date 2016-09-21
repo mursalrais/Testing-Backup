@@ -5,7 +5,6 @@
 
     @(Html.Kendo().Grid(Model)
     .Name("AdjustmentDetails")
-    .ToolBar(tools => tools.Create().Text("Add New"))
         .Editable(editable => editable.Mode(GridEditMode.InCell)
         .CreateAt(GridInsertRowPosition.Top))
     .Columns(columns =>
@@ -57,9 +56,6 @@
 
         columns.Bound(p => p.remark).ClientTemplate("#= remark #" +
         "<input type='hidden' id='remark#= GetDetailAdjustment(data)#' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].remark' value='#= remark #' />");
-
-        columns.Command(command => command.Custom("Delete").HtmlAttributes(new { @class = "btn btn-danger" })
-      .Click("onDeleteKendoDetail")).Width(100);
 
         columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
         "<input type='hidden' name='AdjustmentDetails[#= GetDetailAdjustment(data)#].ID' value='#= ID #' />"

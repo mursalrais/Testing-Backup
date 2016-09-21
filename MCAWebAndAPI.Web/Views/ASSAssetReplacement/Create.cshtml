@@ -4,17 +4,7 @@
 
 @model AssetReplacementHeaderVM
 
-@using (Ajax.BeginForm("Submit", "ASSAssetReplacement",
-                                                                                                                                                                           FormMethod.Post,
-                                                                                                                                                                           new AjaxOptions
-                                                                                                                                                                           {
-                                                                                                                                                                               OnBegin = "onBeginForm",
-                                                                                                                                                                               OnComplete = "onCompleteForm",
-                                                                                                                                                                               OnSuccess = "onSuccessFormEmbed",
-                                                                                                                                                                               OnFailure = "onFailureForm"
-                                                                                                                                                                           }, new { @class = "form-horizontal" }))
 
-{
     <form class="form-horizontal" method="post" action="/ASSAssetReplacement/Submit" id="create-asset-acquisition-form">
         <fieldset>
             <legend>Form Asset Replacement</legend>
@@ -98,7 +88,7 @@
         </div>
 
     </form>
-}
+
 
 <style>
     #myProgress {

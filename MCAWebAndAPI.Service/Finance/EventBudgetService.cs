@@ -453,12 +453,13 @@ namespace MCAWebAndAPI.Service.Finance
             RequisitionNoteVM rnHeader = reqNoteService.Get(id);
             EventBudgetVM ebHeader = Get(rnHeader.EventBudgetNo.Value);
 
-            if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
-                throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
+            //if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
+            //    throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
 
             // copy EB updated values to RN
             rnHeader.Project.Value = ebHeader.Project.Value;
             rnHeader.Total = ebHeader.TotalDirectPayment;
+            rnHeader.TransactionStatus = ebHeader.TransactionStatus.Text;
 
             // delete all existing details in RN
             foreach (var rnDetail in rnHeader.ItemDetails)
@@ -513,12 +514,13 @@ namespace MCAWebAndAPI.Service.Finance
             SCAVoucherVM scaVoucherHeader = scaVoucherService.Get(id);
             EventBudgetVM ebHeader = Get(scaVoucherHeader.EventBudgetID);
 
-            if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
-                throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
+            //if (ebHeader.TransactionStatus.Value == TransactionStatusComboBoxVM.Locked)
+            //    throw new Exception("Cannot update Requisition Note for a Locked Event Budget");
 
             // copy EB updated values to RN
             scaVoucherHeader.Project = ebHeader.Project.Value;
 			scaVoucherHeader.TotalAmount = ebHeader.TotalSCA;
+            scaVoucherHeader.TransactionStatus.Value = ebHeader.TransactionStatus.Value;
 
             // delete all existing details in RN
             foreach (var rnDetail in scaVoucherHeader.EventBudgetItems)

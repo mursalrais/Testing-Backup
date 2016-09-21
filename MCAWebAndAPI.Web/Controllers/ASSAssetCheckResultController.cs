@@ -33,10 +33,22 @@ namespace MCAWebAndAPI.Web.Controllers
         // GET: AssetCheckResult
         public ActionResult Index(string siteUrl)
         {
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
 
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
+            String url = "";
+            if (siteUrlSession == null)
+            {
+                url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+                url = (siteUrlSession ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckResult;
+            }
+
+            
 
             return Content("<script>window.top.location.href = '" + url+"';</script>");     
         }
@@ -67,8 +79,17 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public int PositionID(int? ID, string siteUrl)
         {
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
             if (ID == null)
             {
                 ID = assetCheckResultService.GetMinIDProfesional();
@@ -108,8 +129,17 @@ namespace MCAWebAndAPI.Web.Controllers
             HttpPostedFileBase file
         )
         {
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
             //assetCheckResultService.UpdatePosition();
 
             var fileName = "";
@@ -187,8 +217,17 @@ namespace MCAWebAndAPI.Web.Controllers
         )
         {
 
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
 
             var fileName = "";
             if (file != null && file.ContentLength > 0)
@@ -253,8 +292,17 @@ namespace MCAWebAndAPI.Web.Controllers
         )
         {
 
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
 
             var fileName = "";
             if (file != null && file.ContentLength > 0)
@@ -335,7 +383,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetPositions()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            _dataMasterService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
 
             var positions = GetFromPositionsExistingSession();
             return Json(positions.Select(e =>
@@ -353,7 +403,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetProfessionals()
         {
-            _dataMasterService.SetSiteUrl(ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            _dataMasterService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
 
             var professionals = GetFromExistingSession();
             professionals = professionals.OrderBy(e => e.FirstMiddleName);
@@ -389,11 +441,20 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Approve", new { ID = ID });
             }
 
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
             //String s = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             //var A = SPConnector.GetCurrentUser(s);
-            if(requestor != null)
+            if (requestor != null)
             {
                 if(assetCheckResultService.IsAprover(requestor,ID))
                 {
@@ -458,8 +519,17 @@ namespace MCAWebAndAPI.Web.Controllers
         )
         {
 
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
 
             if (!string.IsNullOrEmpty(Approve))
             {
@@ -474,9 +544,9 @@ namespace MCAWebAndAPI.Web.Controllers
             }
 
             var viewModel = assetCheckResultService.GetPopulatedModel(ID, data.FormID.Value, data);
-            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejectd")
+            if(viewModel.ApprovalStatus == "Approved" || viewModel.ApprovalStatus == "Rejected")
             {
-                return RedirectToAction("Approve", new { ID = ID });
+                return RedirectToAction("Approvegray", new { ID = ID });
             }
             return View(viewModel);
         }
@@ -489,8 +559,17 @@ namespace MCAWebAndAPI.Web.Controllers
         )
         {
 
-            assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var siteUrlSession = SessionManager.Get<string>("SiteUrl");
+
+            if (siteUrlSession == null)
+            {
+                assetCheckResultService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+                SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            }
+            else
+            {
+                assetCheckResultService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+            }
 
             if (!string.IsNullOrEmpty(Approve))
             {

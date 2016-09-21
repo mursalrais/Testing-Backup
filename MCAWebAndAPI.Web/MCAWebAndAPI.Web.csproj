@@ -1219,8 +1219,8 @@
     <Content Include="Views\ASSAssetCheckResult\_Detailsgray.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\_approval_Pathgray.cshtml" />
     <Content Include="Views\ASSAssetCheckResult\Approvegray.cshtml" />
-    <Content Include="Views\HRFeeSlip\CreateFeeSlip.cshtml" />
-    <Content Include="Views\HRFeeSlip\_ProfessionalDetailFee.cshtml" />
+    <Content Include="Views\HRAdjustment\ViewAdjustmentData.cshtml" />
+    <Content Include="Views\HRAdjustment\_ViewAdjustmentDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

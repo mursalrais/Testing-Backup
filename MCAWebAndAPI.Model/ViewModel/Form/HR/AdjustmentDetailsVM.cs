@@ -36,7 +36,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         {
             var index = 0;
             var options = new string[] {
-                "Stop Award",
+                "Spot Award",
                 "Retention Payment",
                 "Overtime",
                 "Adjustment",
@@ -101,7 +101,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// statusaplication
         /// </summary>
         [UIHint("InGridAjaxComboBox")]
-        [DisplayName("PayType")]
+        [DisplayName("Debit/Credit")]
         public AjaxComboBoxVM payType { get; set; } = new AjaxComboBoxVM();
 
         public static IEnumerable<InGridComboBoxVM> getPayTypeOptions()
@@ -133,10 +133,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         [UIHint("InGridAjaxComboBox")]
-        [DisplayName("Professional")]
+        [DisplayName("Name")]
         public AjaxComboBoxVM ddlProfessional { get; set; } = new AjaxComboBoxVM
           {
-            ActionName = "GetProfessionals",
+            ActionName = "GetProfessionalsActive",
             ValueField = "ID",
             ControllerName = "HRDataMaster",
             TextField = "Project_Unit"

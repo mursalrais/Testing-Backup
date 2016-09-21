@@ -24,7 +24,7 @@ namespace MCAWebAndAPI.Service.Asset
 
         public bool IsAprover(string emailUser, int? cekResultID)
         {
-            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>Deputy Executive Director</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>"+emailUser+"</Value></Eq></And></Where></Query></View>";
+            var caml = @"<View><Query><Where><And><Eq><FieldRef Name='Position' /><Value Type='Lookup'>Deputy Executive Director, Operations Support</Value></Eq><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + emailUser+"</Value></Eq></And></Where></Query></View>";
             var profesionalMaster = SPConnector.GetList("Professional Master", _siteUrl, caml);
 
             foreach(var item in profesionalMaster)
@@ -465,7 +465,7 @@ namespace MCAWebAndAPI.Service.Asset
                         GetFullName(model.CountedBy2.Value),
                         GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, ID.ToString()));
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
                 else
                 {
@@ -614,7 +614,7 @@ namespace MCAWebAndAPI.Service.Asset
                         GetFullName(model.CountedBy2.Value),
                         GetFullName(model.CountedBy3.Value),
                         _siteUrl + String.Format(UrlResource.AssetCheckResultApprove, IDResult.ToString()));
-                    //EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
+                    EmailUtil.Send(email.EmailTo, "Notification to approve the result", email.EmailContent);
                 }
 
                 return model;
@@ -651,8 +651,29 @@ namespace MCAWebAndAPI.Service.Asset
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
 
+            email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                (dataCekResult["assetcheckcountedby2"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = ApproveEmail(
+                (dataCekResult["assetcheckcountedby3"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Approve notification of asset check result", email.EmailContent);
             return model;
         }
 
@@ -679,14 +700,36 @@ namespace MCAWebAndAPI.Service.Asset
 
             EmailHelperAssetCheckResult email = new EmailHelperAssetCheckResult();
 
-            email = ApproveEmail(
+            email = RejectEmail(
                 (dataCekResult["assetcheckcountedby1"] as FieldLookupValue).LookupId,
                 (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
                 dataCekResult["assetcheckformid"].ToString(),
                 Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
                 );
 
-            //EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = RejectEmail(
+                (dataCekResult["assetcheckcountedby2"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
+
+            email = new EmailHelperAssetCheckResult();
+
+            email = RejectEmail(
+                (dataCekResult["assetcheckcountedby3"] as FieldLookupValue).LookupId,
+                (dataCekResult["approvalname"] as FieldLookupValue).LookupId,
+                dataCekResult["assetcheckformid"].ToString(),
+                Convert.ToDateTime(dataCekResult["assetcheckcountdate"].ToString())
+                );
+
+            EmailUtil.Send(email.EmailTo, "Rejected notification of asset check result", email.EmailContent);
 
 
             return model;

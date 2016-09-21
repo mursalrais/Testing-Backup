@@ -1098,7 +1098,9 @@
 
             console.log("totalBalance: " + totalBalance);
 
-            $("#DayOffNextBalance").data("kendoGrid").dataSource.data()[j].Balance = totalBalance;
+            $("#DayOffNextBalance").data("kendoGrid").dataSource.[0].Balance = totalBalance;
+
+            $("#DayOffNextBalance").data("kendoGrid").dataSource.[0].Balance.prop('value', to);
         }
 
         function displayNextBalance()

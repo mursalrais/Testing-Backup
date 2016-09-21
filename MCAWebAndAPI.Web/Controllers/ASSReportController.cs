@@ -48,6 +48,41 @@ namespace MCAWebAndAPI.Web.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public ActionResult GridWorksheet_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            var emptyTable = _service.getTable("Fixed Asset");
+            SessionManager.Set("CSVDataTable", emptyTable);
+
+            var viewModel = new AssetReportVM();
+            viewModel.dtDetails = emptyTable;
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = emptyTable.ToDataSourceResult(request);
+
+            // Convert to Json 
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+        }
+
+
+        [HttpPost]
+        public ActionResult GridWorksheet_ExportExcel(string contentType, string base64, string fileName)
+        {
+            var fileContents = Convert.FromBase64String(base64);
+
+            fileName = string.Format("ReportFixedAsset.xlsx");
+
+            // Store the file on the session variable
+            var fileContent = fileContents;
+            //SessionManager.Set("PayrollWorksheet_ExcelFile", fileContents);
+
+            return File(fileContents, contentType, fileName);
+        }
+
         public JsonResult Grid_ReadFA([DataSourceRequest] DataSourceRequest request)
         {
             // Get from existing session variable or create new if doesn't exist
