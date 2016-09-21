@@ -157,7 +157,7 @@
         }
 
         function onAssetLevelClick(e) {
-            //alert("asset level : " + this.dataItem(e.item));
+            alert("asset level : " + this.dataItem(e.item));
             if (this.dataItem(e.item) == "Main Asset") {
                 $("#AssetCategory_Value").data("kendoDropDownList").enable(true);
                 $("#AssetCategory_Value").data("kendoDropDownList").value("");
@@ -183,7 +183,7 @@
                 $("#AssetType_Value").data("kendoDropDownList").value("");
 
                 $("#AssetNoAssetDesc_Value").data("kendoDropDownList").enable(true);
-                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value("");
+                $("#AssetNoAssetDesc_Value").data("kendoDropDownList").value(1);
 
             }
         }

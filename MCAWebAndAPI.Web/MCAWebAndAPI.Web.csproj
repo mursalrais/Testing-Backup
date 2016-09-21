@@ -1002,8 +1002,6 @@
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataForApprover.cshtml" />
     <Content Include="Views\HRExitProcedure\_ExitProcedureDataHR.cshtml" />
     <Content Include="Views\HRExitProcedure\ViewExitProcedureForApprover.cshtml" />
-    <Content Include="Views\HRFeeSlip\FeeSlip.cshtml" />
-    <Content Include="Views\HRFeeSlip\_FeeSlipDetails.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\Decimal.cshtml" />
     <Content Include="Views\HRPayroll\DisplayMonthlyFee.cshtml" />
     <Content Include="Views\Success\ErrorMessage.cshtml" />
@@ -1221,6 +1219,8 @@
     <Content Include="Views\ASSAssetCheckResult\Approvegray.cshtml" />
     <Content Include="Views\HRAdjustment\ViewAdjustmentData.cshtml" />
     <Content Include="Views\HRAdjustment\_ViewAdjustmentDetails.cshtml" />
+    <Content Include="Views\HRFeeSlip\_ProfessionalDetailFee.cshtml" />
+    <Content Include="Views\HRFeeSlip\CreateFeeSlip.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1253,9 +1253,9 @@
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
-    <Compile Include="Controllers\COMMGLController.cs" />
-    <Compile Include="Controllers\COMMVendorController.cs" />
+    <Compile Include="Controllers\COMGLController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
+    <Compile Include="Controllers\COMVendorController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />

@@ -1,0 +1,76 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model.FeeSlipDetails)
+          .Name("FeeSlipDetails")
+          .ToolBar(tools => tools.Create().Text("Add New Component"))
+          .Editable(editable => editable.Mode(GridEditMode.InCell)
+              .CreateAt(GridInsertRowPosition.Bottom))
+          .Columns(columns =>
+          {
+            
+              columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+                                                           "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].Position' value='#= Position #' />"
+                  );
+              columns.Bound(p => p.ID).ClientTemplate("#= ID #" +
+                                                               "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
+                  );
+              columns.Bound(p => p.EditMode).ClientTemplate("#= EditMode #" +
+                                                                     "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
+                  );
+
+
+          })
+          .Events(e =>
+          {
+              e.Edit("onEditKendoDetail");
+              e.DataBound("onDataBoundComponentDetails");
+          })
+          .DataSource(dataSource => dataSource.Ajax()
+          .Events(events =>
+          {
+              //  events.Change("onChange");
+          })
+              //.Aggregates(aggregates =>
+              //{
+              //    aggregates.Add(p => p.Amount).Sum();
+              //})
+
+              .Model(model =>
+              {
+                  model.Id(p => p.ID);
+                  //model.Field(m => m.ReceiptDate).DefaultValue(DateTime.UtcNow);
+                  //model.Field(m => m.Currency).DefaultValue(ClaimComponentDetailVM.GetCurrencyDefaultValue());
+                  //model.Field(m => m.Type).DefaultValue(ClaimComponentDetailVM.GetTypeDefaultValue());
+              })
+              .ServerOperation(false)
+          )
+    )
+
+
+
+
+</div>
+
+
+
+<script>
+
+ 
+    function getComponentDetail(dataItem) {
+        var data = $("#FeeSlipDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundComponentDetails(e) {
+        var grid = $("#FeeSlipDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+        
+
+    }
+
+  
+
+</script>
+

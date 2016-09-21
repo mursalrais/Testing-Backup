@@ -180,7 +180,6 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             var viewModel = new SCAVoucherVM();
             viewModel = service.Get(model.ID);
-            viewModel.SCAVoucherItems = service.GetSCAVoucherItems(Convert.ToInt32(model.ID)).ToList();
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, PrintPageURL, null);
@@ -220,7 +219,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             service =  new SCAVoucherService(siteUrl);
 
             int? ID = null;
-            ID = service.CreateSCAVoucher(ref viewModel);
+            ID = service.CreateSCAVoucher(ref viewModel, COMProfessionalController.GetAll());
 
             Task createSCAVoucherItemTask = service.CreateSCAVoucherItemAsync(ID, viewModel.SCAVoucherItems);
             Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(ID, viewModel.Documents);
@@ -260,7 +259,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 }
                 else
                 {
-                    if (service.UpdateSCAVoucher(viewModel))
+                    if (service.UpdateSCAVoucher(viewModel, COMProfessionalController.GetAll()))
                     {
                         Task createSCAVoucherItemTask = service.UpdateSCAVoucherItem(viewModel.ID, viewModel.SCAVoucherItems);
                         Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(viewModel.ID, viewModel.Documents);
@@ -348,10 +347,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         private void SetAdditionalSettingToVM(ref SCAVoucherVM viewModel)
         {
-            viewModel.SDO.ControllerName = "ComboBox";
-            viewModel.SDO.ActionName = "GetProfessionals";
+            viewModel.SDO.ControllerName = "COMProfessional";
+            viewModel.SDO.ActionName = "GetForCombo";
             viewModel.SDO.ValueField = "ID";
-            viewModel.SDO.TextField = "Desc1";
+            viewModel.SDO.TextField = "NameAndPos";
             viewModel.SDO.OnSelectEventName = "OnSelectProfessional";
 
             viewModel.EventBudget.ControllerName = "ComboBox";

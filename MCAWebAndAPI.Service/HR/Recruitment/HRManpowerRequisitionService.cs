@@ -39,6 +39,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 }
                 else
                 {
+
+                }
+                {
                     emailApprover = GetApprover("Deputy Executive Director");
                 }
                 Approver = SPConnector.GetUser(emailApprover, _siteUrl);

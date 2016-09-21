@@ -16,6 +16,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         void CreateAdjustmentData(string period, AdjustmentDataVM CompensatoryList);
 
-        bool CheckRequest(AdjustmentDataVM header);        
+        bool CheckRequest(AdjustmentDataVM header);
+
+        bool CheckEditRequest(AdjustmentDataVM header);
     }
 }
