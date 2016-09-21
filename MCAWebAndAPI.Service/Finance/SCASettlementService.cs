@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Service.Finance
                 catch (Exception b)
                 {
                     logger.Error("surrounding SaveSCASettlementDetailItems. Error is supressed.", b);
-                }              
+                }
             }
             catch (Exception e)
             {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Common;
+using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -20,7 +21,8 @@ namespace MCAWebAndAPI.Web.Controllers
         public const string FieldName_ID = "ID";
         public const string FieldName_Long = "Long";
 
-        private static string siteUrl = ConfigResource.DefaultProgramSiteUrl;
+        //private static string siteUrl = ConfigResource.DefaultProgramSiteUrl;
+        private static string siteUrl = WBSService.GetCurrentSiteUrl(siteUrl);
 
         public JsonResult GetAllAsJsonResult()
         {
@@ -47,13 +49,15 @@ namespace MCAWebAndAPI.Web.Controllers
             return WBSService.GetAll(siteUrl);
         }
 
-        public JsonResult GetAllByActivityAsJsonResult(string activity = null)
+        public JsonResult GetAllByActivityAsJsonResult(string siteUrl, int activityId)
         {
             JsonResult result;
 
+            var activity = ActivityService.Get(siteUrl, activityId);
+
             IEnumerable<WBS> wbsMasters = GetAllCached();
 
-            if (string.IsNullOrEmpty(activity))
+            if (string.IsNullOrEmpty(activity.Name))
             {
                 result = Json(wbsMasters.Select(e => new
                 {
@@ -63,7 +67,7 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else
             {
-                result = Json(wbsMasters.Where(w => w.Activity == activity).Select(e => new
+                result = Json(wbsMasters.Where(w => w.Activity == activity.Name).Select(e => new
                 {
                     Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
                     Text = e.WBSID + "-" + e.WBSDescription
@@ -94,6 +98,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private static IEnumerable<WBS> GetAllCached()
         {
+            siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBS>;
             var wbsMapping = sessionVariable ?? WBSService.GetAll(siteUrl);
