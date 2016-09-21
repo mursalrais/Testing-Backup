@@ -191,9 +191,10 @@
                                 }
                             });
 
-                            if(valdate == false)
-                            {
+                            if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
+                            } else if (cektime == false) {
+                                alert("FinishTime can not be smaller than the starttime..!!");
                             } else {
                                 $("form").submit();
                             }
@@ -242,6 +243,8 @@
 
                             if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
+                            } else if (cektime == false) {
+                                alert("FinishTime can not be smaller than the starttime..!!");
                             } else {
                                 $("form").submit();
                             }
@@ -286,6 +289,8 @@
 
                             if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
+                            } else if (cektime == false) {
+                                alert("FinishTime can not be smaller than the starttime..!!");
                             } else {
                                 $("#StatusForm").val("Draft")
                                 $("form").submit();
