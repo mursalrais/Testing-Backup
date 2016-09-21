@@ -32,8 +32,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Get blank ViewModel
             var viewModel = _hRFeeSlipService.GetPopulatedModel();
-
-            SessionManager.Set("ProfessionalFeeSlip", viewModel.FeeSlipDetails);
+            viewModel.ID = 100;
+          //  SessionManager.Set("ProfessionalFeeSlip", viewModel.FeeSlipDetails);
 
             // Return to the name of the view and parse the model
             return View(viewModel);
@@ -58,6 +58,19 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRFeeSlipService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
+
+            if (!viewModel.FeeSlipDetails.Any())
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Empty");
+            }
+            else
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(viewModel.FeeSlipDetails.Count().ToString());
+            }
 
             var strPages = "";//viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
             return RedirectToAction("Redirect", "HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
@@ -88,36 +101,36 @@ namespace MCAWebAndAPI.Web.Controllers
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
 
-        public JsonResult GridProfessional_Read([DataSourceRequest] DataSourceRequest request)
-        {
-            // Get from existing session variable or create new if doesn't exist
-            if (SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip") == null) return null;
-            var items = SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip");
+        //public JsonResult GridProfessional_Read([DataSourceRequest] DataSourceRequest request)
+        //{
+        //    // Get from existing session variable or create new if doesn't exist
+        //    if (SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip") == null) return null;
+        //    var items = SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip");
 
-            // Convert to Kendo DataSource
-            DataSourceResult result = items.ToDataSourceResult(request);
+        //    // Convert to Kendo DataSource
+        //    DataSourceResult result = items.ToDataSourceResult(request);
 
-            // Convert to Json
-            var json = Json(result, JsonRequestBehavior.AllowGet);
-            json.MaxJsonLength = int.MaxValue;
-            return json;
-            // return null;
+        //    // Convert to Json
+        //    var json = Json(result, JsonRequestBehavior.AllowGet);
+        //    json.MaxJsonLength = int.MaxValue;
+        //    return json;
+        //    // return null;
 
-            //// Get from existing session variable or create new if doesn't exist
-            //if (SessionManager.Get<FeeSlipVM>("FeeSlipModel") == null) return null;
-            //var items = SessionManager.Get<FeeSlipVM>("FeeSlipModel");
-            //var dtProfessional = items.dtDetails;
-            //if (dtProfessional == null || dtProfessional.Rows.Count == 0) return null;
+        //    //// Get from existing session variable or create new if doesn't exist
+        //    //if (SessionManager.Get<FeeSlipVM>("FeeSlipModel") == null) return null;
+        //    //var items = SessionManager.Get<FeeSlipVM>("FeeSlipModel");
+        //    //var dtProfessional = items.dtDetails;
+        //    //if (dtProfessional == null || dtProfessional.Rows.Count == 0) return null;
 
-            //// Convert to Kendo DataSource
-            //DataSourceResult result = dtProfessional.ToDataSourceResult(request);
+        //    //// Convert to Kendo DataSource
+        //    //DataSourceResult result = dtProfessional.ToDataSourceResult(request);
 
-            //// Convert to Json
-            //var json = Json(result, JsonRequestBehavior.AllowGet);
-            //json.MaxJsonLength = int.MaxValue;
-            //return json;
-            //// return null;
-        }
+        //    //// Convert to Json
+        //    //var json = Json(result, JsonRequestBehavior.AllowGet);
+        //    //json.MaxJsonLength = int.MaxValue;
+        //    //return json;
+        //    //// return null;
+        //}
 
     }
 }

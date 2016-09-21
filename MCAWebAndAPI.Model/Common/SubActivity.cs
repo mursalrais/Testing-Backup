@@ -1,6 +1,6 @@
 ﻿using MCAWebAndAPI.Model.Common;
 
-namespace MCAWebAndAPI.Model.ProjectManagement.Common
+namespace MCAWebAndAPI.Model.Common
 {
     public class SubActivity : Item
     {

@@ -1,59 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MCAWebAndAPI.Model.ProjectManagement.Common;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.ProjectManagement.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Common
 {
-    public class WBSMasterService : IWBSMasterService
+    public partial class WBSService : IWBSMasterService
     {
-        public const string SP_WBSMAPPING_IN_PROJECT_LIST_NAME = "WBSMapping";
-        public const string SP_WBSMAPPING_IN_PROGRAM_LIST_NAME = "WBS Mapping";
-        public const string SP_ACTIVITY_LIST_NAME = "Activity";
-        public const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
+        public const string ListName = "WBS Mapping";
+
+        public const string ListNameActivity = "Activity";
+        public const string ListNameSubActivity = "Sub Activity";
 
         /// <summary>
         /// Gets a WBSMapping by its id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static WBSMapping Get(string siteUrl, int id)
+        public static WBS Get(string siteUrl, int id)
         {
-            var item = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, id, GetCompactProgramSiteUrl(siteUrl));
-            
-            return ConvertToWBSModelInProgram(item);
+            var item = SPConnector.GetListItem(ListName, id, GetCompactProgramSiteUrl(siteUrl));
+
+            return ConvertToVM(item);
         }
 
-
-        public static IEnumerable<WBSMapping> GetWBSMappingsInProgram(string siteUrl)
+        public static IEnumerable<WBS> GetAll(string siteUrl)
         {
-            var wbs = new List<WBSMapping>();
+            var wbs = new List<WBS>();
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListName, GetCompactProgramSiteUrl(siteUrl)))
             {
-                wbs.Add(ConvertToWBSModelInProgram(item));
+                wbs.Add(ConvertToVM(item));
             }
 
             return wbs;
         }
 
-        public static WBSMapping GetWBSMappingsInProgram(string siteUrl, int? ID)
+        public static bool UpdateWBSMapping(string siteUrl)
         {
-            var wbs = new WBSMapping();
+            var wbsList = GetAll(siteUrl);
+            var wbsProjectDict = new Dictionary<string, WBS>();
 
-            var listItem = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, ID, GetCompactProgramSiteUrl(siteUrl));
-            wbs = ConvertToWBSModelInProgram(listItem);
-            
-            return wbs;
-        }
-
-        public static bool UpdateWBSMapping(string _siteUrl)
-        {
-            var wbsList = GetAllWBSMappings(_siteUrl);
-            var wbsProjectDict = new Dictionary<string, WBSMapping>();
             foreach (var item in wbsList)
             {
                 if (!wbsProjectDict.ContainsKey(item.WBSID))
@@ -64,12 +54,13 @@ namespace MCAWebAndAPI.Service.Common
 
             var wbsProgramDict = new Dictionary<string, ListItem>();
             var anyUpdatedValue = false;
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, _siteUrl))
+
+            foreach (var item in SPConnector.GetList(ListName, siteUrl))
             {
                 try
                 {
                     wbsProgramDict.Add(Convert.ToString(item["WBS_x0020_ID"]), item);
-                    var isUpdated = UpdateIfChanged(_siteUrl, item, wbsProjectDict);
+                    var isUpdated = UpdateIfChanged(siteUrl, item, wbsProjectDict);
 
                     if (isUpdated && !anyUpdatedValue)
                         anyUpdatedValue = true;
@@ -80,26 +71,26 @@ namespace MCAWebAndAPI.Service.Common
                 }
             }
 
-            var appendIfNew = AppendIfNewWBSExist(_siteUrl, wbsProjectDict, wbsProgramDict);
+            var appendIfNew = AppendIfNewWBSExist(siteUrl, wbsProjectDict, wbsProgramDict);
             return anyUpdatedValue || appendIfNew;
         }
 
-        public static IEnumerable<WBSMapping> GetAllWBSMappings(string siteUrl)
-        {
-            var siteUrlCP = GetCompactProgramSiteUrl(siteUrl);
+        //public static IEnumerable<WBSMapping> GetAllWBSMappings(string siteUrl)
+        //{
+        //    var siteUrlCP = GetCompactProgramSiteUrl(siteUrl);
 
-            var activities = GetActivitiesAcrossProjects(siteUrlCP);
-            var subActivities = GetSubActivitiesAcrossProjects(siteUrlCP);
-            var items = GetWBSAcrossProjects(siteUrlCP, subActivities, activities);
+        //    var activities = GetActivitiesAcrossProjects(siteUrlCP);
+        //    var subActivities = GetSubActivitiesAcrossProjects(siteUrlCP);
+        //    var items = GetWBSAcrossProjects(siteUrlCP, subActivities, activities);
 
-            return items;
-        }
+        //    return items;
+        //}
 
         public static IEnumerable<Activity> GetAllActivities(string siteUrl)
         {
             var items = new List<Activity>();
 
-            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListNameActivity, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToActivityModel(item));
             }
@@ -111,7 +102,7 @@ namespace MCAWebAndAPI.Service.Common
         {
             var items = new List<SubActivity>();
 
-            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListNameSubActivity, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToSubActivityModel(item));
             }
@@ -119,43 +110,44 @@ namespace MCAWebAndAPI.Service.Common
             return items;
         }
 
+        #region Private Members
 
-        private static IEnumerable<WBSMapping> GetWBSAcrossProjects(string siteUrl, IEnumerable<SubActivity> subActivities,
-            IEnumerable<Activity> activities)
-        {
-            var items = new List<WBSMapping>();
-            items.AddRange(GetProjectWBS(siteUrl, "/gp", subActivities, activities));
-            items.AddRange(GetProjectWBS(siteUrl, "/hn", subActivities, activities));
-            items.AddRange(GetProjectWBS(siteUrl, "/pm", subActivities, activities));
-            return items;
-        }
+        //private static IEnumerable<WBSMapping> GetWBSAcrossProjects(string siteUrl, IEnumerable<SubActivity> subActivities,
+        //    IEnumerable<Activity> activities)
+        //{
+        //    var items = new List<WBSMapping>();
+        //    items.AddRange(GetProjectWBS(siteUrl, "/gp", subActivities, activities));
+        //    items.AddRange(GetProjectWBS(siteUrl, "/hn", subActivities, activities));
+        //    items.AddRange(GetProjectWBS(siteUrl, "/pm", subActivities, activities));
+        //    return items;
+        //}
 
-        private static IEnumerable<WBSMapping> GetProjectWBS(string siteUrl, string projectRelativeUrl,
-            IEnumerable<SubActivity> subActivities,
-            IEnumerable<Activity> activities)
-        {
-            var programSiteUrl = siteUrl;
-            siteUrl = programSiteUrl + projectRelativeUrl;
-            var wbses = GetAllWBSes(siteUrl, subActivities, activities);
-            siteUrl = programSiteUrl;
+        //private static IEnumerable<WBSMapping> GetProjectWBS(string siteUrl, string projectRelativeUrl,
+        //    IEnumerable<SubActivity> subActivities,
+        //    IEnumerable<Activity> activities)
+        //{
+        //    var programSiteUrl = siteUrl;
+        //    siteUrl = programSiteUrl + projectRelativeUrl;
+        //    var wbses = GetAllWBSes(siteUrl, subActivities, activities);
+        //    siteUrl = programSiteUrl;
 
-            return wbses;
-        }
+        //    return wbses;
+        //}
 
-        private static IEnumerable<WBSMapping> GetAllWBSes(string siteUrl, IEnumerable<SubActivity> subActivities,
-            IEnumerable<Activity> activities)
-        {
-            var items = new List<WBSMapping>();
+        //private static IEnumerable<WBSMapping> GetAllWBSes(string siteUrl, IEnumerable<SubActivity> subActivities,
+        //    IEnumerable<Activity> activities)
+        //{
+        //    var items = new List<WBSMapping>();
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROJECT_LIST_NAME, siteUrl))
-            {
-                items.Add(ConvertToWBSModel(siteUrl, item, subActivities, activities));
-            }
+        //    foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROJECT_LIST_NAME, siteUrl))
+        //    {
+        //        items.Add(ConvertToWBSModel(siteUrl, item, subActivities, activities));
+        //    }
 
-            return items;
-        }
+        //    return items;
+        //}
 
-        private static bool AppendIfNewWBSExist(string siteUrl, Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
+        private static bool AppendIfNewWBSExist(string siteUrl, Dictionary<string, WBS> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
         {
             var itemKeysToAppend = new List<string>();
             foreach (var item in wbsProjectDict)
@@ -168,7 +160,6 @@ namespace MCAWebAndAPI.Service.Common
 
             if (itemKeysToAppend.Count == 0)
                 return false;
-
 
             foreach (var itemKey in itemKeysToAppend)
             {
@@ -183,7 +174,7 @@ namespace MCAWebAndAPI.Service.Common
 
                 try
                 {
-                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, siteUrl);
+                    SPConnector.AddListItem(ListName, columnValues, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -194,7 +185,7 @@ namespace MCAWebAndAPI.Service.Common
             return true;
         }
 
-        private static bool UpdateIfChanged(string siteUrl, ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
+        private static bool UpdateIfChanged(string siteUrl, ListItem item, Dictionary<string, WBS> wbsDictionary)
         {
             var key = Convert.ToString(item["WBS_x0020_ID"]);
             if (!wbsDictionary.ContainsKey(key))
@@ -222,13 +213,12 @@ namespace MCAWebAndAPI.Service.Common
             {
                 try
                 {
-                    SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["ID"]),
+                    SPConnector.UpdateListItem(ListName, Convert.ToInt32(item["ID"]),
                         updatedValues, siteUrl);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    //Logger.Error(e.Message);
                     return false;
                 }
             }
@@ -238,24 +228,23 @@ namespace MCAWebAndAPI.Service.Common
             }
         }
 
-        private static WBSMapping ConvertToWBSModel(string siteUrl, ListItem item, IEnumerable<SubActivity> subActivities,
-            IEnumerable<Activity> activities)
-        {
-            var model = new WBSMapping();
-            model.WBSID = Convert.ToString(item["Title"]);
-            model.WBSDescription = Convert.ToString(item["Description"]);
-            model.SubActivity = item["SubActivity"] == null ? string.Empty :
-                Convert.ToString((item["SubActivity"] as FieldLookupValue).LookupValue);
+        //private static WBSMapping ConvertToVM(string siteUrl, ListItem item, IEnumerable<SubActivity> subActivities,
+        //    IEnumerable<Activity> activities)
+        //{
+        //    var model = new WBSMapping();
+        //    model.WBSID = Convert.ToString(item["Title"]);
+        //    model.WBSDescription = Convert.ToString(item["Description"]);
+        //    model.SubActivity = item["SubActivity"] == null ? string.Empty :
+        //        Convert.ToString((item["SubActivity"] as FieldLookupValue).LookupValue);
 
-            var relatedActivity = RetrieveRelatedActivity(model.SubActivity, subActivities, activities);
-            if (relatedActivity == null)
-                return model;
+        //    var relatedActivity = RetrieveRelatedActivity(model.SubActivity, subActivities, activities);
+        //    if (relatedActivity == null)
+        //        return model;
 
-            model.Activity = relatedActivity.ActivityName;
-            model.Project = ProjectHierarchyService.GetProjectNameFromSiteUrl(siteUrl) ?? relatedActivity.ProjectName;
-            return model;
-        }
-
+        //    model.Activity = relatedActivity.ActivityName;
+        //    model.Project = ProjectHierarchyService.GetProjectNameFromSiteUrl(siteUrl) ?? relatedActivity.ProjectName;
+        //    return model;
+        //}
 
         private static Activity RetrieveRelatedActivity(string subActivityName, IEnumerable<SubActivity> subActivities, IEnumerable<Activity> activities)
         {
@@ -268,9 +257,9 @@ namespace MCAWebAndAPI.Service.Common
                 string.Compare(e.ActivityName, subActivity.ActivityName, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
-        private static WBSMapping ConvertToWBSModelInProgram(ListItem item)
+        private static WBS ConvertToVM(ListItem item)
         {
-            return new WBSMapping
+            return new WBS
             {
                 ID = Convert.ToInt32(item["ID"]),
                 WBSID = Convert.ToString(item["WBS_x0020_ID"]),
@@ -280,7 +269,6 @@ namespace MCAWebAndAPI.Service.Common
                 SubActivity = Convert.ToString(item["Sub_x0020_Activity"])
             };
         }
-
 
         private static IEnumerable<Activity> GetProjectActivities(string siteUrl, string projectRelativeUrl)
         {
@@ -371,5 +359,7 @@ namespace MCAWebAndAPI.Service.Common
         {
             return CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.CP);
         }
+
+        #endregion
     }
 }

@@ -7,8 +7,17 @@ using System.Linq;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class COMMGLController : Controller
+    public class COMGLController : Controller
     {
+        public const string ControllerName = "COMGL";
+
+        public const string MethodName_GetAllAsJsonResult = "GetAllAsJsonResult";
+
+        public const string FieldName_Value = "Value";
+        public const string FieldName_Text = "Text";
+        public const string FieldName_ID = "ID";
+        public const string FieldName_Long = "Long";
+
         private static string siteUrl = ConfigResource.DefaultBOSiteUrl;
 
         public JsonResult GetAllAsJsonResult()

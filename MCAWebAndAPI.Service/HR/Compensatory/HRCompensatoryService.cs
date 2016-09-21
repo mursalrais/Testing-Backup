@@ -385,6 +385,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var DateStr = Convert.ToDateTime(item["compensatorydate"]);
             var StartStr = Convert.ToDateTime(item["compensatorystarttime"]);
             var FinishStr = Convert.ToDateTime(item["compensatoryendtime"]);
+            TimeZoneInfo usersTimeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time");
             var DayStr = DateStr.DayOfWeek;
 
                 return new CompensatoryDetailVM
@@ -393,9 +394,9 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 CmpID = Convert.ToInt32(item["ID"]),
                 CmpHID = Convert.ToInt32(FormatUtil.ConvertLookupToValue(item, "compensatoryrequest")),
                 CmpDate = Convert.ToDateTime(item["compensatorydate"]),
-                StartTime = Convert.ToDateTime(item["compensatorystarttime"]),
-                FinishTime = Convert.ToDateTime(item["compensatoryendtime"]),
-                CmpTotalHours = Convert.ToInt32(item["totalhours"]),
+                StartTime = TimeZoneInfo.ConvertTimeFromUtc(StartStr, usersTimeZone),
+                FinishTime = TimeZoneInfo.ConvertTimeFromUtc(FinishStr, usersTimeZone),
+                CmpTotalHours = Convert.ToInt32(item["totalhours"]), 
                 TotalDay = Convert.ToDecimal(item["totaldays"]),
                 remarks = Convert.ToString(item["remarks"]),
                 AppStatus = Convert.ToString(item["compensatorystatus"]),

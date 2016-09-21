@@ -111,7 +111,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 csvErrors = new List<CSVErrorLogVM>();
 
-                csvErrors = service.ProcessCSVFilesAsync(viewModel.Documents, COMMVendorController.GetAll(), ref listOutstandingAdvance);
+                csvErrors = service.ProcessCSVFilesAsync(viewModel.Documents, COMVendorController.GetAll(), ref listOutstandingAdvance);
 
                 if (csvErrors.Count > 0)
                 {

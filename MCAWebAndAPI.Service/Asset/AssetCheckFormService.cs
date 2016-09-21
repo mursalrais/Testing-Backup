@@ -243,7 +243,7 @@ namespace MCAWebAndAPI.Service.Asset
                 camlTransfer = camlTransfer.Replace("room", "roomto");
                 camlTransfer = camlTransfer.Replace("floor", "floorto");
 
-                foreach (var item in SPConnector.GetList("Asset Transfer Detail", _siteUrl, caml))
+                foreach (var item in SPConnector.GetList("Asset Transfer Detail", _siteUrl, camlTransfer))
                 {
                     var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
 
@@ -282,7 +282,7 @@ namespace MCAWebAndAPI.Service.Asset
                         modelDetailItem.item = i;
                         modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
                         modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
-                        modelDetailItem.province = ((item["provinceto"] as FieldLookupValue).LookupValue == null ? "" : (item["province"] as FieldLookupValue).LookupValue);
+                        modelDetailItem.province = ((item["provinceto"] as FieldLookupValue).LookupValue == null ? "" : (item["provinceto"] as FieldLookupValue).LookupValue);
                         modelDetailItem.location =
                             (item["officeto"] == null ? "" : (item["officeto"] as FieldLookupValue).LookupValue)
                             + "/" + (item["floorto"] == null ? "" : item["floorto"].ToString())

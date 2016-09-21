@@ -158,7 +158,7 @@ namespace MCAWebAndAPI.Service.Finance
                 updatedValue.Add(FieldNameDetailSCAHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
 
                 var wbsId = Convert.ToInt32(viewModel.WBS.Value);
-                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+                var wbs = Common.WBSService.Get(siteUrl, wbsId);
                 updatedValue.Add(FieldNameDetailWBSId, wbsId);
                 updatedValue.Add(FieldNameDetailWBSDescription, wbs.WBSIDDescription);
 
@@ -218,7 +218,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.DescriptionOfExpense = Convert.ToString(listItem[FieldNameDetailDescription]);
 
             var wbsId = (listItem[FieldNameDetailGLNo] as FieldLookupValue).LookupId;
-            var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+            var wbs = Common.WBSService.Get(siteUrl, wbsId);
             viewModel.WBS.Value = wbsId;
             viewModel.WBS.Text = wbs.WBSIDDescription;
 
