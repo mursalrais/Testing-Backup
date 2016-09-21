@@ -18,7 +18,7 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -50,7 +50,7 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
