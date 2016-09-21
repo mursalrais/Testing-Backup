@@ -82,11 +82,12 @@
     @section scripts{
 
         <script>
+            var cektime = true;
+
             $(document).ready(function () {
                 var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val()
                 $("#ProfName").prop("value", nameProf);
                 $("#ProfName").prop('readonly', 'true');
-                
                 var eMail = $("#cmpEmail").val();
 
                 if (eMail != null) {
@@ -144,14 +145,26 @@
                         });
                     });
 
+                    var x = -1;
+                    rowgrid.each(function (e) {
+                        x++;
+                        debugger;
+                        var xstart = $("#Start" + x).val();
+                        var xfinish = $("#Finish" + x).val();
+                        if (xfinish <= xstart) {
+                            cektime = false;
+                        }
+                    });
+
                     if (valdate == false) {
                         alert("Date you have chosen already exists, please choose another date..!!");
+                    } else if (cektime == false) {
+                        alert("FinishTime can not be smaller than the starttime..!!");
                     } else {
                         $("#StatusForm").val("Pending Approval 1 of 2")
                         $("form").submit();
                     }
                 });
-
 
                 $("#submithr-button").click(function () {
                     $("#StatusForm").val("submithr");
@@ -181,8 +194,21 @@
                         });
                     });
 
+                    var x = -1;
+                    rowgrid.each(function (e) {
+                        x++;
+                        debugger;
+                        var xstart = $("#Start" + x).val();
+                        var xfinish = $("#Finish" + x).val();
+                        if (xfinish <= xstart) {
+                            cektime = false;
+                        }
+                    });
+
                     if (valdate == false) {
                         alert("Date you have chosen already exists, please choose another date..!!");
+                    } else if (cektime == false) {
+                        alert("FinishTime can not be smaller than the starttime..!!");
                     } else {
                         $("form").submit();
                     }
@@ -235,15 +261,24 @@
                     if (model.StartTime != null && model.FinishTime != null) {
                         var start = model.StartTime.getHours();
                         var finish = model.FinishTime.getHours();
-                        var finishsec = model.FinishTime.getSeconds();
+                        var startmin = model.StartTime.getMinutes();
+                        if (startmin == 30)
+                            startmin = 0.5
+                        var finishmin = model.FinishTime.getMinutes();
+                        if (finishmin == 30)
+                            finishmin = 0.5
+
                         var range;
-                       
-                        if ((finish + finishsec) <= start) {
+
+                        if ((finish + finishmin) <= (start + startmin)) {
                             alert("FinishTime can not be smaller than the starttime..!!")
+                            cektime = false;
+                        } else {
+                            cektime = true;
                         }
 
-                        if (start < finish) {
-                            range = finish - start
+                        if (start + startmin < finish + finishmin) {
+                            range = (finish + finishmin) - (start + startmin)
 
                             if (model.CmpTotalHours != range) {
                                 model.set("CmpTotalHours", range);
