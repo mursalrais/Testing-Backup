@@ -1260,6 +1260,7 @@
     <Compile Include="Controllers\COMProfessionalController.cs" />
     <Compile Include="Controllers\COMVendorController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
+    <Compile Include="Controllers\COMWBSControllerEx.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FileController.cs" />
