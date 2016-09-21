@@ -36,7 +36,6 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string COMProfesional_CONTROLLER = "COMProfessional";
         private const string ACTIONNAME_PROFESSIONAL = "GetForCombo";
         private const string ACTIONNAME_VENDORS = "GetVendors";
-        private const string ACTIONNAME_WBSMASTERS = "GetWBSMasters";
         private const string ACTIONNAME_GLMASTERS = "GetGLMasters";
         private const string CURRENCY_SELECTEVENTCHANGE = "onSelectCurrency";
         private const string FIELD_ID = "ID";
@@ -142,7 +141,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                WBSMapping wbs = COMWBSController.GetWBSMappings(Convert.ToInt32(viewModel.WBS.Value));
+                WBSMapping wbs = COMWBSController.Get(Convert.ToInt32(viewModel.WBS.Value));
                 viewModel.WBSDescription = wbs.WBSIDDescription;
 
                 service.Update(viewModel, COMProfessionalController.GetAll());
@@ -272,9 +271,9 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Vendor.TextField = Field_Desc;
 
             viewModel.WBS.ControllerName = COMWBSController.ControllerName;
-            viewModel.WBS.ActionName = COMWBSController.GetAllByActivityAsJsonResult_MethodName;
-            viewModel.WBS.ValueField = FIELD_VALUE;
-            viewModel.WBS.TextField = FIELD_TEXT;
+            viewModel.WBS.ActionName = COMWBSController.MethodName_GetAllByActivityAsJsonResult;
+            viewModel.WBS.ValueField = COMWBSController.FieldName_Value;
+            viewModel.WBS.TextField = COMWBSController.FieldName_Text;
 
             viewModel.GL.ControllerName = COMBOBOX_CONTROLLER;
             viewModel.GL.ActionName = ACTIONNAME_GLMASTERS;
