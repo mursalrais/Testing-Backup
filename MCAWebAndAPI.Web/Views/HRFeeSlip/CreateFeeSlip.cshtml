@@ -1,0 +1,94 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+
+@using (Html.BeginForm("PrintFeeSlip", "HRFeeSlip", FormMethod.Post,
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
+
+
+
+{
+    <fieldset>
+
+      
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.ProfessionalName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ProfessionalName)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.Type).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Type)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.OrganizationInsuranceID)
+                </div>*@
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ClaimDate)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.DependantName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DependantName)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.IndividualInsuranceNumber).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.IndividualInsuranceNumber)
+                </div>*@
+            </div>
+
+        </div>
+
+        <legend>Professional</legend>
+        <div class="row">
+            @Html.Partial("_ProfessionalDetailFee", Model)
+        </div>
+
+
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="submit-to-hr-button" class="btn btn-primary" type="submit">
+                    <i class="fa fa-save"></i>
+                    Validate to HR
+                </button>
+              
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+
+
+
+
+    </script>
+}

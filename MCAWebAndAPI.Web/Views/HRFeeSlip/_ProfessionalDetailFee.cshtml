@@ -1,0 +1,80 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+<div class="col-sm-12">
+   @(Html.Kendo().Grid(Model.FeeSlipDetails)
+          .Name("gridDataView")
+          .Editable(editable => editable.Mode(GridEditMode.InCell))
+          .Scrollable()
+          .HtmlAttributes(new { style = "height: 500px" })
+          .Columns(columns =>
+          {
+              // columns.Bound(p => p.ProfessionalID).ClientTemplate(
+              //"<input type='checkbox' #= checklist ? checked='checked':'' # class='chkbx' />").Width(70).
+              // HeaderTemplate("<input type='checkbox' id='chkSelectAll' onclick='checkAll(this)'/>");
+
+              columns.Bound(p => p.ProfessionalID).ClientTemplate("#= ProfessionalID #" +
+              "<input type='hidden' name='gridDataView[#= getProfessionalDetail(data)#].ProfessionalID' value='#= ProfessionalID #' />").Width(90);
+              columns.Bound(p => p.Name).ClientTemplate("#= Name #" +
+             "<input type='hidden' name='gridDataView[#= getProfessionalDetail(data)#].Name' value='#= Name #' />").Width(150);
+              columns.Bound(p => p.Unit).ClientTemplate("#= Unit #" +
+             "<input type='hidden' name='gridDataView[#= getProfessionalDetail(data)#].Unit' value='#= Unit #' />").Width(150);
+              columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+             "<input type='hidden' name='gridDataView[#= getProfessionalDetail(data)#].Position' value='#= Position #' />").Width(150);
+              columns.Bound(p => p.JoiningDate).ClientTemplate("#= JoiningDate #" +
+            "<input type='hidden' name='gridDataView[#= getProfessionalDetail(data)#].JoiningDate' value='#= JoiningDate #' />").Width(150);
+
+
+          })
+           .Events(e =>
+           {
+             //  e.DataBound("onDataBoundProfessionalDetails");
+           })
+          .DataSource(dataSource => dataSource
+              .Ajax()
+              .Model(model =>
+              {
+                  model.Id(p => p.ProfessionalID);
+                  //model.Field(p => p.ProfessionalID).Editable(false);
+                  //model.Field(p => p.Name).Editable(false);
+                  //model.Field(p => p.Position).Editable(false);
+                  //model.Field(p => p.Unit).Editable(false);
+                  //model.Field(p => p.JoiningDate).Editable(false);
+              })
+
+             // .Read(read => read.Action("GridProfessional_Read", "HRFeeSlip"))
+               .ServerOperation(false)
+          )
+)
+
+
+</div>
+
+
+
+
+
+<script>
+    
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+       // alert(state);
+        var grid = $('#gridDataView').data('kendoGrid');
+        $.each(grid.dataSource.view(), function () {
+            if (this['checklist'] !== state)
+                this.dirty = true;
+            this['checklist'] = state;
+        });
+        grid.refresh();
+    }
+
+    function getProfessionalDetail(dataItem) {
+        var data = $("#gridDataView").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundProfessionalDetails(e) {
+        var grid = $("#gridDataView").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+    }
+</script>

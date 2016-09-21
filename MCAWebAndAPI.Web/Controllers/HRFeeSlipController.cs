@@ -33,38 +33,91 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get blank ViewModel
             var viewModel = _hRFeeSlipService.GetPopulatedModel();
 
+            SessionManager.Set("ProfessionalFeeSlip", viewModel.FeeSlipDetails);
+
             // Return to the name of the view and parse the model
-            return View("FeeSlip", viewModel);
+            return View(viewModel);
+        }
+
+        IEnumerable<FeeSlipDetailVM> BindClaimfeeDetails(FormCollection form,
+         IEnumerable<FeeSlipDetailVM> feeDetails)
+        {
+            var array = feeDetails.ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i].ProfessionalID = BindHelper.BindIntInGrid("gridDataView",
+                    i, "ProfessionalID", form);
+            }
+            return array;
         }
 
         [HttpPost]
-        public ActionResult CreateFeeSlip(FormCollection form, FeeSlipVM viewModel)
+        public ActionResult PrintFeeSlip(FormCollection form, FeeSlipVM viewModel)
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRFeeSlipService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            int? headerID = null;
-            try
-            {
-                headerID = _hRFeeSlipService.CreateHeader(viewModel);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
 
-            try
-            {
-                _hRFeeSlipService.CreateFeeSlipDetails(headerID, viewModel.FeeSlipDetails);
-            }
-            catch (Exception e)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(e);
-            }
+            var strPages = "";//viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+            return RedirectToAction("Redirect", "HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
+            //int? headerID = null;
+            //try
+            //{
+            //    //   headerID = _hRFeeSlipService.CreateHeader(viewModel);
 
-            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            //    viewModel.FeeSlipDetails = BindClaimfeeDetails(form, viewModel.FeeSlipDetails);
+
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+            //try
+            //{
+            //   // _hRFeeSlipService.CreateFeeSlipDetails(headerID, viewModel.FeeSlipDetails);
+            //}
+            //catch (Exception e)
+            //{
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(e);
+            //}
+
+            //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
         }
+
+        public JsonResult GridProfessional_Read([DataSourceRequest] DataSourceRequest request)
+        {
+            // Get from existing session variable or create new if doesn't exist
+            if (SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip") == null) return null;
+            var items = SessionManager.Get<IEnumerable<FeeSlipDetailVM>>("ProfessionalFeeSlip");
+
+            // Convert to Kendo DataSource
+            DataSourceResult result = items.ToDataSourceResult(request);
+
+            // Convert to Json
+            var json = Json(result, JsonRequestBehavior.AllowGet);
+            json.MaxJsonLength = int.MaxValue;
+            return json;
+            // return null;
+
+            //// Get from existing session variable or create new if doesn't exist
+            //if (SessionManager.Get<FeeSlipVM>("FeeSlipModel") == null) return null;
+            //var items = SessionManager.Get<FeeSlipVM>("FeeSlipModel");
+            //var dtProfessional = items.dtDetails;
+            //if (dtProfessional == null || dtProfessional.Rows.Count == 0) return null;
+
+            //// Convert to Kendo DataSource
+            //DataSourceResult result = dtProfessional.ToDataSourceResult(request);
+
+            //// Convert to Json
+            //var json = Json(result, JsonRequestBehavior.AllowGet);
+            //json.MaxJsonLength = int.MaxValue;
+            //return json;
+            //// return null;
+        }
+
     }
 }

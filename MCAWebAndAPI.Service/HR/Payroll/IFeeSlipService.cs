@@ -11,7 +11,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
     {
         void SetSiteUrl(string siteUrl);
 
-        FeeSlipVM GetPopulatedModel(int? id = null);
+        FeeSlipVM GetPopulatedModel();
 
         FeeSlipVM GetHeader(int? ID);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -130,9 +131,121 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             };
         }
 
-        public FeeSlipVM GetPopulatedModel(int? id = null)
+        private DataTable GetProfessional()
+        {
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("checklist", typeof(bool));
+            dt.Columns.Add("ProfessionalID", typeof(string));
+            dt.Columns.Add("ProfessionalName", typeof(string));
+            dt.Columns.Add("Unit", typeof(string));
+            dt.Columns.Add("Position", typeof(string));
+            dt.Columns.Add("JoinDate", typeof(string));
+
+            var caml = @"<View>
+                        <Query>
+                        <Where>
+                        <Or>
+                        <IsNull><FieldRef Name='lastworkingdate' /></IsNull>
+                        <Gt>
+                        <FieldRef Name='lastworkingdate' />
+                        <Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value>" +
+                        "</Gt>" +
+                        "</Or>" +
+                       "</Where>" +
+                       "</Query>" +
+                       "<ViewFields>" +
+                       "<FieldRef Name = 'ID'/> " +
+                       "<FieldRef Name = 'Title'/>" +
+                       "<FieldRef Name = 'Project_x002f_Unit'/>" +
+                       "<FieldRef Name = 'Position'/>" +
+                       "<FieldRef Name = 'Join_x0020_Date'/>" +
+                       "</ViewFields>" +
+                       "</View>";
+
+            var listCol = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach (var item in listCol)
+            {
+                DataRow row = dt.NewRow();
+                row["ProfessionalID"] = Convert.ToString(item["ID"]);
+                row["ProfessionalName"] = Convert.ToString(item["Title"]);
+                row["Unit"] = Convert.ToString(item["Project_x002f_Unit"]); //FormatUtil.ConvertLookupToValue(item, "Project_x002f_Unit");
+                row["Position"] = FormatUtil.ConvertLookupToValue(item, "Position");//Convert.ToString(item["Position"]);
+                if (item["Join_x0020_Date"] != null)
+                {
+                    row["JoinDate"] = Convert.ToDateTime(item["Join_x0020_Date"]).ToString("d-MMM-yy");
+                }
+                row["checklist"] = false;
+                dt.Rows.Add(row);
+            }
+
+            //var models = new List<ProfessionalMaster>();
+            //foreach (var item in SPConnector.GetList(SP_PROMAS_LIST_NAME, _siteUrl, caml))
+            //{
+            //    models.Add(ConvertToProfessionalModel_Light(item));
+            //}
+
+            //return models;
+
+
+            return dt;
+        }
+
+        private IEnumerable<FeeSlipDetailVM> GetProfessionals()
+        {
+            var models = new List<FeeSlipDetailVM>();
+            var caml = @"<View>
+                        <Query>
+                        <Where>
+                        <Or>
+                        <IsNull><FieldRef Name='lastworkingdate' /></IsNull>
+                        <Gt>
+                        <FieldRef Name='lastworkingdate' />
+                        <Value IncludeTimeValue='TRUE' Type='DateTime'>" + DateTime.UtcNow.ToString("yyyy-MM-dd") + "T23:57:44Z</Value>" +
+                        "</Gt>" +
+                        "</Or>" +
+                       "</Where>" +
+                       "</Query>" +
+                       "<ViewFields>" +
+                       "<FieldRef Name = 'ID'/> " +
+                       "<FieldRef Name = 'Title'/>" +
+                       "<FieldRef Name = 'Project_x002f_Unit'/>" +
+                       "<FieldRef Name = 'Position'/>" +
+                       "<FieldRef Name = 'Join_x0020_Date'/>" +
+                       "</ViewFields>" +
+                       "</View>";
+
+            var listCol = SPConnector.GetList("Professional Master", _siteUrl, caml);
+
+            foreach (var item in listCol)
+            {
+                var prof = new FeeSlipDetailVM
+                {
+                    ProfessionalID = Convert.ToInt32(item["ID"]),
+                    Name = Convert.ToString(item["Title"]),
+                    Unit = Convert.ToString(item["Project_x002f_Unit"]),
+                    Position = FormatUtil.ConvertLookupToValue(item, "Position"),
+                    JoiningDate =
+                        item["Join_x0020_Date"] != null
+                            ? Convert.ToDateTime(item["Join_x0020_Date"]).ToString("d-MMM-yy")
+                            : String.Empty,
+                    checklist = false
+                };
+
+                models.Add(prof);
+            }
+
+
+            return models;
+        }
+
+        public FeeSlipVM GetPopulatedModel()
         {
             var model = new FeeSlipVM();
+
+            // model.dtDetails = GetProfessional();
+            model.FeeSlipDetails = GetProfessionals();
             return model;
         }
 

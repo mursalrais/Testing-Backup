@@ -12,6 +12,20 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class FeeSlipDetailVM : Item
     {
+      
+        public int? ProfessionalID { get; set; }
+
+        public bool checklist { get; set; }
+
+        public string Name { get; set; }
+       
+        public string Unit { get; set; }
+      
+        public string JoiningDate { get; set; }
+
+        public string Position { get; set; }
+
+
         [UIHint("Int32")]
         public int Fee { get; set; }
 
