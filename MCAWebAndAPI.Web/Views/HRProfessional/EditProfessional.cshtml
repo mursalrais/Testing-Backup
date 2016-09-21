@@ -65,11 +65,14 @@
         <div class="row">
             <div class="col-sm-12">
                 @*Professional View*@
-                @if (!ViewBag.IsHRView )
+                @if (!ViewBag.IsHRView)
                 {
-                    <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
-                        Validate to HR
-                    </button>
+                    if (@Model.ID == null)
+                    {
+                        <button id="ask-hr-to-validate-action" class="btn btn-submit" type="button">
+                            Validate to HR
+                        </button>
+                    }
                 }
                 //HR View
                 // && Model.ValidationStatus ==

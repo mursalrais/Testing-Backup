@@ -7,6 +7,14 @@
         var dataTable = SessionManager.Get<System.Data.DataTable>("CSVDataTable");
         foreach (System.Data.DataColumn column in dataTable.Columns)
         {
+            if (column.ColumnName == "No" || column.ColumnName == "Project" || column.ColumnName == "AssetType" || column.ColumnName == "AssetID" || column.ColumnName == "Quantity")
+            {
+                columns.Bound(column.ColumnName);
+            }
+            else
+            {
+                columns.Bound(column.ColumnName).Hidden(true);
+            }
         }
     })
     .Sortable()

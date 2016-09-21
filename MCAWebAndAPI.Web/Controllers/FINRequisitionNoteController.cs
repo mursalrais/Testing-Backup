@@ -285,16 +285,18 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetWBSMaster(string activity = null)
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            return new COMWBSController().GetAllByActivityAsJsonResult(activity);
 
-            reqNoteService = new RequisitionNoteService(siteUrl);
-            var wbsMasters = reqNoteService.GetWBSMaster(activity);
+            //var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
 
-            return Json(wbsMasters.Select(e => new
-            {
-                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = (e.Title + "-" + e.WBSDescription)
-            }), JsonRequestBehavior.AllowGet);
+            //reqNoteService = new RequisitionNoteService(siteUrl);
+            //var wbsMasters = reqNoteService.GetWBSMaster(activity);
+
+            //return Json(wbsMasters.Select(e => new
+            //{
+            //    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+            //    Text = (e.Title + "-" + e.WBSDescription)
+            //}), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

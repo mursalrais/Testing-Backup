@@ -824,5 +824,21 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             return EmailHR;
         }
+
+        public string GetPosition(string username, string siteUrl)
+        {
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='officeemail' /><Value Type='Text'>" + username + @"</Value></Eq></Where></Query><ViewFields><FieldRef Name='Position' /></ViewFields><QueryOptions /></View>";
+            var listItem = SPConnector.GetList("Professional Master", siteUrl, caml);
+            string position = "";
+            foreach (var item in listItem)
+            {
+                position = FormatUtil.ConvertLookupToValue(item, "Position");
+            }
+            if (position == null)
+            {
+                position = "";
+            }
+            return position;
+        }
     }
 }

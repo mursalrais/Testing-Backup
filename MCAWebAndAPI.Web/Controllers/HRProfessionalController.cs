@@ -32,11 +32,21 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set("SiteUrl", siteUrl);
         }
 
-        public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null)
+        public async Task<ActionResult> EditProfessional(string siteUrl = null, int? ID = null, string username = null)
         {
             SetSiteUrl(siteUrl);
             var viewModel = await _professionalService.GetProfessionalDataAsync(ID);
-            ViewBag.IsHRView = true;
+
+            string position = _professionalService.GetPosition(username, siteUrl);
+            if (position.Contains("HR") || position.Contains("Human Resource"))
+            {
+                ViewBag.IsHRView = true;
+            }
+            else
+            {
+                ViewBag.IsHRView = false;
+            }
+            //ViewBag.IsHRView = true;
             return View(viewModel);
         }
 

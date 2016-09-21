@@ -72,8 +72,16 @@ namespace MCAWebAndAPI.Service.Utils
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
 
-           
-            smtp.Send(mail);
+            try
+            {
+                smtp.Send(mail);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+          
 
             //foreach (var item in mail.To)
             //{

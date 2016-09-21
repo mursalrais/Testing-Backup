@@ -1,18 +1,18 @@
-﻿using MCAWebAndAPI.Model.ViewModel.Control;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using Elmah;
+using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
+using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
-using System.Linq;
-using System.Web.Mvc;
-using FinService = MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Converter;
-using System;
-using Elmah;
-using System.IO;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
-using System.Threading.Tasks;
+
+using FinService = MCAWebAndAPI.Service.Finance;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -21,8 +21,8 @@ namespace MCAWebAndAPI.Web.Controllers
     ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
     ///         user has not asked for any petty cash advance.
     ///
-    ///         Through this feature, finance will create the reimbursement of petty cash which results in 
-    ///         user needs to receive the reimbursement. 
+    ///         Through this feature, finance will create the reimbursement of petty cash which results in
+    ///         user needs to receive the reimbursement.
     /// </summary>
 
     public class FINPettyCashReimbursementController : Controller
@@ -30,7 +30,6 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string PettyCashReimbursement_ControllerName = "FINPettyCashReimbursement";
         private const string Vendor_ActionName = "GetVendor";
         private const string Professional_ActionName = "GetProfessional";
-        private const string WBS_ActionName = "GetWBS";
         private const string GL_ActionName = "GetGL";
         private const string PaidTo_EventName = "onSelectPaidTo";
         private const string ValueField = "ID";
@@ -41,7 +40,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string SuccessMsgFormatCreated = "Petty Cash Reimbursement number {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "Petty Cash Reimbursement number {0} has been successfully updated.";
 
-        IPettyCashReimbursementService service;
+        private IPettyCashReimbursementService service;
 
         public FINPettyCashReimbursementController()
         {
@@ -66,11 +65,11 @@ namespace MCAWebAndAPI.Web.Controllers
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl)?? ConfigResource.DefaultBOSiteUrl;
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
 
             var viewModel = service.GetPettyCashReimbursement(model.ID);
-            
+
             if (viewModel.Professional.Value > 0)
             {
                 var profesional = COMProfessionalController.Get(siteUrl, viewModel.Professional.Value);
@@ -130,7 +129,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return RedirectToAction("Index", "Success",
                 new
                 {
-                    successMessage = string.Format(viewModel.Operation==Operations.c ? SuccessMsgFormatCreated : SuccessMsgFormatUpdated, viewModel.DocNo),
+                    successMessage = string.Format(viewModel.Operation == Operations.c ? SuccessMsgFormatCreated : SuccessMsgFormatUpdated, viewModel.DocNo),
                     previousUrl = string.Format(FirstPageUrl, siteUrl)
                 });
         }
@@ -188,22 +187,21 @@ namespace MCAWebAndAPI.Web.Controllers
 
             viewModel.WBS = new AjaxComboBoxVM
             {
-                ControllerName = "COMWBS",
-                ActionName = "GetAllAsJsonResult",
-                ValueField = "ID",
-                TextField = "Long",
+                ControllerName = COMWBSController.ControllerName,
+                ActionName = COMWBSController.MethodName_GetAllAsJsonResult,
+                ValueField = COMWBSController.FieldName_ID,
+                TextField = COMWBSController.FieldName_Long,
                 Value = viewModel.WBS.Value
             };
 
             viewModel.GL = new AjaxCascadeComboBoxVM
             {
-                ControllerName = "COMMGL",
-                ActionName = "GetAllAsJsonResult",
-                ValueField = "ID",
-                TextField = "Long",
+                ControllerName = COMGLController.ControllerName,
+                ActionName = COMGLController.MethodName_GetAllAsJsonResult,
+                ValueField = COMGLController.FieldName_ID,
+                TextField = COMGLController.FieldName_Long,
                 Value = viewModel.GL.Value
             };
-
         }
     }
 }

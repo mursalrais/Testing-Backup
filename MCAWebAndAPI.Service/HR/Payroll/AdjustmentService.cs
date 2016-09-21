@@ -41,6 +41,33 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             foreach (var cekadjust in header.AdjustmentDetails)
             {
+                foreach (var getadjust in adjustmentlist)
+                {
+                    if (cekadjust.ddlProfessional.Value == getadjust.ddlProfessional.Value && cekadjust.ajusmentType.Text == getadjust.ajusmentType.Text)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool CheckEditRequest(AdjustmentDataVM header)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var columnValues = new Dictionary<string, object>();
+
+            var adjustmentlist = new List<AdjustmentDetailsVM>();
+
+            foreach (var detailitem in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, ""))
+            {
+                adjustmentlist.Add(ConvertToAdjusDetailVM(detailitem));
+            }
+
+            foreach (var cekadjust in header.AdjustmentDetails)
+            {
                 if (cekadjust.EditMode != 0)
                 {
                     foreach (var getadjust in adjustmentlist)
@@ -218,6 +245,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     cratedValueDetail.Add("Title", Convert.ToString(getperiod));
                     cratedValueDetail.Add("adjustmentperiod", getperiod);
                     cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    cratedValueDetail.Add("Project_x002f_Unit", viewModel.projUnit);
+                    cratedValueDetail.Add("Position", viewModel.position);
                     cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);
                     cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
@@ -242,6 +271,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         updatedValue.Add("Title", Convert.ToString(getperiod));
                         updatedValue.Add("adjustmentperiod", getperiod);
                         updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                        updatedValue.Add("Project_x002f_Unit", viewModel.projUnit);
+                        updatedValue.Add("Position", viewModel.position);
                         updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
                         updatedValue.Add("adjustmentamount", viewModel.amount);
                         updatedValue.Add("debitorcredit", viewModel.payType.Text);

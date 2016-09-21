@@ -7,7 +7,7 @@ using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class COMMVendorController : Controller
+    public class COMVendorController : Controller
     {
         private static string siteUrl = ConfigResource.DefaultBOSiteUrl;
 
