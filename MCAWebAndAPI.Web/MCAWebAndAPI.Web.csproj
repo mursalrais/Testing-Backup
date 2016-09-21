@@ -1253,9 +1253,9 @@
     <Compile Include="Controllers\BIEmbedController.cs" />
     <Compile Include="Controllers\CalendarEventController.cs" />
     <Compile Include="Controllers\ComboBoxController.cs" />
-    <Compile Include="Controllers\COMMGLController.cs" />
-    <Compile Include="Controllers\COMMVendorController.cs" />
+    <Compile Include="Controllers\COMGLController.cs" />
     <Compile Include="Controllers\COMProfessionalController.cs" />
+    <Compile Include="Controllers\COMVendorController.cs" />
     <Compile Include="Controllers\COMWBSController.cs" />
     <Compile Include="Controllers\CSVController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />

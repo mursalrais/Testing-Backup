@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
         IEnumerable<GLMasterVM> GetGLMasters();
         
-        IEnumerable<WBSMasterVM> GetWBSMaster(string activiy);
+        //IEnumerable<WBSMasterVM> GetWBSMaster(string activiy);
        
         int CreateRequisitionNote(RequisitionNoteVM viewModel);
         bool UpdateRequisitionNote(RequisitionNoteVM viewModel);

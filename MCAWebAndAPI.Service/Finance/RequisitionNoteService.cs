@@ -120,39 +120,40 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return glMasters;
         }
 
-        public IEnumerable<WBSMasterVM> GetWBSMaster(string activity)
-        {
-            var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
-                 (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
+        //[Obsolete]
+        //public IEnumerable<WBSMasterVM> GetWBSMaster(string activity)
+        //{
+        //    var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
+        //         (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
 
-            string valuesText = string.Empty;
-            ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, siteUrl, camlGetSubactivity);
-            string camlGetWbs = string.Empty;
+        //    string valuesText = string.Empty;
+        //    ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, siteUrl, camlGetSubactivity);
+        //    string camlGetWbs = string.Empty;
 
-            if (subActivityLits.Count > 0)
-            {
-                foreach (var item in subActivityLits)
-                {
-                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
-                }
-            }
-            else
-            {
-                //if isempty
-                valuesText += "<Value Type='Lookup'>-1</Value>";
-            }
+        //    if (subActivityLits.Count > 0)
+        //    {
+        //        foreach (var item in subActivityLits)
+        //        {
+        //            valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //if isempty
+        //        valuesText += "<Value Type='Lookup'>-1</Value>";
+        //    }
 
-            camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
-                                valuesText + "</Values></In></Where></Query></View>";
-            var wbsMasters = new List<WBSMasterVM>();
+        //    camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
+        //                        valuesText + "</Values></In></Where></Query></View>";
+        //    var wbsMasters = new List<WBSMasterVM>();
 
-            foreach (var item in SPConnector.GetList(ListName_WBSMaster, siteUrl, camlGetWbs))
-            {
-                wbsMasters.Add(ConvertToWBSMasterModel(item));
-            }
+        //    foreach (var item in SPConnector.GetList(ListName_WBSMaster, siteUrl, camlGetWbs))
+        //    {
+        //        wbsMasters.Add(ConvertToWBSMasterModel(item));
+        //    }
 
-            return wbsMasters;
-        }
+        //    return wbsMasters;
+        //}
 
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {

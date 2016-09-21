@@ -13,6 +13,7 @@ using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
+using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -70,7 +71,6 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             return View(viewModel);
         }
-
 
         public JsonResult GetGLMaster()
         {
@@ -203,7 +203,12 @@ namespace MCAWebAndAPI.Web.Controllers
             if (user != null)
                 userName = user.Name;
 
-            DateTime dt = DateTime.Now;
+            DateTime dt = DateTime.ParseExact(Request.Form[nameof(viewModel.ClientDateTime)].ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            if (dt == DateTime.MinValue)
+            {
+                //server's time better than no time.
+                dt = DateTime.Now;
+            }
             footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
 
             using (var writer = new StringWriter())
