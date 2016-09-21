@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Service.Shared
+namespace MCAWebAndAPI.Model.Common
 {
-    public interface IActivityService
+    public partial class WBS
     {
-        void SetSiteUrl(string siteUrl);
     }
 }

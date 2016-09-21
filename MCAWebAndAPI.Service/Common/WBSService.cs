@@ -8,7 +8,7 @@ using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Common
 {
-    public class WBSService : IWBSMasterService
+    public partial class WBSService : IWBSMasterService
     {
         public const string ListName = "WBS Mapping";
 
@@ -22,7 +22,7 @@ namespace MCAWebAndAPI.Service.Common
         /// <returns></returns>
         public static WBS Get(string siteUrl, int id)
         {
-            var item = SPConnector.GetListItem(ListName, id, GetCompactProgramSiteUrl(siteUrl));
+            var item = SPConnector.GetListItem(ListName, id, GetCurrentSiteUrl(siteUrl));
 
             return ConvertToVM(item);
         }
@@ -31,12 +31,19 @@ namespace MCAWebAndAPI.Service.Common
         {
             var wbs = new List<WBS>();
 
-            foreach (var item in SPConnector.GetList(ListName, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListName, GetCurrentSiteUrl(siteUrl)))
             {
                 wbs.Add(ConvertToVM(item));
             }
 
             return wbs;
+        }
+
+        //TODO: remove this temporary function
+        public static string GetCurrentSiteUrl(string siteUrl)
+        {
+            return siteUrl;
+            //return GetCompactProgramSiteUrl(siteUrl);
         }
 
         public static bool UpdateWBSMapping(string siteUrl)
@@ -108,6 +115,48 @@ namespace MCAWebAndAPI.Service.Common
             }
 
             return items;
+        }
+
+        public static IEnumerable<Activity> GetActivitiesAcrossProjects(string siteUrl)
+        {
+            var items = new List<Activity>();
+            items.AddRange(GetProjectActivities(siteUrl, "/gp"));
+            items.AddRange(GetProjectActivities(siteUrl, "/hn"));
+            items.AddRange(GetProjectActivities(siteUrl, "/pm"));
+            return items;
+        }
+
+        public static SubActivity ConvertToSubActivityModel(ListItem item)
+        {
+            var model = new SubActivity();
+            model.SubActivityName = Convert.ToString(item["Title"]);
+            model.ActivityName = item["Activity"] == null ? string.Empty
+                : Convert.ToString((item["Activity"] as FieldLookupValue).LookupValue);
+            model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
+
+            return model;
+        }
+
+        public static string GenerateScheduleStatusColor(string scheduleStatus)
+        {
+            switch (scheduleStatus)
+            {
+                case "Significantly Behind Schedule": return "Red";
+                case "Behind Schedule": return "Yellow";
+                case "On Schedule": return "Green";
+                case "Future": return "Blue";
+                default: return "Black";
+            }
+        }
+
+        public static string GetCompactProgramSiteUrl(string siteUrl)
+        {
+            if (string.IsNullOrEmpty(siteUrl))
+            {
+                throw new InvalidOperationException("siteUrl parameter cannot be null.");
+            }
+
+            return CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.CP);
         }
 
         #region Private Members
@@ -297,15 +346,6 @@ namespace MCAWebAndAPI.Service.Common
             return subActivities;
         }
 
-        public static IEnumerable<Activity> GetActivitiesAcrossProjects(string siteUrl)
-        {
-            var items = new List<Activity>();
-            items.AddRange(GetProjectActivities(siteUrl, "/gp"));
-            items.AddRange(GetProjectActivities(siteUrl, "/hn"));
-            items.AddRange(GetProjectActivities(siteUrl, "/pm"));
-            return items;
-        }
-
         private static IEnumerable<SubActivity> GetSubActivitiesAcrossProjects(string siteUrl)
         {
             var items = new List<SubActivity>();
@@ -313,17 +353,6 @@ namespace MCAWebAndAPI.Service.Common
             items.AddRange(GetProjectSubActivities(siteUrl, "/hn"));
             items.AddRange(GetProjectSubActivities(siteUrl, "/pm"));
             return items;
-        }
-
-        public static SubActivity ConvertToSubActivityModel(ListItem item)
-        {
-            var model = new SubActivity();
-            model.SubActivityName = Convert.ToString(item["Title"]);
-            model.ActivityName = item["Activity"] == null ? string.Empty
-                : Convert.ToString((item["Activity"] as FieldLookupValue).LookupValue);
-            model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
-
-            return model;
         }
 
         private static Activity ConvertToActivityModel(ListItem item)
@@ -341,23 +370,6 @@ namespace MCAWebAndAPI.Service.Common
             model.ProjectName = Convert.ToString(item["ProjectName"]);
 
             return model;
-        }
-
-        public static string GenerateScheduleStatusColor(string scheduleStatus)
-        {
-            switch (scheduleStatus)
-            {
-                case "Significantly Behind Schedule": return "Red";
-                case "Behind Schedule": return "Yellow";
-                case "On Schedule": return "Green";
-                case "Future": return "Blue";
-                default: return "Black";
-            }
-        }
-
-        private static string GetCompactProgramSiteUrl(string siteUrl)
-        {
-            return CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.CP);
         }
 
         #endregion

@@ -12,6 +12,9 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Service.Resources;
 using System.Net;
 using System;
+using System.IO;
+using Elmah;
+using MCAWebAndAPI.Service.Converter;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -32,26 +35,13 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // Get blank ViewModel
             var viewModel = _hRFeeSlipService.GetPopulatedModel();
-            viewModel.ID = 100;
-          //  SessionManager.Set("ProfessionalFeeSlip", viewModel.FeeSlipDetails);
-
+          
+       
             // Return to the name of the view and parse the model
             return View(viewModel);
         }
 
-        IEnumerable<FeeSlipDetailVM> BindClaimfeeDetails(FormCollection form,
-         IEnumerable<FeeSlipDetailVM> feeDetails)
-        {
-            var array = feeDetails.ToArray();
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                array[i].ProfessionalID = BindHelper.BindIntInGrid("gridDataView",
-                    i, "ProfessionalID", form);
-            }
-            return array;
-        }
-
+       
         [HttpPost]
         public ActionResult PrintFeeSlip(FormCollection form, FeeSlipVM viewModel)
         {
@@ -59,21 +49,62 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRFeeSlipService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
 
-            if (!viewModel.FeeSlipDetails.Any())
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("Empty");
-            }
-            else
-            {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse(viewModel.FeeSlipDetails.Count().ToString());
-            }
+            // return null;
 
-            var strPages = "";//viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
-            return RedirectToAction("Redirect", "HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
+             string RelativePath = "~/Views/HRTimesheet/PrintFeeSlip.cshtml";
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
+
+            viewModel = _hRFeeSlipService.GetPopulatedModel();
+
+
+            var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
+            var fileName ="FeeSlip.pdf";
+            byte[] pdfBuf = null;
+            string content;
+
+            ControllerContext.Controller.ViewData.Model = viewModel;
+            ViewData = ControllerContext.Controller.ViewData;
+            TempData = ControllerContext.Controller.TempData;
+
+            using (var writer = new StringWriter())
+            {
+                var contextviewContext = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
+                view.View.Render(contextviewContext, writer);
+                writer.Flush();
+                content = writer.ToString();
+                content = content.Replace("{XIMGPATHX}", domain);
+
+                // Get PDF Bytes
+                try
+                {
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                }
+                catch (Exception e)
+                {
+                    ErrorSignal.FromCurrentContext().Raise(e);
+                    return JsonHelper.GenerateJsonErrorResponse(e);
+                }
+            }
+            if (pdfBuf == null)
+                return HttpNotFound();
+            return File(pdfBuf, "application/pdf");
+
+
+            //if (viewModel.FeeSlipDetails.All(c => c.Intchecklist != 1))
+            //{
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse("Please select the professional first");
+            //}
+            //else
+            //{
+            //    Response.TrySkipIisCustomErrors = true;
+            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    return JsonHelper.GenerateJsonErrorResponse(viewModel.FeeSlipDetails.Count().ToString());
+            //}
+
+            //var strPages = "";//viewModel.UserPermission == "HR" ? "/sitePages/hrInsuranceView.aspx" : "/sitePages/ProfessionalClaim.aspx";
+            //return RedirectToAction("Redirect", "HRInsuranceClaim", new { siteUrl = siteUrl + strPages });
             //int? headerID = null;
             //try
             //{
@@ -99,6 +130,7 @@ namespace MCAWebAndAPI.Web.Controllers
             //}
 
             //return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.MonthlyFee);
+            return null;
         }
 
         //public JsonResult GridProfessional_Read([DataSourceRequest] DataSourceRequest request)

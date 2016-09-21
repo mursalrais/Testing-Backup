@@ -171,9 +171,11 @@
     <Compile Include="Asset\LocationMasterService.cs" />
     <Compile Include="Asset\LocationService.cs" />
     <Compile Include="Asset\ReportService.cs" />
+    <Compile Include="Common\ActivityService.cs" />
     <Compile Include="Common\ComboBoxService.cs" />
     <Compile Include="Common\CommonService.cs" />
     <Compile Include="Common\GLMasterService.cs" />
+    <Compile Include="Common\IActivityService.cs" />
     <Compile Include="Common\IComboBoxService.cs" />
     <Compile Include="Common\IGLMasterService.cs" />
     <Compile Include="Common\ILocationService.cs" />
@@ -181,8 +183,10 @@
     <Compile Include="Common\IWorkflowService.cs" />
     <Compile Include="Common\LocationService.cs" />
     <Compile Include="Common\ProfessionalService.cs" />
+    <Compile Include="Common\SubActivityService.cs" />
     <Compile Include="Common\VendorService.cs" />
     <Compile Include="Common\WBSService.cs" />
+    <Compile Include="Common\WBSServiceEx.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
@@ -312,8 +316,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Shared\ActivityService.cs" />
-    <Compile Include="Shared\IActivityService.cs" />
     <Compile Include="Shared\IPlaceService.cs" />
     <Compile Include="Shared\IVendorService.cs" />
     <Compile Include="Shared\PlaceService.cs" />
