@@ -22,13 +22,13 @@ namespace MCAWebAndAPI.Service.Utils
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("no-replayIMS@mca-indonesia.go.id", "Mr21112015");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress("no-replayIMS@mca-indonesia.go.id", "System MCA Indonesia");
+            mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.To.Add(new MailAddress(emailAddress));
             mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
             mail.CC.Add(new MailAddress("heidy@eceos.com"));
@@ -54,13 +54,13 @@ namespace MCAWebAndAPI.Service.Utils
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("no-replayIMS@mca-indonesia.go.id", "Mr21112015");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress("no-replayIMS@mca-indonesia.go.id", "System MCA Indonesia");
+            mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
             mail.CC.Add(new MailAddress("heidy@eceos.com"));
             foreach (var item in lstEmail)
