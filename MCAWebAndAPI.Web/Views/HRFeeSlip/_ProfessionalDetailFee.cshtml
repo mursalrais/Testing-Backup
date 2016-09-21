@@ -3,7 +3,7 @@
 
 <div class="col-sm-12">
     @(Html.Kendo().Grid(Model.FeeSlipDetails)
-          .Name("ClaimComponentDetails")
+          .Name("FeeSlipDetails")
           .ToolBar(tools => tools.Create().Text("Add New Component"))
           .Editable(editable => editable.Mode(GridEditMode.InCell)
               .CreateAt(GridInsertRowPosition.Bottom))
@@ -11,13 +11,13 @@
           {
             
               columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
-                                                           "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].Position' value='#= Position #' />"
+                                                           "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].Position' value='#= Position #' />"
                   );
               columns.Bound(p => p.ID).ClientTemplate("#= ID #" +
-                                                               "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
+                                                               "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].ID' value='#= ID #' />"
                   );
               columns.Bound(p => p.EditMode).ClientTemplate("#= EditMode #" +
-                                                                     "<input type='hidden' name='ClaimComponentDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
+                                                                     "<input type='hidden' name='FeeSlipDetails[#= getComponentDetail(data)#].EditMode' value='#= EditMode #' />"
                   );
 
 
@@ -59,12 +59,12 @@
 
  
     function getComponentDetail(dataItem) {
-        var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
+        var data = $("#FeeSlipDetails").data("kendoGrid").dataSource.data();
         return data.indexOf(dataItem);
     }
 
     function onDataBoundComponentDetails(e) {
-        var grid = $("#ClaimComponentDetails").data("kendoGrid");
+        var grid = $("#FeeSlipDetails").data("kendoGrid");
         hideDeletedRowKendoDetail(grid);
         
 
