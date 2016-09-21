@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCAWebAndAPI.Model.Common
 {
-    public class WBS : Item
+    public partial class WBS : Item
     {
         string _WBSID;
         string _WBSDescription;

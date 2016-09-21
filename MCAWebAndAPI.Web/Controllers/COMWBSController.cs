@@ -8,7 +8,7 @@ using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
-    public class COMWBSController : Controller
+    public partial class COMWBSController : Controller
     {
         public const string ControllerName = "COMWBS";
 

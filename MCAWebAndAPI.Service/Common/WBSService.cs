@@ -8,7 +8,7 @@ using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Common
 {
-    public class WBSService : IWBSMasterService
+    public partial class WBSService : IWBSMasterService
     {
         public const string ListName = "WBS Mapping";
 
