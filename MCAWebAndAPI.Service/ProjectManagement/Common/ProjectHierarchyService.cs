@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Chart;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -32,7 +33,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
             model.Finish = Convert.ToDateTime(item["Finish"]);
             model.Director = (FieldUserValue)item["Project_x0020_Manager"] == null ? "" :
                     Convert.ToString(((FieldUserValue)item["Project_x0020_Manager"]).LookupValue);
-            model.ColorStatus = WBSMasterService.GenerateScheduleStatusColor(Convert.ToString(item["Schedule_x0020_Status"]));
+            model.ColorStatus = WBSService.GenerateScheduleStatusColor(Convert.ToString(item["Schedule_x0020_Status"]));
             model.ScheduleStatus = Convert.ToString(item["Schedule_x0020_Status"]);
             model.PercentComplete = Convert.ToDouble(item["_x0025__x0020_Complete"]);
 
@@ -63,12 +64,12 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         public IEnumerable<Activity> GetAllActivities()
         {
-            return WBSMasterService.GetAllActivities(_siteUrl);
+            return WBSService.GetAllActivities(_siteUrl);
         }
 
         public IEnumerable<SubActivity> GetAllSubActivities()
         {
-            return WBSMasterService.GetAllSubActivities(_siteUrl);
+            return WBSService.GetAllSubActivities(_siteUrl);
         }
 
         public IEnumerable<Project> GetAllProjects()
@@ -107,9 +108,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         {
             var items = new List<SubActivity>();
 
-            foreach (var item in SPConnector.GetList(WBSMasterService.SP_SUB_ACTIVITY_LIST_NAME, _siteUrl))
+            foreach (var item in SPConnector.GetList(WBSService.ListNameSubActivity, _siteUrl))
             {
-                items.Add(WBSMasterService.ConvertToSubActivityModel(item));
+                items.Add(WBSService.ConvertToSubActivityModel(item));
             }
 
             return items.Select(e => new StackedBarChartVM()
@@ -117,27 +118,27 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
                 CategoryName = e.ActivityName,
                 GroupName = GenerateOrderedScheduleStatus(e.ScheduleStatus),
                 Value = 1,
-                Color = WBSMasterService.GenerateScheduleStatusColor(e.ScheduleStatus)
+                Color = WBSService.GenerateScheduleStatusColor(e.ScheduleStatus)
             });
         }
 
         public IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject()
         {
-            var items = WBSMasterService.GetActivitiesAcrossProjects(_siteUrl);
+            var items = WBSService.GetActivitiesAcrossProjects(_siteUrl);
 
             return items.Select(e => new StackedBarChartVM()
             {
                 CategoryName = e.ProjectName,
                 GroupName = GenerateOrderedScheduleStatus(e.ScheduleStatus),
                 Value = 1,
-                Color = WBSMasterService.GenerateScheduleStatusColor(e.ScheduleStatus)
+                Color = WBSService.GenerateScheduleStatusColor(e.ScheduleStatus)
             });
         }
 
 
-        public IEnumerable<WBSMapping> GetAllWBSMappings()
+        public IEnumerable<WBS> GetAllWBSMappings()
         {
-            return WBSMasterService.GetAll(_siteUrl);
+            return WBSService.GetAll(_siteUrl);
 
             //var activities = GetActivitiesAcrossProjects();
             //var subActivities = GetSubActivitiesAcrossProjects();
@@ -148,7 +149,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         public bool UpdateWBSMapping()
         {
-            return WBSMasterService.UpdateWBSMapping(_siteUrl);
+            return WBSService.UpdateWBSMapping(_siteUrl);
 
             //var wbsList = GetAllWBSMappings();
             //var wbsProjectDict = new Dictionary<string, WBSMapping>();
@@ -181,9 +182,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         }
 
 
-        public IEnumerable<WBSMapping> GetWBSMappingsInProgram()
+        public IEnumerable<WBS> GetWBSMappingsInProgram()
         {
-            return WBSMasterService.GetAll(_siteUrl);
+            return WBSService.GetAll(_siteUrl);
 
             //var wbs = new List<WBSMapping>();
 

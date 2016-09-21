@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using MCAWebAndAPI.Model.ProjectManagement.Common;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.Common;
-using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 
 namespace MCAWebAndAPI.Web.Controllers
@@ -43,23 +42,23 @@ namespace MCAWebAndAPI.Web.Controllers
             ), JsonRequestBehavior.AllowGet);
         }
 
-        public IEnumerable<WBSMapping> GetAll()
+        public IEnumerable<WBS> GetAll()
         {
-            return WBSMasterService.GetAll(siteUrl);
+            return WBSService.GetAll(siteUrl);
         }
 
         public JsonResult GetAllByActivityAsJsonResult(string activity = null)
         {
             JsonResult result;
 
-            IEnumerable<WBSMapping> wbsMasters = GetAllCached();
+            IEnumerable<WBS> wbsMasters = GetAllCached();
 
             if (string.IsNullOrEmpty(activity))
             {
                 result = Json(wbsMasters.Select(e => new
                 {
                     Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                    Text = (e.WBSID + "-" + e.WBSDescription)
+                    Text = e.WBSID + "-" + e.WBSDescription
                 }), JsonRequestBehavior.AllowGet);
             }
             else
@@ -67,23 +66,23 @@ namespace MCAWebAndAPI.Web.Controllers
                 result = Json(wbsMasters.Where(w => w.Activity == activity).Select(e => new
                 {
                     Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                    Text = (e.WBSID + "-" + e.WBSDescription)
+                    Text = e.WBSID + "-" + e.WBSDescription
                 }), JsonRequestBehavior.AllowGet);
             }
 
             return result;
         }
 
-        public static IEnumerable<WBSMapping> GetAllByActivity(string activity = null)
+        public static IEnumerable<WBS> GetAllByActivity(string activity = null)
         {
-            IEnumerable<WBSMapping> wbsMappings = GetAllCached();
+            IEnumerable<WBS> wbsMappings = GetAllCached();
 
             return wbsMappings.Where(w => w.Activity == activity);
         }
 
-        public static WBSMapping Get(int? id = null)
+        public static WBS Get(int? id = null)
         {
-            var result = new WBSMapping();
+            var result = new WBS();
 
             if (id != null)
             {
@@ -93,11 +92,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return result;
         }
 
-        private static IEnumerable<WBSMapping> GetAllCached()
+        private static IEnumerable<WBS> GetAllCached()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;
-            var wbsMapping = sessionVariable ?? WBSMasterService.GetAll(siteUrl);
+            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBS>;
+            var wbsMapping = sessionVariable ?? WBSService.GetAll(siteUrl);
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["WBSMapping"] = wbsMapping;

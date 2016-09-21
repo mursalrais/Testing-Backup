@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Service.ProjectManagement.Common
 {
@@ -20,9 +21,9 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
         IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByActivity();
 
         IEnumerable<StackedBarChartVM> GenerateProjectHealthStatusChartByProject();
-        IEnumerable<WBSMapping> GetAllWBSMappings();
+        IEnumerable<WBS> GetAllWBSMappings();
 
-        IEnumerable<WBSMapping> GetWBSMappingsInProgram();
+        IEnumerable<WBS> GetWBSMappingsInProgram();
 
         IEnumerable<InGridComboBoxVM> GetProjectComboBox();
 

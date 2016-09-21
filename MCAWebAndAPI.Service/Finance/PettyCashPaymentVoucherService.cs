@@ -294,7 +294,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.ReasonOfPayment = Convert.ToString(listItem[FIELD_REASON]);
             viewModel.Fund = Convert.ToString(listItem[FIELD_FUND]);
 
-            WBSMapping wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(listItem[FieldName_WBSID]));
+            WBS wbs = Common.WBSService.Get(siteUrl, Convert.ToInt32(listItem[FieldName_WBSID]));
 
             viewModel.WBS.Value = wbs.ID;
             viewModel.WBS.Text = string.Format("{0}-{1}", wbs.WBSID, wbs.WBSDescription);

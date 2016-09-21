@@ -141,7 +141,7 @@ namespace MCAWebAndAPI.Service.Finance
 
 
                 var wbsId = Convert.ToInt32(viewModel.WBS.Value);
-                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+                var wbs = Common.WBSService.Get(siteUrl, wbsId);
 
                 updatedValue.Add(FieldNameDetail_WBSID, wbsId);
                 updatedValue.Add(FieldNameDetail_WBSDescription, wbs.WBSIDDescription);
