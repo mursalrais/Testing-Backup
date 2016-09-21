@@ -22,13 +22,13 @@ namespace MCAWebAndAPI.Service.Utils
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replayIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress("no-reply@mca-indonesia.go.id", "ims.mca-indonesia.go.id");
+            mail.From = new MailAddress("no-replayIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.To.Add(new MailAddress(emailAddress));
             mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
             mail.CC.Add(new MailAddress("heidy@eceos.com"));
@@ -54,13 +54,13 @@ namespace MCAWebAndAPI.Service.Utils
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replayIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
             MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress("no-reply@mca-indonesia.go.id", "ims.mca-indonesia.go.id");
+            mail.From = new MailAddress("no-replayIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
             mail.CC.Add(new MailAddress("heidy@eceos.com"));
             foreach (var item in lstEmail)
@@ -81,13 +81,89 @@ namespace MCAWebAndAPI.Service.Utils
                 throw e;
             }
 
-          
+
 
             //foreach (var item in mail.To)
             //{
             //    smtp.SendAsync(mail.From.Address, item.Address, mail.Subject, mail.Body, DateTime.Now);
             //}
         }
+
+
+        //public static void Send(string emailAddress, string subject, string emailMessage)
+        //{
+        //    var smtp = new SmtpClient();
+        //    {
+        //        smtp.Host = "smtp-mail.outlook.com";
+        //        smtp.Port = 587;
+        //        smtp.EnableSsl = true;
+        //        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //        smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+        //        smtp.Timeout = 20000;
+        //    }
+
+        //    MailMessage mail = new MailMessage();
+
+        //    mail.From = new MailAddress("no-reply@mca-indonesia.go.id", "ims.mca-indonesia.go.id");
+        //    mail.To.Add(new MailAddress(emailAddress));
+        //    mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
+        //    mail.CC.Add(new MailAddress("heidy@eceos.com"));
+        //    mail.Subject = subject;
+        //    mail.Body = emailMessage;
+        //    mail.IsBodyHtml = true;
+
+        //    try
+        //    {
+        //        smtp.Send(mail);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
+
+        //public static void SendMultiple(List<String> lstEmail, string subject, string emailMessage)
+        //{
+        //    var smtp = new SmtpClient();
+        //    {
+        //        smtp.Host = "smtp-mail.outlook.com";
+        //        smtp.Port = 587;
+        //        smtp.EnableSsl = true;
+        //        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //        smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+        //        smtp.Timeout = 20000;
+        //    }
+
+        //    MailMessage mail = new MailMessage();
+
+        //    mail.From = new MailAddress("no-reply@mca-indonesia.go.id", "ims.mca-indonesia.go.id");
+        //    mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
+        //    mail.CC.Add(new MailAddress("heidy@eceos.com"));
+        //    foreach (var item in lstEmail)
+        //    {
+        //        mail.To.Add(new MailAddress(item));
+        //    }
+
+        //    mail.Subject = subject;
+        //    mail.Body = emailMessage;
+        //    mail.IsBodyHtml = true;
+
+        //    try
+        //    {
+        //        smtp.Send(mail);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+
+
+
+        //    //foreach (var item in mail.To)
+        //    //{
+        //    //    smtp.SendAsync(mail.From.Address, item.Address, mail.Subject, mail.Body, DateTime.Now);
+        //    //}
+        //}
 
         public static bool IsValidEmailId(string InputEmail)
         {
