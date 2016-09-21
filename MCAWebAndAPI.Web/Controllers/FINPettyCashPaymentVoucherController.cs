@@ -167,7 +167,7 @@ namespace MCAWebAndAPI.Web.Controllers
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             service.SetSiteUrl(siteUrl);
             viewModel = service.GetPettyCashPaymentVoucher(viewModel.ID);
 
@@ -175,14 +175,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 try
                 {
-                    IDataMasterService _dataMasterService = new DataMasterService();
-                    _dataMasterService.SetSiteUrl(siteUrl);
-
-                    var sessionVariable = System.Web.HttpContext.Current.Session["ProfessionalMaster"] as IEnumerable<ProfessionalMaster>;
-                    var professionals = sessionVariable ?? _dataMasterService.GetProfessionals();
-
-
-                    ProfessionalMaster data = professionals.FirstOrDefault(p => p.ID.Value == viewModel.Professional.Value.Value);
+                    var allProfs = COMProfessionalController.GetAll();
+                    ProfessionalMaster data = allProfs.FirstOrDefault(p => p.ID.Value == viewModel.Professional.Value.Value);
 
                     if (data != null)
                     {
@@ -191,7 +185,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 }
                 catch
                 {
-                    throw;
+                    viewModel.PaidTo.Text = string.Empty;
                 }
             }
             else if (viewModel.PaidTo.Text.Equals(PaidToVendor))
