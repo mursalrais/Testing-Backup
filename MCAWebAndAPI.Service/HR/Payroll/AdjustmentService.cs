@@ -245,6 +245,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                     cratedValueDetail.Add("Title", Convert.ToString(getperiod));
                     cratedValueDetail.Add("adjustmentperiod", getperiod);
                     cratedValueDetail.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                    cratedValueDetail.Add("Project_x002f_Unit", viewModel.projUnit);
+                    cratedValueDetail.Add("Position", viewModel.position);
                     cratedValueDetail.Add("adjustmenttype", viewModel.ajusmentType.Text);
                     cratedValueDetail.Add("adjustmentamount", viewModel.amount);
                     cratedValueDetail.Add("debitorcredit", viewModel.payType.Text);
@@ -269,6 +271,8 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                         updatedValue.Add("Title", Convert.ToString(getperiod));
                         updatedValue.Add("adjustmentperiod", getperiod);
                         updatedValue.Add("professional", new FieldLookupValue { LookupId = (int)viewModel.ddlProfessional.Value });
+                        updatedValue.Add("Project_x002f_Unit", viewModel.projUnit);
+                        updatedValue.Add("Position", viewModel.position);
                         updatedValue.Add("adjustmenttype", viewModel.ajusmentType.Text);
                         updatedValue.Add("adjustmentamount", viewModel.amount);
                         updatedValue.Add("debitorcredit", viewModel.payType.Text);
