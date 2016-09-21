@@ -92,5 +92,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string UserEmail { get; set; }
 
+        public string ClientDateTime { get; set; } = string.Empty;
+
     }
 }

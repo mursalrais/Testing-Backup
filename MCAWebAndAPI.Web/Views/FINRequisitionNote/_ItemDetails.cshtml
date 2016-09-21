@@ -105,7 +105,7 @@
                        model.Field(m => m.Activity).DefaultValue(AjaxComboBoxVM.GetDefaultValue());
                        model.Field(m => m.WBS).DefaultValue(RequisitionNoteItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(RequisitionNoteItemVM.GetGLDefaultValue());
-
+                       model.Field(m => m.Frequency).DefaultValue(1);
                    })
                     .Read(read => read.Action("GetRequisitionNoteDetailsByEventBudgetId", "FINRequisitionNote").Data("SetEventBudgetID"))
                    .ServerOperation(false)
@@ -162,7 +162,13 @@
 
 
     function filterWBS() {
-        var activityId = $('#WBS').closest('td').prev('td')[0].childNodes[2].value;
+        var activityId = "0";
+        try {
+            activityId = $('#WBS').closest('td').prev('td')[0].childNodes[2].value;
+        } catch (e) {
+            activityId = "0";
+        }
+
         return {
             activity: activityId
         };

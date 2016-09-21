@@ -21,22 +21,22 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         [DisplayName("Period")]
         public DateTime? Period { get; set; } = DateTime.Now.ToLocalTime();
 
-        [UIHint("Int32")]
-        public int Slip { get; set; }
+        //[UIHint("Int32")]
+        //public int Slip { get; set; }
 
-        [UIHint("Int32")]
-        public int? ProfessionalID { get; set; }
+        //[UIHint("Int32")]
+        //public int? ProfessionalID { get; set; }
 
-        public string Name { get; set; }
+        //public string Name { get; set; }
 
-        [UIHint("Date")]
-        public string JoiningDate { get; set; }
+        //[UIHint("Date")]
+        //public string JoiningDate { get; set; }
 
-        public string Designation { get; set; }
+        //public string Designation { get; set; }
 
-        public string PaymentMode { get; set; }
+        //public string PaymentMode { get; set; }
 
-        [UIHint("Int32")]
-        public int TakeHomePay { get; set; }
+        //[UIHint("Int32")]
+        //public int TakeHomePay { get; set; }
     }
 }

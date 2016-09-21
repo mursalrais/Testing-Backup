@@ -12,17 +12,26 @@ namespace MCAWebAndAPI.Web.Controllers
     public class COMWBSController : Controller
     {
         public const string ControllerName = "COMWBS";
-        public const string GetAllByActivityAsJsonResult_MethodName = "GetAllByActivityAsJsonResult";
+
+        public const string MethodName_GetAllByActivityAsJsonResult = "GetAllByActivityAsJsonResult";
+        public const string MethodName_GetAllAsJsonResult = "GetAllAsJsonResult";
+
+        public const string FieldName_Value = "Value";
+        public const string FieldName_Text = "Text";
+        public const string FieldName_ID = "ID";
+        public const string FieldName_Long = "Long";
 
         private static string siteUrl = ConfigResource.DefaultProgramSiteUrl;
 
         public JsonResult GetAllAsJsonResult()
         {
-            var data = GetWBSMappingFromExistingSession();
+            var data = GetAllCached();
 
             return Json(data.Select(e =>
                 new
                 {
+                    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                    Text = (e.Title + "-" + e.WBSDescription),
                     e.ID,
                     e.WBSID,
                     e.WBSDescription,
@@ -34,17 +43,16 @@ namespace MCAWebAndAPI.Web.Controllers
             ), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetWBSMappings()
+        public IEnumerable<WBSMapping> GetAll()
         {
-            var data = WBSMasterService.GetAllWBSMappings(siteUrl);
-            return this.Jsonp(data);
+            return WBSMasterService.GetAll(siteUrl);
         }
 
         public JsonResult GetAllByActivityAsJsonResult(string activity = null)
         {
             JsonResult result;
 
-            IEnumerable<WBSMapping> wbsMasters = GetWBSMappingFromExistingSession();
+            IEnumerable<WBSMapping> wbsMasters = GetAllCached();
 
             if (string.IsNullOrEmpty(activity))
             {
@@ -56,45 +64,45 @@ namespace MCAWebAndAPI.Web.Controllers
             }
             else
             {
-                result= Json(wbsMasters.Where(w => w.Activity == activity).Select(e => new
+                result = Json(wbsMasters.Where(w => w.Activity == activity).Select(e => new
                 {
                     Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
                     Text = (e.WBSID + "-" + e.WBSDescription)
                 }), JsonRequestBehavior.AllowGet);
             }
 
-
             return result;
         }
 
-        public IEnumerable<WBSMapping> GetAllByActivity(string activity = null)
+        public static IEnumerable<WBSMapping> GetAllByActivity(string activity = null)
         {
-            IEnumerable<WBSMapping> wbsMappings = GetWBSMappingFromExistingSession();
+            IEnumerable<WBSMapping> wbsMappings = GetAllCached();
 
             return wbsMappings.Where(w => w.Activity == activity);
         }
-        
-        public static WBSMapping GetWBSMappings(int? ID=null)
+
+        public static WBSMapping Get(int? id = null)
         {
             var result = new WBSMapping();
-            if (ID != null)
+
+            if (id != null)
             {
-                result = WBSMasterService.GetWBSMappingsInProgram(siteUrl, ID);
+                result = GetAllCached().SingleOrDefault(w => w.ID == id);
             }
 
             return result;
         }
 
-        private static IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
+        private static IEnumerable<WBSMapping> GetAllCached()
         {
             //Get existing session variable
             var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;
-            var wbsMapping = sessionVariable ?? WBSMasterService.GetWBSMappingsInProgram(siteUrl);
+            var wbsMapping = sessionVariable ?? WBSMasterService.GetAll(siteUrl);
 
             if (sessionVariable == null) // If no session variable is found
                 System.Web.HttpContext.Current.Session["WBSMapping"] = wbsMapping;
+
             return wbsMapping;
         }
-
     }
 }

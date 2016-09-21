@@ -137,7 +137,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         public IEnumerable<WBSMapping> GetAllWBSMappings()
         {
-            return WBSMasterService.GetAllWBSMappings(_siteUrl);
+            return WBSMasterService.GetAll(_siteUrl);
 
             //var activities = GetActivitiesAcrossProjects();
             //var subActivities = GetSubActivitiesAcrossProjects();
@@ -183,7 +183,7 @@ namespace MCAWebAndAPI.Service.ProjectManagement.Common
 
         public IEnumerable<WBSMapping> GetWBSMappingsInProgram()
         {
-            return WBSMasterService.GetWBSMappingsInProgram(_siteUrl);
+            return WBSMasterService.GetAll(_siteUrl);
 
             //var wbs = new List<WBSMapping>();
 

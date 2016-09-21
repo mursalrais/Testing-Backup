@@ -26,16 +26,16 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string Position { get; set; }
 
 
-        [UIHint("Int32")]
-        public int Fee { get; set; }
+        //[UIHint("Int32")]
+        //public int Fee { get; set; }
 
-        [UIHint("Int32")]
-        public int Deduction { get; set; }
+        //[UIHint("Int32")]
+        //public int Deduction { get; set; }
 
-        [UIHint("Int32")]
-        public int TotalIncome { get; set; }
+        //[UIHint("Int32")]
+        //public int TotalIncome { get; set; }
 
-        [UIHint("Int32")]
-        public int TotalDeduction { get; set; }
+        //[UIHint("Int32")]
+        //public int TotalDeduction { get; set; }
     }
 }

@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameId = "ID";
         private const string FieldNameSCAReimbursementNO = "Title";
         private const string FieldNameEventBudget = "EventBudget";
+        private const string FieldNameEventBudgetNo = "Event_x0020_Budget_x0020_No_x003";
         private const string FieldNameDescription = "Description";
         private const string FieldNameFund = "Fund";
         private const string FieldNameCurrency = "Currency";
@@ -222,7 +223,7 @@ namespace MCAWebAndAPI.Service.Finance
             if (listItem[FieldNameEventBudget] != null)
             {
                 viewModel.EventBudget.Value = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupId;
-                viewModel.EventBudget.Text = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupValue;
+                viewModel.EventBudget.Text = (listItem[FieldNameEventBudgetNo] as FieldLookupValue).LookupValue;
             }
 
             viewModel.Description = Convert.ToString(listItem[FieldNameDescription]);

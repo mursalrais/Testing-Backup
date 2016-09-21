@@ -59,32 +59,32 @@
             Reimbursement Special Cash Advance
         </div>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 10px; padding:15px;">
         <table width="100%">
             <tbody>
                 <tr>
                     <td width="170px">Reimbursement SCA No. </td>
                     <td width="2px">:</td>
-                    <td width="200px">@Model.DocNo</td>
+                    <td >@Model.DocNo</td>
                     <td width="100px">Currency</td>
                     <td width="2px">:</td>
-                    <td>@Model.Currency.Value</td>
+                    <td width="20%" >@Model.Currency.Value</td>
                 </tr>
                 <tr>
                     <td width="150px">Event Budget No.</td>
                     <td width="2px">:</td>
-                    <td width="200px" >@Model.EventBudget.Text</td>
+                    <td >@Model.EventBudget.Text</td>
                     <td width="100px">Fund</td>
                     <td width="2px">:</td>
-                    <td>@Model.Fund</td>
+                    <td width="20%" >@Model.Fund</td>
                 </tr>
                 <tr>
                     <td width="150px">Description</td>
                     <td width="2px">:</td>
-                    <td>@Model.Description</td>
+                    <td >@Model.Description</td>
                     <td width="100px"></td>
                     <td width="2px"></td>
-                    <td></td>
+                    <td width="20%"></td>
                 </tr>
             </tbody>
         </table>
@@ -111,7 +111,7 @@
                     {
                         <tr>
                             <td>
-                                @listData[i].ReceiptDate
+                                @listData[i].ReceiptDate.Value.ToString("MM/dd/yyyy")
                             </td>
                             <td>
                                 @listData[i].ReceiptNo
@@ -129,8 +129,8 @@
                             <td>
                                 @listData[i].GL.Text
                             </td>
-                            <td>
-                                @listData[i].Amount.ToString()
+                            <td class="rightAlign">
+                                @listData[i].Amount.ToString("N2")
                             </td>
                             <td></td>
                         </tr>
@@ -142,14 +142,14 @@
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="rightAlign footerBGColor" style="border-color:transparent;" colspan="2">Total Amount Reimbursed </td>
-                    <td class="rightAlign footerBGColor" style="border-color:transparent;" >@Model.Amount.ToString()</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;" >@Model.Amount.ToString("N2")</td>
                     <td class="footerBGColor" style="border-color:transparent;" ></td>
                 </tr>
                 
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 10px; padding:15px;">
         <table width="100%" id="TblNote">
             <tbody>
                 <tr>
