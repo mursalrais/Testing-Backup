@@ -20,116 +20,116 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         const string SP_HEADER_LIST_NAME = "Fee Slip";
         const string SP_DETAIL_LIST_NAME = "Fee Slip Detail";
 
-        public void CreateFeeSlipDetails(int? headerID, IEnumerable<FeeSlipDetailVM> feeSlipDetails)
-        {
-            foreach (var viewModel in feeSlipDetails)
-            {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
-                if (Item.CheckIfDeleted(viewModel))
-                {
-                    try
-                    {
-                        SPConnector.DeleteListItem(SP_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
+        //public void CreateFeeSlipDetails(int? headerID, IEnumerable<FeeSlipDetailVM> feeSlipDetails)
+        //{
+        //    foreach (var viewModel in feeSlipDetails)
+        //    {
+        //        if (Item.CheckIfSkipped(viewModel))
+        //            continue;
+        //        if (Item.CheckIfDeleted(viewModel))
+        //        {
+        //            try
+        //            {
+        //                SPConnector.DeleteListItem(SP_DETAIL_LIST_NAME, viewModel.ID, _siteUrl);
 
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e);
-                        throw e;
-                    }
-                    continue;
-                }
-                var updatedValue = new Dictionary<string, object>();
-                updatedValue.Add("dateofnewfee", viewModel.Fee);
-                updatedValue.Add("dateofnewfee", viewModel.Fee);
-                updatedValue.Add("monthlyfee", viewModel.Deduction);
-                updatedValue.Add("annualfee", viewModel.TotalIncome);
-                updatedValue.Add("currency", viewModel.TotalDeduction);
-                try
-                {
-                    if (Item.CheckIfUpdated(viewModel))
-                        SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
-                    else
-                        SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw new Exception(ErrorResource.SPInsertError);
-                }
-            }
-        }
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                logger.Error(e);
+        //                throw e;
+        //            }
+        //            continue;
+        //        }
+        //        var updatedValue = new Dictionary<string, object>();
+        //        updatedValue.Add("dateofnewfee", viewModel.Fee);
+        //        updatedValue.Add("dateofnewfee", viewModel.Fee);
+        //        updatedValue.Add("monthlyfee", viewModel.Deduction);
+        //        updatedValue.Add("annualfee", viewModel.TotalIncome);
+        //        updatedValue.Add("currency", viewModel.TotalDeduction);
+        //        try
+        //        {
+        //            if (Item.CheckIfUpdated(viewModel))
+        //                SPConnector.UpdateListItem(SP_DETAIL_LIST_NAME, viewModel.ID, updatedValue, _siteUrl);
+        //            else
+        //                SPConnector.AddListItem(SP_DETAIL_LIST_NAME, updatedValue, _siteUrl);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            logger.Error(e.Message);
+        //            throw new Exception(ErrorResource.SPInsertError);
+        //        }
+        //    }
+        //}
 
-        public int CreateHeader(FeeSlipVM header)
-        {
-            var columnValues = new Dictionary<string, object>();
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalID) });
-            columnValues.Add("ProjectOrUnit", header.Slip);
-            columnValues.Add("position", header.Name);
-            columnValues.Add("maritalstatus", header.JoiningDate);
-            columnValues.Add("joindate", header.Designation);
-            columnValues.Add("dateofnewpsa", header.PaymentMode);
-            try
-            {
-                SPConnector.AddListItem(SP_HEADER_LIST_NAME, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.Message);
-            }
+        //public int CreateHeader(FeeSlipVM header)
+        //{
+        //    var columnValues = new Dictionary<string, object>();
+        //    columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalID) });
+        //    columnValues.Add("ProjectOrUnit", header.Slip);
+        //    columnValues.Add("position", header.Name);
+        //    columnValues.Add("maritalstatus", header.JoiningDate);
+        //    columnValues.Add("joindate", header.Designation);
+        //    columnValues.Add("dateofnewpsa", header.PaymentMode);
+        //    try
+        //    {
+        //        SPConnector.AddListItem(SP_HEADER_LIST_NAME, columnValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Error(e.Message);
+        //    }
 
-            return SPConnector.GetLatestListItemID(SP_HEADER_LIST_NAME, _siteUrl);
-        }
+        //    return SPConnector.GetLatestListItemID(SP_HEADER_LIST_NAME, _siteUrl);
+        //}
 
-        public FeeSlipVM GetHeader(int? ID)
-        {
-            var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
-            return ConvertToFeeSlipModel(listItem);
-        }
+        //public FeeSlipVM GetHeader(int? ID)
+        //{
+        //    var listItem = SPConnector.GetListItem(SP_HEADER_LIST_NAME, ID, _siteUrl);
+        //    return ConvertToFeeSlipModel(listItem);
+        //}
 
-        private FeeSlipVM ConvertToFeeSlipModel(ListItem listItem)
-        {
-            var viewModel = new FeeSlipVM();
+        //private FeeSlipVM ConvertToFeeSlipModel(ListItem listItem)
+        //{
+        //    var viewModel = new FeeSlipVM();
 
-            viewModel.ID = Convert.ToInt32(listItem["ID"]);
-            viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
-            viewModel.Slip = Convert.ToInt32(listItem["ProjectOrUnit"]);
-            viewModel.Name = Convert.ToString(listItem["position"]);
-            viewModel.JoiningDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime().ToShortDateString();
-            viewModel.Designation = Convert.ToString(listItem["position"]);
-            viewModel.PaymentMode = Convert.ToString(listItem["position"]);
+        //    viewModel.ID = Convert.ToInt32(listItem["ID"]);
+        //    viewModel.ProfessionalID = FormatUtil.ConvertLookupToID(listItem, "professional");
+        //    viewModel.Slip = Convert.ToInt32(listItem["ProjectOrUnit"]);
+        //    viewModel.Name = Convert.ToString(listItem["position"]);
+        //    viewModel.JoiningDate = Convert.ToDateTime(listItem["joindate"]).ToLocalTime().ToShortDateString();
+        //    viewModel.Designation = Convert.ToString(listItem["position"]);
+        //    viewModel.PaymentMode = Convert.ToString(listItem["position"]);
 
-            // Convert Details
-            viewModel.FeeSlipDetails = GetFeeSlipDetails(viewModel.ID);
+        //    // Convert Details
+        //    viewModel.FeeSlipDetails = GetFeeSlipDetails(viewModel.ID);
 
-            return viewModel;
-        }
+        //    return viewModel;
+        //}
 
-        private IEnumerable<FeeSlipDetailVM> GetFeeSlipDetails(int? ID)
-        {
-            var caml = @"<View><Query><Where><Eq><FieldRef Name='monthlyfeeid' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
+        //private IEnumerable<FeeSlipDetailVM> GetFeeSlipDetails(int? ID)
+        //{
+        //    var caml = @"<View><Query><Where><Eq><FieldRef Name='monthlyfeeid' /><Value Type='Lookup'>" + ID.ToString() + "</Value></Eq></Where></Query></View>";
 
-            var FeeSlipDetails = new List<FeeSlipDetailVM>();
-            foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
-            {
-                FeeSlipDetails.Add(ConvertToFeeSlipDetailVM(item));
-            }
+        //    var FeeSlipDetails = new List<FeeSlipDetailVM>();
+        //    foreach (var item in SPConnector.GetList(SP_DETAIL_LIST_NAME, _siteUrl, caml))
+        //    {
+        //        FeeSlipDetails.Add(ConvertToFeeSlipDetailVM(item));
+        //    }
 
-            return FeeSlipDetails;
-        }
+        //    return FeeSlipDetails;
+        //}
 
-        private FeeSlipDetailVM ConvertToFeeSlipDetailVM(ListItem item)
-        {
-            return new FeeSlipDetailVM
-            {
-                ID = Convert.ToInt32(item["ID"]),
-                Fee = Convert.ToInt32(item["dateofnewfee"]),
-                Deduction = Convert.ToInt32(item["monthlyfee"]),
-                TotalIncome = Convert.ToInt32(item["annualfee"]),
-                TotalDeduction = Convert.ToInt32(item["annualfee"]),
-            };
-        }
+        //private FeeSlipDetailVM ConvertToFeeSlipDetailVM(ListItem item)
+        //{
+        //    return new FeeSlipDetailVM
+        //    {
+        //        ID = Convert.ToInt32(item["ID"]),
+        //        Fee = Convert.ToInt32(item["dateofnewfee"]),
+        //        Deduction = Convert.ToInt32(item["monthlyfee"]),
+        //        TotalIncome = Convert.ToInt32(item["annualfee"]),
+        //        TotalDeduction = Convert.ToInt32(item["annualfee"]),
+        //    };
+        //}
 
         private DataTable GetProfessional()
         {
@@ -192,7 +192,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return dt;
         }
 
-        private IEnumerable<FeeSlipDetailVM> GetProfessionals()
+        public IEnumerable<FeeSlipDetailVM> GetProfessionals()
         {
             var models = new List<FeeSlipDetailVM>();
             var caml = @"<View>
@@ -222,6 +222,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 var prof = new FeeSlipDetailVM
                 {
+                    ID = Convert.ToInt32(item["ID"]),
                     ProfessionalID = Convert.ToInt32(item["ID"]),
                     Name = Convert.ToString(item["Title"]),
                     Unit = Convert.ToString(item["Project_x002f_Unit"]),
@@ -242,10 +243,11 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public FeeSlipVM GetPopulatedModel()
         {
-            var model = new FeeSlipVM();
+          //  var model = new FeeSlipVM { FeeSlipDetails = GetProfessionals() };
 
-            // model.dtDetails = GetProfessional();
+            var model = new FeeSlipVM() ;
             model.FeeSlipDetails = GetProfessionals();
+            // model.dtDetails = GetProfessional();
             return model;
         }
 
@@ -254,29 +256,29 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);
         }
 
-        public bool UpdateHeader(FeeSlipVM header)
-        {
-            var columnValues = new Dictionary<string, object>();
-            int? ID = header.ID;
-            columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalID) });
-            columnValues.Add("ProjectOrUnit", header.Slip);
-            columnValues.Add("position", header.Name);
-            columnValues.Add("maritalstatus", header.JoiningDate);
-            columnValues.Add("joindate", header.Designation);
-            columnValues.Add("dateofnewpsa", header.PaymentMode);
+        //public bool UpdateHeader(FeeSlipVM header)
+        //{
+        //    var columnValues = new Dictionary<string, object>();
+        //    int? ID = header.ID;
+        //    columnValues.Add("professional", new FieldLookupValue { LookupId = Convert.ToInt32(header.ProfessionalID) });
+        //    columnValues.Add("ProjectOrUnit", header.Slip);
+        //    columnValues.Add("position", header.Name);
+        //    columnValues.Add("maritalstatus", header.JoiningDate);
+        //    columnValues.Add("joindate", header.Designation);
+        //    columnValues.Add("dateofnewpsa", header.PaymentMode);
 
-            try
-            {
-                SPConnector.UpdateListItem(SP_HEADER_LIST_NAME, ID, columnValues, _siteUrl);
-            }
-            catch (Exception e)
-            {
-                logger.Debug(e.Message);
-                return false;
-            }
-            var entitiy = new FeeSlipVM();
-            entitiy = header;
-            return true;
-        }
+        //    try
+        //    {
+        //        SPConnector.UpdateListItem(SP_HEADER_LIST_NAME, ID, columnValues, _siteUrl);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        logger.Debug(e.Message);
+        //        return false;
+        //    }
+        //    var entitiy = new FeeSlipVM();
+        //    entitiy = header;
+        //    return true;
+        //}
     }
 }
