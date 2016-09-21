@@ -321,6 +321,8 @@
     <Content Include="bin\WebGrease.dll" />
     <Content Include="bin\zh-CN\Kendo.Mvc.resources.dll" />
     <Content Include="Content\bi.css" />
+    <Content Include="Content\bootstrap-1.1.0.css" />
+    <Content Include="Content\bootstrap-1.1.0.min.css" />
     <Content Include="Content\custom.css" />
     <Content Include="Content\fin-style.css" />
     <Content Include="Content\home.css" />
@@ -483,6 +485,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

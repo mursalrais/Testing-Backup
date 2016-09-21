@@ -786,3 +786,9 @@ Please try again.
 2016-09-20 23:56:19.6384 MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService Microsoft.SharePoint.Client.ServerException: Invalid data has been used to update the list item. The field you are trying to update may be read only.
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
    at MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService.CreateManpowerRequisition(ManpowerRequisitionVM viewModel) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRManpowerRequisitionService.cs:line 105
+2016-09-21 12:16:20.7416 MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService System.Net.Mail.SmtpException: The operation has timed out.
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 45
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceMonitoringService.CreatePerformanceMonitoringDetails(Nullable`1 headerID, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceMonitoringService.cs:line 139
+2016-09-21 14:06:49.5633 MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService System.Net.Mail.SmtpException: Mailbox unavailable. The server response was: 5.3.4 554-554 5.2.0 STOREDRV.Deliver; delivery result banner
+   at MCAWebAndAPI.Service.Utils.EmailUtil.Send(String emailAddress, String subject, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\EmailUtil.cs:line 45
+   at MCAWebAndAPI.Service.HR.Recruitment.PerformanceEvaluationService.CreatePerformanceEvaluationDetails(Nullable`1 headerID, String emailMessage) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\PerformanceEvaluationService.cs:line 142

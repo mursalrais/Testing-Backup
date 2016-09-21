@@ -142,6 +142,12 @@
                 $("form").submit();
             });
 
+            $(function () {
+                $('#CalendarEventDate').datetimepicker({
+                    showMeridian: false
+                });
+            });
+
         });
 
         function onSuccess(data) {
