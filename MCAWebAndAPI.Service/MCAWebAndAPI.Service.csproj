@@ -183,6 +183,7 @@
     <Compile Include="Common\ProfessionalService.cs" />
     <Compile Include="Common\VendorService.cs" />
     <Compile Include="Common\WBSService.cs" />
+    <Compile Include="Common\WBSServiceEx.cs" />
     <Compile Include="Common\WorkflowService.cs" />
     <Compile Include="Converter\CSVConverter.cs" />
     <Compile Include="Converter\PDFConverter.cs" />
