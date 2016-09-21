@@ -446,7 +446,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (adjustmentData != null)
                     {
-                        payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                        var debitOrCredit = adjustmentData.DebitOrCredit;
+                        if (debitOrCredit == "Debit")
+                        {
+                            adjustmentData.AdjustmentAmount = adjustmentData.AdjustmentAmount * -1;
+                            payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                        }
+                        if (debitOrCredit == "Credit")
+                        {
+                            payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                        }
                     }
 
                     var spotData = _allAdjustments.FirstOrDefault(e =>
@@ -455,7 +464,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (spotData != null)
                     {
-                        payrollWorksheet[rowIndex].SpotAward = spotData.AdjustmentAmount;
+                        var debitOrCredit = spotData.DebitOrCredit;
+                        if (debitOrCredit == "Debit")
+                        {
+                            spotData.AdjustmentAmount = spotData.AdjustmentAmount * -1;
+                            payrollWorksheet[rowIndex].SpotAward = spotData.AdjustmentAmount;
+                        }
+                        if (debitOrCredit == "Credit")
+                        {
+                            payrollWorksheet[rowIndex].SpotAward = spotData.AdjustmentAmount;
+                        }
                     }
 
                     var retentionData = _allAdjustments.FirstOrDefault(e =>
@@ -464,7 +482,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (retentionData != null)
                     {
-                        payrollWorksheet[rowIndex].RetentionPayment = retentionData.AdjustmentAmount;
+                        var debitOrCredit = retentionData.DebitOrCredit;
+                        if (debitOrCredit == "Debit")
+                        {
+                            retentionData.AdjustmentAmount = retentionData.AdjustmentAmount * -1;
+                            payrollWorksheet[rowIndex].RetentionPayment = retentionData.AdjustmentAmount;
+                        }
+                        if (debitOrCredit == "Credit")
+                        {
+                            payrollWorksheet[rowIndex].RetentionPayment = retentionData.AdjustmentAmount;
+                        }
                     }
 
                     var overtimeData = _allAdjustments.FirstOrDefault(e =>
@@ -473,7 +500,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (overtimeData != null)
                     {
-                        payrollWorksheet[rowIndex].Overtime = overtimeData.AdjustmentAmount;
+                        var debitOrCredit = overtimeData.DebitOrCredit;
+                        if (debitOrCredit == "Debit")
+                        {
+                            overtimeData.AdjustmentAmount = overtimeData.AdjustmentAmount * -1;
+                            payrollWorksheet[rowIndex].Overtime = overtimeData.AdjustmentAmount;
+                        }
+                        if (debitOrCredit == "Credit")
+                        {
+                            payrollWorksheet[rowIndex].Overtime = overtimeData.AdjustmentAmount;
+                        }
                     }
 
                     var deductionData = _allAdjustments.FirstOrDefault(e =>
@@ -482,7 +518,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
                     if (deductionData != null)
                     {
-                        payrollWorksheet[rowIndex].Deduction = deductionData.AdjustmentAmount;
+                        var debitOrCredit = deductionData.DebitOrCredit;
+                        if (debitOrCredit == "Debit")
+                        {
+                            deductionData.AdjustmentAmount = deductionData.AdjustmentAmount * -1;
+                            payrollWorksheet[rowIndex].Deduction = deductionData.AdjustmentAmount;
+                        }
+                        if (debitOrCredit == "Credit")
+                        {
+                            payrollWorksheet[rowIndex].Deduction = deductionData.AdjustmentAmount;
+                        }
                     }
                 }
             }

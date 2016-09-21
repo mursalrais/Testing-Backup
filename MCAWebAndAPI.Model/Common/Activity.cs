@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Model.ProjectManagement.Common
+namespace MCAWebAndAPI.Model.Common
 {
     public class Activity : Item
     {

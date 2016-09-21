@@ -26,6 +26,11 @@ namespace MCAWebAndAPI.Web.Controllers
             return new HRDataMasterController().GetProfessionals();
         }
 
+        public JsonResult GetProfessionalsActive()
+        {
+            return new HRDataMasterController().GetProfessionalsActive();
+        }
+
         public JsonResult GetEventBudgetsDirectPayment()
         {
             return GetEventBudgets(EventBudgetService.GetChoice.DirectPayment);
@@ -113,7 +118,7 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 e.ID,
                 e.Title,
-                Desc = e.ID == -1 ? string.Empty : string.Format("{0} - {1}", e.ID, e.Name)
+                Desc = e.ID == -1 ? string.Empty : string.Format("{0} - {1}", e.Title, e.Name)
             }), JsonRequestBehavior.AllowGet);
         }
         

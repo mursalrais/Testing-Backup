@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MCAWebAndAPI.Model.ProjectManagement.Common
+namespace MCAWebAndAPI.Model.Common
 {
-    public class WBSMapping : Item
+    public class WBS : Item
     {
         string _WBSID;
         string _WBSDescription;

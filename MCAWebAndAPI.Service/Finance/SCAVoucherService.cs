@@ -311,7 +311,7 @@ namespace MCAWebAndAPI.Service.Finance
                 scvItem.GLID = Convert.ToInt32((item[FIELD_NAME_GL] as FieldLookupValue).LookupId.ToString());
 
                 scvItem.WBSID = Convert.ToInt32(item[FieldNameItem_WBSID]);
-                WBSMapping wbs = Common.WBSMasterService.Get(siteUrl, scvItem.WBSID);
+                WBS wbs = Common.WBSService.Get(siteUrl, scvItem.WBSID);
                 scvItem.WBS = wbs.WBSIDDescription;
 
                 scvItem.GL = string.Format("{0} - {1}", (item[FIELD_NAME_SCA_GL_ID] as FieldLookupValue).LookupValue.ToString(), (item[FIELD_NAME_SCA_GL_VALUE] as FieldLookupValue).LookupValue.ToString());

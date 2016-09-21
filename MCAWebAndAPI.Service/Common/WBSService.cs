@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MCAWebAndAPI.Model.ProjectManagement.Common;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Service.ProjectManagement.Common;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.Common
 {
-    public class WBSMasterService : IWBSMasterService
+    public class WBSService : IWBSMasterService
     {
-        //public const string SP_WBSMAPPING_IN_PROJECT_LIST_NAME = "WBSMapping";
-        public const string SP_WBSMAPPING_IN_PROGRAM_LIST_NAME = "WBS Mapping";
+        public const string ListName = "WBS Mapping";
 
-        public const string SP_ACTIVITY_LIST_NAME = "Activity";
-        public const string SP_SUB_ACTIVITY_LIST_NAME = "Sub Activity";
+        public const string ListNameActivity = "Activity";
+        public const string ListNameSubActivity = "Sub Activity";
 
         /// <summary>
         /// Gets a WBSMapping by its id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static WBSMapping Get(string siteUrl, int id)
+        public static WBS Get(string siteUrl, int id)
         {
-            var item = SPConnector.GetListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, id, GetCompactProgramSiteUrl(siteUrl));
+            var item = SPConnector.GetListItem(ListName, id, GetCompactProgramSiteUrl(siteUrl));
 
             return ConvertToVM(item);
         }
 
-        public static IEnumerable<WBSMapping> GetAll(string siteUrl)
+        public static IEnumerable<WBS> GetAll(string siteUrl)
         {
-            var wbs = new List<WBSMapping>();
+            var wbs = new List<WBS>();
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListName, GetCompactProgramSiteUrl(siteUrl)))
             {
                 wbs.Add(ConvertToVM(item));
             }
@@ -43,7 +42,7 @@ namespace MCAWebAndAPI.Service.Common
         public static bool UpdateWBSMapping(string siteUrl)
         {
             var wbsList = GetAll(siteUrl);
-            var wbsProjectDict = new Dictionary<string, WBSMapping>();
+            var wbsProjectDict = new Dictionary<string, WBS>();
 
             foreach (var item in wbsList)
             {
@@ -56,7 +55,7 @@ namespace MCAWebAndAPI.Service.Common
             var wbsProgramDict = new Dictionary<string, ListItem>();
             var anyUpdatedValue = false;
 
-            foreach (var item in SPConnector.GetList(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, siteUrl))
+            foreach (var item in SPConnector.GetList(ListName, siteUrl))
             {
                 try
                 {
@@ -91,7 +90,7 @@ namespace MCAWebAndAPI.Service.Common
         {
             var items = new List<Activity>();
 
-            foreach (var item in SPConnector.GetList(SP_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListNameActivity, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToActivityModel(item));
             }
@@ -103,7 +102,7 @@ namespace MCAWebAndAPI.Service.Common
         {
             var items = new List<SubActivity>();
 
-            foreach (var item in SPConnector.GetList(SP_SUB_ACTIVITY_LIST_NAME, GetCompactProgramSiteUrl(siteUrl)))
+            foreach (var item in SPConnector.GetList(ListNameSubActivity, GetCompactProgramSiteUrl(siteUrl)))
             {
                 items.Add(ConvertToSubActivityModel(item));
             }
@@ -148,7 +147,7 @@ namespace MCAWebAndAPI.Service.Common
         //    return items;
         //}
 
-        private static bool AppendIfNewWBSExist(string siteUrl, Dictionary<string, WBSMapping> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
+        private static bool AppendIfNewWBSExist(string siteUrl, Dictionary<string, WBS> wbsProjectDict, Dictionary<string, ListItem> wbsProgramDict)
         {
             var itemKeysToAppend = new List<string>();
             foreach (var item in wbsProjectDict)
@@ -175,7 +174,7 @@ namespace MCAWebAndAPI.Service.Common
 
                 try
                 {
-                    SPConnector.AddListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, columnValues, siteUrl);
+                    SPConnector.AddListItem(ListName, columnValues, siteUrl);
                 }
                 catch (Exception e)
                 {
@@ -186,7 +185,7 @@ namespace MCAWebAndAPI.Service.Common
             return true;
         }
 
-        private static bool UpdateIfChanged(string siteUrl, ListItem item, Dictionary<string, WBSMapping> wbsDictionary)
+        private static bool UpdateIfChanged(string siteUrl, ListItem item, Dictionary<string, WBS> wbsDictionary)
         {
             var key = Convert.ToString(item["WBS_x0020_ID"]);
             if (!wbsDictionary.ContainsKey(key))
@@ -214,13 +213,12 @@ namespace MCAWebAndAPI.Service.Common
             {
                 try
                 {
-                    SPConnector.UpdateListItem(SP_WBSMAPPING_IN_PROGRAM_LIST_NAME, Convert.ToInt32(item["ID"]),
+                    SPConnector.UpdateListItem(ListName, Convert.ToInt32(item["ID"]),
                         updatedValues, siteUrl);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    //Logger.Error(e.Message);
                     return false;
                 }
             }
@@ -259,9 +257,9 @@ namespace MCAWebAndAPI.Service.Common
                 string.Compare(e.ActivityName, subActivity.ActivityName, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
-        private static WBSMapping ConvertToVM(ListItem item)
+        private static WBS ConvertToVM(ListItem item)
         {
-            return new WBSMapping
+            return new WBS
             {
                 ID = Convert.ToInt32(item["ID"]),
                 WBSID = Convert.ToString(item["WBS_x0020_ID"]),

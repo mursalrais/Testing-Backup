@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
+using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
@@ -141,7 +142,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                WBSMapping wbs = COMWBSController.Get(Convert.ToInt32(viewModel.WBS.Value));
+                WBS wbs = COMWBSController.Get(Convert.ToInt32(viewModel.WBS.Value));
                 viewModel.WBSDescription = wbs.WBSIDDescription;
 
                 service.Update(viewModel, COMProfessionalController.GetAll());

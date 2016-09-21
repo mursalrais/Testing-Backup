@@ -256,7 +256,7 @@ namespace MCAWebAndAPI.Service.Finance
             detail.WBSId = Convert.ToInt32(item[EventBudgetItemFieldName_WBSId]);
             if (detail.WBSId > 0)
             {
-                WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, detail.WBSId);
+                WBS wbsMapping = Common.WBSService.Get(siteUrl, detail.WBSId);
                 detail.WBS.Value = detail.WBSId;
                 detail.WBS.Text = wbsMapping.WBSIDDescription;
                 detail.WBSDesription = string.Format("{0}-{1}", wbsMapping.WBSID, wbsMapping.WBSIDDescription);
@@ -370,7 +370,7 @@ namespace MCAWebAndAPI.Service.Finance
                 updatedValue.Add(EventBudgetItemFieldName_EventBudgetID, headerID);
 
                 var wbsId = Convert.ToInt32(viewModel.WBS.Value);
-                WBSMapping wbsMapping = Common.WBSMasterService.Get(siteUrl, wbsId);
+                WBS wbsMapping = Common.WBSService.Get(siteUrl, wbsId);
 
                 updatedValue.Add(EventBudgetItemFieldName_WBSId, wbsId);
                 updatedValue.Add(EventBudgetItemFieldName_WBSDescription, wbsMapping.WBSIDDescription);
