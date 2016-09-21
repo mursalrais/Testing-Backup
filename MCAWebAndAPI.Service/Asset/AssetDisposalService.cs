@@ -40,6 +40,7 @@ namespace MCAWebAndAPI.Service.Asset
                 SPConnector.AddListItem(SP_MON_FEE_LIST_NAME, columnValues, _siteUrl);
 
                 var id = SPConnector.GetLatestListItemID("Asset Disposal", _siteUrl);
+
                 if (header.attach.FileName != "" || header.attach.FileName != null)
                 {
                     SPConnector.AttachFile("Asset Disposal", id, header.attach, _siteUrl);
@@ -158,8 +159,16 @@ namespace MCAWebAndAPI.Service.Asset
         public AssetDisposalVM GetHeader(int? ID, string SiteUrl)
         {
 
+            var ff = SPConnector.GetListItem("Asset Disposal", ID, _siteUrl);
 
-            var filename = SPConnector.GetAttachFileName("Asset Disposal", ID, _siteUrl);
+            var FV = Convert.ToString(ff["Attachments"]);
+            var filename = "";
+
+            if (FV == "true")
+            {
+                filename = SPConnector.GetAttachFileName("Asset Disposal", ID, _siteUrl);
+            }
+
             var listItem = SPConnector.GetListItem(SP_MON_FEE_LIST_NAME, ID, _siteUrl);
             var viewModel = new AssetDisposalVM();
             viewModel.filename = filename;
