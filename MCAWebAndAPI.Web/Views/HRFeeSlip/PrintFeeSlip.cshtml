@@ -1,0 +1,102 @@
+﻿@using System.Data
+@using MCAWebAndAPI.Model.ViewModel.Form.Common
+@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using System.Collections.Generic
+
+@model FeeSlipVM
+
+@{
+    ViewBag.Title = "Print Fee Slip";
+    Layout = "~/Views/Shared/_LayoutPDF.cshtml";
+}
+
+
+<div class="form-horizontal">
+    <div class="row" style="text-align: center; margin-top: 20px;">
+        <div id="logo-group" class="row">
+            <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
+        </div>
+        <div class="row" style="margin-top:5px;font-weight:bold;">
+            MCA Indonesia
+        </div>
+        <div class="row" style="margin-top:10px; font-weight:bold;">
+            Petty Cash Payment Voucher
+        </div>
+    </div>
+    @*<div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td colspan="3">
+                        <div class="row" style="margin-left:2px; margin-bottom:10px; font-weight:bold;">
+                            I. PETTY CASH ADVANCE
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="150px">Voucher No</td>
+                    <td width="2px">:</td>
+                    <td>@Model.TransactionNo</td>
+                    <td width="150px">Date</td>
+                    <td width="2px">:</td>
+                    <td>@Model.Date.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <td width="150px">Paid To</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.PaidTo.Value</td>
+                </tr>
+                <tr>
+                    <td width="150px">Amount Paid</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.Amount</td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Amount in Words</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.AmountPaidInWord</td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Reason of payment</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.ReasonOfPayment</td>
+                </tr>
+
+                <tr>
+                    <td width="150px">Fund</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.Fund</td>
+                </tr>
+                <tr>
+                    <td width="150px">WBS</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.WBS.Text</td>
+                </tr>
+
+                <tr>
+                    <td width="150px">GL</td>
+                    <td width="2px">:</td>
+                    <td colspan="4">@Model.GL.Text</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>*@
+
+    
+
+</div>
+
+
+
+
+
+
+<style type="text/css">
+
+
+</style>
+
+
+
