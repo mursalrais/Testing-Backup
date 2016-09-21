@@ -464,12 +464,16 @@ namespace MCAWebAndAPI.Service.Common
 
             var userNames = await getApproverNamesTask;
             var userName = userNames.FirstOrDefault();
-            viewModel.ApproverNameText = userName.Name;
-            viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+            if (userName != null)
             {
-                Text = userName.Name,
-                Value = userName.ID,
-            });
+                viewModel.ApproverNameText = userName.Name;
+
+                viewModel.ApproverName = AjaxComboBoxVM.GetDefaultValue(new AjaxComboBoxVM
+                {
+                    Text = userName.Name,
+                    Value = userName.ID,
+                });
+            }
 
             return viewModel;
         }

@@ -100,6 +100,38 @@ namespace MCAWebAndAPI.Web.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult EditAdjustmentData(FormCollection form, AdjustmentDataVM viewModel)
+        {
+            var siteUrl = SessionManager.Get<string>("SiteUrl");
+            _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            string period = Convert.ToString(viewModel.periodDate);
+            bool checkadjust;
+
+            checkadjust = _service.CheckEditRequest(viewModel);
+
+            if (checkadjust == true)
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+            }
+
+            try
+            {
+                _service.CreateAdjustmentData(period, viewModel);
+            }
+            catch (Exception e)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse(e);
+            }
+
+            return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.AdjustmentList);
+
+        }
+
         public async Task<ActionResult> GetAdjustmentDetails(string period)
         {
             var viewmodel = new AdjustmentDataVM();

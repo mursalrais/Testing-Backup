@@ -88,8 +88,17 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get from existing session variable or create new if doesn't exist
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            var emptyTable = _service.getTable("Fixed Asset");
-            SessionManager.Set("CSVDataTable", emptyTable);
+            var dataTable = SessionManager.Get<System.Data.DataTable>("CSVDataTable");
+            var emptyTable = new DataTable();
+            if (dataTable.Rows.Count == 0)
+            {
+                emptyTable = _service.getTable("Fixed Asset");
+                SessionManager.Set("CSVDataTable", emptyTable);
+            }
+            else
+            {
+                emptyTable = dataTable;
+            }
 
             var viewModel = new AssetReportVM();
             viewModel.dtDetails = emptyTable;
@@ -121,8 +130,17 @@ namespace MCAWebAndAPI.Web.Controllers
             // Get from existing session variable or create new if doesn't exist
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _service.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
-            var emptyTable = _service.getTable("Small Value Asset");
-            SessionManager.Set("CSVDataTable", emptyTable);
+            var dataTable = SessionManager.Get<System.Data.DataTable>("CSVDataTable");
+            var emptyTable = new DataTable();
+            if (dataTable.Rows.Count == 0)
+            {
+                emptyTable = _service.getTable("Small Value Asset");
+                SessionManager.Set("CSVDataTable", emptyTable);
+            }
+            else
+            {
+                emptyTable = dataTable;
+            }
 
             var viewModel = new AssetReportVM();
             viewModel.dtDetails = emptyTable;
