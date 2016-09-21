@@ -188,7 +188,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         //Input Interview Result I
         public ActionResult InputInterviewResult(string siteurl = null, int? ID = null, int? posMan = null )
-        {
+      {
             //mandatory: get site url
             _service.SetSiteUrl(siteurl);
             SessionManager.Set("siteurl", siteurl);

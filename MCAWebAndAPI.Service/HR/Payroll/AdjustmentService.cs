@@ -41,6 +41,33 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             foreach (var cekadjust in header.AdjustmentDetails)
             {
+                foreach (var getadjust in adjustmentlist)
+                {
+                    if (cekadjust.ddlProfessional.Value == getadjust.ddlProfessional.Value && cekadjust.ajusmentType.Text == getadjust.ajusmentType.Text)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool CheckEditRequest(AdjustmentDataVM header)
+        {
+            var viewModel = new CompensatoryVM();
+
+            var columnValues = new Dictionary<string, object>();
+
+            var adjustmentlist = new List<AdjustmentDetailsVM>();
+
+            foreach (var detailitem in SPConnector.GetList(SP_AJUDATA_LIST_NAME, _siteUrl, ""))
+            {
+                adjustmentlist.Add(ConvertToAdjusDetailVM(detailitem));
+            }
+
+            foreach (var cekadjust in header.AdjustmentDetails)
+            {
                 if (cekadjust.EditMode != 0)
                 {
                     foreach (var getadjust in adjustmentlist)
