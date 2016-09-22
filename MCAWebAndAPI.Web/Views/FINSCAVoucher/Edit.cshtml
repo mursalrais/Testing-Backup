@@ -6,13 +6,13 @@
 *@
 
 @using (Html.BeginForm("Edit", "FINSCAVoucher",
-    FormMethod.Post,
-    new
-    {
-        @id = "formEditSCA",
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                FormMethod.Post,
+                new
+                {
+                    @id = "formEditSCA",
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
     <fieldset>
         <legend>Special Cash Advance Voucher</legend>
@@ -26,7 +26,7 @@
                 @Html.Partial("_GeneralFormDisplay", Model)
             }
         </div>
-    
+
         <legend>Item Detail</legend>
         <div class="row">
             @Html.Partial("_DisplayEventBudgetItems", Model.SCAVoucherItems)
@@ -35,6 +35,8 @@
         @Html.HiddenFor(m => m.ID, new { @id = "hdnSCAVoucherID" })
         @Html.HiddenFor(m => m.SCAVoucherNo)
         @Html.HiddenFor(m => m.Action)
+        @Html.HiddenFor(m => m.ClientDateTime)
+
     </fieldset>
 
     <div class="form-actions">

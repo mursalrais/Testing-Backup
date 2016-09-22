@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -307,16 +308,13 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             byte[] pdfBuf = null;
             string content;
 
-            string footer = string.Empty;
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
 
-            //TODO: Resolve user name
-            string userName = "xxxx";
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            if (viewModel.Modified > viewModel.Created)
-            {
-                DateTime dt = DateTime.Now;
-                footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
-            }
+            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
