@@ -59,9 +59,14 @@
     <script>
         
         $(document).ready(function () {
+            var date = $("#cmpYearDate").val();
+            date = date.split("/");
+            var year = parseInt(date[2], 10);
+
             debugger;
             $("#com-title").prop('readonly', 'true');
-            $("#com-title").prop("value", $("#cmpTitle").val());
+            $("#com-title").prop("value", year);
+            $("#cmpTitle").prop("value", year);
 
             $('#print-button').click(function (e) {
                 $("#ParentDiv").show();

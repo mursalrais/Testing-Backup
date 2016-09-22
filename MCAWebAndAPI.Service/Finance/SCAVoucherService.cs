@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 using System.Web;
 using MCAWebAndAPI.Model.Common;
 using MCAWebAndAPI.Model.HR.DataMaster;
-using MCAWebAndAPI.Model.ProjectManagement.Common;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
-using MCAWebAndAPI.Service.Common;
-using MCAWebAndAPI.Service.HR.Common;
 using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
@@ -25,15 +22,18 @@ namespace MCAWebAndAPI.Service.Finance
     public class SCAVoucherService : ISCAVoucherService
     {
         #region List Definition
+
         private const string LIST_NAME_SCAVOUCHER = "SCA Voucher";
         private const string LIST_NAME_SCAVOUCHER_ITEM = "SCA Voucher Item";
         private const string LIST_NAME_EVENT_BUDGET = "Event Budget";
         private const string LIST_NAME_EVENT_BUDGET_ITEM = "Event Budget Item";
         private const string LIST_NAME_SCA_DOCUMENT = "SCA Voucher Documents";
         private const string LIST_NAME_SCAVOUCHER_DOC = "SCA_x0020_Voucher";
-        #endregion
+
+        #endregion List Definition
 
         #region List Field Definition
+
         private const string FIELD_NAME_ID = "ID";
         private const string FIELD_NAME_SCAVOUCHER = "SCAVoucher";
         private const string FIELD_NAME_SCA_NO = "Title";
@@ -81,7 +81,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string EVENT_BUDGET_FIELD_UOMQUANTITY = "UoMQuantity";
         private const string EVENT_BUDGET_FIELD_SCA = "SCA";
         private const string EVENT_BUDGET_FIELD_SCA_VALUE = "0";
-        #endregion
+
+        #endregion List Field Definition
 
         public SCAVoucherService(string siteUrl)
         {
@@ -89,7 +90,7 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
         private string siteUrl = string.Empty;
-        static Logger logger = LogManager.GetCurrentClassLogger();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
         public int GetActivityIDByEventBudgetID(int eventBudgetID)
         {
@@ -146,7 +147,6 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 SPConnector.AddListItem(LIST_NAME_SCAVOUCHER, columnValues, siteUrl);
                 result = SPConnector.GetLatestListItemID(LIST_NAME_SCAVOUCHER, siteUrl);
-
             }
             catch (ServerException e)
             {
@@ -210,7 +210,6 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, siteUrl);
                 result = true;
-
             }
             catch (Exception e)
             {
@@ -232,7 +231,6 @@ namespace MCAWebAndAPI.Service.Finance
             {
                 SPConnector.UpdateListItem(LIST_NAME_SCAVOUCHER, scaVoucher.ID, columnValues, siteUrl);
                 result = true;
-
             }
             catch (Exception e)
             {
@@ -494,7 +492,6 @@ namespace MCAWebAndAPI.Service.Finance
                 }
             }
         }
-
 
         private static List<string> GetIDItemDetails(string siteUrl, int headerID)
         {

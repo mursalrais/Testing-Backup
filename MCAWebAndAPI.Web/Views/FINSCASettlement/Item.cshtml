@@ -31,6 +31,7 @@
                 @Html.HiddenFor(m => m.ID)
                 @Html.HiddenFor(m => m.DocNo)
                 @Html.HiddenFor(m => m.Operation)
+                @Html.HiddenFor(m => m.UserEmail)
             </div>
         </div>
         <div class="row">
@@ -135,7 +136,7 @@
                     alert('Please make sure that all required fields are filled');
                     return;
                 }
-
+                e.preventDefault();
                 var actionUrl = $('form').attr("action");
                 var newActionUrl = actionUrl.replace("Save", "Print");
 

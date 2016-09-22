@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Activity.cs" />
+    <Compile Include="Common\ActivityVM.cs" />
     <Compile Include="Common\DateTimeExtensions.cs" />
     <Compile Include="Common\DoubleExtentions.cs" />
     <Compile Include="Common\EventCalendar.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Common\WBSEx.cs" />
     <Compile Include="Common\Workflow.cs" />
     <Compile Include="HR\DataMaster\AdjustmentMaster.cs" />
+    <Compile Include="HR\DataMaster\DayOffBalanceMaster.cs" />
     <Compile Include="HR\DataMaster\DayOffRequest.cs" />
     <Compile Include="HR\DataMaster\DayOffTypeMaster.cs" />
     <Compile Include="ViewModel\Control\MultiSelectVM.cs" />
@@ -235,7 +237,6 @@
     <Compile Include="ViewModel\Form\Common\PendingApprovalItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowItemVM.cs" />
     <Compile Include="ViewModel\Form\Common\WorkflowRouterVM.cs" />
-    <Compile Include="ViewModel\Form\Finance\ActivityVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetItemVM.cs" />
     <Compile Include="ViewModel\Form\Finance\EventBudgetVM.cs" />
     <Compile Include="ViewModel\Form\Finance\OutstandingAdvanceVM.cs" />

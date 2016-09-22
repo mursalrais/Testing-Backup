@@ -194,7 +194,7 @@
                             if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
                             } else if (cektime == false) {
-                                alert("FinishTime can not be smaller than the starttime..!!");
+                                alert("Time (Finish) cannot be same or earlier than Time (Start)");
                             } else {
                                 $("form").submit();
                             }
@@ -244,7 +244,7 @@
                             if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
                             } else if (cektime == false) {
-                                alert("FinishTime can not be smaller than the starttime..!!");
+                                alert("Time (Finish) cannot be same or earlier than Time (Start)");
                             } else {
                                 $("form").submit();
                             }
@@ -290,7 +290,7 @@
                             if (valdate == false) {
                                 alert("Date you have chosen already exists, please choose another date..!!");
                             } else if (cektime == false) {
-                                alert("FinishTime can not be smaller than the starttime..!!");
+                                alert("Time (Finish) cannot be same or earlier than Time (Start)");
                             } else {
                                 $("#StatusForm").val("Draft")
                                 $("form").submit();
@@ -409,7 +409,7 @@
                                 var range;
 
                                 if ((finish + finishmin) <= (start + startmin)) {
-                                    alert("FinishTime can not be smaller than the starttime..!!")
+                                    alert("Time (Finish) cannot be same or earlier than Time (Start)")
                                     cektime = false;
                                 } else {
                                     cektime = true;
