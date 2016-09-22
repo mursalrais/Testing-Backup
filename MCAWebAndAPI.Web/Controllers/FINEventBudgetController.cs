@@ -14,6 +14,7 @@ using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using FinService = MCAWebAndAPI.Service.Finance;
 using System.Globalization;
+using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -197,19 +198,13 @@ namespace MCAWebAndAPI.Web.Controllers
             byte[] pdfBuf = null;
             string content;
 
-            string footer = string.Empty;
-
-            //TODO: Resolve user name
-            var allProfs = COMProfessionalController.GetAll();
-            Model.HR.DataMaster.ProfessionalMaster user = allProfs.FirstOrDefault(x => x.OfficeEmail == userEmail);
-            string userName = "xxxx";
-            if (user != null)
-                userName = user.Name;
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
 
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
             
-            footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
