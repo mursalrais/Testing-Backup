@@ -164,6 +164,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Print(FormCollection form, PettyCashPaymentVoucherVM viewModel)
         {
+            if (viewModel.ID == null)
+                return null;
+
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 

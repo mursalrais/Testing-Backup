@@ -35,14 +35,20 @@ namespace MCAWebAndAPI.Web.Controllers
         private ISCASettlementService service;
         private ISCAVoucherService serviceSCAVoucher;
 
-        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, string op = null, string userEmail = "", int? id = null)
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service = new SCASettlementService(siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+            viewModel.UserEmail = userEmail;
 
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel);

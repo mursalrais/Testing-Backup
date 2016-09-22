@@ -32,14 +32,21 @@ namespace MCAWebAndAPI.Web.Controllers
         private ISCAReimbursementService service;
         private IEventBudgetService serviceEB;
         
-        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, string op = null, string userEmail = "", int? id = null)
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service = new SCAReimbursementService(siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+            viewModel.UserEmail = userEmail;
+
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             SetAdditionalSettingToViewModel(ref viewModel);
@@ -91,6 +98,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Print(FormCollection form, SCAReimbursementVM viewModel)
         {
+            if (viewModel.ID == null)
+                return null;
+
+
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
