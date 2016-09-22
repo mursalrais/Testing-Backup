@@ -70,6 +70,9 @@
                     alert('Please make sure that all required fields are filled');
                     return;
                 }
+
+                $('#ClientDateTime').val(new Date());
+
                 e.preventDefault();
                 var actionUrl = $('form').attr("action");
                 var newActionUrl = actionUrl.replace("Edit", "Print");
@@ -78,7 +81,6 @@
                 $('form').submit();
 
             });
-
 
             var categoryDropDownList = $("#Category_Value").data("kendoDropDownList");
             toggleEventBudgetComboBox(categoryDropDownList.value());

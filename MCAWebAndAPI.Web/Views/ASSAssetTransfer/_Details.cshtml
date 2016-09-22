@@ -27,7 +27,7 @@
                                     ActionName = "GetAssetSubSAssetGrid"
                                 }).Width(200);
 
-                            columns.Bound(p => p.Province).ClientTemplate("#= Province.Value #" +
+                            columns.Bound(p => p.Province).ClientTemplate("#= Province.Text #" +
                               "<input type='hidden' class='province' name='Details[#= getWorkingRelationshipDetails(data)#].Province.Value' value='#= Province.Value #' />"
                             ).EditorViewData(new
                             {

@@ -53,6 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             JsonResult result;
 
+            siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             var activity = ActivityService.Get(siteUrl, activityId);
 
             IEnumerable<WBS> wbsMasters = GetAllCached();
