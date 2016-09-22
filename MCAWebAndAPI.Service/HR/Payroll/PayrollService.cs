@@ -221,6 +221,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             // Retrive required data to cut network round trip time
             var populateProfessionalDayOffRequestTask = worksheet.PopulateAllProfessionalDayOffRequests(professionalIDs);
 
+            // Retrive required data to cut network round trip time
+            var populateProfessionalDayOffBalanceTask = worksheet.populateProfessionalDayOffBalances(professionalIDs);
+
             // Populate rows
             worksheet.PopulateRows(dateRange, professionalIDs);
 
@@ -229,7 +232,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             {
                 await Task.WhenAll(populateProfessionalTask, populateValidPSATask, 
                     populateProfessionalMonthlyFeeTask, populateProfessionalDayOffRequestTask, 
-                    populateHolidaysAndPublicHolidays, populateAdjustmentTask);
+                    populateHolidaysAndPublicHolidays, populateAdjustmentTask, populateProfessionalDayOffBalanceTask);
             }
             catch (Exception e)
             {
