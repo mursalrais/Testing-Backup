@@ -281,9 +281,9 @@ namespace MCAWebAndAPI.Service.HR.Payroll
                 {
                     var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
 
-                    var annualDayOff = _allProfessionalDayOffBalances.FirstOrDefault(e =>
-                        e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
-                        IsAnnualDayOff(_dateRanges[indexDate], e, 1));
+                    //var annualDayOff = _allProfessionalDayOffBalances.FirstOrDefault(e =>
+                    //    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    //    IsAnnualDayOff(_dateRanges[indexDate], e, 1));
 
                     //if (annualDayOff != null)
                     //{
@@ -304,15 +304,15 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return payrollWorksheet;
         }
 
-        private static bool IsAnnualDayOff(DateTime date, DayOffBalanceMaster dayOffBalanceMaster, int flagNumber)
-        {
-            //var year = adjustmentMaster.AdjustmentPeriod.Year;
-            //var month = adjustmentMaster.AdjustmentPeriod.Month;
-            //var day = adjustmentMaster.AdjustmentPeriod.Day;
-            //var type = adjustmentMaster.AdjustmentType;
+        //private static bool IsAnnualDayOff(DateTime date, DayOffBalanceMaster dayOffBalanceMaster, int flagNumber)
+        //{
+        //    var year = adjustmentMaster.AdjustmentPeriod.Year;
+        //    var month = adjustmentMaster.AdjustmentPeriod.Month;
+        //    var day = adjustmentMaster.AdjustmentPeriod.Day;
+        //    var type = adjustmentMaster.AdjustmentType;
 
-            return year == date.Year && month == date.Month && day == date.Day;
-        }
+        //    return year == date.Year && month == date.Month && day == date.Day;
+        //}
 
         /// <summary>
         /// Columns retrived from Professional Master: Name, ProjectUnit, Position, BankAccountName, BankAccountNumber, Currency
