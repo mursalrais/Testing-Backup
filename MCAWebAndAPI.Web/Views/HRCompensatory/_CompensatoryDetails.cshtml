@@ -11,11 +11,11 @@
         columns.Bound(p => p.CmpHID).ClientTemplate("#= CmpHID #" +
         "<input type='hidden' name='ComplistDetails[#= GetDetailComplist(data)#].CmpHID' value='#= CmpHID #' />");
 
-        columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
-        "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
-
         columns.Bound(p => p.CmpDate).ClientTemplate("#=getDayName(CmpDate)#"
                            ).Width(150);
+
+        columns.Bound(p => p.CmpDate).ClientTemplate("#= kendo.toString(CmpDate, \"MM/dd/yyyy \") #" +
+        "<input type='hidden' id='Dateid#= GetDetailComplist(data)#' name='CompensatoryDetails[#= GetDetailComplist(data)#].CmpDate' value='#= CmpDate #' />");
 
         columns.Bound(p => p.StartTime).ClientTemplate("#= kendo.toString(StartTime, \"hh:mm tt\") #" +
       "<input id='Start#= GetDetailComplist(data)#' type='hidden' name='CompensatoryDetails[#= GetDetailComplist(data)#].StartTime' value='#= StartTime #' />");
