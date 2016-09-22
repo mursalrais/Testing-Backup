@@ -99,7 +99,9 @@
                 if (valdatermk == false) {
                     alert("remark must be inputed..!");
                 } else if (valdate == false) {
-                    alert("professional with same adjustment type already add in same period..!!");
+                    //Professional cannot have two same types of adjustment within the same period
+                    alert("Professional cannot have two same types of adjustment within the same period");
+                   // alert("professional with same adjustment type already add in same period..!!");
                 } else {
                     $("form").submit();
                 }

@@ -8,6 +8,7 @@ using System.Web;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Model.ViewModel.Form.Shared;
+using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Service.Utils;
 using Microsoft.SharePoint.Client;
 using NLog;
@@ -60,7 +61,6 @@ namespace MCAWebAndAPI.Service.Finance
 
         private const string EmailSubject = " Outstanding Advance Reminder";
         private const string StaffIDPrefix_Proffesional = "5";
-        private const string StaffIDPrefix_IC = "1";
         private const string StaffIDPrefix_Grantee = "4";
 
         private const string DefaultInvalid_Date = "0001/01/01";
@@ -76,6 +76,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         #endregion
 
+        private static string[] StaffIDPrefix_IC = new[] { "1", "2", "3" };
         private static string[] FieldNames = { "Date (Upload)", "Staff ID", "Staff Name", "Reference", "Due Date", "Currency", "Amount", "Project" };
 
         private enum ImportedFields
@@ -174,23 +175,26 @@ namespace MCAWebAndAPI.Service.Finance
             SaveAttachment(ID, reference, documents);
         }
 
-        public async Task SendEmailToProfessional(string message, OutstandingAdvanceVM viewModel)
+        public async Task SendEmail(string messageIC, string messageGr, OutstandingAdvanceVM viewModel, IEnumerable<VendorVM> vendors, string siteUrlHR)
         {
-            var vendor = SPConnector.GetListItem(ListName_Vendor, viewModel.Staff.Value, siteUrl);
-            var vendorId = vendor[FieldName_VendorID] == null ? "" : vendor[FieldName_VendorID].ToString();
-            var name = vendor[FieldName_VendorName] == null ? "" : vendor[FieldName_VendorName].ToString();
-            var email = vendor[FieldName_Email] == null ? "" : vendor[FieldName_Email].ToString();
-            if (IsIdependentConsultant(vendorId) || IsProfessional(vendorId))
+            var vendor = vendors.ToList().Find(v => v.ID == viewModel.Staff.Value);
+            var vendorId = vendor.VendorId;
+            viewModel.Staff.Text = vendor.Name;
+
+            if (IsIndependentConsultant(vendorId) || IsProfessional(vendorId))
             {
-                SendEmail(email, CreateMessage(name, message, viewModel));
+                var name = vendor.Name;
+                var email = vendor.Email;
+                SendEmail(email, CreateMessage(name, messageIC, viewModel));
+            }
+            else if (IsGrantee(vendorId))
+            {
+                SendEmailToGrantees(messageGr, viewModel, siteUrlHR);
             }
         }
 
-        public async Task SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, string siteUrlHR)
+        public void SendEmailToGrantees(string message, OutstandingAdvanceVM viewModel, string siteUrlHR)
         {
-            var staff = SPConnector.GetListItem(ListName_Vendor, viewModel.Staff.Value, siteUrl);
-            viewModel.Staff.Text = staff[FieldName_VendorName] == null ? "" : staff[FieldName_VendorName].ToString();
-
             var listPosition = new Dictionary<string, string>();
             listPosition.Add(Position_DED, ProjectUnit_ProgramDiv);
             listPosition.Add(Position_GrantManager, ProjectUnit_GreenProsperity);
@@ -320,7 +324,7 @@ namespace MCAWebAndAPI.Service.Finance
 
             if (vendor != null)
             {
-                if (IsIdependentConsultant(vendor.VendorId) || IsProfessional(vendor.VendorId))
+                if (IsIndependentConsultant(vendor.VendorId) || IsProfessional(vendor.VendorId))
                 {
                     if (oa.Currency.Value != CurrencyComboBoxVM.CurrencyIDR)
                     {
@@ -484,9 +488,9 @@ namespace MCAWebAndAPI.Service.Finance
         }
 
 
-        private static bool IsIdependentConsultant(string staffId)
+        private static bool IsIndependentConsultant(string staffId)
         {
-            return staffId.ToString().Substring(0, 1) == StaffIDPrefix_IC;
+            return Array.IndexOf(StaffIDPrefix_IC, staffId.Substring(0, 1)) > -1;
         }
 
         private static bool IsProfessional(string staffId)
@@ -604,7 +608,6 @@ namespace MCAWebAndAPI.Service.Finance
         private static List<OutstandingAdvanceVM> ReadCSV(HttpPostedFileBase file, IEnumerable<VendorVM> vendors, ref List<CSVErrorLogVM> errorLog)
         {
             List<OutstandingAdvanceVM> listOutstandingAdvance = new List<OutstandingAdvanceVM>();
-            OutstandingAdvanceVM outstandingAdvance = new OutstandingAdvanceVM();
             string fileName = file.FileName;
 
             BinaryReader b = new BinaryReader(file.InputStream);
@@ -625,7 +628,14 @@ namespace MCAWebAndAPI.Service.Finance
                         continue;
                     }
 
-                    ConvertRowToVM(fileName, row, ref outstandingAdvance, ref errorLog, vendors);
+                    if (string.IsNullOrWhiteSpace(row))
+                    {
+                        continue;
+                    }
+
+                    OutstandingAdvanceVM outstandingAdvance = new OutstandingAdvanceVM();
+
+                    outstandingAdvance = ConvertRowToVM(fileName, row, ref errorLog, vendors);
 
                     Validate(outstandingAdvance, fileName, ref errorLog, vendors);
 
@@ -644,13 +654,15 @@ namespace MCAWebAndAPI.Service.Finance
             return listOutstandingAdvance;
         }
 
-        private static void ConvertRowToVM(string fileName,  string row,ref OutstandingAdvanceVM oa, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
+        private static OutstandingAdvanceVM ConvertRowToVM(string fileName,  string row, ref List<CSVErrorLogVM> errorLog, IEnumerable<VendorVM> vendors)
         {
+            OutstandingAdvanceVM returnOA = new OutstandingAdvanceVM();
+
             if (!string.IsNullOrEmpty(row))
             {
                 string[] data = row.Split(';');
 
-                oa.DateOfUpload = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DateOfUpload], Convert.ToString(data[(int)ImportedFields.DateOfUpload]), ref errorLog);
+                returnOA.DateOfUpload = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DateOfUpload], Convert.ToString(data[(int)ImportedFields.DateOfUpload]), ref errorLog);
 
                 var fieldName = FieldNames[(int)ImportedFields.StaffId];
                 var staffName = data[(int)ImportedFields.StaffName];
@@ -680,7 +692,7 @@ namespace MCAWebAndAPI.Service.Finance
                 }
                 else
                 {
-                    oa.Staff.Value = vendor.ID;
+                    returnOA.Staff.Value = vendor.ID;
 
                     // Just because the ID is correct doesn't mean the name is correct too. So, check the name
                     vendor = vendors.ToList().Find(v => v.Name == staffName);
@@ -697,7 +709,7 @@ namespace MCAWebAndAPI.Service.Finance
                     }
                     else
                     {
-                        oa.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
+                        returnOA.Staff.Text = Convert.ToString(data[(int)ImportedFields.StaffName]);
                     }
 
                     // Actually we are not safe yet.
@@ -705,13 +717,15 @@ namespace MCAWebAndAPI.Service.Finance
                     // Logic should be developed here.
                 }
 
-                oa.Reference = Convert.ToString(data[(int)ImportedFields.Reference]);
-                oa.DueDate = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DueDate], Convert.ToString(data[(int)ImportedFields.DueDate]), ref errorLog);
+                returnOA.Reference = Convert.ToString(data[(int)ImportedFields.Reference]);
+                returnOA.DueDate = ConvertToDate(fileName, FieldNames[(int)ImportedFields.DueDate], Convert.ToString(data[(int)ImportedFields.DueDate]), ref errorLog);
 
-                oa.Currency.Value = Convert.ToString(data[(int)ImportedFields.Currency]);
-                oa.Amount = ConvertToDecimal(fileName, FieldNames[(int)ImportedFields.Amount], data[(int)ImportedFields.Amount], ref errorLog);
-                oa.Project.Value = Convert.ToString(data[(int)ImportedFields.Project]).Replace("\r", "");
+                returnOA.Currency.Value = Convert.ToString(data[(int)ImportedFields.Currency]);
+                returnOA.Amount = ConvertToDecimal(fileName, FieldNames[(int)ImportedFields.Amount], data[(int)ImportedFields.Amount], ref errorLog);
+                returnOA.Project.Value = Convert.ToString(data[(int)ImportedFields.Project]).Replace("\r", "");
             }
+
+            return returnOA;
         }
 
         //private static int? GetIDVendor(int staffId, IEnumerable<VendorVM> vendors)

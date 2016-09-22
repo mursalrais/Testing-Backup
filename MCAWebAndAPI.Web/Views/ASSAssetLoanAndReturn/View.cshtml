@@ -3,14 +3,14 @@
 @model AssetLoanAndReturnHeaderVM
 
 @using (Ajax.BeginForm("Update", "ASSAssetLoanAndReturn",
-                                                                                                                FormMethod.Post,
-                                                                                                                new AjaxOptions
-                                                                                                                {
-                                                                                                                    OnBegin = "onBeginForm",
-                                                                                                                    OnComplete = "onCompleteForm",
-                                                                                                                    OnSuccess = "onSuccessFormEmbed",
-                                                                                                                    OnFailure = "onFailureForm"
-                                                                                                                }, new { @class = "form-horizontal" }))
+                                                                                                                            FormMethod.Post,
+                                                                                                                            new AjaxOptions
+                                                                                                                            {
+                                                                                                                                OnBegin = "onBeginForm",
+                                                                                                                                OnComplete = "onCompleteForm",
+                                                                                                                                OnSuccess = "onSuccessFormEmbed",
+                                                                                                                                OnFailure = "onFailureForm"
+                                                                                                                            }, new { @class = "form-horizontal" }))
 
 
 {
@@ -29,7 +29,7 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Professional).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Professional)
+                    @Html.DisplayFor(m => m.Professional)
                 </div>
             </div>
             <div class="form-group">
@@ -49,35 +49,34 @@
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.LoanDate).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.LoanDate,new { id = "loandate" })
+                    @Html.DisplayFor(m => m.LoanDate, new { id = "loandate" })
                 </div>
             </div>
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Purpose).Class("col-md-4 control-label")
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Purpose)
+                    @Html.DisplayFor(m => m.Purpose)
                 </div>
             </div>
         </div>
 
         <legend>Asset Loan and Return Detail</legend>
         <div class="row">
-            @Html.Partial("_Details", Model.AssetLoanAndReturnItem)
+            @Html.Partial("_ViewDetails", Model.AssetLoanAndReturnItem)
         </div>
-
 
     </fieldset>
 
-        @Html.HiddenFor(m => m.ID)
-        @Html.HiddenFor(m => m.CancelURL)
-        <div>
-            <center>
-                <input class="k-button k-button-icontext k-grid-add" onclick="return saveAssignment()" type="submit" value="Save" />
-                <a href="@Model.CancelURL" target='_parent'>
-                    <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
-                </a>
-            </center>
-        </div>
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.CancelURL)
+    <div>
+        <center>
+          
+            <a href="@Model.CancelURL" target='_parent'>
+                <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
+            </a>
+        </center>
+    </div>
 
 
 
@@ -123,8 +122,8 @@
                 //}
 
                 //console.log(loandate);
-       
-               
+
+
                 window.top.location.href = "@Model.CancelURL";
 
             }

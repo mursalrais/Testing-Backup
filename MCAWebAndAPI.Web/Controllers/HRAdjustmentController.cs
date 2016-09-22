@@ -83,7 +83,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+               // return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+                return JsonHelper.GenerateJsonErrorResponse("Professional cannot have two same types of adjustment within the same period");
             }
 
             try
@@ -115,7 +116,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+                //return JsonHelper.GenerateJsonErrorResponse("professional with same adjustment type already add in same period..!!");
+                return JsonHelper.GenerateJsonErrorResponse("Professional cannot have two same types of adjustment within the same period");
             }
 
             try

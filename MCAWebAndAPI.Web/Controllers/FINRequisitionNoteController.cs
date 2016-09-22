@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,6 +50,9 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         private const string SuccessMsgFormatUpdated = "Requisition Note number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Requisition%20Note/All%20Items%20FIN.aspx";
+
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
 
         private IRequisitionNoteService reqNoteService;
         private IEventBudgetService eventBudgetService;
@@ -272,7 +276,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 
@@ -283,20 +287,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMaster(string activity = null)
+        public JsonResult GetWBSMaster(int activityId)
         {
-            return new COMWBSController().GetAllByActivityAsJsonResult(activity);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            //var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-
-            //reqNoteService = new RequisitionNoteService(siteUrl);
-            //var wbsMasters = reqNoteService.GetWBSMaster(activity);
-
-            //return Json(wbsMasters.Select(e => new
-            //{
-            //    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-            //    Text = (e.Title + "-" + e.WBSDescription)
-            //}), JsonRequestBehavior.AllowGet);
+            return new COMWBSController().GetAllByActivityAsJsonResult(siteUrl, activityId);
         }
 
         [HttpPost]
@@ -316,16 +311,14 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             byte[] pdfBuf = null;
             string content;
 
-            string footer = string.Empty;
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
 
-            //TODO: Resolve user name
-            string userName = "xxxx";
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            if (viewModel.Modified > viewModel.Created)
-            {
-                DateTime dt = DateTime.Now;
-                footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
-            }
+            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {

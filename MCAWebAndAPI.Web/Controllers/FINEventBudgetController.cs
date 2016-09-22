@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+
 using FinService = MCAWebAndAPI.Service.Finance;
-using System.Globalization;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -30,12 +32,15 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string FirstPageUrl = "{0}/Lists/Event%20Budget/AllItems.aspx";
         private const string PrintPageUrl = "~/Views/FINEventBudget/Print.cshtml";
 
-        IEventBudgetService service;
-        IRequisitionNoteService requisitionNoteService;
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+
+        private IEventBudgetService service;
+        private IRequisitionNoteService requisitionNoteService;
 
         public ActionResult Item(string siteUrl = null, int? id = null, string userEmail = "")
         {
-            if (userEmail==string.Empty)
+            if (userEmail == string.Empty)
             {
                 throw new InvalidOperationException("Invalid parameter: userEmail.");
             }
@@ -57,13 +62,10 @@ namespace MCAWebAndAPI.Web.Controllers
                 viewModel.RequisitionNoteId = rn.Item1;
                 viewModel.RequisitionNoteNo = rn.Item2;
 
-
                 Tuple<int, string> sca = new SCAVoucherService(siteUrl).GetIdAndNoByEventBudgetID(viewModel.ID.Value);
 
                 viewModel.SCAVoucherId = sca.Item1;
                 viewModel.SCAVoucherNo = sca.Item2;
-
-
             }
 
             SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
@@ -88,7 +90,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-
             service = new EventBudgetService(SessionManager.Get<string>(SharedController.Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
@@ -149,12 +150,12 @@ namespace MCAWebAndAPI.Web.Controllers
                 updateTaskRNOrSCA.Add(service.UpdateRequisitionNoteAsync(siteUrl, viewModel.RequisitionNoteId));
             }
 
-            if(viewModel.SCAVoucherId > 0)
+            if (viewModel.SCAVoucherId > 0)
             {
                 updateTaskRNOrSCA.Add(service.UpdateSCAVoucherAsync(siteUrl, viewModel.SCAVoucherId));
             }
 
-            if(updateTaskRNOrSCA.Count > 0)
+            if (updateTaskRNOrSCA.Count > 0)
             {
                 Task allTasks2 = Task.WhenAll(updateTaskRNOrSCA.ToArray());
                 await allTasks2;
@@ -176,13 +177,15 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Activity.TextField = "Text";
             viewModel.Activity.Cascade = "Project_Value";
             viewModel.Activity.Filter = "filterProject";
-
         }
 
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel, string userEmail = "")
         {
+            if (viewModel.ID == null)
+                return null;
+
             string RelativePath = PrintPageUrl;
-            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection,Request.Url.Authority);
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service = new EventBudgetService(siteUrl);
@@ -194,22 +197,14 @@ namespace MCAWebAndAPI.Web.Controllers
             byte[] pdfBuf = null;
             string content;
 
-            string footer = string.Empty;
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
 
-            //TODO: Resolve user name
-            var allProfs = COMProfessionalController.GetAll();
-            Model.HR.DataMaster.ProfessionalMaster user = allProfs.FirstOrDefault(x => x.OfficeEmail == userEmail);
-            string userName = "xxxx";
-            if (user != null)
-                userName = user.Name;
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            DateTime dt = DateTime.ParseExact(Request.Form[nameof(viewModel.ClientDateTime)].ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            if (dt == DateTime.MinValue)
-            {
-                //server's time better than no time.
-                dt = DateTime.Now;
-            }
-            footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -235,6 +230,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
-
     }
 }

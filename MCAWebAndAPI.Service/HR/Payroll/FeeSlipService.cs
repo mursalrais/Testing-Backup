@@ -243,10 +243,19 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
         public FeeSlipVM GetPopulatedModel()
         {
-          //  var model = new FeeSlipVM { FeeSlipDetails = GetProfessionals() };
-
+         
             var model = new FeeSlipVM() ;
             model.FeeSlipDetails = GetProfessionals();
+            // model.dtDetails = GetProfessional();
+            return model;
+        }
+
+        public FeeSlipVM GetModelPrint(FeeSlipVM viewModel)
+        {
+
+            var model = new FeeSlipVM();
+            model.FeeSlipDetails = viewModel.FeeSlipDetails.Where(c => c.Intchecklist == 1);
+           // model.FeeSlipDetails = 
             // model.dtDetails = GetProfessional();
             return model;
         }

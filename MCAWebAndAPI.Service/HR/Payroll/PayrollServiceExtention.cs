@@ -30,6 +30,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         private static IEnumerable<DayOffRequest> _allProfessionalDayOffRequests;
         private static IEnumerable<EventCalendar> _allHolidaysAndPublicHolidays;
         private static IEnumerable<AdjustmentMaster> _allAdjustments;
+        private static IEnumerable<DayOffBalanceMaster> _allProfessionalDayOffBalances;
 
         private static int[] _professionalIDs;
         private static DateTime[] _dateRanges;
@@ -101,6 +102,17 @@ namespace MCAWebAndAPI.Service.HR.Payroll
         public static async Task PopulateAllProfessionalMonthlyFee(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
         {
             _allProfessionalMonthlyFees = _dataMasterService.GetMonthlyFees(professionalIDs.ToArray());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <param name="professionalIDs"></param>
+        /// <returns></returns>
+        public static async Task populateProfessionalDayOffBalances(this List<PayrollWorksheetDetailVM> payrollWorksheet, IEnumerable<int> professionalIDs)
+        {
+            _allProfessionalDayOffBalances = _dayOffService.GetDayOffBalances(professionalIDs.ToArray());
         }
 
         /// <summary>
@@ -223,6 +235,7 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             payrollWorksheet.PopulateColumnsFromEventCalendar();
             payrollWorksheet.PopulateColumnsFromDayOff();
             payrollWorksheet.PopulateColumnsFromAdjustment();
+            payrollWorksheet.PopulateColumnsFromDayOffBalance();
 
             return payrollWorksheet;
         }
@@ -254,6 +267,52 @@ namespace MCAWebAndAPI.Service.HR.Payroll
 
             return dayOffRequestData != null;
         }
+
+        /// <summary>
+        /// Columns retrived from Day-Off Balance: Annual Day Off
+        /// </summary>
+        /// <param name="payrollWorksheet"></param>
+        /// <returns></returns>
+        private static List<PayrollWorksheetDetailVM> PopulateColumnsFromDayOffBalance(this List<PayrollWorksheetDetailVM> payrollWorksheet)
+        {
+            for (int indexProfessional = 0; indexProfessional < _professionalIDs.Length; indexProfessional++)
+            {
+                for (int indexDate = 0; indexDate < _dateRanges.Length; indexDate++)
+                {
+                    var rowIndex = indexProfessional * _dateRanges.Length + indexDate;
+
+                    //var annualDayOff = _allProfessionalDayOffBalances.FirstOrDefault(e =>
+                    //    e.ProfessionalID == _professionalIDs[indexProfessional] + string.Empty &&
+                    //    IsAnnualDayOff(_dateRanges[indexDate], e, 1));
+
+                    //if (annualDayOff != null)
+                    //{
+                    //    var debitOrCredit = annualDayOff.DebitOrCredit;
+                    //    if (debitOrCredit == "Debit")
+                    //    {
+                    //        annualDayOff.AdjustmentAmount = adjustmentData.AdjustmentAmount * -1;
+                    //        payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                    //    }
+                    //    if (debitOrCredit == "Credit")
+                    //    {
+                    //        payrollWorksheet[rowIndex].Adjustment = adjustmentData.AdjustmentAmount;
+                    //    }
+                    //}
+                }
+            }
+
+            return payrollWorksheet;
+        }
+
+        //private static bool IsAnnualDayOff(DateTime date, DayOffBalanceMaster dayOffBalanceMaster, int flagNumber)
+        //{
+        //    var year = adjustmentMaster.AdjustmentPeriod.Year;
+        //    var month = adjustmentMaster.AdjustmentPeriod.Month;
+        //    var day = adjustmentMaster.AdjustmentPeriod.Day;
+        //    var type = adjustmentMaster.AdjustmentType;
+
+        //    return year == date.Year && month == date.Month && day == date.Day;
+        //}
 
         /// <summary>
         /// Columns retrived from Professional Master: Name, ProjectUnit, Position, BankAccountName, BankAccountNumber, Currency

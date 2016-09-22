@@ -17,6 +17,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public bool checklist { get; set; }
 
+        public int Intchecklist { get; set; }
+
         public string Name { get; set; }
        
         public string Unit { get; set; }

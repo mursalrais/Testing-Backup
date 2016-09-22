@@ -5,16 +5,17 @@ using System.Web.Mvc;
 using MCAWebAndAPI.Model.ViewModel.Control;
 using MCAWebAndAPI.Service.Common;
 using MCAWebAndAPI.Service.Finance;
+using MCAWebAndAPI.Service.Shared;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+
 using FinService = MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Shared;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
     public class ComboBoxController : Controller
     {
-        IComboBoxService service;
+        private IComboBoxService service;
 
         public ComboBoxController()
         {
@@ -61,7 +62,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var activities = Service.Shared.ActivityService.GetActivities(siteUrl);
+            var activities = Service.Common.ActivityService.GetAll(siteUrl);
 
             return Json(activities.Select(e => new
             {
@@ -75,7 +76,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            var activities = Service.Shared.ActivityService.GetActivities(siteUrl,projectValue);
+            var activities = Service.Common.ActivityService.GetAllByProject(siteUrl, projectValue);
 
             return Json(activities.Select(e => new
             {
@@ -121,7 +122,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 Desc = e.ID == -1 ? string.Empty : string.Format("{0} - {1}", e.Title, e.Name)
             }), JsonRequestBehavior.AllowGet);
         }
-        
+
         public JsonResult GetGLMasters()
         {
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
@@ -131,7 +132,7 @@ namespace MCAWebAndAPI.Web.Controllers
             return Json(glMasters.Select(e => new
             {
                 Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-                Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : string.Format("{0} - {1}",e.Title, e.GLDescription)
+                Text = string.IsNullOrWhiteSpace(e.Title) ? string.Empty : string.Format("{0} - {1}", e.Title, e.GLDescription)
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -148,8 +149,6 @@ namespace MCAWebAndAPI.Web.Controllers
                 Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
                 Text = string.IsNullOrWhiteSpace(e.Name) ? string.Empty : e.Name
             }), JsonRequestBehavior.AllowGet);
-
         }
-
     }
 }

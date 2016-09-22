@@ -40,5 +40,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public IEnumerable<SCAReimbursementItemVM> ItemDetails { get; set; } = new List<SCAReimbursementItemVM>();
 
         public Operations Operation { get; set; }
+
+        public string UserEmail { get; set; }
+
+        public string ClientDateTime { get; set; } = string.Empty;
     }
 }

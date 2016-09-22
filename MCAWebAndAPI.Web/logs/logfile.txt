@@ -787,3 +787,20 @@ Please try again.
    at MCAWebAndAPI.Service.Utils.SPConnector.AddListItem(String listName, Dictionary`2 columnValues, String siteUrl) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\Utils\SPConnector.cs:line 420
    at MCAWebAndAPI.Service.HR.Recruitment.HRManpowerRequisitionService.CreateManpowerRequisition(ManpowerRequisitionVM viewModel) in D:\Work\IMS-Web-and-API\MCAWebAndAPI.Service\HR\Recruitment\HRManpowerRequisitionService.cs:line 105
 2016-09-21 11:24:34.3331 MCAWebAndAPI.Service.JobSchedulers.Schedulers.PayrollRunScheduler DefaultQuartzScheduler has been started at Wednesday, September 21, 2016 in site https://eceos2.sharepoint.com/sites/ims/hr
+2016-09-21 18:00:26.0187 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Mailbox unavailable. The server response was: 5.7.3 Requested action aborted; user not authenticated
+2016-09-21 18:03:02.7434 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Mailbox unavailable. The server response was: 5.7.3 Requested action aborted; user not authenticated
+2016-09-21 18:06:35.3307 MCAWebAndAPI.Service.HR.InsuranceClaim.InsuranceClaimService Mailbox unavailable. The server response was: 5.7.3 Requested action aborted; user not authenticated
+2016-09-22 09:43:01.8173 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
+2016-09-22 09:44:45.5746 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:46:08.6528 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:47:01.3716 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:47:42.1592 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:49:53.0888 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
+2016-09-22 09:50:39.5004 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
+2016-09-22 09:52:37.3367 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:54:34.1587 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:55:05.1951 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:56:51.7343 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 09:58:25.3734 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 10:02:02.8624 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
+2016-09-22 10:04:29.9623 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
