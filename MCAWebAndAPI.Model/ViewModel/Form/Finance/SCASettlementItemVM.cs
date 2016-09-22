@@ -26,7 +26,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         public string Payee { get; set; }
 
-        [DisplayName("Description of Expense")]
+        [DisplayName("Description of Expenses")]
         public string DescriptionOfExpense { get; set; }
 
         [UIHint("InGridAjaxComboBox")]

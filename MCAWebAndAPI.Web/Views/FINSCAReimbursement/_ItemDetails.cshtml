@@ -25,7 +25,8 @@
         columns.Bound(p => p.Payee).ClientTemplate("#= Payee #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].Payee' value='#= Payee #' />");
 
-        columns.Bound(p => p.DescriptionOfExpense).ClientTemplate("#= DescriptionOfExpense #" +
+        columns.Bound(p => p.DescriptionOfExpense).HeaderHtmlAttributes(
+    new { style = "white-space: normal" }).ClientTemplate("#= DescriptionOfExpense #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].DescriptionOfExpense' value='#= DescriptionOfExpense #' />");
 
         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +

@@ -4,47 +4,13 @@ namespace MCAWebAndAPI.Model.Common
 {
     public class SubActivity : Item
     {
-        private string _subActivityName;
-        private string _activityFK;
-        private string _scheduleStatus;
 
-        public string SubActivityName
-        {
-            get
-            {
-                return _subActivityName;
-            }
+        public string SubActivityName { get; set; }
 
-            set
-            {
-                _subActivityName = value;
-            }
-        }
+        public int ActivityId { get; set; }
 
-        public string ActivityName
-        {
-            get
-            {
-                return _activityFK;
-            }
+        public string ActivityName { get; set; }
 
-            set
-            {
-                _activityFK = value;
-            }
-        }
-
-        public string ScheduleStatus
-        {
-            get
-            {
-                return _scheduleStatus;
-            }
-
-            set
-            {
-                _scheduleStatus = value;
-            }
-        }
+        public string ScheduleStatus { get; set; }
     }
 }

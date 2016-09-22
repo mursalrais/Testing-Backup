@@ -272,7 +272,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public JsonResult GetGLMaster()
         {
-            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
             var glMasters = FinService.SharedService.GetGLMaster(siteUrl);
 
@@ -283,20 +283,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             }), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetWBSMaster(string activity = null)
+        public JsonResult GetWBSMaster(int activityId)
         {
-            return new COMWBSController().GetAllByActivityAsJsonResult(activity);
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
 
-            //var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
-
-            //reqNoteService = new RequisitionNoteService(siteUrl);
-            //var wbsMasters = reqNoteService.GetWBSMaster(activity);
-
-            //return Json(wbsMasters.Select(e => new
-            //{
-            //    Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
-            //    Text = (e.Title + "-" + e.WBSDescription)
-            //}), JsonRequestBehavior.AllowGet);
+            return new COMWBSController().GetAllByActivityAsJsonResult(siteUrl, activityId);
         }
 
         [HttpPost]
