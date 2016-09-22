@@ -18,7 +18,7 @@
                             DataTextField = "FirstMiddleName",
                             DataValueField = "Value",
                             ControllerName = "HRDataMaster",
-                            ActionName = "GetProfessionalsAll"
+                            ActionName = "GetProfessionalsActive"
                         });
 
         columns.Bound(p => p.ddlProfessional).ClientTemplate("#=getProfId(ddlProfessional)#"
