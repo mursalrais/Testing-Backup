@@ -51,10 +51,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
             // return null;
 
-             string RelativePath = "~/Views/HRTimesheet/PrintFeeSlip.cshtml";
+             string RelativePath = "~/Views/HRFeeSlip/PrintFeeSlip.cshtml";
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-            viewModel = _hRFeeSlipService.GetPopulatedModel();
+           // viewModel = _hRFeeSlipService.GetPopulatedModel();
 
 
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);

@@ -12,17 +12,28 @@
 
 
 <div class="form-horizontal">
-    <div class="row" style="text-align: center; margin-top: 20px;">
-        <div id="logo-group" class="row">
-            <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
+    <div id="wrapper">
+        <div style="text-align: left; margin-top: 20px;" id="content">
+            <div id="logo-group">
+                <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
+            </div>
+            <div style="margin-top: 5px; font-weight: bold; font-size: 15px">
+                Millennium Challenge Account - Indonesia
+            </div>
+            <div style="margin-top: 5px; font-weight: bold; font-size: 10px">
+                Reducing Poverty through Economic Growth
+            </div>
         </div>
-        <div class="row" style="margin-top:5px;font-weight:bold;">
-            MCA Indonesia
-        </div>
-        <div class="row" style="margin-top:10px; font-weight:bold;">
-            Petty Cash Payment Voucher
+        <div id="sidebar" style="text-align: left; margin-top: 20px;">
+            <div style="margin-top: 5px; font-weight: bold; font-size: 15px">
+                Millennium Challenge 
+            </div>
+            <div style="margin-top: 5px; font-weight: bold; font-size: 10px">
+                Reducing Poverty 
+            </div>
         </div>
     </div>
+   
     @*<div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
         <table width="100%">
             <tbody>
@@ -84,7 +95,7 @@
         </table>
     </div>*@
 
-    
+
 
 </div>
 
@@ -95,6 +106,23 @@
 
 <style type="text/css">
 
+    #wrapper {
+  margin-right: 200px;
+}
+#content {
+  float: left;
+  width: 70%;
+  background-color: #CCF;
+}
+#sidebar {
+  float: right;
+  width: 30%;
+  /*margin-right: -200px;*/
+  background-color: #FFA;
+}
+#cleared {
+  clear: both;
+}
 
 </style>
 
