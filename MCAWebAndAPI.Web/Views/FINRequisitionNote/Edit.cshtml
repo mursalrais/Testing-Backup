@@ -11,11 +11,11 @@
 }
 
 @using (Html.BeginForm("EditRequisitionNote", "FINRequisitionNote", FormMethod.Post,
-                        new
-                        {
-                            @class = "form-horizontal",
-                            enctype = "multipart/form-data"
-                        }))
+                                    new
+                                    {
+                                        @class = "form-horizontal",
+                                        enctype = "multipart/form-data"
+                                    }))
 {
     <fieldset>
         <legend>Requisition Note</legend>
@@ -24,6 +24,7 @@
                 @Html.HiddenFor(m => m.ID)
                 @Html.HiddenFor(m => m.Title)
                 @Html.HiddenFor(m => m.UserEmail)
+                @Html.HiddenFor(m => m.ClientDateTime)
             </div>
         </div>
         <div class="row">

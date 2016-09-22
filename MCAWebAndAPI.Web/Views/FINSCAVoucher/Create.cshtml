@@ -6,12 +6,12 @@
 *@
 
 @using (Html.BeginForm("Create", "FINSCAVoucher", FormMethod.Post,
-                                    new
-                                    {
-                                        @id = "formCreateSCA",
-                                        @class = "form-horizontal",
-                                        enctype = "multipart/form-data"
-                                    }))
+                                                            new
+                                                            {
+                                                                @id = "formCreateSCA",
+                                                                @class = "form-horizontal",
+                                                                enctype = "multipart/form-data"
+                                                            }))
 {
     <fieldset>
         <legend>Special Cash Advance Voucher</legend>
@@ -21,7 +21,8 @@
 
         <legend>Item Detail</legend>
 
-        @Html.HiddenFor(s => s.UserEmail);
+        @Html.HiddenFor(s => s.UserEmail)
+        @Html.HiddenFor(s => s.ClientDateTime)
 
         <div class="row">
             @Html.Partial("_EventBudgetItems", Model.SCAVoucherItems)
@@ -46,6 +47,7 @@
 @section scripts{
     <script>
         $("#formCreateSCA").on('submit', function () {
+            $('#ClientDateTime').val(new Date());
             var grid = $("#EventBudgetDetail").data("kendoGrid");
             var dataSource = grid.dataSource;
 
