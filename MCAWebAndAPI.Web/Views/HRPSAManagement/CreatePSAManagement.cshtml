@@ -43,70 +43,73 @@
           
             function checkOverlapping() {
 
-                var tenure = $("#Tenure").val()
+                var tenure = $("#Tenure").val();
 
-                if (($(".k-file").length == 0))
+                if ($("#PSAId").val() == 0)
                 {
-                    alert("Must Upload The Document");
+                    alert("You Must Select The Professional");
                 }
                 else
                 {
-
-                    if (tenure == 0)
+                    if (($(".k-file").length == 0))
                     {
-                        alert("Must Input Tenure Period");
+                        alert("Must Upload The Document");
                     }
-                    else
-                    {$("#PSARenewalNumber").val()
-                        var psaRenewalNumber = 
-                        var strPSARenewal = $("#StrPSARenewal").val()
+                    else {
 
-                        if (strPSARenewal != "0") {
+                        if (tenure == 0) {
+                            alert("Must Input Tenure Period");
+                        }
+                        else {
+                            var psaRenewalNumber = $("#PSARenewalNumber").val()
+                            var strPSARenewal = $("#StrPSARenewal").val()
 
-                            var dateOfNewPSA = $("#DateOfNewPSA").val();
-                            var dateofNewPSADate = new Date(dateOfNewPSA);
-                            var psaExpiryDate = $("#PSAExpiryDate").val();
-                            var psaExpiryDateDate = new Date(psaExpiryDate);
-                            var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
-                            var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
-                            var psaExpiredDateBefore = $('#ExpireDateBefore').val();
-                            var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
+                            if (strPSARenewal != "0") {
 
-                            //Cek Overlapping Date of New PSA
-                            if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
-                                //Warning overlapping star tdate
+                                var dateOfNewPSA = $("#DateOfNewPSA").val();
+                                var dateofNewPSADate = new Date(dateOfNewPSA);
+                                var psaExpiryDate = $("#PSAExpiryDate").val();
+                                var psaExpiryDateDate = new Date(psaExpiryDate);
+                                var dateOfNewPSABefore = $("#DateOfNewPSABefore").val();
+                                var dateofNewPSABeforeDate = new Date(dateOfNewPSABefore);
+                                var psaExpiredDateBefore = $('#ExpireDateBefore').val();
+                                var psaExpiryDateBeforeDate = new Date(psaExpiredDateBefore);
 
-                                var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
+                                //Cek Overlapping Date of New PSA
+                                if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate)) {
+                                    //Warning overlapping star tdate
+
+                                    var confirmationValue = confirm("Date of New PSA for New Contract is less than PSA Expiry Date on last contract");
+                                    if (confirmationValue == true) {
+                                        $("form").submit();
+                                    }
+                                    if (confirmationValue == false) {
+
+                                        return false;
+                                    }
+
+                                }
+
+                            }
+                                //Cek Overlapping PSA Expired Date
+                            else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
+                                //Warning overlapping star date dan end date
+                                var confirmationValue = confirm("Range date of New Contract is between of last contract")
                                 if (confirmationValue == true) {
                                     $("form").submit();
                                 }
                                 if (confirmationValue == false) {
-
                                     return false;
                                 }
-
                             }
-
-                        }
-                            //Cek Overlapping PSA Expired Date
-                        else if ((dateofNewPSADate > dateofNewPSABeforeDate) && (dateofNewPSADate < psaExpiryDateBeforeDate) && (psaExpiryDateDate < psaExpiredDateBeforeDate)) {
-                            //Warning overlapping star date dan end date
-                            var confirmationValue = confirm("Range date of New Contract is between of last contract")
-                            if (confirmationValue == true) {
+                            else {
                                 $("form").submit();
                             }
-                            if (confirmationValue == false) {
-                                return false;
-                            }
                         }
-                        else {
-                            $("form").submit();
-                        }
-                    }
 
-                  }
-                    
+                    }
                 }
+}
 
         function onSuccess(data) {
             
@@ -258,6 +261,9 @@
 
             
             $(document).ready(function () {
+
+                
+
                 $("#Tenure").kendoNumericTextBox({
                     change: onChange,
                     spin: onSpin
