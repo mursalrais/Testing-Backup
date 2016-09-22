@@ -6,14 +6,14 @@
 
 
 @using (Html.BeginForm(
-    "Save", "FINSCAReimbursement",
-    FormMethod.Post,
-    new
-    {
-        @id="formSCAR",
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                "Save", "FINSCAReimbursement",
+                FormMethod.Post,
+                new
+                {
+                    @id = "formSCAR",
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
 
     <fieldset>
@@ -24,6 +24,7 @@
                 @Html.HiddenFor(m => m.DocNo)
                 @Html.HiddenFor(m => m.Operation)
                 @Html.HiddenFor(m => m.UserEmail)
+                @Html.HiddenFor(m => m.ClientDateTime)
             </div>
         </div>
         <div class="row">
@@ -62,7 +63,7 @@
                         @Html.EditorFor(m => m.Amount, new { HtmlAttributes = new { @class = "textbox-padding6px-readonly", @readonly = "readonly" } })
                     </div>
                 </div>
-              
+
             </div>
         </div>
         <legend>Item Details</legend>
@@ -143,6 +144,9 @@
         $("#formSCAR").on('submit', function () {
             // do validation here
             var voucherNo = $('#EventBudget_Value').val();
+
+            $('#ClientDateTime').val(new Date());
+
             if (voucherNo === '0') {
                 $('#txtEBError').text('Event Budget No is required.');
 

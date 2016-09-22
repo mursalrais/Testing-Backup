@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Web.Mvc;
 using Elmah;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
@@ -126,6 +128,14 @@ namespace MCAWebAndAPI.Web.Controllers
             byte[] pdfBuf = null;
             string content;
 
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
+
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
+
+            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+
             using (var writer = new StringWriter())
             {
                 var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
@@ -137,7 +147,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content, footer);
                 }
                 catch (Exception e)
                 {
