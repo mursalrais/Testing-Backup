@@ -15,9 +15,9 @@
     <div id="wrapper">
         <div style="text-align: left; margin-top: 20px;" id="content">
             <div id="logo-group">
-                <img src="{XIMGPATHX}" alt="MCA Indonesia" width="100">
+                <img src="{XIMGPATHX}" alt="MCA Indonesia" width="150">
             </div>
-            <div style="margin-top: 5px; font-weight: bold; font-size: 15px">
+            <div style="margin-top: 5px; font-weight: bold; font-size: 12px">
                 Millennium Challenge Account - Indonesia
             </div>
             <div style="margin-top: 5px; font-weight: bold; font-size: 10px">
@@ -61,76 +61,74 @@
                     <td colspan="12" class="tdCenterNoBorderLeftRightGreen">DETAILED INFORMATION</td>
                 </tr>
                 <tr>
-                    <td colspan="7" class="tdCenterNoBorderLeftRightGreen">FEEqfqefqefqefffffffffffffffffffffffffffffffffffffffffffffffffffffff</td>
+                    <td colspan="6" class="tdCenterNoBorderLeftRightGreen">FEEqfqefqefqefffffffffffffffffffffffffffffffffffffffffffffffffffffff</td>
                     <td class="tdCenterNoBorder"></td>
-                    <td colspan="4" class="tdCenterNoBorderLeftRightGreen">DEDUCTION</td>
+                    <td colspan="5" class="tdCenterNoBorderLeftRightGreen">DEDUCTION</td>
                 </tr>
+                @for (int i = 1; i <= 7; i++)
+                {
+                    <tr>
+                        <td colspan="6" class="tdLeftNoBorderLeftRightWhiteDotted">@i.ToString()</td>
+                        <td class="tdCenterNoBorder"></td>
+                        <td colspan="5" class="tdLeftNoBorderLeftRightWhiteDotted">DEDUCTION</td>
+                    </tr>
+                }
+                @for (int i = 1; i <=5; i++)
+                {
+                    <tr>
+                        <td colspan="6" class="tdCenterNoBorder"></td>
+                        <td class="tdCenterNoBorder"></td>
+                        <td colspan="5" class="tdCenterNoBorder"></td>
+                    </tr>
+                }
+                <tr >
+                    <td colspan="6" style=" border-right:  solid white; border-left: solid white;
+                        border-top:  solid white;border-bottom:  double black;background-color: white;"></td>
+                    <td class="tdCenterNoBorder"></td>
+                    <td colspan="5" class="tdCenterNoBorder"></td>
+                </tr>
+
+                <tr>
+                    <td colspan="6" class="tdCenterNoBorderLeftRightGreenDouble"></td>
+                    <td class="tdCenterNoBorder"></td>
+                    <td colspan="5" class="tdCenterNoBorder"></td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="tdLeftNoBorder">Note :</td>
+                    <td class="tdLeftNoBorder"></td>
+                    <td colspan="5" class="tdCenterNoBorder">Jakarta, 24 February 2016</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="tdLeftNoBorder">Please inform the HR Unit - hrd@mca-indonesia.go.id - within <br/>
+                        a week if there is a mistake in this document.<br/>
+                        .. If there is no inquiry submitted by staff within a week of receiving the document,<br/>
+                        she/he is considered accepting & in agreement with the above statements in this document.<br/>
+                        ... No signature required and printed copy is considered as original.
+                    </td>
+                    <td class="tdLeftNoBorder"></td>
+                    <td colspan="5" class="tdCenterNoBorder"><br/><br/><br/><br/><br/>Human Resources Unit</td>
+                </tr>
+               
+                @*<tr>
+                    <td colspan="7" class="tdLeftNoBorder">.. If there is no inquiry submitted by staff within a week of receiving the document,<br/> 
+                    she/he is considered accepting & in agreement with the above statements in this document.</td>
+                    <td class="tdLeftNoBorder"></td>
+                    <td colspan="4" class="tdLeftNoBorder"></td>
+                </tr>
+                <tr>
+                    <td colspan="7" class="tdLeftNoBorder">... No signature required and printed copy is considered as original.</td>
+                    <td class="tdLeftNoBorder"></td>
+                    <td colspan="4" class="tdCenterNoBorder">Human Resources Unit</td>
+                </tr>
+                '*@
             </table>
         </div>
 
     </div>
 
-        @*<div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
-                <table width="100%">
-                    <tbody>
-                        <tr>
-                            <td colspan="3">
-                                <div class="row" style="margin-left:2px; margin-bottom:10px; font-weight:bold;">
-                                    I. PETTY CASH ADVANCE
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Voucher No</td>
-                            <td width="2px">:</td>
-                            <td>@Model.TransactionNo</td>
-                            <td width="150px">Date</td>
-                            <td width="2px">:</td>
-                            <td>@Model.Date.ToString("MM/dd/yyyy")</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Paid To</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.PaidTo.Value</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">Amount Paid</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.Amount</td>
-                        </tr>
-
-                        <tr>
-                            <td width="150px">Amount in Words</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.AmountPaidInWord</td>
-                        </tr>
-
-                        <tr>
-                            <td width="150px">Reason of payment</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.ReasonOfPayment</td>
-                        </tr>
-
-                        <tr>
-                            <td width="150px">Fund</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.Fund</td>
-                        </tr>
-                        <tr>
-                            <td width="150px">WBS</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.WBS.Text</td>
-                        </tr>
-
-                        <tr>
-                            <td width="150px">GL</td>
-                            <td width="2px">:</td>
-                            <td colspan="4">@Model.GL.Text</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>*@
-
+    <div style="background-color: lightgreen; color: white; text-align: right;margin-top: 20px;"   width: 100%;>
+        info@mca-indonesia.go.id | www.mca-indonesia.go.id
+    </div>
 
 
     </div>
@@ -142,6 +140,15 @@
 
 <style type="text/css">
 
+     .tdCenterNoBorderLeftRightGreenDouble {
+   border-right:  solid white;
+   border-left: solid white;
+   border-top:  double black;
+   border-bottom:  double black;
+   padding: 5px 15px;text-align: center;vertical-align: bottom;background-color: lightgreen;
+   vertical-align: text-bottom;font-size: 10px;color: black;
+}
+
     .tdCenterNoBorderLeftRightGreen {
    border-right: 1px solid white;
    border-left: 1px solid white;
@@ -151,12 +158,31 @@
    vertical-align: text-bottom;font-size: 10px;color: black;
 }
 
+      .tdLeftNoBorderLeftRightWhiteDotted {
+   border-right: 1px solid white;
+   border-left: 1px solid white;
+   border-top: 2px dotted black;
+   border-bottom: 2px dotted black;
+   padding: 5px 15px;text-align: left;vertical-align: bottom;background-color: white;
+   vertical-align: text-bottom;font-size: 10px;color: black;
+}
+
+
      .tdCenterNoBorder {
    border-right: 1px solid white;
    border-left: 1px solid white;
    border-top: 2px solid white;
    border-bottom: 2px solid white;
    padding: 5px 15px;text-align: center;vertical-align: bottom;background-color: white;
+   vertical-align: text-bottom;font-size: 10px;color: black;
+}
+
+      .tdLeftNoBorder {
+   border-right: 1px solid white;
+   border-left: 1px solid white;
+   border-top: 2px solid white;
+   border-bottom: 2px solid white;
+   padding: 5px 15px;text-align: left;vertical-align: bottom;background-color: white;
    vertical-align: text-bottom;font-size: 10px;color: black;
 }
 
@@ -173,18 +199,16 @@
 }
 #content {
   float: left;
-  width: 60%;
+  width: 65%;
   background-color:white;
 }
 #sidebar {
   float: right;
-  width: 40%;
+  width: 35%;
   /*margin-right: -200px;*/
   background-color: white;
 }
-#cleared {
-  clear: both;
-}
+
 
 </style>
 

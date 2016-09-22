@@ -92,92 +92,104 @@
     @Html.HiddenFor(m => m.TotalAmount)
 </div>
 
+<div class="col-sm-6">
+    <div style="border-style: double; color: black;border-color: lightblue">
 
-<script>
-
-    $(document)
-        .ready(function() {
-            //var overallTotalScore = 0;
-            //overallTotalScore = parseFloat($('#TotalAmount').val());
-            //    alert(overallTotalScore);
-            //$('#TotalAmountTemp').prop('value', format1(overallTotalScore));
-            var overallTotalScore = 0;
-            overallTotalScore = parseFloat($('#TotalAmount').val());
-            $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
-        });
-
-    function getComponentDetail(dataItem) {
-        var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
-        return data.indexOf(dataItem);
-    }
-
-    function onDataBoundComponentDetails(e) {
-        var grid = $("#ClaimComponentDetails").data("kendoGrid");
-
-        var gridData = grid.dataSource.view();
-        var dataSource = grid.dataSource;
-        for (var i = 0; i < gridData.length; i++) {
-            var currentUid = gridData[i].uid;
-            if ((gridData[i].EditMode == -1)) {
-                var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
-                var cell = currenRow.find("td:eq(2)");
-                cell.text(0);
-                dataSource._data[i].Amount = 0.0;
-                currenRow.hide();
-            }
-        }
-
-    }
-
-    function onDeleteKendoDetailplus(e) {
-        var result = confirm("Are you sure you want to delete this item?");
-        if (!result) return;
-
-        var tr = $(e.target).closest("tr"); //get the row
-        var data = this.dataItem(tr); //get the row data so it can be referred later
+        Please send the Original Receipt & Claim Form to HR Unit a.s.a.p. <br/>
+        The receipt and Claim must be submitted to AXA not more than 60 (sixty) days <br/>
+        after the date of the receipt, and for Re-claim, not more than 30 (thirty) days.
 
 
-        var overallTotalScore = 0;
-        overallTotalScore = $('#TotalAmount').val();
-        if (data.Amount > 0) {
-            overallTotalScore = parseFloat(overallTotalScore) - parseFloat(data.Amount);
-        }
+    </div>
+</div>
+<div class="col-sm-6">
 
-        $('#TotalAmount').prop('value', overallTotalScore);
-        $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
-        // -1 is Item.Mode.DELETED
-        data.set("EditMode", -1);
+</div>
+    <script>
 
-
-    }
-
-    function format1(n) {
-        return n.toFixed(0)
-            .replace(/./g,
-                function(c, i, a) {
-                    return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-                });
-    }
-
-    function onChange(e) {
-        var overallTotalScore = 0.0;
-        var recordsOnCurrentView = 0;
-        if (e.action === "itemchange") {
-            if (e.field === "Amount") {
-                var grid = $("#ClaimComponentDetails").data("kendoGrid");
-                var dataSource = grid.dataSource;
-                //records on current view / page
-                recordsOnCurrentView = dataSource.view().length;
-
-                for (var i = 0; i < recordsOnCurrentView; i++) {
-                    overallTotalScore = overallTotalScore + parseFloat(dataSource._data[i].Amount);
-                }
-                $('#TotalAmount').prop('value', overallTotalScore);
+        $(document)
+            .ready(function () {
+                //var overallTotalScore = 0;
+                //overallTotalScore = parseFloat($('#TotalAmount').val());
+                //    alert(overallTotalScore);
+                //$('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+                var overallTotalScore = 0;
+                overallTotalScore = parseFloat($('#TotalAmount').val());
                 $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+            });
+
+        function getComponentDetail(dataItem) {
+            var data = $("#ClaimComponentDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
+        function onDataBoundComponentDetails(e) {
+            var grid = $("#ClaimComponentDetails").data("kendoGrid");
+
+            var gridData = grid.dataSource.view();
+            var dataSource = grid.dataSource;
+            for (var i = 0; i < gridData.length; i++) {
+                var currentUid = gridData[i].uid;
+                if ((gridData[i].EditMode == -1)) {
+                    var currenRow = grid.table.find("tr[data-uid='" + currentUid + "']");
+                    var cell = currenRow.find("td:eq(2)");
+                    cell.text(0);
+                    dataSource._data[i].Amount = 0.0;
+                    currenRow.hide();
+                }
+            }
+
+        }
+
+        function onDeleteKendoDetailplus(e) {
+            var result = confirm("Are you sure you want to delete this item?");
+            if (!result) return;
+
+            var tr = $(e.target).closest("tr"); //get the row
+            var data = this.dataItem(tr); //get the row data so it can be referred later
+
+
+            var overallTotalScore = 0;
+            overallTotalScore = $('#TotalAmount').val();
+            if (data.Amount > 0) {
+                overallTotalScore = parseFloat(overallTotalScore) - parseFloat(data.Amount);
+            }
+
+            $('#TotalAmount').prop('value', overallTotalScore);
+            $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+            // -1 is Item.Mode.DELETED
+            data.set("EditMode", -1);
+
+
+        }
+
+        function format1(n) {
+            return n.toFixed(0)
+                .replace(/./g,
+                    function (c, i, a) {
+                        return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+                    });
+        }
+
+        function onChange(e) {
+            var overallTotalScore = 0.0;
+            var recordsOnCurrentView = 0;
+            if (e.action === "itemchange") {
+                if (e.field === "Amount") {
+                    var grid = $("#ClaimComponentDetails").data("kendoGrid");
+                    var dataSource = grid.dataSource;
+                    //records on current view / page
+                    recordsOnCurrentView = dataSource.view().length;
+
+                    for (var i = 0; i < recordsOnCurrentView; i++) {
+                        overallTotalScore = overallTotalScore + parseFloat(dataSource._data[i].Amount);
+                    }
+                    $('#TotalAmount').prop('value', overallTotalScore);
+                    $('#TotalAmountTemp').prop('value', format1(overallTotalScore));
+                }
             }
         }
-    }
 
 
-</script>
+    </script>
 
