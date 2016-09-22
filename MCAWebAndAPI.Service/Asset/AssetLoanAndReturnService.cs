@@ -460,6 +460,20 @@ namespace MCAWebAndAPI.Service.Asset
             return details;
         }
 
+        public IEnumerable<AssetLoanAndReturnItemVM> GetDetailsEdit(int? headerID)
+        {
+
+            var caml = @"<View><Query><Where><Eq><FieldRef Name='assetloanandreturn' /><Value Type='Lookup'>" + headerID.ToString() + "</Value></Eq></Where></Query></View>";
+            var details = new List<AssetLoanAndReturnItemVM>();
+
+            foreach (var item in SPConnector.GetList(SP_ASSLNRDetails_LIST_NAME, _siteUrl, caml))
+            {
+                details.Add(ConvertToDetailsEdit(item));
+            }
+
+            return details;
+        }
+
         //private AssetLoanAndReturnItemVM ConvertToDetails(ListItem item)
         //{
         //    var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["Asset_x002d_Sub_x0020_Asset"] as FieldLookupValue).LookupId, _siteUrl);
@@ -473,18 +487,17 @@ namespace MCAWebAndAPI.Service.Asset
         //    };
 
         //}
-
         private AssetLoanAndReturnItemVM ConvertToDetails(ListItem item)
         {
             var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
 
-                AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
+            AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
             _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
             _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
 
             var model = new AssetLoanAndReturnItemVM();
             model.ID = Convert.ToInt32(item["ID"]);
-           
+
             model.EstReturnDate = Convert.ToDateTime(item["estreturndate"]);
             model.ReturnDate = Convert.ToDateTime(item["returndate"]);
 
@@ -497,6 +510,37 @@ namespace MCAWebAndAPI.Service.Asset
             else
             {
                 model.ReturnDate = Convert.ToDateTime(item["returndate"]);
+            }
+
+            model.AssetSubAsset = AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset);
+            model.Status = Convert.ToString(item["status"]);
+
+            return model;
+        }
+
+        private AssetLoanAndReturnItemVM ConvertToDetailsEdit(ListItem item)
+        {
+            var ListAssetSubAsset = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+
+                AjaxComboBoxVM _assetSubAsset = new AjaxComboBoxVM();
+            _assetSubAsset.Value = (item["assetsubasset"] as FieldLookupValue).LookupId;
+            _assetSubAsset.Text = Convert.ToString(ListAssetSubAsset["AssetID"]) + " - " + Convert.ToString(ListAssetSubAsset["Title"]);
+
+            var model = new AssetLoanAndReturnItemVM();
+            model.ID = Convert.ToInt32(item["ID"]);
+           
+            model.EstReturnDate = Convert.ToDateTime(item["estreturndate"]).AddDays(1);
+            model.ReturnDate = Convert.ToDateTime(item["returndate"]).AddDays(1);
+
+
+            DateTime? DT = new DateTime();
+            if (Convert.ToDateTime(item["returndate"]) == DateTime.MinValue)
+            {
+                model.ReturnDate = null;
+            }
+            else
+            {
+                model.ReturnDate = Convert.ToDateTime(item["returndate"]).AddDays(1);
             }
 
             model.AssetSubAsset = AssetLoanAndReturnItemVM.GetAssetSubAssetDefaultValue(_assetSubAsset);
