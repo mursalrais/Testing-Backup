@@ -37,7 +37,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private const string SuccessMsgFormatCreated = "SCA Voucher number {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "SCA Voucher number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/SCA%20Voucher/AllItems.aspx";
-        
+
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+
         public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
             if (userEmail == string.Empty)
@@ -118,10 +121,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             service = new SCAVoucherService(siteUrl);
             SCAVoucherVM model = new SCAVoucherVM();
-            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail); 
+            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail);
 
             model = service.Get(ID);
-            
+
             if (model.UserEmail != userEmail || !COMProfessionalController.IsPositionFinance(professional.Position))
             {
                 throw new InvalidOperationException("You have no right to see this data.");
@@ -194,7 +197,8 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -225,7 +229,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-            service =  new SCAVoucherService(siteUrl);
+            service = new SCAVoucherService(siteUrl);
 
             int? ID = null;
             ID = service.CreateSCAVoucher(ref viewModel, COMProfessionalController.GetAll());

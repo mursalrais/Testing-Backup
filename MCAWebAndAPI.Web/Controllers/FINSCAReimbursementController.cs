@@ -25,6 +25,9 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string SuccessMsgFormatUpdated = "SCA reimbursement for {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/SCA%20Reimbursement/AllItems.aspx";
 
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+
         private const string EventBudgetController = "FINEventBudget";
         private const string EventBudgetAction = "GetEventBudgetList";
         private const string EventBudgetValue = "ID";
@@ -33,7 +36,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private ISCAReimbursementService service;
         private IEventBudgetService serviceEB;
-        
+
         public ActionResult Item(string siteUrl = null, string op = null, string userEmail = "", int? id = null)
         {
             if (userEmail == string.Empty)
@@ -103,7 +106,6 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel.ID == null)
                 return null;
 
-
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
@@ -111,7 +113,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             //service = new SCAReimbursementService(siteUrl);
             //viewModel = service.Get(Operations.e, viewModel.ID);
-
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -125,7 +126,8 @@ namespace MCAWebAndAPI.Web.Controllers
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -157,7 +159,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.EventBudget.ValueField = EventBudgetValue;
             viewModel.EventBudget.TextField = EventBudgetText;
             viewModel.EventBudget.OnSelectEventName = EventBudgetOnSelectEventName;
-
         }
     }
 }

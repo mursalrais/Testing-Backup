@@ -61,7 +61,6 @@ namespace MCAWebAndAPI.Service.Finance
 
         private const string EmailSubject = " Outstanding Advance Reminder";
         private const string StaffIDPrefix_Proffesional = "5";
-        private const string StaffIDPrefix_IC = "1";
         private const string StaffIDPrefix_Grantee = "4";
 
         private const string DefaultInvalid_Date = "0001/01/01";
@@ -77,6 +76,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         #endregion
 
+        private static string[] StaffIDPrefix_IC = new[] { "1", "2", "3" };
         private static string[] FieldNames = { "Date (Upload)", "Staff ID", "Staff Name", "Reference", "Due Date", "Currency", "Amount", "Project" };
 
         private enum ImportedFields
@@ -490,7 +490,7 @@ namespace MCAWebAndAPI.Service.Finance
 
         private static bool IsIndependentConsultant(string staffId)
         {
-            return staffId.ToString().Substring(0, 1) == StaffIDPrefix_IC;
+            return Array.IndexOf(StaffIDPrefix_IC, staffId.Substring(0, 1)) > -1;
         }
 
         private static bool IsProfessional(string staffId)
