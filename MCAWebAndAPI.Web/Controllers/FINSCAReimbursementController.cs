@@ -91,6 +91,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Print(FormCollection form, SCAReimbursementVM viewModel)
         {
+            if (viewModel.ID == null)
+                return null;
+
+
             string RelativePath = PrintPageUrl;
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);

@@ -181,6 +181,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel, string userEmail = "")
         {
+            if (viewModel.ID == null)
+                return null;
+
             string RelativePath = PrintPageUrl;
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection,Request.Url.Authority);
 
@@ -203,12 +206,9 @@ namespace MCAWebAndAPI.Web.Controllers
             if (user != null)
                 userName = user.Name;
 
-            DateTime dt = DateTime.ParseExact(Request.Form[nameof(viewModel.ClientDateTime)].ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-            if (dt == DateTime.MinValue)
-            {
-                //server's time better than no time.
-                dt = DateTime.Now;
-            }
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
+            
             footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
 
             using (var writer = new StringWriter())

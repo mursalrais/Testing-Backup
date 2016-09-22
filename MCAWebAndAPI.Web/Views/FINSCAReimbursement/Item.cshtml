@@ -103,7 +103,7 @@
                     alert('Please make sure that all required fields are filled');
                     return;
                 }
-
+                e.preventDefault();
                 var actionUrl = $('form').attr("action");
                 var newActionUrl = actionUrl.replace("Save", "Print");
 

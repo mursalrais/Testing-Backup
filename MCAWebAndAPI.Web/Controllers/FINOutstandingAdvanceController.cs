@@ -69,9 +69,8 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 int? id = service.Save(viewModel);
                 Task createApplicationDocumentTask = service.SaveAttachmentAsync(id, viewModel.Reference, viewModel.Documents);
-                Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, viewModel);
-                Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, viewModel, siteUrlHR);
-                Task allTasks = Task.WhenAll(createApplicationDocumentTask, sendEmailToProfessional, sendEmailToGrantees);
+                Task sendEmail = service.SendEmail(EmailResource.ProfessionalEmailOutstandingAdvance, EmailResource.GranteesEmailOutstandingAdvance, viewModel, COMVendorController.GetAll(), siteUrlHR);
+                Task allTasks = Task.WhenAll(createApplicationDocumentTask, sendEmail);
 
                 await allTasks;
             }
@@ -129,9 +128,8 @@ namespace MCAWebAndAPI.Web.Controllers
                         int? id = service.Save(item);
                         if (id > 0)
                         {
-                            Task sendEmailToProfessional = service.SendEmailToProfessional(EmailResource.ProfessionalEmailOutstandingAdvance, item);
-                            Task sendEmailToGrantees = service.SendEmailToGrantees(EmailResource.GranteesEmailOutstandingAdvance, item, siteUrlHR);
-                            Task allTasks = Task.WhenAll(sendEmailToProfessional, sendEmailToGrantees);
+                            Task sendEmail = service.SendEmail(EmailResource.ProfessionalEmailOutstandingAdvance, EmailResource.GranteesEmailOutstandingAdvance, item, COMVendorController.GetAll(), siteUrlHR);
+                            Task allTasks = Task.WhenAll(sendEmail);
 
                             await allTasks;
                         }
