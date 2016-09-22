@@ -49,5 +49,10 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         string GetPositionName(int positionID);
 
         string GetPositionFromManpower(int? ID);
+
+        string GetProjectUnitFromManpower(int? ID);
+
+        int GetPositionID(string positionName, string projectUnit);
+
     }
 }

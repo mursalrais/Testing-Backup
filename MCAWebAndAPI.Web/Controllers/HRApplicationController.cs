@@ -123,6 +123,9 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
+            string cekPosition = Convert.ToString(viewModel.Position);
+            string cekPositionName = Convert.ToString(viewModel.PositionName);
+
             viewModel.EducationDetails = BindEducationDetails(form, viewModel.EducationDetails);
             Task createEducationDetailsTask = _service.CreateEducationDetailsAsync(headerID, viewModel.EducationDetails);
             viewModel.TrainingDetails = BindTrainingDetails(form, viewModel.TrainingDetails);
@@ -135,8 +138,11 @@ namespace MCAWebAndAPI.Web.Controllers
             Task allTasks = Task.WhenAll(createEducationDetailsTask, createTrainingDetailsTask,
                 createWorkingExperienceDetailsTask, createApplicationDocumentTask);
 
-            _service.SendMail(viewModel.EmailAddresOne, string.Format("{0} at MCA-Indonesia", viewModel.Position), string.Format(EmailResource.ApplicationData, viewModel.FirstMiddleName, viewModel.Position));
-            
+            string positionName = _service.GetPositionFromManpower(Convert.ToInt32(viewModel.ManpowerRequisitionID));
+
+            //_service.SendMail(viewModel.EmailAddresOne, string.Format("{0} at MCA-Indonesia", positionName), string.Format(EmailResource.ApplicationData, viewModel.FirstMiddleName, positionName));
+            _service.SendMail(viewModel.EmailAddresOne, string.Format("{0} at MCA-Indonesia", positionName), string.Format("Dear {0},{1}{2}Thank you for your interest in MCA-Indonesia! Your application for the {3} has been received.{4}{5}We will review your application and if there is interest in pursuing your candidacy, you will be contacted immediately. Kindly be informed that only shortlisted candidate(s) will be contacted by MCA-Indonesia. We regret that due to the high volume of applications, we may not be able to respond to all applicants individually.{6}{7}While waiting, you are invited to look into our website to learn more about MCA-Indonesia, http://mca-indonesia.go.id/. {8}{9}Thank you again for your interest in our organization. We appreciate the time you invested in this application.{10}{11}Regards,{12}Recruitment MCA-Indonesia", viewModel.FirstMiddleName, Environment.NewLine, Environment.NewLine, positionName, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine, Environment.NewLine));
+
             try
             {
                 await allTasks;
@@ -276,15 +282,20 @@ namespace MCAWebAndAPI.Web.Controllers
         public ActionResult CreateApplicationData(string siteUrl = null, int? ID = null, string position = null)
         {
             // MANDATORY: Set Site URL
-            _service.SetSiteUrl(siteUrl);
             SessionManager.Set("SiteUrl", siteUrl);
-            
+            _service.SetSiteUrl(siteUrl);
+
             var viewModel = _service.GetApplication(null);
             //viewModel.Position = position;
             viewModel.ManpowerRequisitionID = ID;
 
             string positionName = _service.GetPositionFromManpower(ID);
+            string projectUnit = _service.GetProjectUnitFromManpower(ID);
+
+            int positionID = _service.GetPositionID(positionName, projectUnit);
+
             viewModel.Position = positionName;
+            viewModel.PositionID = positionID;
 
 
             return View(viewModel);

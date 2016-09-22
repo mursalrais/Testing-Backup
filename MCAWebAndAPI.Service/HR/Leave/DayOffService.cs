@@ -362,7 +362,7 @@ namespace MCAWebAndAPI.Service.HR.Leave
             {
                 dayOffTypeRequest = "Baptism of the Professional's Children";
             }
-            else if (dayOffType == "DeathoftheProfessional’sdependent(i.e. spouse or children)orparentorparentin-laws")
+            else if (dayOffType == "DeathoftheProfessional’sdependent(i.e.spouseorchildren)orparentorparentin-laws")
             {
                 dayOffTypeRequest = "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws";
             }
@@ -459,11 +459,9 @@ namespace MCAWebAndAPI.Service.HR.Leave
             if(ID == null)
             {
                 model.DayOffRequestDetails = GetDayOffRequestsDetails(ID, model.Professional);
-                model.DayOffNextBalance = GetDayOffNextBalance(model.Professional);
+                
             }
-
-            //model.DayOffNextBalance = GetDayOffNextBalance(model.Professional);
-
+            
             return model;
         }
 
@@ -520,59 +518,6 @@ namespace MCAWebAndAPI.Service.HR.Leave
             }
 
             return dayOffBalanceDetail;
-        }
-
-        private IEnumerable<DayOffNextBalanceVM> GetDayOffNextBalance(string professionalName)
-        {
-            var DayOffNextBalance = new List<DayOffNextBalanceVM>();
-
-            foreach (var item in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, null))
-            {
-                DayOffNextBalance.Add(ConvertToDayOffNextBalance(item, professionalName));
-            }
-
-            return DayOffNextBalance;
-        }
-
-        private DayOffNextBalanceVM ConvertToDayOffNextBalance(ListItem item, string professionalName)
-        {
-            var dayOffNextBalance = new DayOffNextBalanceVM();
-
-
-            if (Convert.ToString(item["Title"]) == "Annual Day-Off")
-            {
-                dayOffNextBalance = GetDayOffNextBalanceAnnualDayOff(Convert.ToString(item["Title"]), "Active", professionalName);
-            }
-            else if (Convert.ToString(item["Title"]) == "Special Day-Off")
-            {
-                dayOffNextBalance = GetDayOffNextBalanceSpecialDayOff(Convert.ToString(item["Title"]), professionalName);
-            }
-            else if (Convert.ToString(item["Title"]) == "Compensatory Time")
-            {
-                dayOffNextBalance = GetDayOffNextBalanceCompensatoryTime(Convert.ToString(item["Title"]), professionalName);
-            }
-            else if (Convert.ToString(item["Title"]) == "Paternity")
-            {
-                dayOffNextBalance = GetDayOffNextBalancePaternity(Convert.ToString(item["Title"]), professionalName);
-            }
-            else
-            {
-                dayOffNextBalance.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
-                    new InGridComboBoxVM
-                    {
-                        Text = Convert.ToString(item["Title"])
-                    });
-
-                dayOffNextBalance.DayOffBrought = Convert.ToInt32(0);
-                dayOffNextBalance.Unit = DayOffBalanceVM.GetUnitDefaultValue(
-                        new InGridComboBoxVM
-                        {
-                            Text = Convert.ToString(item["uom"])
-                        });
-                dayOffNextBalance.Balance = Convert.ToDouble(item["quantity"]);
-            }
-
-            return dayOffNextBalance;
         }
 
         //Digunakan
@@ -1384,76 +1329,207 @@ namespace MCAWebAndAPI.Service.HR.Leave
             }
         }
 
-        //public int CreateExitProcedure(ExitProcedureVM exitProcedure)
-        //{
-        //    var updatedValues = new Dictionary<string, object>();
-        //    var statusExitProcedure = "Pending Approval";
+        public DayOffRequestVM GetRequestDataByUser(List<string> arrDayOffType, List<string> arrTotalDayOff, string professionalID)
+        {
+            var dayOffRequest = new DayOffRequestVM();
 
-        //    updatedValues.Add("Title", exitProcedure.FullName);
-        //    updatedValues.Add("requestdate", exitProcedure.RequestDate);
-        //    updatedValues.Add("professional", new FieldLookupValue { LookupId = (int)exitProcedure.ProfessionalID });
-        //    updatedValues.Add("projectunit", exitProcedure.ProjectUnit);
-        //    updatedValues.Add("position", exitProcedure.Position);
-        //    updatedValues.Add("joindate", exitProcedure.ProfessionalJoinDate);
-        //    updatedValues.Add("mobilenumber", exitProcedure.PhoneNumber);
-        //    updatedValues.Add("officeemail", exitProcedure.ProfessionalPersonalMail);
-        //    updatedValues.Add("currentaddress", exitProcedure.CurrentAddress);
-        //    updatedValues.Add("lastworkingdate", exitProcedure.LastWorkingDate);
-        //    updatedValues.Add("exitreason", exitProcedure.ExitReason.Value);
-        //    updatedValues.Add("reasondescription", exitProcedure.ReasonDesc);
-        //    updatedValues.Add("psanumber", exitProcedure.PSANumber);
+            dayOffRequest.DayOffNextBalance = GetDayOffNextBalance(professionalID, arrDayOffType, arrTotalDayOff);
 
-        //    if (exitProcedure.StatusForm == "Draft")
-        //    {
-        //        statusExitProcedure = "Draft";
+            return dayOffRequest;
+        }
 
-        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+        private IEnumerable<DayOffNextBalanceVM> GetDayOffNextBalance(string professionalID, List<string> arrDayOffType, List<string> arrTotalDayOff)
+        {
+            var listNextBalance = new List<DayOffNextBalanceVM>();
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
-        //    }
-        //    if (exitProcedure.StatusForm == "Pending Approval")
-        //    {
-        //        statusExitProcedure = "Pending Approval";
+            foreach (var professionalDayOffBalance in SPConnector.GetList(SP_MAS_DAYOFF_TYPE_LIST_NAME, _siteUrl, null))
+            {
+                listNextBalance.Add(ConvertToDayOffNextBalance(professionalDayOffBalance, professionalID, arrDayOffType, arrTotalDayOff));
+            }
 
-        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+            return listNextBalance;
+        }
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
-        //    }
-        //    if (exitProcedure.StatusForm == "Saved by HR")
-        //    {
-        //        statusExitProcedure = "Draft";
+        private DayOffNextBalanceVM ConvertToDayOffNextBalance(ListItem professionalDayOffBalance, string professionalID, List<string> arrDayOffType, List<string> arrTotalDayOff)
+        {
+            var dayOffNextBalance = new DayOffNextBalanceVM();
 
-        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+            var professionalData = SPConnector.GetListItem(SP_PRO_MAS_LIST_NAME, Convert.ToInt32(professionalID), _siteUrl);
+            string professionalName = Convert.ToString(professionalData["Title"]);
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
-        //    }
-        //    if (exitProcedure.StatusForm == "Approved by HR")
-        //    {
-        //        statusExitProcedure = "Approved";
+            if (Convert.ToString(professionalDayOffBalance["Title"]) == "Annual Day-Off")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceAnnualDayOff(Convert.ToString(professionalDayOffBalance["Title"]), "Active", professionalName);
 
-        //        var professionalData = SPConnector.GetListItem(SP_PROMAS_LIST_NAME, exitProcedure.ProfessionalID, _siteUrl);
-        //        string professionalOfficeMail = Convert.ToString(professionalData["officeemail"]);
+                string[] arrDayOffTypeReq = arrDayOffType[0].Split(',');
+                string[] arrTotalDayOffTypeReq = arrTotalDayOff[0].Split(',');
 
-        //        updatedValues.Add("visibleto", SPConnector.GetUser(professionalOfficeMail, _siteUrl));
-        //    }
+                int indexDayOffType = 0;
+                int lenArrTotalDayOff = arrTotalDayOff.Count;
+                int totalAnnualDayOffReq = 0;
+                int counterTotalAnnualDayOff = 0;
 
-        //    updatedValues.Add("status", statusExitProcedure);
+                foreach (string dayOffType in arrDayOffTypeReq)
+                {
+                    if(dayOffType == "AnnualDay-Off")
+                    {
+                        indexDayOffType = indexDayOffType + 1;
+                        break;
+                    }
+                }
 
-        //    try
-        //    {
-        //        SPConnector.AddListItem(SP_EXP_LIST_NAME, updatedValues, _siteUrl);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        logger.Error(e.Message);
-        //        throw e;
-        //    }
+                foreach(string dataTotalAnnualDayOff in arrTotalDayOffTypeReq)
+                {
+                    counterTotalAnnualDayOff = counterTotalAnnualDayOff + 1;
 
-        //    return SPConnector.GetLatestListItemID(SP_EXP_LIST_NAME, _siteUrl);
-        //}
+                    if (indexDayOffType == counterTotalAnnualDayOff)
+                    {
+                        totalAnnualDayOffReq = Convert.ToInt32(dataTotalAnnualDayOff);
+                        break;
+                    }
+                }
+
+                if(Convert.ToInt32(dayOffNextBalance.DayOffBrought) > 0)
+                {
+                    if(Convert.ToInt32(dayOffNextBalance.DayOffBrought) > totalAnnualDayOffReq)
+                    {
+                        dayOffNextBalance.DayOffBrought = Convert.ToInt32(dayOffNextBalance.DayOffBrought) - totalAnnualDayOffReq;
+                    }
+                    if(Convert.ToInt32(dayOffNextBalance.DayOffBrought) < totalAnnualDayOffReq)
+                    {
+                        int selisihDayOff = Convert.ToInt32(dayOffNextBalance.DayOffBrought) - totalAnnualDayOffReq;
+                        dayOffNextBalance.DayOffBrought = Convert.ToInt32(0);
+                        dayOffNextBalance.Balance = Convert.ToInt32(dayOffNextBalance.Balance) + selisihDayOff;
+                    }
+                }
+                else
+                {
+                    dayOffNextBalance.Balance = Convert.ToInt32(dayOffNextBalance.Balance) - totalAnnualDayOffReq;
+                }
+                
+            }
+            else if (Convert.ToString(professionalDayOffBalance["Title"]) == "Special Day-Off")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceSpecialDayOff(Convert.ToString(professionalDayOffBalance["Title"]), professionalName);
+
+                string[] arrDayOffTypeReq = arrDayOffType[0].Split(',');
+                string[] arrTotalDayOffTypeReq = arrTotalDayOff[0].Split(',');
+
+                int indexDayOffType = 0;
+                int lenArrTotalDayOff = arrTotalDayOff.Count;
+                int totalSpecialDayOffReq = 0;
+                int counterTotalSpecialDayOff = 0;
+
+                foreach (string dayOffType in arrDayOffTypeReq)
+                {
+                    if (dayOffType == "SpecialDay-Off")
+                    {
+                        indexDayOffType = indexDayOffType + 1;
+                        break;
+                    }
+                }
+
+                foreach (string dataTotalSpecialDayOff in arrTotalDayOffTypeReq)
+                {
+                    counterTotalSpecialDayOff = counterTotalSpecialDayOff + 1;
+
+                    if (indexDayOffType == counterTotalSpecialDayOff)
+                    {
+                        totalSpecialDayOffReq = Convert.ToInt32(dataTotalSpecialDayOff);
+                        break;
+                    }
+                }
+
+                dayOffNextBalance.Balance = Convert.ToInt32(dayOffNextBalance.Balance) - totalSpecialDayOffReq;
+            }
+            else if (Convert.ToString(professionalDayOffBalance["Title"]) == "Compensatory Time")
+            {
+                dayOffNextBalance = GetDayOffNextBalanceCompensatoryTime(Convert.ToString(professionalDayOffBalance["Title"]), professionalName);
+
+                string[] arrDayOffTypeReq = arrDayOffType[0].Split(',');
+                string[] arrTotalDayOffTypeReq = arrTotalDayOff[0].Split(',');
+
+                int indexDayOffType = 0;
+                int lenArrTotalDayOff = arrTotalDayOff.Count;
+                int totalCompensatoryReq = 0;
+                int counterTotalCompensatory = 0;
+
+                foreach (string dayOffType in arrDayOffTypeReq)
+                {
+                    if (dayOffType == "CompensatoryTime")
+                    {
+                        indexDayOffType = indexDayOffType + 1;
+                        break;
+                    }
+                }
+
+                foreach (string dataTotalCompensatory in arrTotalDayOffTypeReq)
+                {
+                    counterTotalCompensatory = counterTotalCompensatory + 1;
+
+                    if (indexDayOffType == counterTotalCompensatory)
+                    {
+                        totalCompensatoryReq = Convert.ToInt32(dataTotalCompensatory);
+                        break;
+                    }
+                }
+
+                dayOffNextBalance.Balance = Convert.ToInt32(dayOffNextBalance.Balance) - totalCompensatoryReq;
+            }
+            else if (Convert.ToString(professionalDayOffBalance["Title"]) == "Paternity")
+            {
+                dayOffNextBalance = GetDayOffNextBalancePaternity(Convert.ToString(professionalDayOffBalance["Title"]), professionalName);
+
+                string[] arrDayOffTypeReq = arrDayOffType[0].Split(',');
+                string[] arrTotalDayOffTypeReq = arrTotalDayOff[0].Split(',');
+
+                int indexDayOffType = 0;
+                int lenArrTotalDayOff = arrTotalDayOff.Count;
+                int totalPaternityDayOffReq = 0;
+                int counterTotalPaternityDayOff = 0;
+
+                foreach (string dayOffType in arrDayOffTypeReq)
+                {
+                    if (dayOffType == "Paternity")
+                    {
+                        indexDayOffType = indexDayOffType + 1;
+                        break;
+                    }
+                }
+
+                foreach (string dataTotalPaternityDayOff in arrTotalDayOffTypeReq)
+                {
+                    counterTotalPaternityDayOff = counterTotalPaternityDayOff + 1;
+
+                    if (indexDayOffType == counterTotalPaternityDayOff)
+                    {
+                        totalPaternityDayOffReq = Convert.ToInt32(dataTotalPaternityDayOff);
+                        break;
+                    }
+                }
+
+                dayOffNextBalance.Balance = Convert.ToInt32(dayOffNextBalance.Balance) - totalPaternityDayOffReq;
+            }
+            else
+            {
+                dayOffNextBalance.DayOffType = DayOffBalanceVM.GetDayOffTypeDefaultValue(
+                    new InGridComboBoxVM
+                    {
+                        Text = Convert.ToString(professionalDayOffBalance["Title"])
+                    });
+
+                dayOffNextBalance.DayOffBrought = Convert.ToInt32(0);
+                dayOffNextBalance.Unit = DayOffBalanceVM.GetUnitDefaultValue(
+                        new InGridComboBoxVM
+                        {
+                            Text = Convert.ToString(professionalDayOffBalance["uom"])
+                        });
+                dayOffNextBalance.Balance = Convert.ToDouble(professionalDayOffBalance["quantity"]);
+            }
+
+            return dayOffNextBalance;
+
+        }
     }
 }
 
