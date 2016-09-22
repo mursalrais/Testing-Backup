@@ -119,9 +119,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
 
-            service = new SCASettlementService(siteUrl);
-            viewModel = service.Get(Operations.e, viewModel.ID);
-
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
             var fileName = viewModel.Title + "_Application.pdf";
