@@ -54,7 +54,7 @@ namespace MCAWebAndAPI.Web.Controllers
              string RelativePath = "~/Views/HRFeeSlip/PrintFeeSlip.cshtml";
             string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
-           // viewModel = _hRFeeSlipService.GetPopulatedModel();
+            viewModel = _hRFeeSlipService.GetModelPrint(viewModel);
 
 
             var view = ViewEngines.Engines.FindView(ControllerContext, RelativePath, null);
@@ -77,7 +77,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTMLFeeSLip(fileName, content);
                 }
                 catch (Exception e)
                 {
