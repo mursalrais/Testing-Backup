@@ -244,15 +244,13 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective Approver,
+        ///   Looks up a localized string similar to Dear {2},&lt;br&gt;
+        ///You are authorized as an {5} for Manpower Requisition. 
+        ///Manpower Requisition is requested by {3} for position {4}. 
+        ///Please complete the approval process immediately.
         ///
-        ///    This email is sent to you to notify that there is a request which required your action to approve.
-        ///
-        ///Kindly check the link as per below to go to direct page accordingly. You may check your personal
-        ///
-        ///page in IMS (My Approval View). Thank you.    
-        ///
-        ///Link : {0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
+        ///To view the detail, please click the following link:
+        ///{0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
         /// </summary>
         public static string ManpowerApproval {
             get {
@@ -261,19 +259,42 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear Respective {2},
+        ///   Looks up a localized string similar to Dear {0},&lt;br&gt;
         ///
-        ///    This email is sent to you to notify that there is a request which required your action to approve.
+        ///Your request has been approved by {1}. Please contact respective person for any queries.  
         ///
-        ///Kindly check the link as per below to go to direct page accordingly. 
+        ///Thank you..
+        /// </summary>
+        public static string ManpowerApproved {
+            get {
+                return ResourceManager.GetString("ManpowerApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear {2},&lt;br&gt;
+        ///You are authorized as an {5} for Manpower Requisition. 
+        ///Manpower Requisition is requested by {3} for position {4}. 
         ///
-        ///Thank you.    
-        ///
-        ///Link : {0}/Lists/Manpower%20Requisition/DispManpower.aspx?ID={1}.
+        ///To view the detail, please click the following link:
+        ///{0}/Lists/Manpower%20Requisition/ApprovalManpower.aspx?ID={1}.
         /// </summary>
         public static string ManpowerDisplay {
             get {
                 return ResourceManager.GetString("ManpowerDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dear {0},&lt;br&gt;
+        ///
+        ///Your request has been approved by {1}. Please contact respective person for any queries.  
+        ///
+        ///Thank you..
+        /// </summary>
+        public static string ManpowerReject {
+            get {
+                return ResourceManager.GetString("ManpowerReject", resourceCulture);
             }
         }
         

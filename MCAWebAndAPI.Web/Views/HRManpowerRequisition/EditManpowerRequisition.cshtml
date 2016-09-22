@@ -326,7 +326,8 @@
                 }
             });
             var isKeyPosition = $("#IsKeyPosition").val();
-            if (isKeyPosition) {
+            //alert("edit, iskey : " + isKeyPosition);
+            if (isKeyPosition == "True") {
                 //$('#KeyPositionValue').prop('value', "Yes");
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
@@ -337,7 +338,7 @@
                 $("label[for='No']").show();
                 $("label[for='Yes']").hide();
                 $("#isKeyValuationValue").val(false);
-                console.log(isKeyPosition);
+                //alert(isKeyPosition);
             }
             if (((status == "Pending Approval") || (status == "Draft"))) {
        

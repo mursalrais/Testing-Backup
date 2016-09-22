@@ -20,7 +20,7 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 
             DateTime currentDate = DateTime.UtcNow;
             DateTime startDateApproval;
-            string EmailTo;
+            string EmailTo, approver, requestor;
             string SubjectEmail;
             string EmailContent;
             string caml;
@@ -32,10 +32,28 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
 
             //Reminder Manpower HR01
             caml = @"<View><Query><Where><Eq><FieldRef Name='manpowerrequeststatus' /><Value Type='Text'>Pending Approval</Value></Eq></Where></Query><ViewFields><FieldRef Name='requestdate' /><FieldRef Name='ID' /><FieldRef Name='currentapprover' /><FieldRef Name='iskeyposition' /></ViewFields><QueryOptions /></View>";
+            //caml = @"<View><Query>
+            //           <Where>
+            //              <Eq>
+            //                 <FieldRef Name='manpowerrequeststatus' />
+            //                 <Value Type='Text'>Pending Approval</Value>
+            //              </Eq>
+            //           </Where>
+            //        </Query>
+            //        <ViewFields>
+            //           <FieldRef Name='requestdate' />
+            //           <FieldRef Name='ID' />
+            //           <FieldRef Name='iskeyposition' />
+            //           <FieldRef Name='currentapprover' />
+            //           <FieldRef Name='visibleto' />
+            //        </ViewFields>
+            //        <QueryOptions /></View>";
             foreach (var item in SPConnector.GetList(SP_MANPOW_LIST_NAME, siteUrl, caml))
             {
                 startDateApproval = Convert.ToDateTime(item["requestdate"]).ToLocalTime();
                 totalBusinessDays = BusinessDays(startDateApproval, currentDate);
+                //approver = Convert.ToString(item["currentapprover"]);
+                //requestor
                 if (totalBusinessDays >= 5)
                 {
                     if (Convert.ToBoolean(item["iskeyposition"]))
@@ -46,7 +64,8 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
                     {
                         EmailTo = GetApprover("Deputy Executive Director", siteUrl);
                     }
-                    SubjectEmail = "Still Not Approved After 5 Working Days";
+                    SubjectEmail = "Pending for Approval of Manpower Requisition";
+                    //EmailContent = String.Format("Dear {0}, <br> This alert is sent to you to notify that there is a pending action to approve the Manpower Requisition which has been requested by {1}. Please complete the approval process immediately. <br> Thank You. ", );
                     EmailContent = "There are still Manpower Request yet to be processed (item id = " + Convert.ToInt32(item["ID"]).ToString() + ") and waiting for your approval. Please check your Manpower Approval Page";
                     EmailUtil.Send(EmailTo, SubjectEmail, EmailContent);
                 }
