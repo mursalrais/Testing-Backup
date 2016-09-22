@@ -12,16 +12,32 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 {
     public class FeeSlipDetailVM : Item
     {
-        [UIHint("Int32")]
-        public int Fee { get; set; }
+      
+        public int? ProfessionalID { get; set; }
 
-        [UIHint("Int32")]
-        public int Deduction { get; set; }
+        public bool checklist { get; set; }
 
-        [UIHint("Int32")]
-        public int TotalIncome { get; set; }
+        public int Intchecklist { get; set; }
 
-        [UIHint("Int32")]
-        public int TotalDeduction { get; set; }
+        public string Name { get; set; }
+       
+        public string Unit { get; set; }
+      
+        public string JoiningDate { get; set; }
+
+        public string Position { get; set; }
+
+
+        //[UIHint("Int32")]
+        //public int Fee { get; set; }
+
+        //[UIHint("Int32")]
+        //public int Deduction { get; set; }
+
+        //[UIHint("Int32")]
+        //public int TotalIncome { get; set; }
+
+        //[UIHint("Int32")]
+        //public int TotalDeduction { get; set; }
     }
 }

@@ -1,0 +1,128 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+<div class="col-sm-12">
+    @(Html.Kendo().Grid(Model.FeeSlipDetails)
+          .Name("FeeSlipDetails")
+          //.Editable(editable => editable.Mode(GridEditMode.InCell))
+          .Scrollable()
+          .HtmlAttributes(new { style = "height: 500px" })
+          .Columns(columns =>
+          {
+
+              columns.Bound(p => p.checklist).ClientTemplate(
+             "<input type='checkbox' #= checklist ? checked='checked':'' # onclick='checkSelected(this)'  />").Width(70).
+              HeaderTemplate("<input type='checkbox' id='chkSelectAll' onclick='checkAll(this)'/>");
+
+              //  columns.Bound(p => p.checklist).ClientTemplate(
+              //"<input type='checkbox' name='FeeSlipDetails[#= getFeeDetail(data)#].checklist' value='#= checklist #' />").Width(70).
+              // HeaderTemplate("<input type='checkbox' id='chkSelectAll' onclick='checkAll(this)'/>");
+
+              columns.Bound(p => p.ProfessionalID).ClientTemplate("#= ProfessionalID #" +
+              "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].ProfessionalID' value='#= ProfessionalID #' />").Width(90);
+              columns.Bound(p => p.Name).ClientTemplate("#= Name #" +
+             "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].Name' value='#= Name #' />").Width(150);
+              columns.Bound(p => p.Unit).ClientTemplate("#= Unit #" +
+             "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].Unit' value='#= Unit #' />").Width(150);
+              columns.Bound(p => p.Position).ClientTemplate("#= Position #" +
+             "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].Position' value='#= Position #' />").Width(150);
+              columns.Bound(p => p.JoiningDate).ClientTemplate("#= JoiningDate #" +
+            "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].JoiningDate' value='#= JoiningDate #' />").Width(150);
+
+              columns.Bound(p => p.Intchecklist).Hidden().ClientTemplate("#= Intchecklist #" +
+                                                                    "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].Intchecklist' value='#= Intchecklist #' />"
+                 );
+
+              columns.Bound(p => p.ID).Hidden().ClientTemplate("#= ID #" +
+                                                               "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].ID' value='#= ID #' />"
+                  );
+              columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
+                                                                     "<input type='hidden' name='FeeSlipDetails[#= getFeeDetail(data)#].EditMode' value='#= EditMode #' />"
+                  );
+
+
+          })
+          .Events(e =>
+          {
+              e.Edit("onEditKendoDetail");
+              e.DataBound("onDataBoundFeeDetails");
+          })
+          .DataSource(dataSource => dataSource.Ajax()
+          .Events(events =>
+          {
+
+          })
+
+              .Model(model =>
+              {
+                  model.Id(p => p.ID);
+              })
+              .ServerOperation(false)
+          )
+    )
+
+
+
+
+</div>
+
+
+
+<script>
+
+
+    function getFeeDetail(dataItem) {
+        var data = $("#FeeSlipDetails").data("kendoGrid").dataSource.data();
+        return data.indexOf(dataItem);
+    }
+
+    function onDataBoundFeeDetails(e) {
+        var grid = $("#FeeSlipDetails").data("kendoGrid");
+        hideDeletedRowKendoDetail(grid);
+
+
+    }
+
+    function checkSelected(ele) {
+        var grid = $('#FeeSlipDetails').data('kendoGrid');
+        var state = $(ele).is(':checked');
+        var row = $(ele).closest("tr");
+        var dataItem = grid.dataItem(row);
+
+        dataItem.checklist = state;
+
+
+        if (state === true) {
+            dataItem.Intchecklist = 1;
+        } else {
+            dataItem.Intchecklist = 0;
+        }
+
+        grid.refresh();
+    }
+
+    function checkAll(ele) {
+        var state = $(ele).is(':checked');
+        // alert(state);
+        var grid = $('#FeeSlipDetails').data('kendoGrid');
+        $.each(grid.dataSource.view(), function () {
+            if (this['checklist'] !== state) {
+                this.dirty = true;
+            
+            }
+              
+            this['checklist'] = state;
+
+            if (state === true) {
+                this['Intchecklist'] = 1;
+            } else {
+                this['Intchecklist'] = 0;
+            }
+        });
+        grid.refresh();
+    }
+
+  
+   
+
+</script>

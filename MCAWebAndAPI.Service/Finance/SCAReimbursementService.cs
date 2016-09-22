@@ -27,6 +27,7 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameId = "ID";
         private const string FieldNameSCAReimbursementNO = "Title";
         private const string FieldNameEventBudget = "EventBudget";
+        private const string FieldNameEventBudgetNo = "Event_x0020_Budget_x0020_No_x003";
         private const string FieldNameDescription = "Description";
         private const string FieldNameFund = "Fund";
         private const string FieldNameCurrency = "Currency";
@@ -44,6 +45,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailSCAReimbursementHeaderID = "SCAReimbursementId";
         private const string FieldNameDetailGLNo = "GLMasterId_x003a_GL_x0020_No";
         private const string FieldNameDetailGLDesc = "GLMasterId_x003a_GL_x0020_Descri";
+
+        private const string FieldName_VisibleTo = "VisibleTo";
 
         public SCAReimbursementService(string siteUrl)
         {
@@ -81,6 +84,8 @@ namespace MCAWebAndAPI.Service.Finance
             columnValues.Add(FieldNameDescription, scaReimbursement.Description);
             columnValues.Add(FieldNameFund, scaReimbursement.Fund);
             columnValues.Add(FieldNameCurrency, scaReimbursement.Currency.Text);
+
+            columnValues.Add(FieldName_VisibleTo, SPConnector.GetUser(scaReimbursement.UserEmail, siteUrl));
 
             try
             {
@@ -140,7 +145,7 @@ namespace MCAWebAndAPI.Service.Finance
 
 
                 var wbsId = Convert.ToInt32(viewModel.WBS.Value);
-                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+                var wbs = Common.WBSService.Get(siteUrl, wbsId);
 
                 updatedValue.Add(FieldNameDetail_WBSID, wbsId);
                 updatedValue.Add(FieldNameDetail_WBSDescription, wbs.WBSIDDescription);
@@ -222,7 +227,7 @@ namespace MCAWebAndAPI.Service.Finance
             if (listItem[FieldNameEventBudget] != null)
             {
                 viewModel.EventBudget.Value = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupId;
-                viewModel.EventBudget.Text = (listItem[FieldNameEventBudget] as FieldLookupValue).LookupValue;
+                viewModel.EventBudget.Text = (listItem[FieldNameEventBudgetNo] as FieldLookupValue).LookupValue;
             }
 
             viewModel.Description = Convert.ToString(listItem[FieldNameDescription]);

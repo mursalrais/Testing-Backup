@@ -184,6 +184,14 @@
                             Save as Draft
                         </button>
                     }
+
+                    if ((Model.Status.Value != "Pending Approval") && (Model.Status.Value != "Draft"))
+                    {
+                        <button id="save-button" class="btn btn-primary" type="button">
+                            <i class="fa fa-save"></i>
+                            Save
+                        </button>
+                    }
                 }
                     
                 
@@ -318,7 +326,8 @@
                 }
             });
             var isKeyPosition = $("#IsKeyPosition").val();
-            if (isKeyPosition) {
+            //alert("edit, iskey : " + isKeyPosition);
+            if (isKeyPosition == "True") {
                 //$('#KeyPositionValue').prop('value', "Yes");
                 $("label[for='Yes']").show();
                 $("label[for='No']").hide();
@@ -329,7 +338,7 @@
                 $("label[for='No']").show();
                 $("label[for='Yes']").hide();
                 $("#isKeyValuationValue").val(false);
-                console.log(isKeyPosition);
+                //alert(isKeyPosition);
             }
             if (((status == "Pending Approval") || (status == "Draft"))) {
        

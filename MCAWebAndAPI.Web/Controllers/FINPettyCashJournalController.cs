@@ -117,18 +117,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var fileName = viewModel.Title + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
-
-            string footer = string.Empty;
-
-            //TODO: Resolve user name
-            string userName = "xxxx";
-
-            //if (viewModel.Modified > viewModel.Created)
-            //{
-            //    DateTime dt = DateTime.Now;
-            //    footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
-            //}
-
+            
             using (var writer = new StringWriter())
             {
                 var context = new ViewContext(ControllerContext, view.View, ViewData, TempData, writer);
@@ -139,7 +128,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content, footer);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
                 }
                 catch (Exception e)
                 {

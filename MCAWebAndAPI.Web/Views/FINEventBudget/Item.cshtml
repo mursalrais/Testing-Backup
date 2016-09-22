@@ -24,6 +24,7 @@
                     @Html.HiddenFor(m => m.ID)
                     @Html.HiddenFor(m => m.No)
                     @Html.HiddenFor(m => m.UserEmail)
+                    @Html.HiddenFor(m => m.ClientDateTime)
                 </div>
             </div>
             <div class="row">
@@ -267,7 +268,7 @@
                     alert('Please make sure that all required fields are filled');
                     return;
                 }
-
+                e.preventDefault();
                 var actionUrl = $('form').attr("action");
                 var newActionUrl = actionUrl.replace("Save", "Print");
 
@@ -275,10 +276,10 @@
                 $('form').submit();
 
             });
-
         });
 
         $('form').on('submit', function () {
+            $('#ClientDateTime').val(new Date());
             var datasource = $("#ItemDetails").data("kendoGrid").dataSource.data();
             var totalAll = 0;
             var totalAllDP = 0;

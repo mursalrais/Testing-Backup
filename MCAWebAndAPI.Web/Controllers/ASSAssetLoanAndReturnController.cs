@@ -67,6 +67,32 @@ namespace MCAWebAndAPI.Web.Controllers
                 JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult View(int ID, string SiteUrl)
+        {
+            assetLoanAndReturnService.SetSiteUrl(SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+            SessionManager.Set("SiteUrl", SiteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+            var viewModel = assetLoanAndReturnService.GetHeader(ID, SiteUrl);
+
+            int? headerID = null;
+            headerID = viewModel.ID;
+
+            try
+            {
+                var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
+                viewModel.AssetLoanAndReturnItem = viewdetails;
+            }
+            catch (Exception e)
+            {
+                Response.TrySkipIisCustomErrors = true;
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return JsonHelper.GenerateJsonErrorResponse("Failed To Get Data...s");
+            }
+
+            return View(viewModel);
+        }
+
         private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
@@ -215,6 +241,8 @@ namespace MCAWebAndAPI.Web.Controllers
 
             return View(viewModel);
         }
+
+
 
         [HttpPost]
         public ActionResult Update(FormCollection form, AssetLoanAndReturnHeaderVM viewModel, string SiteUrl)

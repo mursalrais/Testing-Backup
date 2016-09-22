@@ -112,7 +112,7 @@ namespace MCAWebAndAPI.Service.Asset
                                                <Where>
                                                   <Eq>
                                                      <FieldRef Name='assetsubasset' />
-                                                     <Value Type='Lookup'>FXA-PC-OE-0001</Value>
+                                                     <Value Type='Lookup'>"+Convert.ToString(info1["AssetID"])+@"</Value>
                                                   </Eq>
                                                </Where>
                                             </Query>
@@ -220,7 +220,7 @@ namespace MCAWebAndAPI.Service.Asset
             tab.Columns.Add("AssetHolder", typeof(string));
             tab.Columns.Add("Province", typeof(string));
             tab.Columns.Add("Location", typeof(string));
-            if(isempty != "empty")
+            if (isempty != "empty")
             {
                 var info = GetReport(_siteUrl, mode);
                 var no = 1;

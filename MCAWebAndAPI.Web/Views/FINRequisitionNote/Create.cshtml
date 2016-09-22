@@ -8,7 +8,7 @@
 
 @{
     ViewBag.Title = "Create Requisition Note";
-    
+
 }
 
 @using (Html.BeginForm("CreateRequisitionNote", "FINRequisitionNote",
@@ -25,12 +25,13 @@
             <div class="col-sm-6">
                 @Html.HiddenFor(m => m.ID)
                 @Html.HiddenFor(m => m.UserEmail)
+                @Html.HiddenFor(m => m.ClientDateTime)
             </div>
         </div>
         <div class="row">
             @Html.Partial("_General", Model)
         </div>
-        
+
         <legend>Item Details</legend>
         <div class="row">
             @Html.Partial("_ItemDetails", Model.ItemDetails)
@@ -47,7 +48,7 @@
     <div class="form-actions">
         <div class="row">
             <div class="col-sm-12">
-               
+
                 <button id="submit-button" class="btn btn-primary" type="submit" value="Save" name="actionType">
                     <i class="fa fa-save"></i>
                     Submit
@@ -67,11 +68,10 @@
             categoryDropDownList.bind("dataBound", function (e) {
             });
 
+            $('#ClientDateTime').val(new Date());
             $("#hdnEvenBudgetId").val("-1");
 
         });
-
-        
     </script>
 }
 
@@ -87,6 +87,5 @@
     .k-button-icontext{
          height: 35px;
          margin-left: 5px;
-    }   
-
+    }
 </style>

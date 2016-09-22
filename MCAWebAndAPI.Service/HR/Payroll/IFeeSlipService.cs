@@ -11,14 +11,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
     {
         void SetSiteUrl(string siteUrl);
 
-        FeeSlipVM GetPopulatedModel(int? id = null);
+        FeeSlipVM GetPopulatedModel();
 
-        FeeSlipVM GetHeader(int? ID);
+        FeeSlipVM GetModelPrint(FeeSlipVM viewModel);
 
-        int CreateHeader(FeeSlipVM header);
+        //FeeSlipVM GetHeader(int? ID);
 
-        bool UpdateHeader(FeeSlipVM header);
+        //int CreateHeader(FeeSlipVM header);
 
-        void CreateFeeSlipDetails(int? headerID, IEnumerable<FeeSlipDetailVM> feeSlipDetails);
+        //bool UpdateHeader(FeeSlipVM header);
+
+        //void CreateFeeSlipDetails(int? headerID, IEnumerable<FeeSlipDetailVM> feeSlipDetails);
     }
 }

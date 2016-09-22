@@ -69,7 +69,7 @@
     $('#print-button').click(function (e) {
         var actionUrl = $('form').attr("action");
         var newActionUrl = actionUrl.replace("Display", "Print");
-
+        e.preventDefault();
         $('form').prop('action', newActionUrl);
         $('form').submit();
 

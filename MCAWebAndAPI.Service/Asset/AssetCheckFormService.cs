@@ -159,9 +159,18 @@ namespace MCAWebAndAPI.Service.Asset
             if(!isNew)
             {
                 var caml = @"<View><Query><Where><And>" + camlOfiice + @"<And>" + camlFloor + camlRoom + @"</And></And></Where><OrderBy><FieldRef Name='assetsubasset' Ascending='True' /></OrderBy></Query></View>";
+                var camlTransfer = caml;
                 int i = 0;
                 foreach (var item in SPConnector.GetList("Asset Assignment Detail", _siteUrl, caml))
                 {
+                    var camlAssetTransfer = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>"+ (item["assetsubasset"] as FieldLookupValue).LookupValue + "</Value></Eq></Where></Query></View>";
+
+                    var dataAssetTransfer = SPConnector.GetList("Asset Transfer Detail",_siteUrl,camlAssetTransfer);
+
+                    if(dataAssetTransfer.Count() > 0)
+                    {
+                        continue;
+                    }
                     var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
 
                     var dataLocationMaster = SPConnector.GetListItem("Location Master", (item["province"] as FieldLookupValue).LookupId, _siteUrl);
@@ -229,6 +238,81 @@ namespace MCAWebAndAPI.Service.Asset
 
                     
                 }
+
+                camlTransfer = camlTransfer.Replace("office", "officeto");
+                camlTransfer = camlTransfer.Replace("room", "roomto");
+                camlTransfer = camlTransfer.Replace("floor", "floorto");
+
+                foreach (var item in SPConnector.GetList("Asset Transfer Detail", _siteUrl, camlTransfer))
+                {
+                    var dataAssetMaster = SPConnector.GetListItem("Asset Master", (item["assetsubasset"] as FieldLookupValue).LookupId, _siteUrl);
+
+                    var dataLocationMaster = SPConnector.GetListItem("Location Master", (item["provinceto"] as FieldLookupValue).LookupId, _siteUrl);
+
+                    caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (item["assetsubasset"] as FieldLookupValue).LookupValue.ToString() + "</Value></Eq></Where></Query></View>";
+                    var dataAssetAcquisitionDetail = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml);
+
+                    if (dataAssetAcquisitionDetail.Count() > 0)
+                    {
+                        caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (item["assetsubasset"] as FieldLookupValue).LookupValue.ToString() + "</Value></Eq></Where></Query></View>";
+                        var dataAssetDisposalDetail = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml);
+
+                        caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (item["assetsubasset"] as FieldLookupValue).LookupValue.ToString() + "</Value></Eq></Where></Query></View>";
+                        var dataAssetReplacement = SPConnector.GetList("Asset Replacement Detail", _siteUrl, caml);
+
+                        caml = @"<View><Query><Where><Eq><FieldRef Name='assetsubasset' /><Value Type='Lookup'>" + (item["assetsubasset"] as FieldLookupValue).LookupValue.ToString() + "</Value></Eq></Where></Query></View>";
+                        var dataAssetLoanReturn = SPConnector.GetList("Asset Loan Return Detail", _siteUrl, caml);
+
+                        int qtyDisposal = 0;
+                        if (dataAssetDisposalDetail.Count() > 0)
+                        {
+                            qtyDisposal = 1;
+                        }
+
+                        int qtyReplacement = 0;
+                        if (dataAssetReplacement.Count() > 0)
+                        {
+                            qtyReplacement = 1;
+                        }
+
+                        int qtyAquisisi = 1;
+                        i++;
+                        var modelDetailItem = new AssetCheckFormItemVM();
+                        modelDetailItem.AssetID = (item["assetsubasset"] as FieldLookupValue).LookupId;
+                        modelDetailItem.item = i;
+                        modelDetailItem.assetSubAsset = (dataAssetMaster["AssetID"] == null ? "" : dataAssetMaster["AssetID"].ToString()) + "-" + (dataAssetMaster["Title"] == null ? "" : dataAssetMaster["Title"].ToString());
+                        modelDetailItem.serialNo = (dataAssetMaster["SerialNo"] == null ? "" : dataAssetMaster["SerialNo"].ToString());
+                        modelDetailItem.province = ((item["provinceto"] as FieldLookupValue).LookupValue == null ? "" : (item["provinceto"] as FieldLookupValue).LookupValue);
+                        modelDetailItem.location =
+                            (item["officeto"] == null ? "" : (item["officeto"] as FieldLookupValue).LookupValue)
+                            + "/" + (item["floorto"] == null ? "" : item["floorto"].ToString())
+                            + "/" + (item["roomto"] == null ? "" : item["roomto"].ToString());
+
+                        if (dataAssetLoanReturn.Count() > 0)
+                        {
+                            foreach (var itemLoan in dataAssetLoanReturn)
+                            {
+                                modelDetailItem.status = (itemLoan["status"] == null ? "" : itemLoan["status"].ToString());
+                            }
+                        }
+                        else
+                        {
+                            modelDetailItem.status = (item["status"] == null ? "" : item["status"].ToString());
+                        }
+
+                        modelDetailItem.systemQty = qtyAquisisi - qtyReplacement;
+
+                        if (modelDetailItem.systemQty != 0)
+                        {
+                            modelDetailItem.systemQty = modelDetailItem.systemQty - qtyDisposal;
+                        }
+
+                        modelDetail.Add(modelDetailItem);
+                    }
+
+
+                }
+
             }      
                   
             model.Details = modelDetail;

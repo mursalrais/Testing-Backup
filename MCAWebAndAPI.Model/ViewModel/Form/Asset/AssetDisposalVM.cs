@@ -16,6 +16,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Asset
 
         public IEnumerable<AssetDisposalDetailVM> Details { get; set; } = new List<AssetDisposalDetailVM>();
 
+        [Required]
         [DisplayName("Attachment")]
         public HttpPostedFileBase attach { get; set; }
         public string filename { get; set; }

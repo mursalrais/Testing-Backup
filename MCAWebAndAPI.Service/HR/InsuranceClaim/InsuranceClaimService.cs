@@ -781,10 +781,10 @@ namespace MCAWebAndAPI.Service.HR.InsuranceClaim
             else if (strStatus == "Validated by HR")
             {
                 lstEmail.Add(strUserEmail);
-                strBody += "Dear Mr/Ms " + strName +",<br><br>";
-                strBody += @"This is to notify you that the Insurance Claim request has been validated by HR.<br> 
+                strBody += "Dear " + strName +",<br><br>";
+                strBody += @"This is to notify that your request for Insurance Claim has been validated by HR.<br> 
                 We will submit your claim immediately to AXA. <br>
-                Please kindly check the latest status of your claim in the following link: <br>";
+                Please kindly check the latest status of your claim at the following link: <br>";
                 strBody += _siteUrl + UrlResource.InsuranceClaim;
                 strBody += "<br><br>Thank you for your attention.";
 

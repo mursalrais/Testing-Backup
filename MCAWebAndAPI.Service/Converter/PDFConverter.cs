@@ -106,5 +106,30 @@ namespace MCAWebAndAPI.Service.Converter
 
             return Convert(document);
         }
+
+        public byte[] ConvertFromHTMLFeeSLip(string pageTitle, string stringHTML)
+        {
+            var document = new HtmlToPdfDocument
+            {
+                GlobalSettings = {
+                    ProduceOutline = true,
+                    DocumentTitle = pageTitle,
+                    PaperSize = PaperKind.A4, // Implicit conversion to PechkinPaperSize
+                    Margins =
+                    {
+                        Left = 2,
+                        Right = 2,
+                        Bottom = 7,
+                        Top = 3,
+                        Unit = Unit.Centimeters
+                    }
+                },
+                Objects = {
+                    new ObjectSettings { HtmlText = stringHTML }
+                }
+            };
+
+            return Convert(document);
+        }
     }
 }

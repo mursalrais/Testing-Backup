@@ -45,8 +45,11 @@ namespace MCAWebAndAPI.Service.HR.Leave
         //Belum Pake
         void PopulateBalance(int idPSA,  PSAManagementVM viewModel, string action);
 
-        //Belum Pake
+        //BuatPayroll
         IEnumerable<DayOffRequest> GetDayOffRequests(IEnumerable<int> professionalIDs);
+
+        //BuatPayroll
+        IEnumerable<DayOffBalanceMaster> GetDayOffBalances(IEnumerable<int> professionalIDs);
 
         //Belum Pake
         int GetUnpaidDayOffTotalDays(int professionalID, IEnumerable<DateTime> dateRange);

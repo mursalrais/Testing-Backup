@@ -1,0 +1,164 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@using MCAWebAndAPI.Web.Helpers
+@model AdjustmentDataVM
+@{
+    ViewBag.Title = "Edit Adjustment HR";
+}
+
+@using (Ajax.BeginForm("CreateAdjustmentData", "HRAdjustment", FormMethod.Post, new AjaxOptions
+{
+    OnBegin = "onBeginForm",
+    OnComplete = "onCompleteForm",
+    OnSuccess = "onSuccessFormEmbed",
+    OnFailure = "onFailureForm"
+}, new
+{
+    @class = "form-horizontal"
+}))
+{
+    <fieldset>
+        @Html.HiddenFor(m => m.periodval)
+
+        <input type="hidden" id="loadpage" value="0">
+        <div class="row">
+            <div class="form-group" id="ParentDiv">
+                @Html.Bootstrap().LabelFor(m => m.periodDate).Class("col-xs-2 control-label")
+                <div class="col-xs-2">
+                    @Html.EditorFor(m => m.periodDate)
+                </div>
+            </div>
+        </div>
+
+        <legend>Adjustment & OT</legend>
+        <div id="adjustmentlist" class="row"></div>
+
+    </fieldset>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            showLoading();
+
+            var period = $("#periodDate").val();
+            var getperiod = period.replace(" ", "-");
+            var url = "/HRAdjustment/GetViewAdjustmentDetails?period=" + getperiod + "";
+
+            $('#adjustmentlist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                    hideLoading();
+
+                }
+            });
+
+            $("#periodDate").kendoDatePicker({
+                // defines the start view
+                start: "year",
+
+                // defines when the calendar should return date
+                depth: "year",
+
+                // display month and year in the input
+                format: "MMMM yyyy",
+                change: onChange
+            });
+
+            $("#submit-button").click(function (e) {
+                var rowgrid = $("#AdjustmentDetails").data("kendoGrid").tbody.find("tr");
+                var valdate = true;
+                var i = -1;
+                rowgrid.each(function (e) {
+                    i++;
+                    var xprof = $("#Profid" + i).val();
+                    var xadjus = $("#ajusmentType" + i).val();
+                    var xEdit = $("#Editid" + i).val();
+                    var j = -1;
+                    rowgrid.each(function (e) {
+                        j++;
+                        var yprof = $("#Profid" + j).val();
+                        var yadjus = $("#ajusmentType" + j).val();
+                        var yEdit = $("#Editid" + j).val();
+                        if (i !== j) {
+                            if (xprof != "undifined" && yprof != "undifined") {
+                                if (xEdit != -1) {
+                                    if (yEdit != -1) {
+                                        if (xprof == yprof) {
+                                            if (xadjus == yadjus) {
+                                                valdate = false;
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+
+                var grid = $("#AdjustmentDetails").data("kendoGrid").dataSource.data();
+
+                var valdatermk = true;
+                for (var i = 0; i < grid.length; i++) {
+                    if (grid[i].EditMode == 0) {
+                        if (grid[i].remark == "") {
+                            valdatermk = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (valdatermk == false) {
+                    alert("remark must be inputed..!");
+                } else if (valdate == false) {
+                    alert("professional with same adjustment type already add in same period..!!");
+                } else {
+                    $("form").submit();
+                }
+            });
+        });
+
+
+        function onChange() {
+            showLoading();
+            var period = $("#periodDate").val();
+            var getperiod = period.replace(" ", "-");
+
+            var url = "/HRAdjustment/GetViewAdjustmentDetails?period=" + getperiod + "";
+
+            $('#adjustmentlist').load(url, function (response, status, xhr) {
+                if (status == "success") {
+                }
+            });
+            hideLoading();
+        }
+
+        function getProfId(prof) {
+            if (prof != null) {
+                return prof.Value;
+            };
+        }
+
+        function onAdjustChange(e) {
+            if (e.action === "itemchange") {
+                var model = e.items[0];
+                var url = "/HRDataMaster/GetProfessionalActives/" + model.ddlProfessional.Value;
+                $.getJSON(url, function (result) {
+                    model.set('projUnit', (result[0].Project_Unit));
+                    model.set('position', (result[0].Position));
+                });
+            }
+        }
+
+        function GetDetailAdjustment(dataItem) {
+            var data = $("#AdjustmentDetails").data("kendoGrid").dataSource.data();
+            return data.indexOf(dataItem);
+        }
+
+        function onDataBoundAdjustmentDetails(e) {
+            var grid = $("#AdjustmentDetails").data("kendoGrid");
+            hideDeletedRowKendoDetail(grid);
+        }
+
+    </script>
+}
+
+

@@ -92,6 +92,7 @@
 @section scripts{
 
     <script>
+        var cektime = true;
 
         function filterLevel() {
             return {
@@ -183,8 +184,21 @@
                     });
                 });
 
+                var x = -1;
+                rowgrid.each(function (e) {
+                    x++;
+                    debugger;
+                    var xstart = $("#Start" + x).val();
+                    var xfinish = $("#Finish" + x).val();
+                    if (xfinish <= xstart) {
+                        cektime = false;
+                    }
+                });
+
                 if (valdate == false) {
                     alert("Date you have chosen already exists, please choose another date..!!");
+                } else if (cektime == false) {
+                    alert("Time (Finish) cannot be same or earlier than Time (Start)");
                 } else {
                     $("form").submit();
                 }
@@ -223,8 +237,21 @@
                     });
                 });
 
+                var x = -1;
+                rowgrid.each(function (e) {
+                    x++;
+                    debugger;
+                    var xstart = $("#Start" + x).val();
+                    var xfinish = $("#Finish" + x).val();
+                    if (xfinish <= xstart) {
+                        cektime = false;
+                    }
+                });
+
                 if (valdate == false) {
                     alert("Date you have chosen already exists, please choose another date..!!");
+                } else if (cektime == false) {
+                    alert("Time (Finish) cannot be same or earlier than Time (Start)");
                 } else {
                     $("form").submit();
                 }
@@ -258,8 +285,21 @@
                     });
                 });
 
+                var x = -1;
+                rowgrid.each(function (e) {
+                    x++;
+                    debugger;
+                    var xstart = $("#Start" + x).val();
+                    var xfinish = $("#Finish" + x).val();
+                    if (xfinish <= xstart) {
+                        cektime = false;
+                    }
+                });
+
                 if (valdate == false) {
                     alert("Date you have chosen already exists, please choose another date..!!");
+                } else if (cektime == false) {
+                    alert("Time (Finish) cannot be same or earlier than Time (Start)");
                 } else {
                     $("form").submit();
                 }
@@ -275,18 +315,17 @@
                 var url = "/HRCompensatory/PrintCompensatoryRequest";
                 submitFormToPrint(url);
             });
-
         });
 
         function getDayName(date) {
             var day = new Array();
-            day[0] = "Monday";
-            day[1] = "Tuesday";
-            day[2] = "Wednesday";
-            day[3] = "Thursday";
-            day[4] = "Friday";
-            day[5] = "Saturday";
-            day[6] = "Sunday";
+            day[0] = "Sunday";
+            day[1] = "Monday";
+            day[2] = "Tuesday";
+            day[3] = "Wednesday";
+            day[4] = "Thursday";
+            day[5] = "Friday";
+            day[6] = "Saturday";
 
             if (date != null) {
                 return day[date.getDay()];
@@ -301,8 +340,15 @@
                 if (model.StartTime != null && model.FinishTime != null) {
                     var start = model.StartTime.getHours();
                     var finish = model.FinishTime.getHours();
-                    var finishsec = model.FinishTime.getSeconds();
+                    var startmin = model.StartTime.getMinutes();
+                    if (startmin == 30)
+                        startmin = 0.5
+                    var finishmin = model.FinishTime.getMinutes();
+                    if (finishmin == 30)
+                        finishmin = 0.5
+
                     var range;
+
                     var rowgrid = $("#CompensatoryDetails").data("kendoGrid").tbody.find("tr");
                     var i = -1
                     var j = -1
@@ -320,12 +366,16 @@
                         });
                     });
 
-                    if ((finish + finishsec) <= start) {
-                        alert("FinishTime can not be smaller than the starttime..!!")
+
+                    if ((finish + finishmin) <= (start + startmin)) {
+                        alert("Time (Finish) cannot be same or earlier than Time (Start)")
+                        cektime = false;
+                    } else {
+                        cektime = true;
                     }
 
-                    if (start < finish) {
-                        range = finish - start
+                    if (start + startmin < finish + finishmin) {
+                        range = (finish + finishmin) - (start + startmin)
 
                         if (model.CmpTotalHours != range) {
                             model.set("CmpTotalHours", range);

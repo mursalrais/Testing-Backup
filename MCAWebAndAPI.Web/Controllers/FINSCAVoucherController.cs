@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,15 +37,25 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
         private const string SuccessMsgFormatCreated = "SCA Voucher number {0} has been successfully created.";
         private const string SuccessMsgFormatUpdated = "SCA Voucher number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/SCA%20Voucher/AllItems.aspx";
-        
+
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+
         public ActionResult Create(string siteUrl = null, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service = new SCAVoucherService(siteUrl);
 
             SCAVoucherVM model = new SCAVoucherVM();
+            model.UserEmail = userEmail;
+
             SetAdditionalSettingToVM(ref model);
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
@@ -53,6 +64,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         public ActionResult Edit(string siteUrl = null, int? ID = null, string userEmail = "")
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
@@ -105,10 +121,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             service = new SCAVoucherService(siteUrl);
             SCAVoucherVM model = new SCAVoucherVM();
-            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail); 
+            ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(userEmail);
 
             model = service.Get(ID);
-            
+
             if (model.UserEmail != userEmail || !COMProfessionalController.IsPositionFinance(professional.Position))
             {
                 throw new InvalidOperationException("You have no right to see this data.");
@@ -168,13 +184,21 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             var viewModel = new SCAVoucherVM();
             viewModel = service.Get(model.ID);
-            viewModel.SCAVoucherItems = service.GetSCAVoucherItems(Convert.ToInt32(model.ID)).ToList();
 
             ViewData.Model = viewModel;
             var view = ViewEngines.Engines.FindView(ControllerContext, PrintPageURL, null);
             var fileName = viewModel.SCAVoucherNo + "_Application.pdf";
             byte[] pdfBuf = null;
             string content;
+
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var userName = user == null ? viewModel.UserEmail : user.Name;
+
+            var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
+            DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
+
+            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -186,7 +210,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 // Get PDF Bytes
                 try
                 {
-                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content);
+                    pdfBuf = PDFConverter.Instance.ConvertFromHTML(fileName, content, footer);
                 }
                 catch (Exception e)
                 {
@@ -205,10 +229,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             var siteUrl = SessionManager.Get<string>(SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
-            service =  new SCAVoucherService(siteUrl);
+            service = new SCAVoucherService(siteUrl);
 
             int? ID = null;
-            ID = service.CreateSCAVoucher(ref viewModel);
+            ID = service.CreateSCAVoucher(ref viewModel, COMProfessionalController.GetAll());
 
             Task createSCAVoucherItemTask = service.CreateSCAVoucherItemAsync(ID, viewModel.SCAVoucherItems);
             Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(ID, viewModel.Documents);
@@ -248,7 +272,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 }
                 else
                 {
-                    if (service.UpdateSCAVoucher(viewModel))
+                    if (service.UpdateSCAVoucher(viewModel, COMProfessionalController.GetAll()))
                     {
                         Task createSCAVoucherItemTask = service.UpdateSCAVoucherItem(viewModel.ID, viewModel.SCAVoucherItems);
                         Task createSCAVoucherDocumentTask = service.CreateSCAVoucherAttachmentAsync(viewModel.ID, viewModel.Documents);
@@ -336,10 +360,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         private void SetAdditionalSettingToVM(ref SCAVoucherVM viewModel)
         {
-            viewModel.SDO.ControllerName = "ComboBox";
-            viewModel.SDO.ActionName = "GetProfessionals";
+            viewModel.SDO.ControllerName = "COMProfessional";
+            viewModel.SDO.ActionName = "GetForCombo";
             viewModel.SDO.ValueField = "ID";
-            viewModel.SDO.TextField = "Desc1";
+            viewModel.SDO.TextField = "NameAndPos";
             viewModel.SDO.OnSelectEventName = "OnSelectProfessional";
 
             viewModel.EventBudget.ControllerName = "ComboBox";

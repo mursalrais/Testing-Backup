@@ -46,6 +46,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailGLDesc = "GL_x003a_GL_x0020_Description";
         private const string FieldNameTypeOfSettlement = "Type_x0020_of_x0020_Settlement";
 
+        private const string FieldName_VisibleTo = "VisibleTo";
+
         private string siteUrl = string.Empty;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -85,6 +87,8 @@ namespace MCAWebAndAPI.Service.Finance
             columnValues.Add(FieldNameReceivedFromTo, scaSettlement.ReceivedFromTo);
             columnValues.Add(FieldNameTypeOfSettlement, scaSettlement.TypeOfSettlement.Value);
 
+            columnValues.Add(FieldName_VisibleTo, SPConnector.GetUser(scaSettlement.UserEmail, siteUrl));
+
             try
             {
                 if (scaSettlement.Operation == Operations.c)
@@ -104,7 +108,15 @@ namespace MCAWebAndAPI.Service.Finance
                     result = scaSettlement.ID;
                 }
 
-                SaveSCASettlementDetailItems(scaSettlement.ID, scaSettlement.ItemDetails);
+
+                try
+                {
+                    SaveSCASettlementDetailItems(scaSettlement.ID, scaSettlement.ItemDetails);
+                }
+                catch (Exception b)
+                {
+                    logger.Error("surrounding SaveSCASettlementDetailItems. Error is supressed.", b);
+                }
             }
             catch (Exception e)
             {
@@ -134,57 +146,76 @@ namespace MCAWebAndAPI.Service.Finance
 
         private void SaveSCASettlementDetailItems(int? headerID, IEnumerable<SCASettlementItemVM> viewModels)
         {
-            foreach (var viewModel in viewModels)
+            try
             {
-                if (Item.CheckIfSkipped(viewModel))
-                    continue;
 
-                if (Item.CheckIfDeleted(viewModel))
+
+                foreach (var viewModel in viewModels)
                 {
+                    if (Item.CheckIfSkipped(viewModel))
+                        continue;
+
+                    if (Item.CheckIfDeleted(viewModel))
+                    {
+                        try
+                        {
+                            SPConnector.DeleteListItem(ListName_SCASettlementItem, viewModel.ID, siteUrl);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.Error(e);
+                            throw e;
+                        }
+                        continue;
+                    }
+
+                    var updatedValue = new Dictionary<string, object>();
+
+                    updatedValue.Add(FieldNameDetailSCAHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
+
                     try
                     {
-                        SPConnector.DeleteListItem(ListName_SCASettlementItem, viewModel.ID, siteUrl);
+                        var wbsId = Convert.ToInt32(viewModel.WBS.Value);
+                        var wbs = Common.WBSService.Get(siteUrl, wbsId);
+                        updatedValue.Add(FieldNameDetailWBSId, wbsId);
+                        updatedValue.Add(FieldNameDetailWBSDescription, wbs.WBSIDDescription);
+                    }
+                    catch (Exception)
+                    {
+
+                        //throw;
+                    }
+
+
+                    updatedValue.Add(FieldNameDetailGL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
+                    updatedValue.Add(FieldNameDetailReceiptDate, viewModel.ReceiptDate);
+                    updatedValue.Add(FieldNameDetailReceiptNo, viewModel.ReceiptNo);
+                    updatedValue.Add(FieldNameDetailPayee, viewModel.Payee);
+                    updatedValue.Add(FieldNameDetailDescription, viewModel.DescriptionOfExpense);
+                    updatedValue.Add(FieldNameDetailAmount, viewModel.Amount);
+
+                    try
+                    {
+                        if (Item.CheckIfCreated(viewModel))
+                        {
+                            SPConnector.AddListItem(ListName_SCASettlementItem, updatedValue, siteUrl);
+                        }
+                        else
+                        {
+                            SPConnector.UpdateListItem(ListName_SCASettlementItem, viewModel.ID, updatedValue, siteUrl);
+                        }
                     }
                     catch (Exception e)
                     {
-                        logger.Error(e);
+                        logger.Error(e.Message);
                         throw e;
                     }
-                    continue;
                 }
-
-                var updatedValue = new Dictionary<string, object>();
-
-                updatedValue.Add(FieldNameDetailSCAHeaderID, new FieldLookupValue { LookupId = Convert.ToInt32(headerID) });
-
-                var wbsId = Convert.ToInt32(viewModel.WBS.Value);
-                var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
-                updatedValue.Add(FieldNameDetailWBSId, wbsId);
-                updatedValue.Add(FieldNameDetailWBSDescription, wbs.WBSIDDescription);
-
-                updatedValue.Add(FieldNameDetailGL, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.GL.Value) });
-                updatedValue.Add(FieldNameDetailReceiptDate, viewModel.ReceiptDate);
-                updatedValue.Add(FieldNameDetailReceiptNo, viewModel.ReceiptNo);
-                updatedValue.Add(FieldNameDetailPayee, viewModel.Payee);
-                updatedValue.Add(FieldNameDetailDescription, viewModel.DescriptionOfExpense);
-                updatedValue.Add(FieldNameDetailAmount, viewModel.Amount);
-
-                try
-                {
-                    if (Item.CheckIfCreated(viewModel))
-                    {
-                        SPConnector.AddListItem(ListName_SCASettlementItem, updatedValue, siteUrl);
-                    }
-                    else
-                    {
-                        SPConnector.UpdateListItem(ListName_SCASettlementItem, viewModel.ID, updatedValue, siteUrl);
-                    }
-                }
-                catch (Exception e)
-                {
-                    logger.Error(e.Message);
-                    throw e;
-                }
+            }
+            catch (Exception eee)
+            {
+                logger.Error("besaran SaveSCASettlementDetailItems", eee);
+                throw eee;
             }
         }
 
@@ -218,7 +249,7 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.DescriptionOfExpense = Convert.ToString(listItem[FieldNameDetailDescription]);
 
             var wbsId = (listItem[FieldNameDetailGLNo] as FieldLookupValue).LookupId;
-            var wbs = Common.WBSMasterService.Get(siteUrl, wbsId);
+            var wbs = Common.WBSService.Get(siteUrl, wbsId);
             viewModel.WBS.Value = wbsId;
             viewModel.WBS.Text = wbs.WBSIDDescription;
 

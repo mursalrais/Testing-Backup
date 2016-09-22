@@ -120,40 +120,6 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             return glMasters;
         }
 
-        public IEnumerable<WBSMasterVM> GetWBSMaster(string activity)
-        {
-            var camlGetSubactivity = @"<View><Query><Where><Eq><FieldRef Name='" + ACTIVITYID_SUBACTIVITY + "' /><Value Type='Lookup'>" +
-                 (activity == null ? string.Empty : activity.ToString()) + "</Value></Eq></Where></Query></View>";
-
-            string valuesText = string.Empty;
-            ListItemCollection subActivityLits = SPConnector.GetList(ListName_SubActivity, siteUrl, camlGetSubactivity);
-            string camlGetWbs = string.Empty;
-
-            if (subActivityLits.Count > 0)
-            {
-                foreach (var item in subActivityLits)
-                {
-                    valuesText += "<Value Type='Lookup'>" + Convert.ToString(item[FIELD_ID]) + "</Value>";
-                }
-            }
-            else
-            {
-                //if isempty
-                valuesText += "<Value Type='Lookup'>-1</Value>";
-            }
-
-            camlGetWbs = @"<View><Query><Where><In><FieldRef Name='" + WBS_SUBACTIVITY_ID + "' /><Values>" +
-                                valuesText + "</Values></In></Where></Query></View>";
-            var wbsMasters = new List<WBSMasterVM>();
-
-            foreach (var item in SPConnector.GetList(ListName_WBSMaster, siteUrl, camlGetWbs))
-            {
-                wbsMasters.Add(ConvertToWBSMasterModel(item));
-            }
-
-            return wbsMasters;
-        }
-
         public int CreateRequisitionNote(RequisitionNoteVM viewModel)
         {
             var updatedValue = new Dictionary<string, object>();
@@ -242,7 +208,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
 
-                var wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
+                var wbs = Common.WBSService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
                 updatedValue.Add(FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBS.Value));
                 updatedValue.Add(FieldNameItem_WBSIdDescription, wbs.WBSIDDescription);
 
@@ -312,7 +278,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
 
                 updatedValue.Add(FIELD_RN_WBS, new FieldLookupValue { LookupId = Convert.ToInt32(viewModel.WBS.Value) });
 
-                var wbs = Common.WBSMasterService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
+                var wbs = Common.WBSService.Get(siteUrl, Convert.ToInt32(viewModel.WBS.Value));
                 updatedValue.Add(FieldNameItem_WBSID, Convert.ToInt32(viewModel.WBS.Value));
                 updatedValue.Add(FieldNameItem_WBSIdDescription, wbs.WBSIDDescription);
 
@@ -491,7 +457,7 @@ namespace MCAWebAndAPI.Service.Finance.RequisitionNote
             viewModel.Activity.Value = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupId;
             viewModel.Activity.Text = (listItem[FIELD_RN_ACTIVITY] as FieldLookupValue).LookupValue;
 
-            var wbs = WBSMasterService.Get(siteUrl, Convert.ToInt32((listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId));
+            var wbs = WBSService.Get(siteUrl, Convert.ToInt32((listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId));
             viewModel.WBS.Value = (listItem[FIELD_RN_WBS] as FieldLookupValue).LookupId;
             viewModel.WBS.Text = wbs.WBSIDDescription;
 

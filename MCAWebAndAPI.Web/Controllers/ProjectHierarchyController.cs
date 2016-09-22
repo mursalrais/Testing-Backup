@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 using MCAWebAndAPI.Web.Resources;
 using MCAWebAndAPI.Model.ProjectManagement.Common;
+using MCAWebAndAPI.Model.Common;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -89,10 +90,10 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
 
-        private IEnumerable<WBSMapping> GetWBSMappingFromExistingSession()
+        private IEnumerable<WBS> GetWBSMappingFromExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBSMapping>;
+            var sessionVariable = System.Web.HttpContext.Current.Session["WBSMapping"] as IEnumerable<WBS>;
             var wbsMapping = sessionVariable ?? _service.GetWBSMappingsInProgram();
 
             if (sessionVariable == null) // If no session variable is found

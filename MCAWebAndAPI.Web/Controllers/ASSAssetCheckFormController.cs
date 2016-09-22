@@ -29,17 +29,19 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrlSession = SessionManager.Get<string>("SiteUrl");
 
+            String url = "";
             if (siteUrlSession == null)
             {
                 assetCheckFormService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultBOSiteUrl);
                 SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultBOSiteUrl);
+
+                url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
             }
             else
             {
                 assetCheckFormService.SetSiteUrl(siteUrlSession ?? ConfigResource.DefaultBOSiteUrl);
+                url = (siteUrlSession ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
             }
-
-            String url = (siteUrl ?? ConfigResource.DefaultBOSiteUrl) + UrlResource.AssetCheckForm;
 
             return Content("<script>window.top.location.href = '" + url + "';</script>");
         }

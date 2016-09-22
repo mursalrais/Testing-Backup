@@ -35,6 +35,8 @@ namespace MCAWebAndAPI.Service.Asset
 
         IEnumerable<AssetLoanAndReturnItemVM> GetDetails(int? headerID);
 
+        IEnumerable<AssetLoanAndReturnItemVM> GetDetailsEdit(int? headerID);
+
         bool CreateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);
 
         bool UpdateAssetTransfer(AssetLoanAndReturnItemVM assetTransfer);

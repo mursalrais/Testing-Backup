@@ -235,6 +235,32 @@ namespace MCAWebAndAPI.Service.HR.Leave
             };
         }
 
+        public IEnumerable<DayOffBalanceMaster> GetDayOffBalances(IEnumerable<int> professionalIDs)
+        {
+            var dayOffBalances = new List<DayOffBalanceMaster>();
+            foreach (var professionalID in professionalIDs)
+            {
+                var caml = @"<View><Query><Where><And><Eq><FieldRef Name='dayoffname' /><Value Type='Choice'>Annual Day-Off</Value></Eq><Eq><FieldRef Name='professional_x003a_ID' /><Value Type='Lookup'>"+ professionalIDs + "</Value></Eq></And></Where></Query><ViewFields><FieldRef Name='ID' /><FieldRef Name='dateofnewpsa' /><FieldRef Name='lastworkingdate' /><FieldRef Name='finalbalance' /></ViewFields><QueryOptions /></View>";
+
+                foreach (var item in SPConnector.GetList(SP_DAYOFF_BAL_LIST_NAME, _siteUrl, caml))
+                {
+                    dayOffBalances.Add(ConvertToDayOffBalance(item, professionalID));
+                }
+            }
+            return dayOffBalances;
+        }
+
+        private DayOffBalanceMaster ConvertToDayOffBalance(ListItem item, int professionalID)
+        {
+            return new DayOffBalanceMaster
+            {
+                ID = Convert.ToInt32(item["ID"]),
+                DateOfNewPsa = Convert.ToDateTime(item["dateofnewpsa"]),
+                LastWorkingDate = Convert.ToDateTime(item["lastworkingdate"]),
+                FinalBalance = Convert.ToInt32(item["finalbalance"]),
+            };
+        }
+
         public DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays, List<string> returnToWork)
         {
             var model = new DayOffRequestVM();

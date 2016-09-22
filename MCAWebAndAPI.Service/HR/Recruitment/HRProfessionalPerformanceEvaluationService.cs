@@ -275,6 +275,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             string professionalEmail = null;
             var columnValues = new Dictionary<string, object>();
 
+            if (header.StatusForm == "Initiated" || header.StatusForm == null)
+            {
+                foreach (var item in SPConnector.GetList(workflowTransactionListName, _siteUrl, caml))
+                {
+                    emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
+
+                    columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
+                    try
+                    {
+                        SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                    }
+
+                    try
+                    {
+                        EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
+                    }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+                }
+            }
+
             if (header.ApproverCount == 1)
             {
                 if (header.TypeForm == "Approver1")
@@ -291,8 +319,7 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             }
                             catch (Exception e)
                             {
-                                logger.Error(e.Message);
-                                throw e;
+
                             }
                         }
                     }

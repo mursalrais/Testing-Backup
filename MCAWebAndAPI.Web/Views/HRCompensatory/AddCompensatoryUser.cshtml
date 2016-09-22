@@ -88,6 +88,8 @@ new AjaxOptions
 @section scripts{
 
     <script>
+        var cektime = true;
+
             $(document).ready(function () {
                 showLoading();
                 var nameProf = $("#cmpName").val() + " - " + $("#cmpPosition").val();
@@ -154,7 +156,6 @@ new AjaxOptions
                                             if (xdate == ydate) {
                                                 valdate = false;
                                                 return false;
-
                                             }
                                         }
                                     }
@@ -163,8 +164,21 @@ new AjaxOptions
                         });
                     });
 
+                    var x = -1;
+                    rowgrid.each(function (e) {
+                        x++;
+                        debugger;
+                        var xstart = $("#Start" + x).val();
+                        var xfinish = $("#Finish" + x).val();
+                        if (xfinish <= xstart) {
+                            cektime = false;
+                        }
+                    });
+
                     if (valdate == false) {
                         alert("Date you have chosen already exists, please choose another date..!!");
+                    } else if (cektime == false) {
+                        alert("Time (Finish) cannot be same or earlier than Time (Start)");
                     } else {
                         $("#StatusForm").val("Pending Approval 1 of 2")
                         $("form").submit();
@@ -198,8 +212,22 @@ new AjaxOptions
                         });
                     });
 
+                    var x = -1;
+                    rowgrid.each(function (e) {
+                        x++;
+                        debugger;
+                        var xstart = $("#Start" + x).val();
+                        var xfinish = $("#Finish" + x).val();
+                        if (xfinish <= xstart) {
+                            cektime = false;
+                        }
+                    });
+
+
                     if (valdate == false) {
                         alert("Date you have chosen already exists, please choose another date..!!");
+                    } else if (cektime == false) {
+                        alert("Time (Finish) cannot be same or earlier than Time (Start)");
                     } else {
                         $("#StatusForm").val("Draft")
                         $("form").submit();
@@ -259,15 +287,24 @@ new AjaxOptions
                     if (model.StartTime != null && model.FinishTime != null) {
                         var start = model.StartTime.getHours();
                         var finish = model.FinishTime.getHours();
-                        var finishsec = model.FinishTime.getSeconds();
+                        var startmin = model.StartTime.getMinutes();
+                        if (startmin == 30)
+                            startmin = 0.5
+                        var finishmin = model.FinishTime.getMinutes();
+                        if (finishmin == 30)
+                            finishmin = 0.5
+
                         var range;
 
-                        if ((finish + finishsec) <= start) {
-                            alert("FinishTime can not be smaller than the starttime..!!")
+                        if ((finish + finishmin) <= (start + startmin)) {
+                            alert("Time (Finish) cannot be same or earlier than Time (Start)")
+                            cektime = false;
+                        } else {
+                            cektime = true;
                         }
 
-                        if (start < finish) {
-                            range = finish - start
+                        if (start + startmin < finish + finishmin) {
+                            range = (finish + finishmin) - (start + startmin)
 
                             if (model.CmpTotalHours != range) {
                                 model.set("CmpTotalHours", range);

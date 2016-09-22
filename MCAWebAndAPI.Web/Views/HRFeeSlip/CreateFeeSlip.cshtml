@@ -1,0 +1,143 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model FeeSlipVM
+
+
+@using (Html.BeginForm("", "HRFeeSlip", FormMethod.Post,
+                            new
+                            {
+                                @class = "form-horizontal",
+                                enctype = "multipart/form-data"
+                            }))
+{
+    <fieldset>
+
+      
+        <div class="col-sm-6">
+
+            <div class="form-group">
+                @Html.Bootstrap().LabelFor(m => m.Period).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.Period)
+                </div>
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.Position).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.Position)
+                </div>*@
+             
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.ID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ID)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.OrganizationInsuranceID).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.OrganizationInsuranceID)
+                </div>*@
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.ClaimDate).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.ClaimDate)
+                </div>*@
+                <button id="print-slip-button" class="btn btn-success" type="button">
+                    <i class="fa fa-save"></i>
+                   Print Fee Slip
+                </button>
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.DependantName).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.EditorFor(m => m.DependantName)
+                </div>*@
+            </div>
+            <div class="form-group">
+                @*@Html.Bootstrap().LabelFor(m => m.IndividualInsuranceNumber).Class("col-sm-4 control-label")
+                <div class="col-sm-8">
+                    @Html.DisplayFor(m => m.IndividualInsuranceNumber)
+                </div>*@
+            </div>
+
+        </div>
+
+        <legend>Professional</legend>
+        <div class="row">
+            @Html.Partial("_ProfessionalDetailFee", Model)
+        </div>
+
+
+
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12">
+               
+              
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+
+        $(document)
+            .ready(function() {
+
+                $("#print-slip-button")
+                    .click(function() {
+
+                        //if (strtype === "Dependent" && strDependent === '') {
+                        //    alert('Dependent Name field is required');
+                        //    return false;
+                        //} else {
+                        //    $("#ClaimStatus").val("Need HR to Validate");
+
+                        // var state = $(ele).is(':checked');
+                        // alert(state);
+                        var cek = false;
+                        var grid = $('#FeeSlipDetails').data('kendoGrid');
+                        $.each(grid.dataSource.view(),
+                            function() {
+
+                                if (this['checklist'] === true) {
+                                    cek = true;
+                                }
+
+                                //if (this['checklist'] !== state) {
+                                //    this.dirty = true;
+
+                                //}
+
+                                //this['checklist'] = state;
+
+                                //if (state === true) {
+                                //    this['Intchecklist'] = 1;
+                                //} else {
+                                //    this['Intchecklist'] = 0;
+                                //}
+                            });
+                       // grid.refresh();
+
+                        if (cek === false) {
+                            alert('Please select the professional first');
+                            return false;
+                        }
+
+                        $('form').prop('action', '/HRFeeSlip/PrintFeeSlip');
+                        $("form").submit();
+
+
+                    });
+
+
+            });
+
+
+    </script>
+    }

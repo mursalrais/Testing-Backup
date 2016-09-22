@@ -103,7 +103,7 @@ namespace MCAWebAndAPI.Service.Finance
                 columnValues.Add(FieldName_Vendor_Code, vendor.VendorId);
                 columnValues.Add(FieldName_Vendor_Name, vendor.Name);
             }
-            
+
             columnValues.Add(FieldName_Driver, viewModel.Driver);
             columnValues.Add(FieldName_Currency, viewModel.Currency.Value);
             columnValues.Add(FieldName_Reason, viewModel.Reason);
@@ -118,7 +118,6 @@ namespace MCAWebAndAPI.Service.Finance
             columnValues.Add(FieldName_AmountLiquidated, viewModel.Amount);
             columnValues.Add(FieldName_AmountReimbursed, viewModel.Amount);
             columnValues.Add(FieldName_Remarks, viewModel.Remarks);
-
 
             try
             {
@@ -202,7 +201,8 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Amount = multiplier * Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
             viewModel.WBSName = Convert.ToString(listItem[FieldName_WBSDesc]);
 
-            viewModel.GLName = string.Format("{0} - {1}", Convert.ToString((listItem[FieldName_GLNo] as FieldLookupValue).LookupValue), Convert.ToString((listItem[FieldName_GLDesc] as FieldLookupValue).LookupValue));
+            GLMasterVM gl = Common.GLMasterService.Get(siteUrl, Convert.ToInt32((listItem[FieldName_GL] as FieldLookupValue).LookupId));
+            viewModel.GLName = gl.GLNoDescription;
 
             if (paidTo.ToLower() == "professional")
             {
@@ -210,7 +210,7 @@ namespace MCAWebAndAPI.Service.Finance
             }
             else if (paidTo.ToLower() == "vendor")
             {
-                viewModel.Payee = Convert.ToString((listItem[FieldName_Vendor_Name] as FieldLookupValue).LookupValue);
+                viewModel.Payee = Convert.ToString(listItem[FieldName_Vendor_Name]);
             }
             else
             {
