@@ -56,5 +56,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public IEnumerable<SCASettlementItemVM> ItemDetails { get; set; } = new List<SCASettlementItemVM>();
 
         public Operations Operation { get; set; }
+
+        public string UserEmail { get; set; }
     }
 }

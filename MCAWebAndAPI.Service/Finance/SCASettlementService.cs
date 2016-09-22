@@ -46,6 +46,8 @@ namespace MCAWebAndAPI.Service.Finance
         private const string FieldNameDetailGLDesc = "GL_x003a_GL_x0020_Description";
         private const string FieldNameTypeOfSettlement = "Type_x0020_of_x0020_Settlement";
 
+        private const string FieldName_VisibleTo = "VisibleTo";
+
         private string siteUrl = string.Empty;
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -84,6 +86,8 @@ namespace MCAWebAndAPI.Service.Finance
             columnValues.Add(FieldNameTotalExpense, scaSettlement.TotalExpense);
             columnValues.Add(FieldNameReceivedFromTo, scaSettlement.ReceivedFromTo);
             columnValues.Add(FieldNameTypeOfSettlement, scaSettlement.TypeOfSettlement.Value);
+
+            columnValues.Add(FieldName_VisibleTo, SPConnector.GetUser(scaSettlement.UserEmail, siteUrl));
 
             try
             {

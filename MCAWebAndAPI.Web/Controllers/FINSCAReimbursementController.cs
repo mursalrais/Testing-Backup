@@ -32,14 +32,21 @@ namespace MCAWebAndAPI.Web.Controllers
         private ISCAReimbursementService service;
         private IEventBudgetService serviceEB;
         
-        public ActionResult Item(string siteUrl = null, string op = null, int? id = null)
+        public ActionResult Item(string siteUrl = null, string op = null, string userEmail = "", int? id = null)
         {
+            if (userEmail == string.Empty)
+            {
+                throw new InvalidOperationException("Invalid parameter: userEmail.");
+            }
+
             siteUrl = siteUrl ?? ConfigResource.DefaultBOSiteUrl;
             SessionManager.Set(SharedController.Session_SiteUrl, siteUrl);
 
             service = new SCAReimbursementService(siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+            viewModel.UserEmail = userEmail;
+
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
             SetAdditionalSettingToViewModel(ref viewModel);
