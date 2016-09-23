@@ -53,16 +53,14 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             var Count = Detail.Count();
             int sum = 0;
             string project = null;
             string individual = null;
-            var ApproverName = viewModel.WorkflowItems;
 
-            foreach (var item in ApproverName)
+            foreach (var item in viewModel.WorkflowItems)
             {
                 var lvl = item.Level;
                 if (lvl == "1")
@@ -73,6 +71,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (lvl == "2")
                 {
                     viewModel.Approver2 = item.ApproverNameText;
+                }
+
+                if (lvl == "3")
+                {
+                    viewModel.Approver3 = item.ApproverNameText;
                 }
             }
 
@@ -214,7 +217,25 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+
+                if (lvl == "3")
+                {
+                    viewModel.Approver3 = item.ApproverNameText;
+                }
+            }
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             var Count = Detail.Count();
@@ -394,7 +415,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     if (viewModel.TypeForm == "Professional" && viewModel.StatusForm == "Pending Approval 3 of 3")
                         _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                         SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 3,
-                        string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                        string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver3, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                     // Send to Level 3 Approver and Requestor
                     if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 3")
@@ -406,7 +427,7 @@ namespace MCAWebAndAPI.Web.Controllers
                     if (viewModel.TypeForm == "Approver3" && viewModel.StatusForm == "Pending Approval 3 of 3")
                         _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                         SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 3,
-                        string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
+                        string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver3, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanApproved, viewModel.Name, viewModel.Requestor));
 
                 }
 
@@ -426,7 +447,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 if (viewModel.StatusForm == "Reject3")
                     _hRPerformancePlanService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                     SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 3,
-                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
+                    string.Format(EmailResource.ProfessionalPerformancePlan, viewModel.Approver3, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerformancePlan, viewModel.ID), string.Format(EmailResource.ProfessionalPerformancePlanRejected, viewModel.Name, viewModel.Requestor));
             
             }
             catch (Exception e)

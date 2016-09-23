@@ -30,8 +30,7 @@ namespace MCAWebAndAPI.Service.Utils
 
             mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.To.Add(new MailAddress(emailAddress));
-            mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
-            mail.CC.Add(new MailAddress("heidy@eceos.com"));
+            mail.CC.Add(new MailAddress("rprayengki@gmail.com"));
             mail.Subject = subject;
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
@@ -61,8 +60,7 @@ namespace MCAWebAndAPI.Service.Utils
             MailMessage mail = new MailMessage();
 
             mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
-            mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
-            mail.CC.Add(new MailAddress("heidy@eceos.com"));
+            mail.CC.Add(new MailAddress("rprayengki@gmail.com"));
             foreach (var item in lstEmail)
             {
                 mail.To.Add(new MailAddress(item));
