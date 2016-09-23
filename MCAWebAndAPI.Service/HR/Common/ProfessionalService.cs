@@ -840,5 +840,32 @@ namespace MCAWebAndAPI.Service.HR.Common
             }
             return position;
         }
+
+        public string GetUser(string email, string siteUrl)
+        {
+            var caml = @"<View><Query>
+                       <Where>
+                          <Eq>
+                             <FieldRef Name='officeemail' />
+                             <Value Type='Text'>" + email + @"</Value>
+                          </Eq>
+                       </Where>
+                    </Query>
+                    <ViewFields>
+                       <FieldRef Name='Title' />
+                    </ViewFields>
+                    <QueryOptions /></View>";
+            var result = SPConnector.GetList("Professional Master", siteUrl, caml);
+            var user = "";
+            if (result.Count != 0)
+            {
+                foreach (var r in result)
+                {
+                    user = Convert.ToString(r["Title"]);
+                }
+            }
+
+            return user;
+        }
     }
 }

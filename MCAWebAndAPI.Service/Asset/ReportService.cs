@@ -26,10 +26,16 @@ namespace MCAWebAndAPI.Service.Asset
             var Listmodel = new List<AssetReportVM>();
             var camlAssetMaster = @"<View><Query>
                                <Where>
-                                  <Eq>
-                                     <FieldRef Name='AssetCategory' />
-                                     <Value Type='Choice'>"+ mode + @"</Value>
-                                  </Eq>
+                                <And>
+                                    <Eq>
+                                         <FieldRef Name='AssetCategory' />
+                                         <Value Type='Choice'>" + mode + @"</Value>
+                                     </Eq>
+                                    <Eq>
+                                        <FieldRef Name='AssetLevel' />
+                                        <Value Type='Choice'>Main Asset</Value>
+                                    </Eq>
+                                </And>
                                </Where>
                                <OrderBy>
                                   <FieldRef Name='AssetID' Ascending='True' />
@@ -49,7 +55,7 @@ namespace MCAWebAndAPI.Service.Asset
                             <QueryOptions /></View>";
             var infoAssetMaster = SPConnector.GetList("Asset Master", SiteUrl, camlAssetMaster);
             var no = 1;
-            foreach(var info1 in infoAssetMaster)
+            foreach (var info1 in infoAssetMaster)
             {
                 var model = new AssetReportVM();
                 model.ID = Convert.ToInt32(info1["ID"]);
@@ -108,19 +114,30 @@ namespace MCAWebAndAPI.Service.Asset
                                                 </Query>
                                                 <ViewFields />
                                                 <QueryOptions /></View>";
+                            var camlreplacementdetail = @"<View><Query>
+                                                       <Where>
+                                                          <Eq>
+                                                             <FieldRef Name='assetsubasset' />
+                                                             <Value Type='Lookup'>" + Convert.ToString(info1["AssetID"]) + @"</Value>
+                                                          </Eq>
+                                                       </Where>
+                                                    </Query>
+                                                    <ViewFields />
+                                                    <QueryOptions /></View>";
                             var camldisposal = @"<View><Query>
                                                <Where>
                                                   <Eq>
                                                      <FieldRef Name='assetsubasset' />
-                                                     <Value Type='Lookup'>"+Convert.ToString(info1["AssetID"])+@"</Value>
+                                                     <Value Type='Lookup'>" + Convert.ToString(info1["AssetID"]) + @"</Value>
                                                   </Eq>
                                                </Where>
                                             </Query>
                                             <ViewFields />
                                             <QueryOptions /></View>";
                             var inforeplacement = SPConnector.GetList("Asset Replacement", SiteUrl, camlreplacement);
+                            var inforeplacementDetail = SPConnector.GetList("Asset Replacement Detail", SiteUrl, camlreplacementdetail);
                             var infoDisposal = SPConnector.GetList("Asset Disposal Detail", SiteUrl, camldisposal);
-                            if (inforeplacement.Count > 0)
+                            if ((inforeplacement.Count != 0 && inforeplacementDetail.Count == 0))
                             {
                                 model.quantity = 0;
                             }
@@ -128,7 +145,7 @@ namespace MCAWebAndAPI.Service.Asset
                             {
                                 model.quantity = 1;
                             }
-                            if(infoDisposal.Count > 0)
+                            if (infoDisposal.Count != 0)
                             {
                                 model.quantity = 0;
                             }
@@ -147,7 +164,7 @@ namespace MCAWebAndAPI.Service.Asset
                                                <Where>
                                                   <Eq>
                                                      <FieldRef Name='assetsubasset_x003a_ID' />
-                                                     <Value Type='Lookup'>"+Convert.ToInt32(info1["ID"])+ @"</Value>
+                                                     <Value Type='Lookup'>" + Convert.ToInt32(info1["ID"]) + @"</Value>
                                                   </Eq>
                                                </Where>
                                             </Query>
@@ -162,19 +179,19 @@ namespace MCAWebAndAPI.Service.Asset
                                             </ViewFields>
                                             <QueryOptions /></View>";
                         var infoAssignment = SPConnector.GetList("Asset Assignment Detail", SiteUrl, camlAssetAssignment);
-                        if(infoAssignment != null)
+                        if (infoAssignment != null)
                         {
                             var idParentAssigment = 0;
                             foreach (var info4 in infoAssignment)
                             {
-                                model.province = Convert.ToString(info4["city"]) +"-"+ (info4["province"] as FieldLookupValue).LookupValue;
-                                model.location = (info4["office"] as FieldLookupValue).LookupValue +"/"+ Convert.ToString(info4["floor"] +"/"+ Convert.ToString(info4["room"]));
+                                model.province = Convert.ToString(info4["city"]) + "-" + (info4["province"] as FieldLookupValue).LookupValue;
+                                model.location = (info4["office"] as FieldLookupValue).LookupValue + "/" + Convert.ToString(info4["floor"] + "/" + Convert.ToString(info4["room"]));
                                 idParentAssigment = (info4["assetassignment"] as FieldLookupValue).LookupId;
                             }
                             var infoParentAssignment = SPConnector.GetListItem("Asset Assignment", idParentAssigment, SiteUrl);
-                            if(infoParentAkuisisi != null)
+                            if (infoParentAkuisisi != null)
                             {
-                                if(infoParentAssignment != null)
+                                if (infoParentAssignment != null)
                                 {
                                     model.assetholdername = (infoParentAssignment["assetholder"] as FieldLookupValue).LookupValue + "-" + Convert.ToString(infoParentAssignment["position"]);
                                 }
@@ -243,6 +260,11 @@ namespace MCAWebAndAPI.Service.Asset
                         WE = "";
                         PD = "";
                     }
+                    else
+                    {
+                        WE = i.warrantyexpires;
+                        PD = i.purchasedate;
+                    }
                     row["WarrantyExpires"] = WE;
                     row["Condition"] = Convert.ToString(i.condition);
                     row["CostIDR"] = Convert.ToString(i.costidr);
@@ -258,7 +280,7 @@ namespace MCAWebAndAPI.Service.Asset
                     tab.Rows.InsertAt(row, (no - 1));
                 }
             }
-            
+
             return tab;
         }
 

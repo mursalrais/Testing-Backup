@@ -103,10 +103,11 @@ namespace MCAWebAndAPI.Web.Controllers
                         _professionalService.SetValidationStatus(headerID, Workflow.ProfessionalValidationStatus.NEED_VALIDATION);
                         foreach (var item in EmailsHR)
                         {
+                            string hrname = _professionalService.GetUser(item, siteUrl);
                             if (!(string.IsNullOrEmpty(item)))
                             {
                                 _professionalService.SendEmailValidation(item,
-                            string.Format(EmailResource.ProfessionalEmailValidation,
+                            string.Format(EmailResource.ProfessionalEmailValidation, hrname, viewModel.FirstMiddleName,
                             string.Format(UrlResource.ProfessionalDisplayByID, siteUrl, headerID)));
                             }
                             

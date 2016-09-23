@@ -354,11 +354,13 @@ namespace MCAWebAndAPI.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dear HR Team,
+        ///   Looks up a localized string similar to Dear {0}, &lt;br&gt;
         ///
-        ///This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+        ///This email is sent to you to notify that there is a request which required your action to validate the professional data of {1}.
+        ///Please complete the validation process immediately
         ///
-        ///Link : {0}.
+        ///To view the detail, please click following link: 
+        ///{2}.
         /// </summary>
         public static string ProfessionalEmailValidation {
             get {

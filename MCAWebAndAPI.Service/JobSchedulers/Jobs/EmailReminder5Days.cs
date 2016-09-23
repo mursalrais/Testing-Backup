@@ -56,6 +56,8 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
                 //requestor
                 if (totalBusinessDays >= 5)
                 {
+                    requestor = Convert.ToString(item["visibleto"]);
+                    approver = Convert.ToString(item["currentapprover"]);
                     if (Convert.ToBoolean(item["iskeyposition"]))
                     {
                         EmailTo = GetApprover("Executive Director", siteUrl);
@@ -65,8 +67,8 @@ namespace MCAWebAndAPI.Service.JobSchedulers.Jobs
                         EmailTo = GetApprover("Deputy Executive Director", siteUrl);
                     }
                     SubjectEmail = "Pending for Approval of Manpower Requisition";
-                    //EmailContent = String.Format("Dear {0}, <br> This alert is sent to you to notify that there is a pending action to approve the Manpower Requisition which has been requested by {1}. Please complete the approval process immediately. <br> Thank You. ", );
-                    EmailContent = "There are still Manpower Request yet to be processed (item id = " + Convert.ToInt32(item["ID"]).ToString() + ") and waiting for your approval. Please check your Manpower Approval Page";
+                    EmailContent = String.Format("Dear {0}, <br> This alert is sent to you to notify that there is a pending action to approve the Manpower Requisition which has been requested by {1}. Please complete the approval process immediately. <br> Thank You. ", approver, requestor);
+                    //EmailContent = "There are still Manpower Request yet to be processed (item id = " + Convert.ToInt32(item["ID"]).ToString() + ") and waiting for your approval. Please check your Manpower Approval Page";
                     EmailUtil.Send(EmailTo, SubjectEmail, EmailContent);
                 }
             }
