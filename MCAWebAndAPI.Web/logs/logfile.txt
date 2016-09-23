@@ -804,3 +804,7 @@ Please try again.
 2016-09-22 09:58:25.3734 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-22 10:02:02.8624 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService Object reference not set to an instance of an object.
 2016-09-22 10:04:29.9623 MCAWebAndAPI.Service.HR.Timesheet.TimesheetService The remote server returned an error: (401) Unauthorized.
+2016-09-22 14:56:42.7977 MCAWebAndAPI.Service.HR.Common.CalendarService Column 'CalendarEventDate' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Event Calendar
+2016-09-22 14:56:44.4780 MCAWebAndAPI.Service.HR.Common.CalendarService Value does not fall within the expected range.
+2016-09-22 14:58:19.9567 MCAWebAndAPI.Service.HR.Common.CalendarService Column 'CalendarEventDate' does not exist. It may have been deleted by another user.  /sites/mca-dev/hr/Lists/Event Calendar
+2016-09-22 15:25:32.9769 MCAWebAndAPI.Service.HR.Common.CalendarService Value does not fall within the expected range.

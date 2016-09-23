@@ -32,9 +32,9 @@ namespace MCAWebAndAPI.Service.HR.Common
         public void CreateHeader(CalendarEventVM calendar)
         {
             var updatedValues = new Dictionary<string, object>();
-            updatedValues.Add("CalendarEventDate", calendar.CalendarEventDate);
+            updatedValues.Add("EventDate", calendar.CalendarEventDate);
             updatedValues.Add("Title", calendar.Title);
-            updatedValues.Add("EventCategory", calendar.EventCategory.Value);
+            updatedValues.Add("Category", calendar.EventCategory.Value);
 
             try
             {
