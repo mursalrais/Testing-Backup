@@ -100,24 +100,18 @@
                     <tr>
                         <td>Amount Liquidated</td>
                         <td>:</td>
-                        <td>@if (Model.Amount.HasValue)
-                        {
-                            Model.Amount.Value.ToString("N2");
-                        }
-                        </td>
+                        <td>@Model.Amount.Value.ToString("N2")</td>
                     </tr>
+                 
 
                     <tr>
                         <td>Amount Reimbursed/Returned</td>
                         <td>:</td>
-                        <td colspan="4">@if (Model.AmountReimbursed.HasValue)
-                        {
-                            Model.AmountReimbursed.Value.ToString("N2");
-                        }</td>
+                        <td>@Model.AmountReimbursed.Value.ToString("N2")</td>
                     </tr>
-
+                    
                                     <tr>
-                                                    <td colspan="3">
+                                                    <td colspan="3"><br />
                                             I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice
                                             have been accepted by and received by MCA-I. Meet all the requirements of the contract with the vendor, and their procurement meets all the
                             requirements of the Compact, the Program, Procurement Gudielines and all other relevant supplemental agreement requirements.
