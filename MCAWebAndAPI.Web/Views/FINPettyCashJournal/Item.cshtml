@@ -157,15 +157,15 @@ new
             }
 
             if ($("#AdvancesForOperationalCar1").val() == '') {
-                $("#AdvancesForOperationalCar1").val(0);
+                $("#AdvancesForOperationalCar1").data("kendoNumericTextBox").value(0);
             }
             if ($("#AdvancesForOperationalCar2").val() == '') {
-                $("#AdvancesForOperationalCar2").val(0);
+                $("#AdvancesForOperationalCar2").data("kendoNumericTextBox").value(0);
             }
             if ($("#AdvancesForOperationalCar3").val() == '') {
-                $("#AdvancesForOperationalCar3").val(0);
+                $("#AdvancesForOperationalCar3").data("kendoNumericTextBox").value(0);
             }
-
+            
             return true;
         });
 
@@ -199,7 +199,7 @@ new
 
         var cashOnHand = totalPettyCashFund - totalAmount - advances1 - advances2 - advances3;
 
-        $('#CashOnHand').val(cashOnHand);
+        $("#CashOnHand").data("kendoNumericTextBox").value(cashOnHand);
     }
 
 </script>

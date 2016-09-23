@@ -33,6 +33,7 @@
                     @Html.Bootstrap().LabelFor(m => m.EventBudget).Class("col-sm-3 control-label")
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.EventBudget)
+                        @Html.HiddenFor(m => m.EventBudget.Text)
                         <span id="txtEBError" style="color:#b94a48; font-size:85%; margin-top:10px; display:block;"></span>
                     </div>
                 </div>

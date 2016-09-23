@@ -61,7 +61,7 @@
             Settlement Special Cash Advance
         </div>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 10px; padding:15px;">
         <table width="100%">
             <tbody>
                 <tr>
@@ -93,7 +93,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;" id="TblDetail">
+    <div class="row" style="text-align: left; margin-top: 10px; padding:15px;" id="TblDetail">
         <table width="100%">
             <thead>
                 <tr>
@@ -115,7 +115,7 @@
                     {
                         <tr>
                             <td>
-                                @listData[i].ReceiptDate
+                                @listData[i].ReceiptDate.ToString("MM/dd/yyyy")
                             </td>
                             <td>
                                 @listData[i].ReceiptNo
@@ -134,7 +134,7 @@
                                 @listData[i].GL.Text
                             </td>
                             <td>
-                                @listData[i].Amount.ToString()
+                                @listData[i].Amount.ToString("N2")
                             </td>
 
                             <td></td>
@@ -147,7 +147,7 @@
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="rightAlign footerBGColor" style="border-color:transparent;" colspan="2">Total Expense </td>
-                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.TotalExpense.ToString()</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.TotalExpense.ToString("N2")</td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
 
@@ -157,7 +157,7 @@
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="rightAlign footerBGColor" colspan="2" style="border-color:transparent;">Special Cash Advance</td>
-                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.SpecialCashAdvanceAmount.ToString()</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.SpecialCashAdvanceAmount.ToString("N2")</td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
 
@@ -167,13 +167,13 @@
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                     <td class="rightAlign footerBGColor" style="border-color:transparent;" colspan="2"> Received from/to</td>
-                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.ReceivedFromTo.ToString()</td>
+                    <td class="rightAlign footerBGColor" style="border-color:transparent;">@Model.ReceivedFromTo.ToString("N2")</td>
                     <td class="footerBGColor" style="border-color:transparent;"></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 20px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 10px; padding:15px;">
         <table width="100%" id="TblNote">
             <tbody>
                 <tr>
@@ -186,7 +186,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row" style="text-align: left; margin-top: 60px; padding:25px;">
+    <div class="row" style="text-align: left; margin-top: 40px; padding:15px;">
         <table width="100%">
             <tbody>
                 <tr>

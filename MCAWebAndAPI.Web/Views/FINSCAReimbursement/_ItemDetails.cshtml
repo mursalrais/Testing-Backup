@@ -16,8 +16,8 @@
     .Columns(columns =>
     {
 
-        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, \"MM/dd/yyyy\") #" +
-       "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= kendo.toString(ReceiptDate, \"dd/MM/yyyy\") #' />");
+        columns.Bound(p => p.ReceiptDate).ClientTemplate("#= kendo.toString(ReceiptDate, 'MM-dd-yyyy') #" +
+             "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptDate' value='#= ReceiptDate #' />");
 
         columns.Bound(p => p.ReceiptNo).ClientTemplate("#= ReceiptNo #" +
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].ReceiptNo' value='#= ReceiptNo #' />");
@@ -30,7 +30,8 @@
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].DescriptionOfExpense' value='#= DescriptionOfExpense #' />");
 
         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Text' value='#= WBS.Text #' />")
             .EditorViewData(new
             {
                 DataTextField = "Text",
@@ -41,7 +42,8 @@
             .Width(150);
 
         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />")
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Text' value='#= GL.Text #' />")
             .EditorViewData(new
             {
                 DataTextField = "Text",

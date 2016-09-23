@@ -110,9 +110,13 @@
                     for (int i = 0; i < listData.Count; i++)
                     {
                         <tr>
-                            <td>
-                                @listData[i].ReceiptDate.Value.ToString("MM/dd/yyyy")
-                            </td>
+                            @if (@listData[i].ReceiptDate.Value != null)
+                            {
+                                <td> @listData[i].ReceiptDate.Value.ToString("MM/dd/yyyy") </td> 
+                            }else
+                            {
+                                <td></td>
+                            }
                             <td>
                                 @listData[i].ReceiptNo
                             </td>
