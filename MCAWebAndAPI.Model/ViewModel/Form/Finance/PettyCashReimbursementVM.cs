@@ -13,24 +13,25 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
     ///         Petty Cash Reimbursement is a transaction for the reimbursement of petty cash only when
     ///         user has not asked for any petty cash advance.
     ///
-    ///         Through this feature, finance will create the reimbursement of petty cash which results in 
-    ///         user needs to receive the reimbursement. 
+    ///         Through this feature, finance will create the reimbursement of petty cash which results in
+    ///         user needs to receive the reimbursement.
     /// </summary>
 
     [MetadataType(typeof(PettyCashReimbursementVMMetadata))]
-    public  class PettyCashReimbursementVM : PettyCashTransactionItem
+    public class PettyCashReimbursementVM : PettyCashTransactionItem
     {
         public PettyCashReimbursementVM()
         {
             this.TransactionType = Shared.PettyCashTranscationType_PettyCashReimbursement;
         }
+
         public Operations Operation { get; set; }
 
         public string DocNo { get; set; }
 
         [Required]
         [UIHint("ComboBox")]
-        public PaidToComboboxVM  PaidTo { get; set; } = new PaidToComboboxVM();
+        public PaidToComboboxVM PaidTo { get; set; } = new PaidToComboboxVM();
 
         [UIHint("AjaxComboBox")]
         public AjaxComboBoxVM Professional { get; set; } = new AjaxComboBoxVM();
@@ -69,7 +70,10 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
 
         [DisplayName("Amount Reimbursed")]
         [Editable(false)]
-        public decimal? AmountReimbursed { get; set; }
+        public decimal? AmountReimbursed
+        {
+            get { return Amount; }
+        }
 
         [UIHint("TextArea")]
         public string Remarks { get; set; }
@@ -88,5 +92,4 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DisplayName("Amount liquidated")]
         public decimal? Amount { get; set; } = 0;
     }
-
 }

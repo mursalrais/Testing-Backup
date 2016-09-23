@@ -34,7 +34,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// remarks
         /// </summary>
         [UIHint("TextArea")]
-        [DisplayName("Degree")]
+        [DisplayName("Remarks(Degree)")]
         public string Remarks { get; set; }
 
     }

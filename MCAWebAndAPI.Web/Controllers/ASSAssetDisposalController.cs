@@ -226,11 +226,11 @@ namespace MCAWebAndAPI.Web.Controllers
         private IEnumerable<AssetAcquisitionItemVM> GetFromPositionsExistingSession()
         {
             //Get existing session variable
-            var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
-            var positions = sessionVariable ?? assetDisposalService.GetAssetSubAsset();
+            //var sessionVariable = System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] as IEnumerable<AssetAcquisitionItemVM>;
+            var positions = assetDisposalService.GetAssetSubAsset();
 
-            if (sessionVariable == null) // If no session variable is found
-                System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
+            //if (sessionVariable == null) // If no session variable is found
+            //    System.Web.HttpContext.Current.Session["Asset%Asset%20Acquisition%20Details"] = positions;
             return positions;
         }
     }

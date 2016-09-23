@@ -19,6 +19,7 @@ enctype = "multipart/form-data" }))
                 @Html.DisplayFor(m => m.Position)
             </div>
             @Html.HiddenFor(m => m.ManpowerRequisitionID)
+            @Html.HiddenFor(m => m.PositionID)
         </div>
     </div>
     <div class="row">
@@ -72,12 +73,33 @@ enctype = "multipart/form-data" }))
             submitFormToPrint(url);
         }
 
-        //$(document).ready(function () {
-        //    $('#print-button').click(function (e)
-        //    {
-                
-        //    });
+        $(document).ready(function () {
 
-        //});
+            //var url = "/HRExitProcedure/DisplayExitChecklistForHR/?professionalMail=" + professionalMail;
+            var positionID = $("#PositionID").val()
+            console.log("positionID: " + positionID);
+
+            var url = "/HRDataMaster/GetKeyPosition/" + positionID;
+
+            $.getJSON(url, function (result)
+            {
+                if (result.length != 0)
+                {
+                    console.log("result: " + result[0]);
+
+                    var positionName = result[0].PositionName;
+                    console.log("positionName: " + positionName);
+
+                    $('#Position').prop('value', positionName);
+                }
+
+            })
+ 
+            //if (positionName == "Project Operations")
+            //{
+            //    positionName = "Project Operations & Finance"
+            //}
+            //console.log("positionName: " + positionName);
+        });
     </script>
 }

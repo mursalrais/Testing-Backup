@@ -428,6 +428,10 @@ namespace MCAWebAndAPI.Service.Asset
                 models.Add(ConvertToModelAssetSubAsset(item));
             }
 
+            foreach (var item in SPConnector.GetList("Asset Replacement Detail", _siteUrl))
+            {
+                models.Add(ConvertToModelAssetSubAsset(item));
+            }
             return models;
         }
 

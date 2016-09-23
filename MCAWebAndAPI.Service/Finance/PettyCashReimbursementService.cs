@@ -239,7 +239,6 @@ namespace MCAWebAndAPI.Service.Finance
             viewModel.Currency.Value = Convert.ToString(listItem[FieldName_Currency]);
             viewModel.Reason = Convert.ToString(listItem[FieldName_Reason]);
             viewModel.Amount = Convert.ToDecimal(listItem[FieldName_AmountLiquidated]);
-            viewModel.AmountReimbursed = Convert.ToDecimal(listItem[FieldName_AmountReimbursed]);
             viewModel.WBS.Value = Convert.ToInt32(listItem[FieldName_WBS]);
             viewModel.WBSDescription = Convert.ToString(listItem[FieldName_WBSDesc]);
 

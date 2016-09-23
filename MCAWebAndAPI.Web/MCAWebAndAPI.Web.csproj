@@ -77,8 +77,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" />
+    <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Common Files\microsoft shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -1382,16 +1386,6 @@
     <Folder Include="Views\HRDataMaster\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
-      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
-      <Name>MCAWebAndAPI.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
-      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
-      <Name>MCAWebAndAPI.Service</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="App_Data\ConfigResource.resx" />
     <EmbeddedResource Include="Resources\ConfigResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1411,6 +1405,16 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCAWebAndAPI.Model\MCAWebAndAPI.Model.csproj">
+      <Project>{0b0761cd-8a08-4527-b895-a26c36224046}</Project>
+      <Name>MCAWebAndAPI.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MCAWebAndAPI.Service\MCAWebAndAPI.Service.csproj">
+      <Project>{529feab6-e31e-4332-a499-75240b2c85ed}</Project>
+      <Name>MCAWebAndAPI.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -29,6 +29,8 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
 
         public string Approver2 { get; set; }
 
+        public string Approver3 { get; set; }
+
         public int ApproverCount { get; set; }
     }
 }

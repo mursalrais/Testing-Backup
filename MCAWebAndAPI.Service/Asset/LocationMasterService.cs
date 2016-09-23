@@ -192,10 +192,16 @@ namespace MCAWebAndAPI.Service.Asset
                               <FieldRef Name='Title' />
                               <Value Type='Text'>" + office + @"</Value>
                            </Eq>
-                           <Eq>
-                              <FieldRef Name='Room' />
-                              <Value Type='Text'>" + room + @"</Value>
-                           </Eq>
+                            <And>
+                               <Eq>
+                                  <FieldRef Name='Floor' />
+                                  <Value Type='Text'>" + floor + @"</Value>
+                               </Eq>
+                               <Eq>
+                                  <FieldRef Name='Room' />
+                                  <Value Type='Text'>" + room + @"</Value>
+                               </Eq>
+                            </And>
                         </And>
                      </And>
                   </And>

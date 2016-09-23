@@ -169,20 +169,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ApproverCount = viewModel.WorkflowItems.Count();
 
-            foreach (var item in viewModel.WorkflowItems)
-            {
-                var lvl = item.Level;
-                if (lvl == "1")
-                {
-                    viewModel.Approver1 = item.ApproverNameText;
-                }
-
-                if (lvl == "2")
-                {
-                    viewModel.Approver2 = item.ApproverNameText;
-                }
-            }
-
             return viewModel;
         }
 
@@ -281,18 +267,17 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                 {
                     emails = FormatUtil.ConvertLookupToValue(item, "approvername_x003a_Office_x0020_");
 
-                    if (header.StatusForm == "Initiated" || header.StatusForm == null)
+                    columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
+                    try
                     {
-                        columnValues.Add("visibletoapprover1", SPConnector.GetUser(emails, _siteUrl));
-                        try
-                        {
-                            SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.Error(e.Message);
-                        }
+                        SPConnector.UpdateListItem(SP_PPE_LIST_NAME, headerID, columnValues, _siteUrl);
                     }
+                    catch (Exception e)
+                    {
+                        logger.Error(e.Message);
+                        throw e;
+                    }
+
                     try
                     {
                         EmailUtil.Send(emails, "Request for Approval of Performance Evaluation Form", messageForApprover);
@@ -321,7 +306,8 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
                             }
                             catch (Exception e)
                             {
-
+                                logger.Error(e.Message);
+                                throw e;
                             }
                         }
                     }
