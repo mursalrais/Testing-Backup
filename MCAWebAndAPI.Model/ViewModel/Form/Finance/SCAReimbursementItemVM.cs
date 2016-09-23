@@ -19,7 +19,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DataType(DataType.Date)]
         [DisplayName("Receipt Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? ReceiptDate { get; set; } = DateTime.Now;
+        public DateTime ReceiptDate { get; set; } = DateTime.Now;
 
         [DisplayName("Receipt No")]
         public string ReceiptNo { get; set; }

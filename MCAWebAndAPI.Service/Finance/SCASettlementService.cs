@@ -272,7 +272,7 @@ namespace MCAWebAndAPI.Service.Finance
             if (listItem[FieldNameSCAVoucherId] != null)
             {
                 viewModel.SCAVoucher.Value = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupId;
-                viewModel.SCAVoucher.Text = (listItem[FieldNameSCAVoucherId] as FieldLookupValue).LookupValue;
+                viewModel.SCAVoucher.Text = (listItem[FieldNameSCAVoucherNo] as FieldLookupValue).LookupValue;
             }
 
             viewModel.Description = (listItem[FieldNameSCAPurpose] as FieldLookupValue).LookupValue;

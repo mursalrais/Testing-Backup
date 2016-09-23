@@ -50,6 +50,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
         private const string SuccessMsgFormatUpdated = "Requisition Note number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Requisition%20Note/All%20Items%20FIN.aspx";
+        private const string FirstPageFinanceUrl = "{0}/SitePages/FinRequisitionNote.aspx";
 
         private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
         private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
@@ -73,7 +74,11 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
 
             var viewModel = reqNoteService.Get(null);
             viewModel.UserEmail = userEmail;
-            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var cancelUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
+            ViewBag.CancelUrl = string.Format(cancelUrl, siteUrl);
             SetAdditionalSettingToViewModel(ref viewModel, true);
             return View(viewModel);
         }
@@ -95,15 +100,10 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 reqNoteService = new RequisitionNoteService(siteUrl);
                 var viewModel = reqNoteService.Get(id);
 
-                #region Check User
+                ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+                var cancelUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
 
-                var siteUrlHR = CommonService.GetSiteUrlFromCurrent(siteUrl, CommonService.Sites.HR);
-
-                ProfessionalMaster professional = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, userEmail);
-
-                #endregion Check User
-
-                ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+                ViewBag.CancelUrl = string.Format(cancelUrl, siteUrl);
                 SetAdditionalSettingToViewModel(ref viewModel, false);
 
                 return View(viewModel);
@@ -166,11 +166,14 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var previousUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
             return RedirectToAction("Index", "Success",
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.Title),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                    previousUrl = string.Format(previousUrl, siteUrl)
                 });
         }
 
@@ -317,7 +320,7 @@ namespace MCAWebAndAPI.Web.Controllers.Finance
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footerMask = user == null ? FooterUser : (COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser);
             var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())

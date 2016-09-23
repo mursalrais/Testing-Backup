@@ -42,6 +42,7 @@
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.SCAVoucher)
                         @Html.ValidationMessageFor(model => model.SCAVoucher.Value)
+                        @Html.HiddenFor(m => m.SCAVoucher.Text)
                         <span id="txtSCAnoError" style="color:#b94a48; font-size:85%; margin-top:10px; display:block;"></span>
                     </div>
                 </div>
@@ -163,7 +164,7 @@
                         $('#Description').val(response.Purpose);
                         $('#Fund').val(response.Fund);
                         $('#SpecialCashAdvanceAmount').data("kendoNumericTextBox").value(response.TotalAmount);
-                        $('#Currency_Value').val(response.Currency);
+                        $('#Currency_Text').val(response.Currency);
                         
                         calculateTotal();
                     },
