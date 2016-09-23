@@ -41,9 +41,13 @@ namespace MCAWebAndAPI.Service.Asset
                 var ass_t = getidam["AssetType"];
                 var camlfx2 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>FXA-" + pro_u + "-" + ass_t + @"</Value></Contains></Where></Query></View>";
                 var datafx1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, camlfx2);
+                var dataad = SPConnector.GetList("Asset Disposal Detail", _siteUrl, camlfx2);
                 if (datafx1.Count() != 0)
                 {
-                    fx.Add(pro_u + "-" + ass_t);
+                    if (dataad.Count() != datafx1.Count())
+                    {
+                        fx.Add(pro_u + "-" + ass_t);
+                    }
                 }
             }
             IEnumerable<string> fx_distinct = fx.Distinct<string>();
@@ -127,9 +131,13 @@ namespace MCAWebAndAPI.Service.Asset
                 var ass_t = getidam["AssetType"];
                 var caml2 = @"<View><Query><Where><Contains><FieldRef Name='assetsubasset' /><Value Type='Lookup'>SVA-" + pro_u + "-" + ass_t + @"</Value></Contains></Where></Query></View>";
                 var datasv1 = SPConnector.GetList("Asset Acquisition Details", _siteUrl, caml2);
+                var dataad = SPConnector.GetList("Asset Disposal Detail", _siteUrl, caml2);
                 if (datasv1.Count() != 0)
                 {
-                    sv.Add(pro_u + "-" + ass_t);
+                    if (dataad.Count() != datasv1.Count())
+                    {
+                        sv.Add(pro_u + "-" + ass_t);
+                    }
                 }
             }
             IEnumerable<string> sv_distinct = sv.Distinct<string>();
