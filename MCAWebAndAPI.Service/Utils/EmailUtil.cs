@@ -18,11 +18,11 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
@@ -50,11 +50,11 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
