@@ -140,6 +140,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return View("_DisplayRequestDetail", viewModel.DayOffRequestDetailsDisplay);
         }
 
+        public ActionResult DisplayNextBalance(List<string> arrDayOffType, List<string> arrTotalDayOff, string professionalID, string siteUrl = null)
+        {
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            
+            var viewModel = _hRDayOffService.GetRequestDataByUser(arrDayOffType, arrTotalDayOff, professionalID);
+
+            return View("_DayOffNextBalance", viewModel.DayOffNextBalance);
+        }
+
         public ActionResult TestAction(int masterDayOffTypeValue, string siteUrl)
         {
             _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
