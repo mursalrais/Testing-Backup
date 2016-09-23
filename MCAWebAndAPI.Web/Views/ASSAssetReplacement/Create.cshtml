@@ -80,7 +80,7 @@
         @Html.HiddenFor(m => m.OldTransactionId.Value)
         <div>
             <center>
-                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" />
+                <input class="k-button k-button-icontext k-grid-add" type="submit" value="Save" onclick="return validation()"/>
                 <a href="@Model.CancelURL" target='_parent'>
                     <input class="k-button k-button-icontext k-grid-add" size="4" value="Cancel" />
                 </a>
@@ -124,6 +124,7 @@
             $('#PurchaseDate').prop('value', "")
             $("#OldTransactionId_Value").data("kendoDropDownList").value("");
         }
+        
     })
 
     function onIdChange(e) {
@@ -135,6 +136,13 @@
         var urlgoto = "/ASSAssetReplacement/Create?";
         //alert(link);
         window.location = urlgoto + "SiteUrl=" + link + "&id=" + res;
+    }
+
+    function validation() {
+        if ($('#OldTransactionId_Value').val() == "") {
+            alert("Please Choose Old Transaction ID");
+            return false;
+        }
     }
 
     function move() {
