@@ -1228,6 +1228,7 @@
     <Content Include="Views\HRAdjustment\_ViewAdjustmentDetails.cshtml" />
     <Content Include="Views\HRFeeSlip\_ProfessionalDetailFee.cshtml" />
     <Content Include="Views\HRFeeSlip\CreateFeeSlip.cshtml" />
+    <Content Include="Views\HRManpowerRequisition\CannotAccess.cshtml" />
     <Content Include="Views\HRFeeSlip\PrintFeeSlip.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

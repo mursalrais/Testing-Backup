@@ -79,7 +79,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                var viewdetails = assetLoanAndReturnService.GetDetailsEdit(headerID);
+                var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
                 viewModel.AssetLoanAndReturnItem = viewdetails;
             }
             catch (Exception e)
@@ -230,7 +230,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             try
             {
-                var viewdetails = assetLoanAndReturnService.GetDetailsEdit(headerID);
+                var viewdetails = assetLoanAndReturnService.GetDetails(headerID);
                 viewModel.AssetLoanAndReturnItem = viewdetails;
             }
             catch (Exception e)

@@ -48,7 +48,25 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRProfessionalPerformanceEvaluationService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
-            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
+
+            foreach (var item in viewModel.WorkflowItems)
+            {
+                var lvl = item.Level;
+                if (lvl == "1")
+                {
+                    viewModel.Approver1 = item.ApproverNameText;
+                }
+
+                if (lvl == "2")
+                {
+                    viewModel.Approver2 = item.ApproverNameText;
+                }
+
+                if (lvl == "3")
+                {
+                    viewModel.Approver3 = item.ApproverNameText;
+                }
+            }
 
             var Detail = viewModel.ProfessionalPerformanceEvaluationDetails;
             int sumPlanned = 0;
@@ -170,17 +188,17 @@ namespace MCAWebAndAPI.Web.Controllers
                         SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 2,
                         string.Format(EmailResource.ProfessionalPerfromanceEvaluation, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformanceEvaluationRequestor, viewModel.Name, viewModel.Requestor));
 
-                    // Send to Level 2 Approver and Requestor
+                    // Send to Level 3 Approver and Requestor
                     if (viewModel.TypeForm == "Approver2" && viewModel.StatusForm == "Pending Approval 2 of 3")
                         _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                         SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 3,
-                        string.Format(EmailResource.ProfessionalPerfromanceEvaluation, viewModel.Approver2, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformanceEvaluationRequestor, viewModel.Name, viewModel.Requestor));
+                        string.Format(EmailResource.ProfessionalPerfromanceEvaluation, viewModel.Approver3, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformanceEvaluationRequestor, viewModel.Name, viewModel.Requestor));
 
                     // Send to Requestor
                     if (viewModel.TypeForm == "Approver3" && viewModel.StatusForm == "Pending Approval 3 of 3")
                         _hRProfessionalPerformanceEvaluationService.SendEmail(viewModel, SP_TRANSACTION_WORKFLOW_LIST_NAME,
                         SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)viewModel.ID, 3,
-                        string.Format(EmailResource.ProfessionalPerfromanceEvaluation, viewModel.Approver1, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformanceEvaluationRequestor, viewModel.Name, viewModel.Requestor));
+                        string.Format(EmailResource.ProfessionalPerfromanceEvaluation, viewModel.Approver3, viewModel.PerformancePeriod, viewModel.Name, siteUrl, UrlResource.ProfessionalPerfromanceEvaluation, viewModel.ID), string.Format(EmailResource.ProfessionalPerformanceEvaluationRequestor, viewModel.Name, viewModel.Requestor));
                 }
             }
             catch (Exception e)

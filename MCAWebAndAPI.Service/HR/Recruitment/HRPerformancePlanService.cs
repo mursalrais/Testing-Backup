@@ -248,20 +248,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
 
             viewModel.ApproverCount = viewModel.WorkflowItems.Count();
 
-            foreach (var item in viewModel.WorkflowItems)
-            {
-                var lvl = item.Level;
-                if (lvl == "1")
-                {
-                    viewModel.Approver1 = item.ApproverNameText;
-                }
-
-                if (lvl == "2")
-                {
-                    viewModel.Approver2 = item.ApproverNameText;
-                }
-            }
-
             return viewModel;
         }
 

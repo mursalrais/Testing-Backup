@@ -42,5 +42,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         public Operations Operation { get; set; }
 
         public string UserEmail { get; set; }
+
+        public string ClientDateTime { get; set; } = string.Empty;
     }
 }

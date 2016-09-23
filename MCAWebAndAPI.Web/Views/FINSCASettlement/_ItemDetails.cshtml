@@ -26,7 +26,8 @@
             "<input type='hidden' name='ItemDetails[#= getItem(data)#].DescriptionOfExpense' value='#= DescriptionOfExpense #' />");
 
         columns.Bound(p => p.WBS).ClientTemplate("#= WBS.Text #" +
-            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />")
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Value' value='#= WBS.Value #' />" +
+            "<input type='hidden' name='ItemDetails[#= getItem(data)#].WBS.Text' value='#= WBS.Text #' />")
                        .EditorViewData(new
                        {
                            DataTextField = "Text",
@@ -36,7 +37,8 @@
                        });
 
         columns.Bound(p => p.GL).ClientTemplate("#= GL.Text #" +
-                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />"
+                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Value' value='#= GL.Value #' />" +
+                         "<input type='hidden' name='ItemDetails[#= getItem(data)#].GL.Text' value='#= GL.Text #' />"
                        )
                        .EditorViewData(new
                        {
@@ -73,7 +75,7 @@
                        model.Id(p => p.ID);
                        model.Field(m => m.WBS).DefaultValue(EventBudgetItemVM.GetWBSDefaultValue());
                        model.Field(m => m.GL).DefaultValue(EventBudgetItemVM.GetGLDefaultValue());
-                       
+
 
                    })
                    .ServerOperation(false)

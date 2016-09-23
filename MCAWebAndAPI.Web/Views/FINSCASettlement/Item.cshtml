@@ -14,14 +14,14 @@
 </style>
     
 @using (Html.BeginForm(
-    "Save", "FINSCASettlement",
-    FormMethod.Post,
-    new
-    {
-        @id = "formSCAS",
-        @class = "form-horizontal",
-        enctype = "multipart/form-data"
-    }))
+                "Save", "FINSCASettlement",
+                FormMethod.Post,
+                new
+                {
+                    @id = "formSCAS",
+                    @class = "form-horizontal",
+                    enctype = "multipart/form-data"
+                }))
 {
 
     <fieldset>
@@ -32,6 +32,7 @@
                 @Html.HiddenFor(m => m.DocNo)
                 @Html.HiddenFor(m => m.Operation)
                 @Html.HiddenFor(m => m.UserEmail)
+                @Html.HiddenFor(m => m.ClientDateTime)
             </div>
         </div>
         <div class="row">
@@ -41,6 +42,7 @@
                     <div class="col-sm-8">
                         @Html.EditorFor(m => m.SCAVoucher)
                         @Html.ValidationMessageFor(model => model.SCAVoucher.Value)
+                        @Html.HiddenFor(m => m.SCAVoucher.Text)
                         <span id="txtSCAnoError" style="color:#b94a48; font-size:85%; margin-top:10px; display:block;"></span>
                     </div>
                 </div>
@@ -162,7 +164,7 @@
                         $('#Description').val(response.Purpose);
                         $('#Fund').val(response.Fund);
                         $('#SpecialCashAdvanceAmount').data("kendoNumericTextBox").value(response.TotalAmount);
-                        $('#Currency_Value').val(response.Currency);
+                        $('#Currency_Text').val(response.Currency);
                         
                         calculateTotal();
                     },
@@ -174,6 +176,8 @@
         }
 
         $("#formSCAS").on('submit', function () {
+            $('#ClientDateTime').val(new Date());
+
             // do validation here
             var voucherNo = $('#SCAVoucher_Value').val();
             if (voucherNo === '0') {

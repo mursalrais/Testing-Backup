@@ -54,53 +54,98 @@ namespace MCAWebAndAPI.Web.Controllers
                "Success",
                new { eMessage = e.Message, previousUrl = siteUrl + "/SitePages/ManpowerRequisiteApproval.aspx" });
             }
-            //send to requestor how to get requestor email from approval
-            Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
-              string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "Requestor"));
 
-            //send to onBehalf
-            if ((viewModel.IsOnBehalfOf == true))
+            var approver = SessionManager.Get<string>("Approver");
+            if (viewModel.Status.Value == "Approved")
             {
-                if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
-                {
-                    Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, viewModel.OnBehalfOf.Text));
-                }
-            }
+                //send to requestor how to get requestor email from approval
+                Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Approval of Manpower Requisition",
+              string.Format(EmailResource.ManpowerApproved, viewModel.Username, approver));
 
-            //send to HR
-            List<string> EmailsHR = _service.GetEmailHR();
-            foreach (var item in EmailsHR)
-            {
-                if (!(string.IsNullOrEmpty(item)))
+                //send to onBehalf
+                if ((viewModel.IsOnBehalfOf == true))
                 {
-                    EmailUtil.Send(item, "Application Submission Confirmation",
-             string.Format(EmailResource.ManpowerDisplay, siteUrl, viewModel.ID.Value, "HR"));
+                    if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
+                    {
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Approval of Manpower Requisition", string.Format(EmailResource.ManpowerApproved, viewModel.Username, approver));
+                    }
                 }
 
-            }
+                //send to HR
+                List<string> EmailsHR = _service.GetEmailHR();
+                foreach (var item in EmailsHR)
+                {
+                    if (!(string.IsNullOrEmpty(item)))
+                    {
+                        EmailUtil.Send(item, "Approval of Manpower Requisition",
+                 string.Format(EmailResource.ManpowerApproved, viewModel.Username, approver));
+                    }
 
+                }
+            }
+            else
+            {
+                //send to requestor how to get requestor email from approval
+                Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Approval of Manpower Requisition",
+              string.Format(EmailResource.ManpowerReject, viewModel.Username, approver));
+
+                //send to onBehalf
+                if ((viewModel.IsOnBehalfOf == true))
+                {
+                    if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
+                    {
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Approval of Manpower Requisition", string.Format(EmailResource.ManpowerReject, viewModel.Username, approver));
+                    }
+                }
+
+                //send to HR
+                List<string> EmailsHR = _service.GetEmailHR();
+                foreach (var item in EmailsHR)
+                {
+                    if (!(string.IsNullOrEmpty(item)))
+                    {
+                        EmailUtil.Send(item, "Approval of Manpower Requisition",
+                 string.Format(EmailResource.ManpowerReject, viewModel.Username, approver));
+                    }
+
+                }
+            }
+            
             return RedirectToAction("Index",
                 "Success",
                 new { errorMessage = string.Format(MessageResource.SuccessCommon, viewModel.ID) });
         }
 
-        public async Task<ActionResult> ApprovalManpowerRequisition(string siteUrl = null, int? ID = null)
+        public async Task<ActionResult> ApprovalManpowerRequisition(string siteUrl = null, int? ID = null, string username=null)
         {
             // MANDATORY: Set Site URL
             SetSiteUrl(siteUrl);
+            string position = _service.GetPosition(username, siteUrl);
+            string approver = _service.GetUser(username, siteUrl);
+            SessionManager.Set("Approver", approver);
+            string[] positionArray = { "Deputy Executive Director", "Executive Director", "DED", "ED" };
+            foreach(var n in positionArray)
+            {
+                if(!position.Contains(n))
+                {
+                    break;
+                }
+                else
+                {
+                    var viewModel = await _service.GetManpowerRequisitionAsync(ID);
+                    if (viewModel.Status.Value == "Pending Approval 1 of 2")
+                    {
+                        ViewBag.State = "Pending Approval 2 of 2";
+                    }
+                    else
+                    {
+                        ViewBag.State = "Approved";
+                    }
+                    return View(viewModel);
+                }
+            }
             
-            var viewModel = await _service.GetManpowerRequisitionAsync(ID);
-            if (viewModel.Status.Value == "Pending Approval 1 of 2")
-            {
-                ViewBag.State = "Pending Approval 2 of 2";
-            }
-            else
-            {
-                ViewBag.State = "Approved";
-            }
-
-
-            return View(viewModel);
+            return View("CannotAccess");
         }
 
         public async Task<ActionResult> EditManpowerRequisition(string siteUrl = null, int? ID = null, string username = null)
@@ -117,6 +162,7 @@ namespace MCAWebAndAPI.Web.Controllers
             else
             {
                 ViewBag.IsHRView = false;
+                return View("CannotAccess");
             }
             viewModel.Username = username;
             return View(viewModel);
@@ -224,14 +270,22 @@ namespace MCAWebAndAPI.Web.Controllers
                 });
         }
 
-        public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null)
+        public async Task<ActionResult> DisplayManpowerRequisition(string siteUrl = null, int? ID = null, string username=null)
         {
             // MANDATORY: Set Site URL
             SetSiteUrl(siteUrl);
+            string position = _service.GetPosition(username, siteUrl);
+            if (position.Contains("HR") || position.Contains("Human Resource"))
+            {
+                var viewModel = await _service.GetManpowerRequisitionAsync(ID);
+                return View(viewModel);
+            }
+            else
+            {
+                ViewBag.IsHRView = false;
+            }
 
-            var viewModel = await _service.GetManpowerRequisitionAsync(ID);
-
-            return View(viewModel);
+            return View("CannotAccess");
         }
 
         public ActionResult CreateManpowerRequisition(string siteUrl = null, string username = null)
@@ -252,7 +306,6 @@ namespace MCAWebAndAPI.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateManpowerRequisition(FormCollection form, ManpowerRequisitionVM viewModel)
         {
-
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             SetSiteUrl(siteUrl);
 
@@ -274,29 +327,35 @@ namespace MCAWebAndAPI.Web.Controllers
             if (viewModel.Status.Value == "Pending Approval")
             {
 
-                string EmailApprover;
+                string EmailApprover, Approver, Requestor;
+                Requestor = _service.GetUser(viewModel.Username, siteUrl);
+                var position = _service.GetPosition(viewModel.Username, siteUrl);
 
                 // Send to Approver
                 if (viewModel.IsKeyPosition)
                 {
                     EmailApprover = _service.GetApprover("Executive Director");
+                    Approver = _service.GetUser(EmailApprover, siteUrl);
                 }
                 else
                 {
                     EmailApprover = _service.GetApprover("Deputy Executive Director");
+                    Approver = _service.GetUser(EmailApprover, siteUrl);
                 }
-                Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
-                                
+                //Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Application Submission Confirmation", string.Format(EmailResource.ManpowerApproval, siteUrl, headerID));
+                //Name of Approver by EmailApprover, Name of requestor username yg login, name of requested position (posostion)
+                Task sendApprover = EmailUtil.SendAsync(EmailApprover, "Request for Approval of Manpower Requisition", string.Format(EmailResource.ManpowerApproval, siteUrl, headerID, Approver, Requestor, position, "Approver"));
+
                 //send to requestor
-                Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Application Submission Confirmation",
-                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID,"Requestor"));
+                Task sendRequestor = EmailUtil.SendAsync(viewModel.Username, "Request for Approval of Manpower Requisition",
+                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID,Requestor, Requestor, position, "You"));
 
                 //send to onBehalf
                 if ((viewModel.IsOnBehalfOf == true))
                 {
                     if (viewModel.EmailOnBehalf != null || viewModel.EmailOnBehalf != "")
                     {
-                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Application Submission Confirmation", string.Format(EmailResource.ManpowerDisplay,siteUrl, headerID,viewModel.OnBehalfOf.Text));
+                        Task sendOnBehalf = EmailUtil.SendAsync(viewModel.EmailOnBehalf, "Request for Approval of Manpower Requisition", string.Format(EmailResource.ManpowerDisplay,siteUrl, headerID,viewModel.OnBehalfOf.Text, Requestor, position, "HR"));
                     }
                 }
 
@@ -304,10 +363,11 @@ namespace MCAWebAndAPI.Web.Controllers
                 List<string> EmailsHR = _service.GetEmailHR();
                 foreach (var item in EmailsHR)
                 {
+                    string hrname = _service.GetUser(item, siteUrl);
                     if (!(string.IsNullOrEmpty(item)))
                     {
                          EmailUtil.Send(item, "Application Submission Confirmation",
-                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID, "HR"));
+                  string.Format(EmailResource.ManpowerDisplay, siteUrl, headerID, hrname, Requestor, viewModel.Position));
                     }
 
                 }

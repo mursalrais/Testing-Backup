@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Threading.Tasks;
+using Microsoft.SharePoint.Client;
 
 namespace MCAWebAndAPI.Service.HR.Recruitment
 {
@@ -33,5 +34,6 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
         Task CreateManpowerRequisitionDocumentsSync(int? headerID, IEnumerable<HttpPostedFileBase> documents);
         string getEmailOnBehalf(int? ID);
         List<string> GetEmailHR();
+        string GetUser(string email, string siteUrl);
     }
 }

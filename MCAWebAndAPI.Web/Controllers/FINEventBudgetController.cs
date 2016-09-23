@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
 using Kendo.Mvc.Extensions;
+using MCAWebAndAPI.Model.HR.DataMaster;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Converter;
 using MCAWebAndAPI.Service.Finance;
 using MCAWebAndAPI.Service.Finance.RequisitionNote;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
+
 using FinService = MCAWebAndAPI.Service.Finance;
-using System.Globalization;
-using MCAWebAndAPI.Model.HR.DataMaster;
 
 namespace MCAWebAndAPI.Web.Controllers
 {
@@ -29,14 +30,18 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatUpdated = "Event Budget number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Event%20Budget/AllItems.aspx";
+        private const string FirstPageFinanceUrl = "{0}/SitePages/FinEventBudget.aspx";
         private const string PrintPageUrl = "~/Views/FINEventBudget/Print.cshtml";
+        
+        private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
+        private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
 
-        IEventBudgetService service;
-        IRequisitionNoteService requisitionNoteService;
+        private IEventBudgetService service;
+        private IRequisitionNoteService requisitionNoteService;
 
         public ActionResult Item(string siteUrl = null, int? id = null, string userEmail = "")
         {
-            if (userEmail==string.Empty)
+            if (userEmail == string.Empty)
             {
                 throw new InvalidOperationException("Invalid parameter: userEmail.");
             }
@@ -58,18 +63,18 @@ namespace MCAWebAndAPI.Web.Controllers
                 viewModel.RequisitionNoteId = rn.Item1;
                 viewModel.RequisitionNoteNo = rn.Item2;
 
-
                 Tuple<int, string> sca = new SCAVoucherService(siteUrl).GetIdAndNoByEventBudgetID(viewModel.ID.Value);
 
                 viewModel.SCAVoucherId = sca.Item1;
                 viewModel.SCAVoucherNo = sca.Item2;
-
-
             }
 
             SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
 
-            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var cancelUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
+            ViewBag.CancelUrl = string.Format(cancelUrl, siteUrl);
             return View(viewModel);
         }
 
@@ -89,7 +94,6 @@ namespace MCAWebAndAPI.Web.Controllers
 
         public JsonResult GetEventBudgetList()
         {
-
             service = new EventBudgetService(SessionManager.Get<string>(SharedController.Session_SiteUrl));
 
             var eventBudgets = service.GetEventBudgetList().ToList();
@@ -150,22 +154,26 @@ namespace MCAWebAndAPI.Web.Controllers
                 updateTaskRNOrSCA.Add(service.UpdateRequisitionNoteAsync(siteUrl, viewModel.RequisitionNoteId));
             }
 
-            if(viewModel.SCAVoucherId > 0)
+            if (viewModel.SCAVoucherId > 0)
             {
                 updateTaskRNOrSCA.Add(service.UpdateSCAVoucherAsync(siteUrl, viewModel.SCAVoucherId));
             }
 
-            if(updateTaskRNOrSCA.Count > 0)
+            if (updateTaskRNOrSCA.Count > 0)
             {
                 Task allTasks2 = Task.WhenAll(updateTaskRNOrSCA.ToArray());
                 await allTasks2;
             }
 
+
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var previousUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
             return RedirectToAction("Index", "Success",
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.No),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                    previousUrl = string.Format(previousUrl, siteUrl)
                 });
         }
 
@@ -177,7 +185,6 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Activity.TextField = "Text";
             viewModel.Activity.Cascade = "Project_Value";
             viewModel.Activity.Filter = "filterProject";
-
         }
 
         public ActionResult Print(FormCollection form, EventBudgetVM viewModel, string userEmail = "")
@@ -186,7 +193,7 @@ namespace MCAWebAndAPI.Web.Controllers
                 return null;
 
             string RelativePath = PrintPageUrl;
-            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection,Request.Url.Authority);
+            string domain = new SharedFinanceController().GetImageLogoPrint(Request.IsSecureConnection, Request.Url.Authority);
 
             var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl);
             service = new EventBudgetService(siteUrl);
@@ -203,8 +210,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
-            
-            var footer = string.Format("This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}", userName, dt, dt);
+
+            var footerMask = user == null ? FooterUser : (COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser);
+            var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())
             {
@@ -230,6 +238,5 @@ namespace MCAWebAndAPI.Web.Controllers
                 return HttpNotFound();
             return File(pdfBuf, "application/pdf");
         }
-
     }
 }

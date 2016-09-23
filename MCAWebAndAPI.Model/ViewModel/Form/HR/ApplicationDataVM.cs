@@ -42,9 +42,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string SpecializationField { get; set; }
 
         [DisplayName("Years of Relevant Work")]
+        [Required]
         public int YearRelevanWork { get; set; }
 
         [DisplayName("Months of Relevant Work")]
+        [Required]
         public int MonthRelevantWork { get; set; }
 
         /// <summary>
@@ -174,6 +176,7 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         /// </summary>
         [UIHint("TextArea")]
         [DataType(DataType.MultilineText)]
+        [DisplayName("Permanent Address")]
         [Required]
         public string PermanentAddress { get; set; }
 

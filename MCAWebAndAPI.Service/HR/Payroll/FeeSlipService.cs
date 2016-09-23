@@ -250,6 +250,16 @@ namespace MCAWebAndAPI.Service.HR.Payroll
             return model;
         }
 
+        public FeeSlipVM GetModelPrint(FeeSlipVM viewModel)
+        {
+
+            var model = new FeeSlipVM();
+            model.FeeSlipDetails = viewModel.FeeSlipDetails.Where(c => c.Intchecklist == 1);
+           // model.FeeSlipDetails = 
+            // model.dtDetails = GetProfessional();
+            return model;
+        }
+
         public void SetSiteUrl(string siteUrl)
         {
             _siteUrl = FormatUtil.ConvertToCleanSiteUrl(siteUrl);

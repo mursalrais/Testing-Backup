@@ -45,8 +45,8 @@
         </div>
 
         <legend>Day-Off Next Balance</legend>
-        <div class="row">
-            @Html.Partial("_DayOffNextBalance", Model.DayOffNextBalance)
+        <div id ="day-off-next-balance" class="row">
+            
         </div>
     </fieldset>
 
@@ -115,7 +115,8 @@
 
                 if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Annual Day-Off")
                 {
-                    balanceAnnualDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
+                    var dayOffBroughtAnnual = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffBrought;
+                    balanceAnnualDayOff = parseInt($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance) + parseInt(dayOffBroughtAnnual);
                 }
                 if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Special Day-Off")
                 {
@@ -216,16 +217,6 @@
                     var textMasterDayOffTypeValue = "Unpaid Day-Off";
                     var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
                 }
-                else if (masterDayOffTypeValue == "24")
-                {
-                    var textMasterDayOffTypeValue = "Unpaid Day-Off";
-                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
-                }
-                else if (masterDayOffTypeValue == "8")
-                {
-                    var textMasterDayOffTypeValue = "Compensatory Time";
-                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
-                }
                 else if (masterDayOffTypeValue == "8")
                 {
                     var textMasterDayOffTypeValue = "Compensatory Time";
@@ -239,11 +230,6 @@
                 else if (masterDayOffTypeValue == "11")
                 {
                     var textMasterDayOffTypeValue = "Miscarriage";
-                    var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
-                }
-                else if (masterDayOffTypeValue == "10")
-                {
-                    var textMasterDayOffTypeValue = "Paternity";
                     var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
                 }
                 else if (masterDayOffTypeValue == "10")
@@ -307,7 +293,6 @@
                     var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
                 }
 
-
                 var fullHalfDay = $("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[i].FullHalf.Text;
                 var woStrFullHalfDay = fullHalfDay.replace(/\s/g, '');
 
@@ -329,6 +314,13 @@
                 if (dateStartRequestDate > dateEndRequestDate)
                 {
                     alert("End Date must be more than Start Date");
+
+                    dayOffRequestDayOffType = [];
+                    dayOffRequestStarDate = [];
+                    dayOffRequestEndDate = [];
+                    dayOffRequestFullOrHalf = [];
+                    dayOffRequestRemarks = [];
+                    dayOffRewquestTotalDays = [];
                 }
                 else if (dateStartRequestDate < dateEndRequestDate)
                 {
@@ -337,14 +329,50 @@
                         if (fullHalfDay == "Half Day")
                         {
                             alert("Must Input Full Day for Maternity");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else if(fullHalfDay == "Full Day")
                         {
-                            var setThreeMonthInDate = checkThreeMonth(dateStartRequestDate, dateEndRequestDate);
+                            var setThreeMonthInDate = checkThreeMonth(startRequestDate, endRequestDate);
 
-                            if(dateEndRequestDate > setThreeMonthInDate)
+                            var datesSetThreeMonthInDate = new Date(setThreeMonthInDate);
+                            var dateDateSetThreeMonthInDate = datesSetThreeMonthInDate.getDate();
+                            var monthDateSetThreeMonthInDate = datesSetThreeMonthInDate.getMonth() + 1;
+                            var yearDateSetThreeMonthInDate = datesSetThreeMonthInDate.getFullYear();
+                            var strDateSetThreeMonthInDate = monthDateSetThreeMonthInDate + '/' + dateDateSetThreeMonthInDate + '/' + yearDateSetThreeMonthInDate;
+
+                            var datesStrEndRequestDate = new Date(strEndRequestDate);
+                            var datesSetThreeMonthInDate = new Date(strDateSetThreeMonthInDate);
+                            
+                            if (datesStrEndRequestDate > datesSetThreeMonthInDate)
                             {
                                 alert("Total Days Request is more than 3 Months");
+
+                                dayOffRequestDayOffType = [];
+                                dayOffRequestStarDate = [];
+                                dayOffRequestEndDate = [];
+                                dayOffRequestFullOrHalf = [];
+                                dayOffRequestRemarks = [];
+                                dayOffRewquestTotalDays = [];
+                            }
+                            if (strEndRequestDate == strDateSetThreeMonthInDate)
+                            {
+                                dayOffRequestDayOffType.push(woStrMasterDayOffType);
+                                dayOffRequestStarDate.push(strStartRequestDate);
+                                dayOffRequestEndDate.push(strEndRequestDate);
+                                dayOffRequestFullOrHalf.push(woStrFullHalfDay);
+                                dayOffRequestRemarks.push(woStrRemarks);
+
+                                var differentDays = convertThreeMonthsToDays(strStartRequestDate, strDateSetThreeMonthInDate);
+                                
+                                dayOffRewquestTotalDays.push(differentDays);
+
                             }
                         }
                     }
@@ -353,24 +381,78 @@
                         if (fullHalfDay == "Half Day")
                         {
                             alert("Must Input Full Day for Miscarriage");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else if(fullHalfDay == "Full Day")
                         {
-                            var dateSetDateInOneMonth = checkOneAndHalfMonth(dateStartRequestDate, dateEndRequestDate);
+                            var dateSetDateInOneMonth = checkOneAndHalfMonth(startRequestDate, endRequestDate);
 
-                            if (dateEndRequestDate > dateSetDateInOneMonth)
+                            console.log("dateSetDateInOneMonth: " + dateSetDateInOneMonth);
+
+                            var datesDateSetDateInOneMonth = new Date(dateSetDateInOneMonth);
+                            var dateDatesDateSetDateInOneMonth = datesDateSetDateInOneMonth.getDate();
+                            var monthDatesDateSetDateInOneMonth = datesDateSetDateInOneMonth.getMonth() + 1;
+                            var yearDatesDateSetDateInOneMonth = datesDateSetDateInOneMonth.getFullYear();
+                            var strDatesDateSetDateInOneMonth = monthDatesDateSetDateInOneMonth + '/' + dateDatesDateSetDateInOneMonth + '/' + yearDatesDateSetDateInOneMonth;
+
+                            var datesStrEndRequestDate = new Date(strEndRequestDate);
+                            console.log("datesStrEndRequestDate: " + datesStrEndRequestDate);
+
+                            var datesSetDateInOneMonth = new Date(strDatesDateSetDateInOneMonth);
+                            console.log("datesSetDateInOneMonth: " + datesSetDateInOneMonth);
+
+                            if (datesStrEndRequestDate > datesSetDateInOneMonth)
                             {
                                 alert("Total Days Request is more than 1,5 Months");
+
+                                dayOffRequestDayOffType = [];
+                                dayOffRequestStarDate = [];
+                                dayOffRequestEndDate = [];
+                                dayOffRequestFullOrHalf = [];
+                                dayOffRequestRemarks = [];
+                                dayOffRewquestTotalDays = [];
+                            }
+                            if(strDatesDateSetDateInOneMonth == strEndRequestDate)
+                            {
+                                dayOffRequestDayOffType.push(woStrMasterDayOffType);
+                                dayOffRequestStarDate.push(strStartRequestDate);
+                                dayOffRequestEndDate.push(strEndRequestDate);
+                                dayOffRequestFullOrHalf.push(woStrFullHalfDay);
+                                dayOffRequestRemarks.push(woStrRemarks);
+
+                                var differentDays = convertThreeMonthsToDays(strStartRequestDate, strEndRequestDate);
+
+                                dayOffRewquestTotalDays.push(differentDays);
                             }
                         }
                     }
                     else if (fullHalfDay == "Half Day")
                     {
                         alert("For Half Day, Start Date Must Be Same With End Date");
+
+                        dayOffRequestDayOffType = [];
+                        dayOffRequestStarDate = [];
+                        dayOffRequestEndDate = [];
+                        dayOffRequestFullOrHalf = [];
+                        dayOffRequestRemarks = [];
+                        dayOffRewquestTotalDays = [];
                     }
                     else if ((dateStartRequestDate > dateTimeLastWorkingDate) || (dateEndRequestDate > dateTimeLastWorkingDate))
                     {
                         alert("Your Start Request Date or End Request Date More Than Last Working Date");
+
+                        dayOffRequestDayOffType = [];
+                        dayOffRequestStarDate = [];
+                        dayOffRequestEndDate = [];
+                        dayOffRequestFullOrHalf = [];
+                        dayOffRequestRemarks = [];
+                        dayOffRewquestTotalDays = [];
                     }
                     else if (masterDayOffTypeValue == "1")
                     {
@@ -386,6 +468,13 @@
                         if (totalRequestAnnualDayOff > intBalanceAnnualDayOff)
                         {
                             alert("Total Days Request is more than Total Annual Day-Off Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -396,7 +485,7 @@
                             dayOffRequestRemarks.push(woStrRemarks);
                             dayOffRewquestTotalDays.push(finalRequestAnnualDayOff);
 
-                            console.log("finalRequestAnnualDayOff: " + finalRequestAnnualDayOff);
+                            //console.log("finalRequestAnnualDayOff: " + finalRequestAnnualDayOff);
                         }
                     }
                     else if (masterDayOffTypeValue == "7")
@@ -413,6 +502,13 @@
                         if (totalRequestSpecialDayOff > intBalanceSpecialDayOff)
                         {
                             alert("Total Days Request is more than Total Special Day-Off Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -439,6 +535,13 @@
                         if (totalRequestCompensatoryTime > intBalanceCompensatoryTime)
                         {
                             alert("Total Days Request is more than Total Compensatory Time Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -463,6 +566,13 @@
                         if (totalRequestPaternity > intBalancePaternity)
                         {
                             alert("Total Days Request is more than Total Paternity Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -487,6 +597,13 @@
                         if (totalRequestMarriageOfProfessional > intBalanceMarriageOfProfessional)
                         {
                             alert("Total Days Request is more than Total Marriage of The Professional Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -511,6 +628,13 @@
                         if (totalRequestMarriageOfTheProfessionalChildren > intBalanceMarriageOfProfessionalChildren)
                         {
                             alert("Total Days Request is more than Total Marriage of The Professional's Children Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -528,12 +652,19 @@
                         var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
                         var finalRequestCircumcisionOfProfessionalSon = parseInt(requestCircumcisionOfProfessionalSon) - parseInt(numberHolidays);
 
-                        totalRequestBaptismOfTheProfessionalChildren = parseInt(totalRequestBaptismOfTheProfessionalChildren) + parseInt(finalRequestCircumcisionOfProfessionalSon);
+                        totalRequestCircumcisionOfProfessionalSon = parseInt(totalRequestCircumcisionOfProfessionalSon) + parseInt(finalRequestCircumcisionOfProfessionalSon);
 
-                        var intBalanceBaptismOfProfessionalChildren = parseInt(balanceCircumcisionOfProfessionalSon);
+                        var intBalanceCircumcisionOfProfessionalSon = parseInt(balanceCircumcisionOfProfessionalSon);
 
                         if (totalRequestCircumcisionOfProfessionalSon > intBalanceCircumcisionOfProfessionalSon) {
                             alert("Total Days Request is more than Total Circumcision of Professional's Son Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else {
                             dayOffRequestDayOffType.push(woStrMasterDayOffType);
@@ -556,6 +687,13 @@
 
                         if (totalRequestBaptismOfTheProfessionalChildren > intBalanceBaptismOfTheProfessionalChildren) {
                             alert("Total Days Request is more than Total Baptism of The Professional's Children Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else {
                             dayOffRequestDayOffType.push(woStrMasterDayOffType);
@@ -579,6 +717,13 @@
                         if (totalRequestDeathOfProfessionalDependent > intBalanceDeathOfProfessionalDependent)
                         {
                             alert("Total Days Request is more than Total Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else {
                             dayOffRequestDayOffType.push(woStrMasterDayOffType);
@@ -602,6 +747,13 @@
                         if (totalRequestDeathOfProfessionalHousehold > intBalanceDeatOfProfessionalHousehold)
                         {
                             alert("Total Days Request is more than Death of a member of the Professional’s household other than the Professional’s dependent or parent Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else {
                             dayOffRequestDayOffType.push(woStrMasterDayOffType);
@@ -625,6 +777,13 @@
                         if (totalRequestProfessionalSeparationDate > intBalanceProfessionalSeparationDate)
                         {
                             alert("Total Days Request is more than Death of a member of the Professional’s separation date is on or after 19 of the month Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else {
                             dayOffRequestDayOffType.push(woStrMasterDayOffType);
@@ -658,6 +817,13 @@
                         if (fullHalfDay == "Half Day")
                         {
                             alert("Must Input Full Day for Maternity");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                     }
                     else if (masterDayOffTypeValue == "11")
@@ -665,11 +831,25 @@
                         if (fullHalfDay == "Half Day")
                         {
                             alert("Must Input Full Day for Miscarriage");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                     }
                     else if ((dateStartRequestDate > dateTimeLastWorkingDate) || (dateEndRequestDate > dateTimeLastWorkingDate))
                     {
                         alert("Your Start Request Date or End Request Date More Than Last Working Date");
+
+                        dayOffRequestDayOffType = [];
+                        dayOffRequestStarDate = [];
+                        dayOffRequestEndDate = [];
+                        dayOffRequestFullOrHalf = [];
+                        dayOffRequestRemarks = [];
+                        dayOffRewquestTotalDays = [];
                     }
                     else if (masterDayOffTypeValue == "1")
                     {
@@ -684,6 +864,13 @@
                         if (totalRequestAnnualDayOff > intBalanceAnnualDayOff)
                         {
                             alert("Total Days Request is more than Total Annual Day-Off Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -720,6 +907,13 @@
                         if (totalRequestSpecialDayOff > intBalanceSpecialDayOff)
                         {
                             alert("Total Days Request is more than Total Special Day-Off Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -753,6 +947,13 @@
 
                         if (totalRequestCompensatoryTime > intBalanceCompensatoryTime) {
                             alert("Total Days Request is more than Total Compensatory Time Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -787,6 +988,13 @@
                         if (totalRequestPaternity > intBalancePaternity)
                         {
                             alert("Total Days Request is more than Total Paternity Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -821,6 +1029,13 @@
                         if (totalRequestMarriageOfProfessional > intBalanceMarriageOfProfessional)
                         {
                             alert("Total Days Request is more than Total Marriage of The Professional Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -855,6 +1070,13 @@
                         if (totalRequestMarriageOfTheProfessionalChildren > intBalanceMarriageOfProfessionalChildren)
                         {
                             alert("Total Days Request is more than Total Marriage of The Professional's Children Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -882,13 +1104,20 @@
                         var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
                         var finalRequestCircumcisionOfProfessionalSon = parseInt(requestCircumcisionOfProfessionalSon) - parseInt(numberHolidays);
 
-                        totalRequestBaptismOfTheProfessionalChildren = parseInt(totalRequestBaptismOfTheProfessionalChildren) + parseInt(finalRequestCircumcisionOfProfessionalSon);
+                        totalRequestCircumcisionOfProfessionalSon = parseInt(totalRequestCircumcisionOfProfessionalSon) + parseInt(finalRequestCircumcisionOfProfessionalSon);
 
-                        var intBalanceBaptismOfProfessionalChildren = parseInt(balanceCircumcisionOfProfessionalSon);
+                        var intBalanceCircumcisionOfProfessionalSon = parseInt(balanceCircumcisionOfProfessionalSon);
 
                         if (totalRequestCircumcisionOfProfessionalSon > intBalanceCircumcisionOfProfessionalSon)
                         {
                             alert("Total Days Request is more than Total Circumcision of Professional's Son Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -923,6 +1152,13 @@
                         if (totalRequestBaptismOfTheProfessionalChildren > intBalanceBaptismOfTheProfessionalChildren)
                         {
                             alert("Total Days Request is more than Total Baptism of The Professional's Children Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -957,6 +1193,13 @@
                         if (totalRequestDeathOfProfessionalDependent > intBalanceDeathOfProfessionalDependent)
                         {
                             alert("Total Days Request is more than Total Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -991,6 +1234,13 @@
                         if (totalRequestDeathOfProfessionalHousehold > intBalanceDeatOfProfessionalHousehold)
                         {
                             alert("Total Days Request is more than Death of a member of the Professional’s household other than the Professional’s dependent or parent Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -1025,6 +1275,13 @@
                         if (totalRequestProfessionalSeparationDate > intBalanceProfessionalSeparationDate)
                         {
                             alert("Total Days Request is more than Death of a member of the Professional’s separation date is on or after 19 of the month Current Balance");
+
+                            dayOffRequestDayOffType = [];
+                            dayOffRequestStarDate = [];
+                            dayOffRequestEndDate = [];
+                            dayOffRequestFullOrHalf = [];
+                            dayOffRequestRemarks = [];
+                            dayOffRewquestTotalDays = [];
                         }
                         else
                         {
@@ -1051,109 +1308,229 @@
                 i++;
             });
 
-            if ((dayOffRequestDayOffType != null) && (dayOffRequestStarDate != null) && (dayOffRequestEndDate != null) && (dayOffRequestFullOrHalf != null) && (dayOffRequestRemarks != null))
+            if ((dayOffRequestDayOffType.length != 0) && (dayOffRequestStarDate.length != 0) && (dayOffRequestEndDate.length != 0) && (dayOffRequestFullOrHalf.length != 0) && (dayOffRequestRemarks.length != 0))
             {
-                
-
                 var returnToWork = GetReturnToWork(dayOffRequestStarDate);
-
                 var len = returnToWork.length;
 
-                for (var i = 0; i < len ; i++)
-                {
-                    console.log("returnToWork: " + returnToWork[i]);
-                }
+                //for (var i = 0; i < len ; i++)
+                //{
+                //    console.log("returnToWork: " + returnToWork[i]);
+                //}
                 
                 displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork)
-
+                
                 var requestLength = dayOffRequestDayOffType.length;
                 var totalDayOffAnnualDayOff = 0;
                 var totalDayOffSickDayOff = 0;
+                var totalDayOffSpecialDayOff = 0;
+                var totalDayOffCompensatoryTime = 0;
+                var totalDayOffPaternity = 0;
+                var totalDayOffMarriageOfTheProfessional = 0;
+                var totalDayOffMarriageOfTheProfessionalChildren = 0;
+                var totalDayOffCircumcisionOfTheProfessionalSon = 0;
+                var totalDayOffBaptismOfProfessionalChildren = 0;
+                var totalDayOffDeathOfProfessionalDependent = 0;
+                var totalDayOffDeathOfMemberProfessionalHousehold = 0;
+                var totalDayOffProfessionalSeparation = 0;
+                var totalDayOffMCAClosing = 0;
+                var totalDayOffVotingDay = 0;
+                var totalDayOffServiceCourt = 0;
+                var totalDayOffOther = 0;
+                var totalUnpaidDayOff = 0;
 
+                var arrDayOffType = [];
+                var arrTotalDayOff = [];
+
+                //var woStrMasterDayOffType = textMasterDayOffTypeValue.replace(/\s/g, '');
+                
                 for (var x = 0; x < requestLength; x++)
                 {
-                    if (dayOffRequestDayOffType[x] == "AnnualDay-Off")
+                    if (dayOffRequestDayOffType[x] == ("Annual Day-Off".replace(/\s/g, '')))
                     {
                         totalDayOffAnnualDayOff = totalDayOffAnnualDayOff + dayOffRewquestTotalDays[x];
-                        console.log("totalDayOffAnnualDayOff: " + totalDayOffAnnualDayOff);
                     }
-                    if (dayOffRequestDayOffType[x] == "SickDay-Off")
+                    if (dayOffRequestDayOffType[x] == ("Sick Day-Off".replace(/\s/g, '')))
                     {
                         totalDayOffSickDayOff = totalDayOffSickDayOff + dayOffRewquestTotalDays[x];
                     }
-
-                    //console.log("dayOffRequestDayOffType: " + dayOffRequestDayOffType[x]);
+                    if (dayOffRequestDayOffType[x] == ("Special Day-Off".replace(/\s/g, '')))
+                    {
+                        totalDayOffSpecialDayOff = totalDayOffSpecialDayOff + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Compensatory Time".replace(/\s/g, '')))
+                    {
+                        totalDayOffCompensatoryTime = totalDayOffCompensatoryTime + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Paternity".replace(/\s/g, '')))
+                    {
+                        totalDayOffPaternity = totalDayOffPaternity + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Marriage of the Professional".replace(/\s/g, '')))
+                    {
+                        totalDayOffMarriageOfTheProfessional = totalDayOffMarriageOfTheProfessional + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Marriage of the Professional's Children".replace(/\s/g, '')))
+                    {
+                        totalDayOffMarriageOfTheProfessionalChildren = totalDayOffMarriageOfTheProfessionalChildren + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Circumcision of the Professional's Sons".replace(/\s/g, '')))
+                    {
+                        totalDayOffCircumcisionOfTheProfessionalSon = totalDayOffCircumcisionOfTheProfessionalSon + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Baptism of the Professional's Children".replace(/\s/g, '')))
+                    {
+                        totalDayOffBaptismOfProfessionalChildren = totalDayOffBaptismOfProfessionalChildren + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws".replace(/\s/g, '')))
+                    {
+                        totalDayOffDeathOfProfessionalDependent = totalDayOffDeathOfProfessionalDependent + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Death of a member of the Professional’s household other than the Professional’s dependent or parent".replace(/\s/g, '')))
+                    {
+                        totalDayOffDeathOfMemberProfessionalHousehold = totalDayOffDeathOfMemberProfessionalHousehold + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Professional’s separation date is on or after 19 of the month".replace(/\s/g, '')))
+                    {
+                        totalDayOffProfessionalSeparation = totalDayOffProfessionalSeparation + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Unscheduled closing of MCA-Indonesia office(s)".replace(/\s/g, '')))
+                    {
+                        totalDayOffMCAClosing = totalDayOffMCAClosing + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Voting Day".replace(/\s/g, '')))
+                    {
+                        totalDayOffVotingDay = totalDayOffVotingDay + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Service as  a court witness".replace(/\s/g, '')))
+                    {
+                        totalDayOffServiceCourt = totalDayOffServiceCourt + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Other".replace(/\s/g, '')))
+                    {
+                        totalDayOffOther = totalDayOffOther + dayOffRewquestTotalDays[x];
+                    }
+                    if (dayOffRequestDayOffType[x] == ("Unpaid Day-Off".replace(/\s/g, '')))
+                    {
+                        totalUnpaidDayOff = totalUnpaidDayOff + dayOffRewquestTotalDays[x];
+                    }
                 }
 
-                UpdateNextBalanceAnnualDayOff(totalDayOffAnnualDayOff, "Annual Day-Off");
+                if (totalDayOffAnnualDayOff > 0)
+                {
+                    arrDayOffType.push(("Annual Day-Off".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffAnnualDayOff);
+                }
+                if (totalDayOffSickDayOff > 0)
+                {
+                    arrDayOffType.push(("Sick Day-Off".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffSickDayOff);
+                }
+                if (totalDayOffSpecialDayOff > 0)
+                {
+                    arrDayOffType.push(("Special Day-Off".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffSpecialDayOff);
+                }
+                if (totalDayOffCompensatoryTime > 0)
+                {
+                    arrDayOffType.push(("Compensatory Time".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffCompensatoryTime);
+                }
+                if (totalDayOffPaternity > 0)
+                {
+                    arrDayOffType.push(("Paternity".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffPaternity);
+                }
+                if (totalDayOffMarriageOfTheProfessional > 0)
+                {
+                    arrDayOffType.push(("Marriage of the Professional".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffMarriageOfTheProfessional);
+                }
+                if (totalDayOffMarriageOfTheProfessionalChildren > 0)
+                {
+                    arrDayOffType.push(("Marriage of the Professional's Children".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffMarriageOfTheProfessionalChildren);
+                }
+                if (totalDayOffCircumcisionOfTheProfessionalSon > 0)
+                {
+                    arrDayOffType.push(("Circumcision of the Professional's Sons".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffCircumcisionOfTheProfessionalSon);
+                }
+                if (totalDayOffBaptismOfProfessionalChildren > 0)
+                {
+                    arrDayOffType.push(("Baptism of the Professional's Children".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffBaptismOfProfessionalChildren);
+                }
+                if (totalDayOffDeathOfProfessionalDependent > 0)
+                {
+                    arrDayOffType.push(("Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffDeathOfProfessionalDependent);
+                }
+                if (totalDayOffDeathOfMemberProfessionalHousehold > 0)
+                {
+                    arrDayOffType.push(("Death of a member of the Professional’s household other than the Professional’s dependent or parent".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffDeathOfMemberProfessionalHousehold);
+                }
+                if (totalDayOffProfessionalSeparation > 0)
+                {
+                    arrDayOffType.push(("Professional’s separation date is on or after 19 of the month".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffProfessionalSeparation);
+                }
+                if (totalDayOffMCAClosing > 0)
+                {
+                    arrDayOffType.push(("Unscheduled closing of MCA-Indonesia office(s)".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffMCAClosing);
+                }
+                if (totalDayOffVotingDay > 0)
+                {
+                    arrDayOffType.push(("Voting Day".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffVotingDay);
+                }
+                if (totalDayOffServiceCourt > 0)
+                {
+                    arrDayOffType.push(("Service as  a court witness".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffServiceCourt);
+                }
+                if (totalDayOffOther > 0)
+                {
+                    arrDayOffType.push(("Other".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalDayOffOther);
+                }
+                if (totalUnpaidDayOff > 0)
+                {
+                    arrDayOffType.push(("Unpaid Day-Off".replace(/\s/g, '')));
+                    arrTotalDayOff.push(totalUnpaidDayOff);
+                }
+
+                displayNextBalance("day-off-next-balance", arrDayOffType, arrTotalDayOff);
 
             }
 
         }
 
-        function UpdateNextBalanceAnnualDayOff(totalDayOffAnnualDayOff, dayOffTypeAnnualDayOff)
+        function convertThreeMonthsToDays(strStartRequestDate, strDateSetThreeMonthInDate)
         {
-            var totalBalance = $("#DayOffNextBalance").data("kendoGrid").dataSource.data()[0].Balance;
-            totalBalance = parseInt(totalBalance) - parseInt(totalDayOffAnnualDayOff);
+            var dateStrStartRequestDate = new Date(strStartRequestDate);
+            var dateStrDateSetThreeMonthInDate = new Date(strDateSetThreeMonthInDate);
+            var timeDiff = Math.abs(dateStrDateSetThreeMonthInDate.getTime() - dateStrStartRequestDate.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-            console.log("totalBalance: " + totalBalance);
-
-            $("#DayOffNextBalance").data("kendoGrid").dataSource.[0].Balance = totalBalance;
-
-            $("#DayOffNextBalance").data("kendoGrid").dataSource.[0].Balance.prop('value', to);
+            return diffDays;
         }
 
-        function displayNextBalance()
+        //function UpdateNextBalanceAnnualDayOff(totalDayOffAnnualDayOff, dayOffTypeAnnualDayOff)
+        //{
+        //    var totalBalance = $("#DayOffNextBalance").data("kendoGrid").dataSource.data()[0].Balance;
+        //    totalBalance = parseInt(totalBalance) - parseInt(totalDayOffAnnualDayOff);
+
+        //    return totalBalance;
+        //}
+
+        function displayNextBalance(domID, arrDayOffType, arrTotalDayOff)
         {
-            //var rowgridRequestDetailDisplay = $("#DayOffRequestDetailsDisplay").data("kendoGrid").tbody.find("tr");
-            var rowgridRequest = $("#DayOffRequestDetailsDisplay").data("kendoGrid");
-            var rowgridRequestDisplay = rowgridRequest.tbody.find("tr");
-            var j = 0;
-
-            rowgridRequestDisplay.each(function (e) {
-                var dayOffTypeRequestDetailDisplay = $("#DayOffRequestDetailsDisplay").data("kendoGrid").dataSource.data()[j].DayOffType;
-
-                console.log("dayOffType: " + dayOffTypeRequestDetailDisplay);
-
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Annual Day-Off") {
-                //    balanceAnnualDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Special Day-Off") {
-                //    balanceSpecialDayOff = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Paternity") {
-                //    balancePaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional") {
-                //    balanceMarriageOfProfessional = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Marriage of the Professional's Children") {
-                //    balanceMarriageOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Circumcision of the Professional's Sons") {
-                //    balanceCircumcisionOfProfessionalSon = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Baptism of the Professional's Children") {
-                //    balanceBaptismOfProfessionalChildren = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws") {
-                //    balanceDeathOfProfessionalDependent = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Death of a member of the Professional’s household other than the Professional’s dependent or parent") {
-                //    balanceDeathOfProfessionalHousehold = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Professional’s separation date is on or after 19 of the month") {
-                //    balanceProfessionalSeparationDate = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Compensatory Time") {
-                //    balanceCompensatoryTime = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-                //if ($("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].DayOffType.Text == "Maternity") {
-                //    balanceMaternity = $("#DayOffBalanceDetails").data("kendoGrid").dataSource.data()[j].Balance;
-                //}
-
-                j++;
-            });
+            var professionalID = $("#ProfessionalID").val()
+            var url = "/HRDayOff/DisplayNextBalance/?arrDayOffType=" + arrDayOffType + "&arrTotalDayOff=" + arrTotalDayOff + "&professionalID=" + professionalID;
+            $('#' + domID).load(url);
         }
 
         function GetReturnToWork(dayOffRequestStarDate)
@@ -2007,19 +2384,17 @@
 
         function displayRequestDetail(domID, dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork)
         {
-            console.log("dayOffRewquestTotalDays: " + dayOffRewquestTotalDays)
-
             var url = "/HRDayOff/DisplayRequestDetail/?dayOffRequestDayOffType=" + dayOffRequestDayOffType + "&dayOffRequestStarDate=" + dayOffRequestStarDate + "&dayOffRequestEndDate=" + dayOffRequestEndDate + "&dayOffRequestFullOrHalf=" + dayOffRequestFullOrHalf + "&dayOffRequestRemarks=" + dayOffRequestRemarks + "&dayOffRewquestTotalDays=" + dayOffRewquestTotalDays + "&returnToWork=" + returnToWork;
             $('#' + domID).load(url);
 
             console.log(url)
         }
 
-        function testfungsi(domID, masterDayOffTypeValue)
-        {
-            var url = "/HRDayOff/TestAction/?masterDayOffTypeValue=" + masterDayOffTypeValue;
-            $('#' + domID).load(url);
-        }
+        //function testfungsi(domID, masterDayOffTypeValue)
+        //{
+        //    var url = "/HRDayOff/TestAction/?masterDayOffTypeValue=" + masterDayOffTypeValue;
+        //    $('#' + domID).load(url);
+        //}
 
         function checkThreeMonth(dateRequestStartDate, dateRequestEndDate)
         {

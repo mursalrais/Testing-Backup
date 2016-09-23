@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Elmah;
 using MCAWebAndAPI.Model.ViewModel.Form.Finance;
 using MCAWebAndAPI.Service.Finance;
-using MCAWebAndAPI.Service.Resources;
 using MCAWebAndAPI.Web.Helpers;
 using MCAWebAndAPI.Web.Resources;
 using static MCAWebAndAPI.Model.ViewModel.Form.Finance.Shared;
@@ -22,7 +20,7 @@ namespace MCAWebAndAPI.Web.Controllers
         private const string FirstPage = "{0}/Lists/Tax%20Reimbursement/AllItems.aspx";
 
         private readonly ITaxReimbursementService service;
-        
+
         public FINTaxReimbursementController()
         {
             service = new TaxReimbursementService();
@@ -40,7 +38,6 @@ namespace MCAWebAndAPI.Web.Controllers
             ViewBag.CancelUrl = string.Format(FirstPage, siteUrl);
 
             return View(viewModel);
-
         }
 
         [HttpPost]

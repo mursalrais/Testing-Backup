@@ -86,6 +86,8 @@
             var grid = $("#EventBudgetDetail").data("kendoGrid");
             var dataSource = grid.dataSource;
 
+            $('#ClientDateTime').val(new Date());
+
             //records on current view / page   
             var recordsOnCurrentView = dataSource.view().length;
             //total records
