@@ -18,14 +18,18 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.Finance
         [DataType(DataType.DateTime)]
         [DisplayName("Date (from)")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy HH:mm}")]
+        public DateTime DateFromPicker { get; set; } = DateTime.Today.AddDays(-14);
+
         public DateTime DateFrom { get; set; } = DateTime.Today.AddDays(-14);
 
         [Required]
         [DataType(DataType.DateTime)]
         [DisplayName("Date (to)")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy HH:mm}")]
+        public DateTime DateToPicker { get; set; } = DateTime.Today;
+
         public DateTime DateTo { get; set; } = DateTime.Today;
-        
+
         [DisplayName("Total amount to be replenished")]
         public decimal TotalAmount { get; set; } = 0;
         

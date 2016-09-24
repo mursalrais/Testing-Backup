@@ -6,7 +6,7 @@
     .Name("ItemDetails")
     .Columns(columns =>
     {
-        columns.Bound(p => p.Date).ClientTemplate("#=kendo.toString(Date,'MM/dd/yyyy')#" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Date' value='#= Date #' />")
+        columns.Bound(p => p.Date).ClientTemplate("#=kendo.toString(Date,'MM/dd/yyyy')#" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].Date' value='#= kendo.toString(Date, \"dd/MM/yyyy\") #' />")
             .HtmlAttributes(new { style = "text-align: right;" }); 
 
         columns.Bound(p => p.PCVNo).ClientTemplate("#= PCVNo #" + "<input type='hidden' name='ItemDetails[#= getItem(data)#].PCVNo' value='#= PCVNo #' />");
