@@ -323,9 +323,11 @@
       <DependentUpon>UrlResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Shared\IPlaceService.cs" />
+    <Compile Include="Shared\IProvinceService.cs" />
     <Compile Include="Shared\IVendorService.cs" />
     <Compile Include="Shared\PlaceService.cs" />
     <Compile Include="Shared\PositionService.cs" />
+    <Compile Include="Shared\ProvinceService.cs" />
     <Compile Include="Shared\VendorService.cs" />
     <Compile Include="Travel\AllowableRateMasterService.cs" />
     <Compile Include="Travel\AuthAdvRequestService.cs" />

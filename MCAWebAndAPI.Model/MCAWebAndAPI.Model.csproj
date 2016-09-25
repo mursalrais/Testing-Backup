@@ -314,6 +314,7 @@
     <Compile Include="ViewModel\Form\Procurement\VendorVM.cs" />
     <Compile Include="ViewModel\Form\Shared\PlaceVM.cs" />
     <Compile Include="ViewModel\Form\Shared\ProfessionalVM.cs" />
+    <Compile Include="ViewModel\Form\Shared\ProvinceVM.cs" />
     <Compile Include="ViewModel\Form\Shared\VendorVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AllowableRateMasterVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvRequestVM.cs" />
@@ -323,7 +324,7 @@
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_LodgingInternationalVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_OthersInCountryVM .cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_OthersInternationalVM.cs" />
-    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_PerDiemInCountryVM%27.cs" />
+    <Compile Include="ViewModel\Form\Travel\AuthAdvReq_PerDiemInCountryVM.cs" />
     <Compile Include="ViewModel\Form\Travel\AuthAdvReq_PerDiemInternationalVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttDependenciesVM.cs" />
     <Compile Include="ViewModel\Gantt\GanttTasksVM.cs" />

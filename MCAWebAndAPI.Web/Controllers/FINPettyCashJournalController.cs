@@ -42,6 +42,8 @@ namespace MCAWebAndAPI.Web.Controllers
             SessionManager.Set(SessionSiteUrl, siteUrl);
 
             var viewModel = service.Get(GetOperation(op), id);
+            viewModel.DateFromPicker = viewModel.DateFrom;
+            viewModel.DateToPicker = viewModel.DateTo;
 
             ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
 
@@ -59,8 +61,9 @@ namespace MCAWebAndAPI.Web.Controllers
             {
                 //this mess is just to ensure date format yyyy-MM-dd
                 //TODO: find a better way
-                var from = Convert.ToDateTime(DateTime.Parse(dateFrom, System.Globalization.CultureInfo.InvariantCulture));
-                var to = Convert.ToDateTime(DateTime.Parse(dateTo, System.Globalization.CultureInfo.InvariantCulture));
+                string format = "dd/MM/yyyy HH:mm"; //should be same with the one set in aspx. if not will error.
+                var from = Convert.ToDateTime(DateTime.ParseExact(dateFrom,format, System.Globalization.CultureInfo.InvariantCulture));
+                var to = Convert.ToDateTime(DateTime.ParseExact(dateTo,format, System.Globalization.CultureInfo.InvariantCulture));
 
                 if (itemEdited)
                     details = service.GetPettyCashTransactions(from, to).ToList();
