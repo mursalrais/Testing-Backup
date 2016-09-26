@@ -55,9 +55,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
             siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
             var activity = new ActivityVM();
-            if (activityId != null)
+            if (activityId.HasValue)
             {
-                ActivityService.Get(siteUrl, Convert.ToInt32(activityId));
+                activity = ActivityService.Get(siteUrl, Convert.ToInt32(activityId.Value));
             }
 
             IEnumerable<WBS> wbsMasters = GetAllCached();
