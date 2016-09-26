@@ -122,11 +122,11 @@
     <comment>To Change when Migrated</comment>
   </data>
   <data name="DefaultHRSiteUrl" xml:space="preserve">
-    <value>https://eceos2.sharepoint.com/sites/mca-dev/hr</value>
+    <value>https://eceos2.sharepoint.com/sites/ims/hruat</value>
     <comment>To Change when Migrated</comment>
   </data>
   <data name="DefaultProgramSiteUrl" xml:space="preserve">
-    <value>https://eceos2.sharepoint.com/sites/mca-dev</value>
+    <value>https://eceos2.sharepoint.com/sites/ims</value>
     <comment>To Change when Migrated</comment>
   </data>
   <data name="UrlPSA" xml:space="preserve">
