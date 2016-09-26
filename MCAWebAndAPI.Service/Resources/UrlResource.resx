@@ -128,7 +128,7 @@
     <value>Lists/Professional Master</value>
   </data>
   <data name="PSAManagementDocumentByID" xml:space="preserve">
-    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHash093fad79-4ce0-43c1-8824-1b429d747e81=FilterField1%3Dpsa%255Fx003a%255FID-FilterValue1%3D{1}</value>
+    <value>{0}/PSA%20Documents/Forms/AllItems.aspx#InplviewHashaa5e9004-b21a-4996-978c-4e2dc97c987a=FilterField1%3DID-FilterValue1%3D{1}</value>
     <comment>Need to change in migration</comment>
   </data>
   <data name="ApplicationData" xml:space="preserve">
