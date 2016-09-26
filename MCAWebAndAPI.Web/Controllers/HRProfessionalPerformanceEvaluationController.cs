@@ -39,6 +39,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "EditPerformanceEvaluation";
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             return View("ProfessionalPerformanceEvaluation", viewModel);
         }
@@ -51,6 +52,7 @@ namespace MCAWebAndAPI.Web.Controllers
 
             if (viewModel.CheckWorkflow == "False")
             {
+                SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
                 foreach (var item in viewModel.WorkflowItems)
                 {
                     var lvl = item.Level;

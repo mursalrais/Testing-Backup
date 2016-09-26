@@ -53,6 +53,7 @@ namespace MCAWebAndAPI.Web.Controllers
         {
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             var Detail = viewModel.ProjectOrUnitGoalsDetails;
             var Count = Detail.Count();
@@ -208,6 +209,7 @@ namespace MCAWebAndAPI.Web.Controllers
             viewModel.Requestor = requestor;
             viewModel.ID = ID;
             ViewBag.Action = "EditPerformancePlan";
+            SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
 
             return View("PerformancePlan", viewModel);
         }
@@ -219,6 +221,7 @@ namespace MCAWebAndAPI.Web.Controllers
             _hRPerformancePlanService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
             if (viewModel.CheckWorkflow == "False")
             {
+                SessionManager.Set("WorkflowItems", viewModel.WorkflowItems);
                 foreach (var item in viewModel.WorkflowItems)
                 {
                     var lvl = item.Level;

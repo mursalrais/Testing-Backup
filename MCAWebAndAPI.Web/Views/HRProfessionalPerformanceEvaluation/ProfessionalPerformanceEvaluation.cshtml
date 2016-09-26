@@ -26,6 +26,7 @@
          @Html.HiddenFor(m => m.StatusForm)
          @Html.HiddenFor(m => m.TypeForm)
          @Html.HiddenFor(m => m.ApproverCount)
+         @Html.HiddenFor(m => m.CheckWorkflow)
 
         <div class="col-xs-12">
             <div class="form-group">
@@ -202,6 +203,8 @@
         @Html.HiddenFor(m => m.StatusForm)
         @Html.HiddenFor(m => m.TypeForm)
         @Html.HiddenFor(m => m.ApproverCount)
+        @Html.HiddenFor(m => m.CheckWorkflow)
+
         <div class="col-xs-12">
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.Name).Class("col-xs-4 control-label")
