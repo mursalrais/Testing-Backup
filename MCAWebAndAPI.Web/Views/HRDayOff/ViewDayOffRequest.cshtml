@@ -1,0 +1,35 @@
+﻿@using MCAWebAndAPI.Model.ViewModel.Form.HR
+@model DayOffRequestVM
+
+@{
+    ViewBag.Title = "View Day-Off Request";
+}
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>View Day-Off Request Header Data</legend>
+        <div class="row">
+            @Html.Partial("_ViewDayOffRequestHeader", Model)
+        </div>
+        <legend>View Day-Off Current Balance</legend>
+        <div class="row">
+            @Html.Partial("_ViewDayOffCurrentBalance", Model.DayOffRequestDetails)
+        </div>
+        <legend>View Day-Off Request Detail</legend>
+        <div class="row">
+            @Html.Partial("_ViewDayOffRequestDetail", Model.DayOffRequestDetails)
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <div class="row">
+            <div class="col-sm-12"><br /></div>
+        </div>
+    </div>
+</div>
+}
+@section scripts{
+
+    <script>
+
+    </script>
+}

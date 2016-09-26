@@ -45,6 +45,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? LastWorkingDate { get; set; } = DateTime.UtcNow;
 
         [UIHint("Date")]
+        public DateTime? PSAStartDate { get; set; } = DateTime.UtcNow;
+
+        [UIHint("Date")]
         public DateTime? PSAExpiryDate { get; set; } = DateTime.UtcNow;
 
         public string ProfessionalStatus { get; set; }

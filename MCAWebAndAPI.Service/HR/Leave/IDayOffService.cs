@@ -65,11 +65,13 @@ namespace MCAWebAndAPI.Service.HR.Leave
 
         int GetPositionID(string requestorposition, string requestorunit, int positionID, int number);
 
-        Task CreateDayOffRequestDetailAsync(DayOffRequestVM dayOffRequest, int? dayOffRequestHeaderID, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail, string requestorposition, string requestorunit, int? positionID);
+        Task CreateDayOffRequestDetailAsync(DayOffRequestVM dayOffRequest, int? dayOffRequestHeaderID, IEnumerable<DayOffRequestDetailDisplayVM> dayOffRequestDetailDisplay, string requestorposition, string requestorunit, int? positionID, string dayOffStatus, IEnumerable<DayOffBalanceVM> dayOffCurrentBalance, IEnumerable<DayOffNextBalanceVM> dayOffNextBalance);
 
         DayOffRequestVM GetRequestData(List<string> dayOffType, List<string> startDate, List<string> endDate, List<string> fullHalfDay, List<string> remarks, List<string> totalDays, List<string> returnToWork);
 
         DayOffRequestVM GetRequestDataByUser(List<string> arrDayOffType, List<string> arrTotalDayOff, string professionalID);
+
+        DayOffRequestVM ViewDayOffRequest(int? ID);
 
     }
 }

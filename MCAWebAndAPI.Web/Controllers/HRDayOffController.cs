@@ -74,58 +74,57 @@ namespace MCAWebAndAPI.Web.Controllers
                 return RedirectToAction("Index", "Error", new { errorMessage = e.Message });
             }
 
-            var dayOffRequestDetail = viewModel.DayOffRequestDetails;
+            var dayOffCurrentBalance = viewModel.DayOffBalanceDetails;
+            var dayOffRequestDetailDisplay = viewModel.DayOffRequestDetailsDisplay;
+            var dayOffNextBalance = viewModel.DayOffNextBalance;
 
             string requestorposition = Convert.ToString(viewModel.PositionName);
             string requestorunit = Convert.ToString(viewModel.ProjectUnit);
 
             int? positionID = _hRDayOffService.GetPositionID(requestorposition, requestorunit, 0, 0);
 
-            viewModel.DayOffRequestDetails = BindRequestStartDate(form, viewModel.DayOffRequestDetails);
-            viewModel.DayOffRequestDetails = BindRequestEndDate(form, viewModel.DayOffRequestDetails);
-            Task createExitProcedureChecklist = _hRDayOffService.CreateDayOffRequestDetailAsync(viewModel, dayOffRequestHeaderID, dayOffRequestDetail, requestorposition, requestorunit, positionID);
+            viewModel.DayOffRequestDetailsDisplay = BindRequestStartDate(form, viewModel.DayOffRequestDetailsDisplay);
+            viewModel.DayOffRequestDetailsDisplay = BindRequestEndDate(form, viewModel.DayOffRequestDetailsDisplay);
+            Task createDayOffRequestDetail = _hRDayOffService.CreateDayOffRequestDetailAsync(viewModel, dayOffRequestHeaderID, dayOffRequestDetailDisplay, requestorposition, requestorunit, positionID, viewModel.StatusForm, dayOffCurrentBalance, dayOffNextBalance);
 
-            //try
-            //{
-            //    if (viewModel.StatusForm == "Pending Approval")
-            //    {
-            //        exitProcedureService.SendMailDocument(viewModel.RequestorMailAddress, string.Format("Thank You For Your Request, Please kindly download Non Disclosure Document on this url: {0}{1} and Exit Interview Form on this url: {2}{3}", siteUrl, UrlResource.ExitProcedureNonDisclosureAgreement, siteUrl, UrlResource.ExitProcedureExitInterviewForm));
-
-            //        exitProcedureService.SendEmail(viewModel, SP_EXP_CHECK_LIST,
-            //        SP_TRANSACTION_WORKFLOW_LOOKUP_COLUMN_NAME, (int)exitProcID,
-            //        string.Format("Dear Respective Approver : {0}{1}/EditExitProcedureForApprover.aspx?ID={2}", siteUrl, UrlResource.ExitProcedure, exitProcID), string.Format("Message for Requestor"));
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    return JsonHelper.GenerateJsonErrorResponse(e);
-            //}
+            //_hRDayOffService.UpdateCurrentAndNextBalance()
 
             return JsonHelper.GenerateJsonSuccessResponse(siteUrl + UrlResource.ExitProcedure);
 
         }
 
-        IEnumerable<DayOffRequestDetailVM> BindRequestStartDate(FormCollection form, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail)
+        public ActionResult ViewDayOffRequest(string siteUrl = null, int? ID = null)
         {
-            var array = dayOffRequestDetail.ToArray();
+            // Clear Existing Session Variables if any
+
+            // MANDATORY: Set Site URL
+            _hRDayOffService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+            SessionManager.Set("SiteUrl", siteUrl ?? ConfigResource.DefaultHRSiteUrl);
+
+            var viewModel = _hRDayOffService.ViewDayOffRequest(ID);
+            return View("ViewDayOffRequest", viewModel);
+        }
+
+        IEnumerable<DayOffRequestDetailDisplayVM> BindRequestStartDate(FormCollection form, IEnumerable<DayOffRequestDetailDisplayVM> dayOffRequestDetailDisplay)
+        {
+            var array = dayOffRequestDetailDisplay.ToArray();
 
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].RequestStartDate = BindHelper.BindDateInGrid("DayOffRequestDetails",
-                    i, "RequestStartDate", form);
+                array[i].RqsStartDate = BindHelper.BindDateInGrid("DayOffRequestDetailsDisplay",
+                    i, "RqsStartDate", form);
             }
             return array;
         }
 
-        IEnumerable<DayOffRequestDetailVM> BindRequestEndDate(FormCollection form, IEnumerable<DayOffRequestDetailVM> dayOffRequestDetail)
+        IEnumerable<DayOffRequestDetailDisplayVM> BindRequestEndDate(FormCollection form, IEnumerable<DayOffRequestDetailDisplayVM> dayOffRequestDetailDisplay)
         {
-            var array = dayOffRequestDetail.ToArray();
+            var array = dayOffRequestDetailDisplay.ToArray();
 
             for (int i = 0; i < array.Length; i++)
             {
-                array[i].RequestEndDate = BindHelper.BindDateInGrid("DayOffRequestDetails",
-                    i, "RequestEndDate", form);
+                array[i].RqsEndDate = BindHelper.BindDateInGrid("DayOffRequestDetailsDisplay",
+                    i, "RqsEndDate", form);
             }
             return array;
         }

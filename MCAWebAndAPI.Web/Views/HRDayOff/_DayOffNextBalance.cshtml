@@ -15,6 +15,10 @@
                              BindTo = DayOffNextBalanceVM.GetDayOffTypeOptions()
                          });
 
+        columns.Bound(p => p.StrDayOffType).Hidden().Width(100).ClientTemplate("#= StrDayOffType #" +
+            "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].StrDayOffType' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].StrDayOffType' value='#= StrDayOffType #' />"
+            );
+
         columns.Bound(p => p.Balance).Width(100).ClientTemplate("#= Balance #" +
             "<input type='hidden' id='DayOffNextBalance[#= getDayOffNextBalance(data)#].Balance' name='DayOffNextBalance[#= getDayOffNextBalance(data)#].Balance' value='#= Balance #' />"
             );
@@ -45,6 +49,7 @@
     {
         model.Id(p => p.ID);
         model.Field(m => m.DayOffType).DefaultValue(DayOffNextBalanceVM.GetDayOffTypeDefaultValue()).Editable(false);
+        model.Field(m => m.StrDayOffType).Editable(false);
         model.Field(m => m.Balance).Editable(false);
         model.Field(m => m.DayOffBrought).Editable(false);
         model.Field(m => m.Unit).DefaultValue(DayOffNextBalanceVM.GetUnitDefaultValue()).Editable(false);
