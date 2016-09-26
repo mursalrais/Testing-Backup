@@ -239,11 +239,34 @@ namespace MCAWebAndAPI.Service.HR.Recruitment
             var Check = await _workflow.CheckWorkflow(intID, listNameWorkflow, columnName);
             if (Check.Count() != 0)
             {
+                viewModel.CheckWorkflow = "True";
                 viewModel.WorkflowItems = Check;
             }
             if (Check.Count() == 0)
             {
+                viewModel.CheckWorkflow = "False";
                 viewModel.WorkflowItems = await _workflow.GetWorkflowDetails(requestor, listName);
+            }
+            if (viewModel.CheckWorkflow == "True")
+            {
+                foreach (var item in viewModel.WorkflowItems)
+                {
+                    var lvl = item.Level;
+                    if (lvl == "1")
+                    {
+                        viewModel.Approver1 = item.ApproverNameText;
+                    }
+
+                    if (lvl == "2")
+                    {
+                        viewModel.Approver2 = item.ApproverNameText;
+                    }
+
+                    if (lvl == "3")
+                    {
+                        viewModel.Approver3 = item.ApproverNameText;
+                    }
+                }
             }
 
             viewModel.ApproverCount = viewModel.WorkflowItems.Count();

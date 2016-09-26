@@ -49,22 +49,25 @@ namespace MCAWebAndAPI.Web.Controllers
             var siteUrl = SessionManager.Get<string>("SiteUrl");
             _hRProfessionalPerformanceEvaluationService.SetSiteUrl(siteUrl ?? ConfigResource.DefaultHRSiteUrl);
 
-            foreach (var item in viewModel.WorkflowItems)
+            if (viewModel.CheckWorkflow == "False")
             {
-                var lvl = item.Level;
-                if (lvl == "1")
+                foreach (var item in viewModel.WorkflowItems)
                 {
-                    viewModel.Approver1 = item.ApproverNameText;
-                }
+                    var lvl = item.Level;
+                    if (lvl == "1")
+                    {
+                        viewModel.Approver1 = item.ApproverNameText;
+                    }
 
-                if (lvl == "2")
-                {
-                    viewModel.Approver2 = item.ApproverNameText;
-                }
+                    if (lvl == "2")
+                    {
+                        viewModel.Approver2 = item.ApproverNameText;
+                    }
 
-                if (lvl == "3")
-                {
-                    viewModel.Approver3 = item.ApproverNameText;
+                    if (lvl == "3")
+                    {
+                        viewModel.Approver3 = item.ApproverNameText;
+                    }
                 }
             }
 
