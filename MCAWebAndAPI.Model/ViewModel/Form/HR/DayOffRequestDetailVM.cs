@@ -46,6 +46,9 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
                 e.Value == model.Value : e.Text == model.Text);
         }
 
+        [DisplayName("Full/Half?")]
+        public string StrFullHalf { get; set; }
+
         /// <summary>
         /// masterdayofftype
         /// </summary>
@@ -75,11 +78,24 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public DateTime? RequestStartDate { get; set; }
 
         /// <summary>
+        /// requeststartdate
+        /// </summary>
+        [DisplayName("Start Date")]
+        [Required]
+        public string StrRequestStartDate { get; set; }
+
+        /// <summary>
         /// requestenddate
         /// </summary>
         [UIHint("Date")]
         [DisplayName("End Date")]
         public DateTime? RequestEndDate { get; set; }
+
+        /// <summary>
+        /// requestenddate
+        /// </summary>
+        [DisplayName("End Date")]
+        public string StrRequestEndDate { get; set; }
 
         /// <summary>
         /// totaldays
@@ -192,5 +208,11 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
             return options.FirstOrDefault(e => e.Value == null ?
                 e.Value == model.Value : e.Text == model.Text);
         }
+
+        /// <summary>
+        /// dayoffrequest
+        /// </summary>
+        [DisplayName("Day-Off Type")]
+        public string StrDayOffType { get; set; }
     }
 }

@@ -1226,6 +1226,10 @@
     <Content Include="Views\HRFeeSlip\CreateFeeSlip.cshtml" />
     <Content Include="Views\HRManpowerRequisition\CannotAccess.cshtml" />
     <Content Include="Views\HRFeeSlip\PrintFeeSlip.cshtml" />
+    <Content Include="Views\HRDayOff\ViewDayOffRequest.cshtml" />
+    <Content Include="Views\HRDayOff\_ViewDayOffRequestHeader.cshtml" />
+    <Content Include="Views\HRDayOff\_ViewDayOffRequestDetail.cshtml" />
+    <Content Include="Views\HRDayOff\_ViewDayOffCurrentBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

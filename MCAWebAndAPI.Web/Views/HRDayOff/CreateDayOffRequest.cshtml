@@ -86,7 +86,9 @@
         function validateDayOffRequest()
         {
             var lastWorkingDate = $("#LastWorkingDate").val();
+            var psaStartDate = $("#PSAStartDate").val();
             var dateTimeLastWorkingDate = new Date(lastWorkingDate);
+            var datePSAStartDate = new Date(psaStartDate);
             var balanceAnnualDayOff;
             var balanceSpecialDayOff;
             var balancePaternity;
@@ -170,6 +172,7 @@
             var i = 0;
             var totalRequestAnnualDayOff = 0;
             var totalRequestSpecialDayOff = 0;
+            var totalRequestSickDayOff = 0;
             var totalRequestPaternity = 0;
             var totalRequestMarriageOfProfessional = 0;
             var totalRequestCircumcisionOfProfessionalSon = 0;
@@ -313,7 +316,7 @@
 
                 if (dateStartRequestDate > dateEndRequestDate)
                 {
-                    alert("End Date must be more than Start Date");
+                    alert("End Date cannot be earlier than Start Date");
 
                     dayOffRequestDayOffType = [];
                     dayOffRequestStarDate = [];
@@ -328,7 +331,7 @@
                     {
                         if (fullHalfDay == "Half Day")
                         {
-                            alert("Must Input Full Day for Maternity");
+                            alert("Maternity day off must be Full Day");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -352,7 +355,7 @@
                             
                             if (datesStrEndRequestDate > datesSetThreeMonthInDate)
                             {
-                                alert("Total Days Request is more than 3 Months");
+                                alert("Total Days cannot be more than Current Balance");
 
                                 dayOffRequestDayOffType = [];
                                 dayOffRequestStarDate = [];
@@ -380,7 +383,7 @@
                     {
                         if (fullHalfDay == "Half Day")
                         {
-                            alert("Must Input Full Day for Miscarriage");
+                            alert("Miscarriage day off must be Full Day");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -409,7 +412,7 @@
 
                             if (datesStrEndRequestDate > datesSetDateInOneMonth)
                             {
-                                alert("Total Days Request is more than 1,5 Months");
+                                alert("Total Days cannot be more than Current Balance");
 
                                 dayOffRequestDayOffType = [];
                                 dayOffRequestStarDate = [];
@@ -434,7 +437,7 @@
                     }
                     else if (fullHalfDay == "Half Day")
                     {
-                        alert("For Half Day, Start Date Must Be Same With End Date");
+                        alert("If half day is chosen, end date must be equal to start date");
 
                         dayOffRequestDayOffType = [];
                         dayOffRequestStarDate = [];
@@ -443,9 +446,14 @@
                         dayOffRequestRemarks = [];
                         dayOffRewquestTotalDays = [];
                     }
-                    else if ((dateStartRequestDate > dateTimeLastWorkingDate) || (dateEndRequestDate > dateTimeLastWorkingDate))
+                    else if ((dateStartRequestDate < datePSAStartDate) || (dateEndRequestDate > dateTimeLastWorkingDate))
                     {
-                        alert("Your Start Request Date or End Request Date More Than Last Working Date");
+                        console.log("dateStartRequestDate: " + dateStartRequestDate);
+                        console.log("datePSAStartDate: " + datePSAStartDate);
+                        console.log("dateEndRequestDate: " + dateEndRequestDate);
+                        console.log()
+
+                        alert("Cannot request day-off outside PSA Active range date");
 
                         dayOffRequestDayOffType = [];
                         dayOffRequestStarDate = [];
@@ -467,7 +475,7 @@
 
                         if (totalRequestAnnualDayOff > intBalanceAnnualDayOff)
                         {
-                            alert("Total Days Request is more than Total Annual Day-Off Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -485,7 +493,6 @@
                             dayOffRequestRemarks.push(woStrRemarks);
                             dayOffRewquestTotalDays.push(finalRequestAnnualDayOff);
 
-                            //console.log("finalRequestAnnualDayOff: " + finalRequestAnnualDayOff);
                         }
                     }
                     else if (masterDayOffTypeValue == "7")
@@ -501,7 +508,7 @@
 
                         if (totalRequestSpecialDayOff > intBalanceSpecialDayOff)
                         {
-                            alert("Total Days Request is more than Total Special Day-Off Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -534,7 +541,7 @@
 
                         if (totalRequestCompensatoryTime > intBalanceCompensatoryTime)
                         {
-                            alert("Total Days Request is more than Total Compensatory Time Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -565,7 +572,7 @@
 
                         if (totalRequestPaternity > intBalancePaternity)
                         {
-                            alert("Total Days Request is more than Total Paternity Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -596,7 +603,7 @@
 
                         if (totalRequestMarriageOfProfessional > intBalanceMarriageOfProfessional)
                         {
-                            alert("Total Days Request is more than Total Marriage of The Professional Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -627,7 +634,7 @@
 
                         if (totalRequestMarriageOfTheProfessionalChildren > intBalanceMarriageOfProfessionalChildren)
                         {
-                            alert("Total Days Request is more than Total Marriage of The Professional's Children Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -657,7 +664,7 @@
                         var intBalanceCircumcisionOfProfessionalSon = parseInt(balanceCircumcisionOfProfessionalSon);
 
                         if (totalRequestCircumcisionOfProfessionalSon > intBalanceCircumcisionOfProfessionalSon) {
-                            alert("Total Days Request is more than Total Circumcision of Professional's Son Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -686,7 +693,7 @@
                         var intBalanceBaptismOfTheProfessionalChildren = parseInt(balanceBaptismOfProfessionalChildren);
 
                         if (totalRequestBaptismOfTheProfessionalChildren > intBalanceBaptismOfTheProfessionalChildren) {
-                            alert("Total Days Request is more than Total Baptism of The Professional's Children Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -716,7 +723,7 @@
 
                         if (totalRequestDeathOfProfessionalDependent > intBalanceDeathOfProfessionalDependent)
                         {
-                            alert("Total Days Request is more than Total Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -746,7 +753,7 @@
 
                         if (totalRequestDeathOfProfessionalHousehold > intBalanceDeatOfProfessionalHousehold)
                         {
-                            alert("Total Days Request is more than Death of a member of the Professional’s household other than the Professional’s dependent or parent Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -776,7 +783,7 @@
 
                         if (totalRequestProfessionalSeparationDate > intBalanceProfessionalSeparationDate)
                         {
-                            alert("Total Days Request is more than Death of a member of the Professional’s separation date is on or after 19 of the month Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -816,7 +823,7 @@
                     {
                         if (fullHalfDay == "Half Day")
                         {
-                            alert("Must Input Full Day for Maternity");
+                            alert("Maternity day off must be Full Day");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -830,7 +837,7 @@
                     {
                         if (fullHalfDay == "Half Day")
                         {
-                            alert("Must Input Full Day for Miscarriage");
+                            alert("Miscarriage day off must be Full Day");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -863,7 +870,7 @@
 
                         if (totalRequestAnnualDayOff > intBalanceAnnualDayOff)
                         {
-                            alert("Total Days Request is more than Total Annual Day-Off Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -906,7 +913,7 @@
 
                         if (totalRequestSpecialDayOff > intBalanceSpecialDayOff)
                         {
-                            alert("Total Days Request is more than Total Special Day-Off Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -946,7 +953,7 @@
                         var intBalanceCompensatoryTime = parseInt(balanceCompensatoryTime);
 
                         if (totalRequestCompensatoryTime > intBalanceCompensatoryTime) {
-                            alert("Total Days Request is more than Total Compensatory Time Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -987,7 +994,7 @@
 
                         if (totalRequestPaternity > intBalancePaternity)
                         {
-                            alert("Total Days Request is more than Total Paternity Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1028,7 +1035,7 @@
 
                         if (totalRequestMarriageOfProfessional > intBalanceMarriageOfProfessional)
                         {
-                            alert("Total Days Request is more than Total Marriage of The Professional Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1069,7 +1076,7 @@
 
                         if (totalRequestMarriageOfTheProfessionalChildren > intBalanceMarriageOfProfessionalChildren)
                         {
-                            alert("Total Days Request is more than Total Marriage of The Professional's Children Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1110,7 +1117,7 @@
 
                         if (totalRequestCircumcisionOfProfessionalSon > intBalanceCircumcisionOfProfessionalSon)
                         {
-                            alert("Total Days Request is more than Total Circumcision of Professional's Son Current Balance");
+                            alert("Total Days is more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1151,7 +1158,7 @@
 
                         if (totalRequestBaptismOfTheProfessionalChildren > intBalanceBaptismOfTheProfessionalChildren)
                         {
-                            alert("Total Days Request is more than Total Baptism of The Professional's Children Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1192,7 +1199,7 @@
 
                         if (totalRequestDeathOfProfessionalDependent > intBalanceDeathOfProfessionalDependent)
                         {
-                            alert("Total Days Request is more than Total Death of the Professional’s dependent (i.e. spouse or children) or parent or parent in-laws Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1233,7 +1240,7 @@
 
                         if (totalRequestDeathOfProfessionalHousehold > intBalanceDeatOfProfessionalHousehold)
                         {
-                            alert("Total Days Request is more than Death of a member of the Professional’s household other than the Professional’s dependent or parent Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1274,7 +1281,7 @@
 
                         if (totalRequestProfessionalSeparationDate > intBalanceProfessionalSeparationDate)
                         {
-                            alert("Total Days Request is more than Death of a member of the Professional’s separation date is on or after 19 of the month Current Balance");
+                            alert("Total Days cannot be more than Current Balance");
 
                             dayOffRequestDayOffType = [];
                             dayOffRequestStarDate = [];
@@ -1303,6 +1310,20 @@
                             }
                         }
                     }
+                    else {
+                        var requestAnotherDayOffTypeDate = calcBusinessDays(dateStartRequestDate, dateEndRequestDate);
+                        var numberHolidays = checkPublicHolidays(dateStartRequestDate, dateEndRequestDate);
+                        var finalRequestAnotherDayOffTypeDate = parseInt(requestAnotherDayOffTypeDate) - parseInt(numberHolidays);
+
+                        totalRequestAnotherDayOffTypeDate = parseInt(totalRequestAnotherDayOffTypeDate) + parseInt(finalRequestAnotherDayOffTypeDate);
+
+                        dayOffRequestDayOffType.push(woStrMasterDayOffType);
+                        dayOffRequestStarDate.push(strStartRequestDate);
+                        dayOffRequestEndDate.push(strEndRequestDate);
+                        dayOffRequestFullOrHalf.push(woStrFullHalfDay);
+                        dayOffRequestRemarks.push(woStrRemarks);
+                        dayOffRewquestTotalDays.push(finalRequestAnotherDayOffTypeDate);
+                    }
                 }
 
                 i++;
@@ -1319,6 +1340,7 @@
                 //}
                 
                 displayRequestDetail("request-detail-display", dayOffRequestDayOffType, dayOffRequestStarDate, dayOffRequestEndDate, dayOffRequestFullOrHalf, dayOffRequestRemarks, dayOffRewquestTotalDays, returnToWork)
+
                 
                 var requestLength = dayOffRequestDayOffType.length;
                 var totalDayOffAnnualDayOff = 0;
@@ -1556,7 +1578,7 @@
                 rowgrid.each(function (e) {
                     j++;
 
-                    if (i != j) {
+                    if ((i != j) && (j == (lengthRequest - 1))) {
                         var requestEndDateInneerLoop = new Date($("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[j].RequestEndDate);
                         var dateRequestEndDateInnerLoop = requestEndDateInneerLoop.getDate();
                         var monthRequestEndDateInnerLoop = requestEndDateInneerLoop.getMonth() + 1;
@@ -1850,6 +1872,316 @@
                             }
                         }
 
+                    }
+                    if((i != j) && (j != (lengthRequest-1)))
+                    {
+                        var requestEndDateInneerLoop = new Date($("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[j].RequestEndDate);
+                        var dateRequestEndDateInnerLoop = requestEndDateInneerLoop.getDate();
+                        var monthRequestEndDateInnerLoop = requestEndDateInneerLoop.getMonth() + 1;
+                        var yearRequestEndDateInnerLoop = requestEndDateInneerLoop.getFullYear();
+                        var strRequestEndDateInnerLoop = monthRequestEndDateInnerLoop + '/' + dateRequestEndDateInnerLoop + '/' + yearRequestEndDateInnerLoop;
+
+                        var requestStartDate = new Date($("#DayOffRequestDetails").data("kendoGrid").dataSource.data()[j].RequestStartDate);
+                        var dateRequestStartDate = requestStartDate.getDate();
+                        var monthRequestStartDate = requestStartDate.getMonth() + 1;
+                        var yearRequestStartDate = requestStartDate.getFullYear();
+                        var strRequestStartDate = monthRequestStartDate + '/' + dateRequestStartDate + '/' + yearRequestStartDate;
+
+                        var datesRequestStartDate = new Date(strRequestStartDate);
+                        var datesRequestEndDateInnerLoop = new Date(strRequestEndDateInnerLoop);
+
+                        if ((datesReturnToWork < datesRequestStartDate) || (datesReturnToWork > datesRequestEndDateInnerLoop)) {
+                            var nameOfDayReturnToWork = checkWeekend(dayDatesReturnToWork);
+
+                            if (nameOfDayReturnToWork == "Saturday") {
+                                var AddTwoDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 2);
+                                var dateAddTwoDays = new Date(AddTwoDays);
+                                var datesDateAddTwoDays = dateAddTwoDays.getDate();
+                                var monthDateAddTwoDays = dateAddTwoDays.getMonth() + 1;
+                                var yearDateAddTwoDays = dateAddTwoDays.getFullYear();
+                                var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
+
+                                var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
+                                if (numberOfPublicHoliday > 0) {
+                                    var AddOneDays = dateAddTwoDays.setDate(dateAddTwoDays.getDate() + 1);
+                                    var dateAddOneDays = new Date(AddOneDays);
+                                    var datesDateAddOneDays = dateAddOneDays.getDate();
+                                    var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                                    var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                                    var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                    returnToWorkDate = strDateAddAddOneDays;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+                                else {
+                                    returnToWorkDate = strDateAddTwoDays;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+                            }
+                            else if (nameOfDayReturnToWork == "Sunday") {
+                                var AddOneDays = datesReturnToWork.setDate(datesReturnToWork.getDate() + 1);
+                                var dateAddOneDays = new Date(AddOneDays);
+                                var datesDateAddOneDays = dateAddOneDays.getDate();
+                                var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                                var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                                var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                var numberOfPublicHoliday = checkPublicHoliday(strDateAddAddOneDays);
+
+                                if (numberOfPublicHoliday > 0) {
+                                    var AddOneDaysAgain = dateAddOneDays.setDate(dateAddOneDays.getDate() + 1);
+                                    var dateAddOneDaysAgain = new Date(AddOneDaysAgain);
+                                    var datesDateAddOneDaysAgain = dateAddOneDaysAgain.getDate();
+                                    var monthDateAddOneDaysAgain = dateAddOneDaysAgain.getMonth() + 1;
+                                    var yearDateAddOneDaysAgain = dateAddOneDaysAgain.getFullYear();
+                                    var strDateAddAddOneDaysAgain = monthDateAddOneDaysAgain + '/' + datesDateAddOneDaysAgain + '/' + yearDateAddOneDaysAgain;
+
+                                    returnToWorkDate = strDateAddAddOneDaysAgain;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+                                else {
+                                    returnToWorkDate = strDateAddAddOneDays;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+                            }
+                            else {
+                                var dateReturnToWork = datesReturnToWork.getDate();
+                                var monthReturnToWork = datesReturnToWork.getMonth() + 1;
+                                var yearReturnToWork = datesReturnToWork.getFullYear();
+                                var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
+
+                                var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+                                if (numberOfPublicHoliday > 0) {
+                                    var AddOneDaysAgain = dateAddOneDays.setDate(dateAddOneDays.getDate() + 1);
+                                    var dateAddOneDaysAgain = new Date(AddOneDaysAgain);
+                                    var datesDateAddOneDays = dateAddOneDays.getDate();
+                                    var monthDateAddOneDays = dateAddOneDays.getMonth() + 1;
+                                    var yearDateAddOneDays = dateAddOneDays.getFullYear();
+                                    var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                    returnToWorkDate = strDateAddAddOneDays;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+                                else {
+                                    returnToWorkDate = strReturnToWork;
+
+                                    datesReturnToWork = new Date(returnToWorkDate);
+                                    dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                    console.log("returnToWorkDate: " + returnToWorkDate);
+                                }
+
+                            }
+                        }
+                        if ((datesReturnToWork >= datesRequestStartDate) && (datesReturnToWork <= datesRequestEndDateInnerLoop)) {
+                            if ((lengthRequest - 1) != j) {
+                                var nextReturnToWork = new Date(requestEndDateInneerLoop);
+                                var dateNextReturnToWork = new Date(nextReturnToWork.setDate(nextReturnToWork.getDate() + 1));
+                                var dayNextReturnToWork = dateNextReturnToWork.getDay();
+                                var nameOfDayReturnToWork = checkWeekend(dayNextReturnToWork);
+
+                                console.log("dateNextReturnToWork: " + dateNextReturnToWork);
+
+                                if (nameOfDayReturnToWork == "Saturday") {
+                                    var AddTwoDays = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 2));
+                                    var datesDateAddTwoDays = AddTwoDays.getDate();
+                                    var monthDateAddTwoDays = AddTwoDays.getMonth() + 1;
+                                    var yearDateAddTwoDays = AddTwoDays.getFullYear();
+                                    var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDays = new Date(AddTwoDays.setDate(dateAddTwoDays.getDate() + 1));
+                                        var datesDateAddOneDays = AddOneDays.getDate();
+                                        var monthDateAddOneDays = AddOneDays.getMonth() + 1;
+                                        var yearDateAddOneDays = AddOneDays.getFullYear();
+                                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                    else {
+                                        returnToWorkDate = strDateAddTwoDays;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                }
+                                else if (nameOfDayReturnToWork == "Sunday") {
+                                    var AddOneDays = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 1));
+                                    var datesDateAddOneDays = AddOneDays.getDate();
+                                    var monthDateAddOneDays = AddOneDays.getMonth() + 1;
+                                    var yearDateAddOneDays = AddOneDays.getFullYear();
+                                    var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddAddOneDays);
+
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDaysAgain = new Date(AddOneDays.setDate(dateAddOneDays.getDate() + 1));
+                                        var datesDateAddOneDaysAgain = AddOneDaysAgain.getDate();
+                                        var monthDateAddOneDaysAgain = AddOneDaysAgain.getMonth() + 1;
+                                        var yearDateAddOneDaysAgain = AddOneDaysAgain.getFullYear();
+                                        var strDateAddAddOneDaysAgain = monthDateAddOneDaysAgain + '/' + datesDateAddOneDaysAgain + '/' + yearDateAddOneDaysAgain;
+
+                                        returnToWorkDate = strDateAddAddOneDaysAgain;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                    else {
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                }
+                                else {
+                                    var dateReturnToWork = dateNextReturnToWork.getDate();
+                                    var monthReturnToWork = dateNextReturnToWork.getMonth() + 1;
+                                    var yearReturnToWork = dateNextReturnToWork.getFullYear();
+                                    var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDaysAgain = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 1));
+                                        var datesDateAddOneDays = AddOneDaysAgain.getDate();
+                                        var monthDateAddOneDays = AddOneDaysAgain.getMonth() + 1;
+                                        var yearDateAddOneDays = AddOneDaysAgain.getFullYear();
+                                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                    else {
+                                        returnToWorkDate = strReturnToWork;
+
+                                        datesReturnToWork = new Date(returnToWorkDate);
+                                        dayDatesReturnToWork = datesReturnToWork.getDay();
+
+                                        console.log("datesReturnToWork: " + datesReturnToWork);
+                                    }
+                                }
+                            }
+                            else {
+                                var nextReturnToWork = new Date(requestEndDateInneerLoop);
+                                var dateNextReturnToWork = new Date(nextReturnToWork.setDate(nextReturnToWork.getDate() + 1));
+                                var dayNextReturnToWork = dateNextReturnToWork.getDay();
+                                var nameOfDayReturnToWork = checkWeekend(dayNextReturnToWork);
+
+                                if (nameOfDayReturnToWork == "Saturday") {
+                                    var AddTwoDays = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 2));
+                                    var datesDateAddTwoDays = AddTwoDays.getDate();
+                                    var monthDateAddTwoDays = AddTwoDays.getMonth() + 1;
+                                    var yearDateAddTwoDays = AddTwoDays.getFullYear();
+                                    var strDateAddTwoDays = monthDateAddTwoDays + '/' + datesDateAddTwoDays + '/' + yearDateAddTwoDays;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddTwoDays);
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDays = new Date(AddTwoDays.setDate(dateAddTwoDays.getDate() + 1));
+                                        var datesDateAddOneDays = AddOneDays.getDate();
+                                        var monthDateAddOneDays = AddOneDays.getMonth() + 1;
+                                        var yearDateAddOneDays = AddOneDays.getFullYear();
+                                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                    else {
+                                        returnToWorkDate = strDateAddTwoDays;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                }
+                                else if (nameOfDayReturnToWork == "Sunday") {
+                                    var AddOneDays = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 1));
+                                    var datesDateAddOneDays = AddOneDays.getDate();
+                                    var monthDateAddOneDays = AddOneDays.getMonth() + 1;
+                                    var yearDateAddOneDays = AddOneDays.getFullYear();
+                                    var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strDateAddAddOneDays);
+
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDaysAgain = new Date(AddOneDays.setDate(dateAddOneDays.getDate() + 1));
+                                        var datesDateAddOneDaysAgain = AddOneDaysAgain.getDate();
+                                        var monthDateAddOneDaysAgain = AddOneDaysAgain.getMonth() + 1;
+                                        var yearDateAddOneDaysAgain = AddOneDaysAgain.getFullYear();
+                                        var strDateAddAddOneDaysAgain = monthDateAddOneDaysAgain + '/' + datesDateAddOneDaysAgain + '/' + yearDateAddOneDaysAgain;
+
+                                        returnToWorkDate = strDateAddAddOneDaysAgain;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                    else {
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                }
+                                else {
+                                    var dateReturnToWork = dateNextReturnToWork.getDate();
+                                    var monthReturnToWork = dateNextReturnToWork.getMonth() + 1;
+                                    var yearReturnToWork = dateNextReturnToWork.getFullYear();
+                                    var strReturnToWork = monthReturnToWork + '/' + dateReturnToWork + '/' + yearReturnToWork;
+
+                                    var numberOfPublicHoliday = checkPublicHoliday(strReturnToWork);
+
+                                    if (numberOfPublicHoliday > 0) {
+                                        var AddOneDaysAgain = new Date(dateNextReturnToWork.setDate(dateNextReturnToWork.getDate() + 1));
+                                        var datesDateAddOneDays = AddOneDaysAgain.getDate();
+                                        var monthDateAddOneDays = AddOneDaysAgain.getMonth() + 1;
+                                        var yearDateAddOneDays = AddOneDaysAgain.getFullYear();
+                                        var strDateAddAddOneDays = monthDateAddOneDays + '/' + datesDateAddOneDays + '/' + yearDateAddOneDays;
+
+                                        returnToWorkDate = strDateAddAddOneDays;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                    else {
+                                        returnToWorkDate = strReturnToWork;
+
+                                        console.log("returnToWorkDate: " + returnToWorkDate);
+                                    }
+                                }
+                            }
+                        }
                     }
                     else 
                     {

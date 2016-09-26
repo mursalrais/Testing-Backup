@@ -21,8 +21,16 @@
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestStartDate' value='#= RequestStartDate #' />"
     );
 
+        columns.Bound(p => p.RqsStartDate).Hidden().Width(80).ClientTemplate("#= RqsStartDate #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RqsStartDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RqsStartDate' value='#= RqsStartDate #' />"
+    );
+
         columns.Bound(p => p.RequestEndDate).Width(80).ClientTemplate("#= RequestEndDate #" +
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RequestEndDate' value='#= RequestEndDate #' />"
+    );
+
+        columns.Bound(p => p.RqsEndDate).Hidden().Width(80).ClientTemplate("#= RqsEndDate #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RqsEndDate' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].RqsEndDate' value='#= RqsEndDate #' />"
     );
 
         columns.Bound(p => p.StrTotalDays).Width(50).ClientTemplate("#= StrTotalDays #" +
@@ -35,6 +43,10 @@
 
         columns.Bound(p => p.Remarks).Width(100).ClientTemplate("#= Remarks #" +
     "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].Remarks' value='#= Remarks #' />"
+    );
+
+        columns.Bound(p => p.TotalDays).Hidden().Width(100).ClientTemplate("#= TotalDays #" +
+    "<input type='hidden' id='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].TotalDays' name='DayOffRequestDetailsDisplay[#= getDayOffRequestDetailsDisplay(data)#].TotalDays' value='#= TotalDays #' />"
     );
 
         columns.Bound(p => p.EditMode).Hidden().ClientTemplate("#= EditMode #" +
@@ -58,9 +70,12 @@
         model.Field(m => m.DayOffType).Editable(false);
         model.Field(m => m.FullHalf).Editable(false);
         model.Field(m => m.RequestStartDate).Editable(false);
+        model.Field(m => m.RqsStartDate).Editable(false);
         model.Field(m => m.RequestEndDate).Editable(false);
+        model.Field(m => m.RqsEndDate).Editable(false);
         model.Field(m => m.Remarks).Editable(false);
         model.Field(m => m.TotalDays).Editable(false);
+        model.Field(m => m.StrTotalDays).Editable(false);
         model.Field(m => m.StrReturnToWork).Editable(false);
     })
     .ServerOperation(false)

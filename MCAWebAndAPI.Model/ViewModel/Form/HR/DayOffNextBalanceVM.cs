@@ -64,6 +64,12 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         }
 
         /// <summary>
+        /// Title
+        /// </summary>
+        [DisplayName("Day-Off Type")]
+        public string StrDayOffType { get; set; }
+
+        /// <summary>
         /// uom
         /// </summary>
         [UIHint("InGridComboBox")]

@@ -25,12 +25,28 @@ namespace MCAWebAndAPI.Model.ViewModel.Form.HR
         public string RequestStartDate { get; set; }
 
         /// <summary>
+        /// requeststartdate
+        /// </summary>
+        [UIHint("Date")]
+        [DisplayName("Start Date")]
+        [Required]
+        public DateTime? RqsStartDate { get; set; }
+
+        /// <summary>
         /// requestenddate
         /// </summary>
         //[UIHint("Date")]
         [DisplayName("End Date")]
         [Required]
         public string RequestEndDate { get; set; }
+
+        /// <summary>
+        /// requestenddate
+        /// </summary>
+        [UIHint("Date")]
+        [DisplayName("End Date")]
+        [Required]
+        public DateTime? RqsEndDate { get; set; }
 
         /// <summary>
         /// totaldays
