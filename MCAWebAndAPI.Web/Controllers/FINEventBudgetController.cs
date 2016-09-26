@@ -30,8 +30,9 @@ namespace MCAWebAndAPI.Web.Controllers
 
         private const string SuccessMsgFormatUpdated = "Event Budget number {0} has been successfully updated.";
         private const string FirstPageUrl = "{0}/Lists/Event%20Budget/AllItems.aspx";
+        private const string FirstPageFinanceUrl = "{0}/SitePages/FinEventBudget.aspx";
         private const string PrintPageUrl = "~/Views/FINEventBudget/Print.cshtml";
-
+        
         private const string FooterFinance = "This form was revised and printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
         private const string FooterUser = "This form was printed by {0}, {1:MM/dd/yyyy}, {2:HH:mm}";
 
@@ -70,7 +71,10 @@ namespace MCAWebAndAPI.Web.Controllers
 
             SetAdditionalSettingToViewModel(ref viewModel, (id.HasValue ? false : true));
 
-            ViewBag.CancelUrl = string.Format(FirstPageUrl, siteUrl);
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var cancelUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
+            ViewBag.CancelUrl = string.Format(cancelUrl, siteUrl);
             return View(viewModel);
         }
 
@@ -161,11 +165,15 @@ namespace MCAWebAndAPI.Web.Controllers
                 await allTasks2;
             }
 
+
+            ProfessionalMaster user = COMProfessionalController.GetFirstOrDefaultByOfficeEmail(siteUrl, viewModel.UserEmail);
+            var previousUrl = user == null ? FirstPageUrl : (COMProfessionalController.IsPositionFinance(user.Position) ? FirstPageFinanceUrl : FirstPageUrl);
+
             return RedirectToAction("Index", "Success",
                 new
                 {
                     successMessage = string.Format(SuccessMsgFormatUpdated, viewModel.No),
-                    previousUrl = string.Format(FirstPageUrl, siteUrl)
+                    previousUrl = string.Format(previousUrl, siteUrl)
                 });
         }
 
@@ -203,7 +211,7 @@ namespace MCAWebAndAPI.Web.Controllers
             var clientTime = Request.Form[nameof(viewModel.ClientDateTime)];
             DateTime dt = !string.IsNullOrWhiteSpace(clientTime) ? (DateTime.ParseExact(clientTime.ToString().Substring(0, 24), "ddd MMM d yyyy HH:mm:ss", CultureInfo.InvariantCulture)) : DateTime.Now;
 
-            var footerMask = COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser;
+            var footerMask = user == null ? FooterUser : (COMProfessionalController.IsPositionFinance(user.Position) ? FooterFinance : FooterUser);
             var footer = string.Format(footerMask, userName, dt, dt);
 
             using (var writer = new StringWriter())

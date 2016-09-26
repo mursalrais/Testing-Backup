@@ -306,11 +306,13 @@ Link :   {0}/Lists/ProfessionalPerformancePlan/EditForm_Custom.aspx?ID={1}</valu
 &lt;p&gt;Regards,&lt;br /&gt;Finance Division&lt;/p&gt;</value>
   </data>
   <data name="ProfessionalEmailValidation" xml:space="preserve">
-    <value>Dear HR Team,
+    <value>Dear {0}, &lt;br&gt;
 
-This email is sent to you to notify that there is a request which required your action to validate the professional data. Kindly check the link as per below to go to direct page accordingly. You may check your personal page in IMS (My Approval View). Thank you. 
+This email is sent to you to notify that there is a request which required your action to validate the professional data of {1}.
+Please complete the validation process immediately
 
-Link : {0}</value>
+To view the detail, please click following link: 
+{2}</value>
   </data>
   <data name="ProfessionalEmailValidationResponse" xml:space="preserve">
     <value>Dear Requestor,

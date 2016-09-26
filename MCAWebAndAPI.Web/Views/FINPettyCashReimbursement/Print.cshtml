@@ -100,19 +100,20 @@
                     <tr>
                         <td>Amount Liquidated</td>
                         <td>:</td>
-                        <td>@Model.Amount</td>
+                        <td>@Model.Amount.Value.ToString("N2")</td>
                     </tr>
+                 
 
                     <tr>
                         <td>Amount Reimbursed/Returned</td>
                         <td>:</td>
-                        <td colspan="4">@Model.Amount</td>
+                        <td>@Model.AmountReimbursed.Value.ToString("N2")</td>
                     </tr>
-
-                    <tr>
-                        <td colspan="3">
-                            I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice
-                            have been accepted by and received by MCA-I. Meet all the requirements of the contract with the vendor, and their procurement meets all the
+                    
+                                    <tr>
+                                                    <td colspan="3"><br />
+                                            I, the authorized MCA project signatory, approve payment of this invoice and certify that the goods, works or services represented on this invoice
+                                            have been accepted by and received by MCA-I. Meet all the requirements of the contract with the vendor, and their procurement meets all the
                             requirements of the Compact, the Program, Procurement Gudielines and all other relevant supplemental agreement requirements.
                         </td>
                     </tr>
@@ -120,7 +121,7 @@
             </table>
         </div>
 
-        <div class="row" style="text-align: left; margin-top: 60px; padding:30px;">
+<div class="row" style="text-align: left; margin-top: 60px; padding:30px;">
             <table width="100%">
                 <tbody>
                     <tr>

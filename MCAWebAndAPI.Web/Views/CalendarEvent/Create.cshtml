@@ -10,7 +10,7 @@
                                             OnFailure = "onFailure"
                                         }, new { @class = "form-horizontal" }))
 {<fieldset>
-        <legend>Form Asset Transfer</legend>
+        <legend>Calendar Event</legend>
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
 
@@ -142,11 +142,18 @@
                 $("form").submit();
             });
 
-            $(function () {
-                $('#CalendarEventDate').datetimepicker({
-                    showMeridian: false
+            jQuery(function () {
+                jQuery("#CalendarEventDate").kendoDateTimePicker({
+                    format : "M/d/yyyy HH:mm",
+                    timeFormat: "HH:mm"
                 });
             });
+
+            //$(function () {
+            //    $('#CalendarEventDate').datetimepicker({
+            //        showMeridian: false
+            //    });
+            //});
 
         });
 

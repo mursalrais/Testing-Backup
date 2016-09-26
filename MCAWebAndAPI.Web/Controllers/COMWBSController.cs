@@ -49,12 +49,16 @@ namespace MCAWebAndAPI.Web.Controllers
             return WBSService.GetAll(siteUrl);
         }
 
-        public JsonResult GetAllByActivityAsJsonResult(string siteUrl, int activityId)
+        public JsonResult GetAllByActivityAsJsonResult(string siteUrl, int? activityId)
         {
             JsonResult result;
 
             siteUrl = siteUrl ?? SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
-            var activity = ActivityService.Get(siteUrl, activityId);
+            var activity = new ActivityVM();
+            if (activityId.HasValue)
+            {
+                activity = ActivityService.Get(siteUrl, Convert.ToInt32(activityId.Value));
+            }
 
             IEnumerable<WBS> wbsMasters = GetAllCached();
 

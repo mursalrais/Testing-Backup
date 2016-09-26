@@ -18,6 +18,7 @@
         }
     })
     .Sortable()
+    .Filterable(f => f.Mode(GridFilterMode.Row))
     .Editable(ed => ed.Mode(GridEditMode.PopUp).CreateAt(GridInsertRowPosition.Bottom))
                                               .ToolBar(tools => tools.Excel())
                                               .ToolBar(tools => tools.Pdf())

@@ -150,5 +150,20 @@ namespace MCAWebAndAPI.Web.Controllers
                 Text = string.IsNullOrWhiteSpace(e.Name) ? string.Empty : e.Name
             }), JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetProvinces()
+        {
+            var siteUrl = SessionManager.Get<string>(SharedController.Session_SiteUrl) ?? ConfigResource.DefaultBOSiteUrl;
+
+            var provinceService = new ProvinceService();
+
+            var list = provinceService.GetAllListItems(siteUrl);
+
+            return Json(list.Select(e => new
+            {
+                Value = e.ID.HasValue ? Convert.ToString(e.ID) : string.Empty,
+                Text = string.IsNullOrWhiteSpace(e.Name) ? string.Empty : e.Name
+            }), JsonRequestBehavior.AllowGet);
+        }
     }
 }

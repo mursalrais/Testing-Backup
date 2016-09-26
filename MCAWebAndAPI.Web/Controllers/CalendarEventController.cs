@@ -40,7 +40,6 @@ namespace MCAWebAndAPI.Web.Controllers
         }
 
         [HttpPost]
-       
         public ActionResult Create(CalendarEventVM viewModel)
         {
             // Check whether error is found

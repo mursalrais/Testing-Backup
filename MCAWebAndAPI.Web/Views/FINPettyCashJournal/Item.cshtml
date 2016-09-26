@@ -30,7 +30,10 @@ new
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.DateFrom).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.DateFrom)
+                    @Html.EditorFor(m => m.DateFromPicker)
+                    <!-- need to set as dd/MM/yyyy if not in controller cant get value -->
+                    @Html.TextBoxFor(model => model.DateFrom, "{0:dd/MM/yyyy HH:mm}", htmlAttributes: new { @type = "hidden" })
+
                 </div>
             </div>
         </div>
@@ -39,7 +42,10 @@ new
             <div class="form-group">
                 @Html.Bootstrap().LabelFor(m => m.DateTo).Class("col-sm-4 control-label")
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.DateTo)
+                    @Html.EditorFor(m => m.DateToPicker)
+                    <!-- need to set as dd/MM/yyyy if not in controller cant get value -->
+                    @Html.TextBoxFor(model => model.DateTo, "{0:dd/MM/yyyy HH:mm}", htmlAttributes: new { @type = "hidden" })
+                    
                 </div>
             </div>
         </div>
@@ -157,15 +163,15 @@ new
             }
 
             if ($("#AdvancesForOperationalCar1").val() == '') {
-                $("#AdvancesForOperationalCar1").val(0);
+                $("#AdvancesForOperationalCar1").data("kendoNumericTextBox").value(0);
             }
             if ($("#AdvancesForOperationalCar2").val() == '') {
-                $("#AdvancesForOperationalCar2").val(0);
+                $("#AdvancesForOperationalCar2").data("kendoNumericTextBox").value(0);
             }
             if ($("#AdvancesForOperationalCar3").val() == '') {
-                $("#AdvancesForOperationalCar3").val(0);
+                $("#AdvancesForOperationalCar3").data("kendoNumericTextBox").value(0);
             }
-
+            
             return true;
         });
 
@@ -184,6 +190,26 @@ new
         });
 
         calcCashOnHand();
+
+        function onChange() {
+            $("#DateFrom").val(convert(this.value()));
+            
+        }
+
+        $("#DateFromPicker").kendoDateTimePicker({
+            change: onChange,
+            format: "MM/dd/yyyy HH:mm"
+        });
+
+        function onChangeTo() {
+            $("#DateTo").val(convert(this.value()));
+
+        }
+
+        $("#DateToPicker").kendoDateTimePicker({
+            change: onChangeTo,
+            format: "MM/dd/yyyy HH:mm"
+        });
     });
 
     $('#Advances1').keyup(calcCashOnHand);
@@ -199,9 +225,20 @@ new
 
         var cashOnHand = totalPettyCashFund - totalAmount - advances1 - advances2 - advances3;
 
-        $('#CashOnHand').val(cashOnHand);
+        $("#CashOnHand").data("kendoNumericTextBox").value(cashOnHand);
     }
 
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+            day = ("0" + date.getDate()).slice(-2);
+            hours = ("0" + date.getHours()).slice(-2);
+            minutes = ("0" + date.getMinutes()).slice(-2);
+
+            var dateformat = [day,mnth, date.getFullYear()].join("/");
+            var timeFormat = [hours, minutes].join(":");
+            return dateformat + " " + timeFormat;
+    }
 </script>
 
 <style>

@@ -18,11 +18,11 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
@@ -30,8 +30,7 @@ namespace MCAWebAndAPI.Service.Utils
 
             mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
             mail.To.Add(new MailAddress(emailAddress));
-            mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
-            mail.CC.Add(new MailAddress("heidy@eceos.com"));
+            mail.CC.Add(new MailAddress("rprayengki@gmail.com"));
             mail.Subject = subject;
             mail.Body = emailMessage;
             mail.IsBodyHtml = true;
@@ -50,19 +49,18 @@ namespace MCAWebAndAPI.Service.Utils
         {
             var smtp = new SmtpClient();
             {
-                smtp.Host = "smtp-mail.outlook.com";
+                smtp.Host = "smtp.office365.com";
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Credentials = new NetworkCredential("auto_mcaindonesia@outlook.com", "MCAIMS_Indoneisa");
+                smtp.Credentials = new NetworkCredential("no-replyIMS@mca-indonesia.go.id", "Mr21112015");
                 smtp.Timeout = 20000;
             }
 
             MailMessage mail = new MailMessage();
 
             mail.From = new MailAddress("no-replyIMS@mca-indonesia.go.id", "System MCA Indonesia");
-            mail.CC.Add(new MailAddress("randi.prayengki@eceos.com"));
-            mail.CC.Add(new MailAddress("heidy@eceos.com"));
+            mail.CC.Add(new MailAddress("rprayengki@gmail.com"));
             foreach (var item in lstEmail)
             {
                 mail.To.Add(new MailAddress(item));
